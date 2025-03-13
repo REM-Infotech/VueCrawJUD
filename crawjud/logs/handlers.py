@@ -75,7 +75,12 @@ class CustomFileHandler(logging.handlers.RotatingFileHandler):
 
     def format(self, record: logging.LogRecord) -> str:
         """Format the log record to JSON."""
+        exc = None
+        if record.exc_info:
+            exc = record.exc_info[1]
+
         log_data = {
+            "exc_record": exc,
             "level": record.levelname,
             "message": record.getMessage(),
             "time": self.formatTime(record, "%Y-%m-%d %H:%M:%S"),
