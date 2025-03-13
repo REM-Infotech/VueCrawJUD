@@ -56,10 +56,7 @@ export async function authenticate(router: Router) {
     });
 
     if (response.status === 200) {
-      const data: Record<string, string> = response.data as Record<
-        string,
-        string
-      >;
+      const data: Record<string, string> = response.data as Record<string, string>;
       localStorage.setItem("token", data.token);
       router.push({ name: "index", query: { message: "You are logged in!" } });
       if ($("#app").hasClass("bg-indigo")) {
@@ -75,9 +72,7 @@ export async function authenticate(router: Router) {
     });
     // Handle specific error cases
     if (error.code === "ERR_NETWORK") {
-      alert(
-        "Cannot connect to server. Please check if the backend is running.",
-      );
+      alert("Cannot connect to server. Please check if the backend is running.");
     }
   }
 }

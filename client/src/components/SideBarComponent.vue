@@ -27,12 +27,7 @@ const handleLogoutClick = (e: Event) => {
         :to="{ name: 'index' }"
         class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none rounded p"
       >
-        <img
-          class="bi pe-none me-2"
-          src="../assets/crawjud.png"
-          alt=""
-          width="40"
-        />
+        <img class="bi pe-none me-2" src="../assets/crawjud.png" alt="" width="40" />
         <span class="fs-4">CrawJUD</span>
       </RouterLink>
       <hr />
@@ -98,9 +93,7 @@ const handleLogoutClick = (e: Event) => {
           <li><a class="dropdown-item" href="#">Profile</a></li>
           <li><hr class="dropdown-divider" /></li>
           <li>
-            <a class="dropdown-item" href="#" @click="handleLogoutClick"
-              >Logout</a
-            >
+            <a class="dropdown-item" href="#" @click="handleLogoutClick">Logout</a>
           </li>
         </ul>
       </div>
