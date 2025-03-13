@@ -45,7 +45,7 @@ class TokenBlocklist(db.Model):
     jti: str = db.Column(db.String(36), nullable=False, index=True)
     type: str = db.Column(db.String(16), nullable=False)
     user_id = db.Column(
-        db.ForeignKey("Users.id"),
+        db.ForeignKey("users.id"),
         default=lambda: get_current_user().id,
         nullable=False,
     )
