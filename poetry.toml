@@ -1,0 +1,4 @@
+package-mode = false
+
+[virtualenvs]
+create = true
