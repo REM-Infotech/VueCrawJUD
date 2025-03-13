@@ -1,14 +1,17 @@
 <script setup lang="ts">
+import { onMounted } from "vue";
 import NavBarComponent from "../../components/NavBarComponent.vue";
 import SideBarComponent from "../../components/SideBarComponent.vue";
 import { io } from "socket.io-client";
-const socket = io("http://localhost:3000");
 
-socket.on("connect", () => {
-  console.log("Connected to server");
-});
-socket.on("disconnect", () => {
-  console.log("Disconnected from server");
+onMounted(() => {
+  const socket = io("http://localhost:5000/log");
+  socket.on("connect", () => {
+    console.log("Connected to server");
+  });
+  socket.on("disconnect", () => {
+    console.log("Disconnected from server");
+  });
 });
 </script>
 
