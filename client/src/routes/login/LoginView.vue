@@ -23,26 +23,23 @@
 </template>
 
 <script setup lang="ts">
-import jQuery from "jquery";
-const $ = jQuery;
+import { onBeforeMount } from "vue";
 import { authenticate } from "./auth";
 import { useRouter } from "vue-router";
-
+import jQuery from "jquery";
 const router = useRouter();
+
+const $ = jQuery;
 
 const handleSubmit = (e: Event) => {
   e.preventDefault();
   authenticate(router);
 };
 
-$(function () {
-  $("#csrf_token").val("1234567890");
-
-  if (router.currentRoute.value.name === "login") {
-    console.log("You are on the login page");
-    if (!$("#app").hasClass("bg-indigo")) {
-      $("#app").addClass("bg-indigo");
-    }
+onBeforeMount(() => {
+  if ($("#app").hasClass("bg-purple")) {
+    $("#app").removeClass("bg-purple");
+    $("#app").addClass("bg-indigo");
   }
 });
 </script>

@@ -8,6 +8,8 @@ import { createApp } from "vue";
 import App from "./App.vue";
 import router from "./routes";
 import "../plugins/axios.ts";
+
+
 function CreateApp() {
   const app = createApp(App);
 

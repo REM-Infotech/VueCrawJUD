@@ -17,6 +17,10 @@ const routes = [
     name: "index",
     component: () => import("./dashboard/DashboardView.vue"),
     meta: { requiresAuth: true },
+    mount() {
+      $("#app").addClass("bg-purple");
+
+    }
   },
 ];
 

@@ -2,8 +2,8 @@
 import NavBarComponent from "../../components/NavBarComponent.vue";
 import SideBarComponent from "../../components/SideBarComponent.vue";
 import { io } from "socket.io-client";
-
 const socket = io("http://localhost:3000");
+
 socket.on("connect", () => {
   console.log("Connected to server");
 });
@@ -25,6 +25,5 @@ socket.on("disconnect", () => {
         </div>
       </div>
     </main>
-    <div id="myModal"></div>
   </div>
 </template>
