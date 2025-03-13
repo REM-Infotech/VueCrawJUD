@@ -3,18 +3,11 @@
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import {
-  faMinus,
-  faMaximize,
-  faClose,
-} from "@fortawesome/free-solid-svg-icons";
+import { faMinus, faMaximize, faClose } from "@fortawesome/free-solid-svg-icons";
 </script>
 
 <template>
-  <nav
-    class="navbar navbar-expand-xl navbar-indigo"
-    aria-label="Sixth navbar example"
-  >
+  <nav class="navbar navbar-expand-xl navbar-indigo" aria-label="Sixth navbar example">
     <div class="container-fluid">
       <a
         class="navbar-brand rounded"
@@ -56,12 +49,7 @@ import {
           <FontAwesomeIcon :icon="faClose" />
         </button> -->
         <form role="search">
-          <input
-            class="form-control m-1"
-            type="search"
-            placeholder="Search"
-            aria-label="Search"
-          />
+          <input class="form-control m-1" type="search" placeholder="Search" aria-label="Search" />
         </form>
       </div>
     </div>
