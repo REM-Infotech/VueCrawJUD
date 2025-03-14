@@ -19,8 +19,7 @@ const routes = [
     meta: { requiresAuth: true },
     mount() {
       $("#app").addClass("bg-purple");
-
-    }
+    },
   },
 ];
 
