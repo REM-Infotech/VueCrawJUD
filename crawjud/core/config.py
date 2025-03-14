@@ -143,6 +143,8 @@ class Config:
     JWT_ACCESS_TOKEN_EXPIRES = timedelta(minutes=15)  # Token expira em 15 minutos
     JWT_REFRESH_TOKEN_EXPIRES = timedelta(days=7)  # Refresh Token expira em 7 dias
     JWT_TOKEN_LOCATION = ["headers", "cookies"]
+    JWT_COOKIE_CSRF_PROTECT = True  # Ativa proteção CSRF
+    JWT_ACCESS_CSRF_HEADER_NAME = "X-CSRF-TOKEN"  # Nome do cabeçalho CSRF
     for paths in [
         DOCS_PATH,
         TEMP_DIR,

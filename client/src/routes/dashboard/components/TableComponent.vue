@@ -6,7 +6,33 @@
     </div>
     <div class="card-body">
       <div class="table-responsive">
-        <BTable striped hover id="DataTables" :items="items" />
+        <table class="table table-striped table-hover" id="FormatedDataTable">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Usuário</th>
+              <th>Nome do Robô</th>
+              <th>Arquivo de Execução</th>
+              <th>Data da Execução</th>
+              <th>Status</th>
+              <th>Data finalização</th>
+              <th data-sortable="false">Arquivo de saida</th>
+            </tr>
+          </thead>
+          <tfoot>
+            <tr>
+              <th>#</th>
+              <th>Usuário</th>
+              <th>Nome do Robô</th>
+              <th>Arquivo de Execução</th>
+              <th>Data da Execução</th>
+              <th>Status</th>
+              <th>Data finalização</th>
+              <th data-sortable="false">Arquivo de saida</th>
+            </tr>
+          </tfoot>
+          <tbody></tbody>
+        </table>
       </div>
     </div>
   </div>
@@ -14,7 +40,6 @@
 
 <script setup lang="ts">
 import { getExecutions } from "./requests";
-import { BTable } from "bootstrap-vue-next";
 import DataTable from "datatables.net-bs5";
 import { onMounted, ref } from "vue";
 import jQuery from "jquery";

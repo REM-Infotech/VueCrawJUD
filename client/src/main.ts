@@ -26,12 +26,6 @@ CreateApp();
 export const api = axios.create({
   baseURL: "http://localhost:5173",
   timeout: 5000, // 5 second timeout
-  headers: {
-    "Content-Type": "application/json",
-    Accept: "application/json",
-    Authorization: "Bearer " + sessionStorage.getItem("token"),
-  },
-  withCredentials: true, // Enable if using cookies/sessions
 });
 
 // Add request interceptor for debugging

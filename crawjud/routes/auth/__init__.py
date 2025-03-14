@@ -4,9 +4,7 @@ import os
 import pathlib
 import traceback
 from dataclasses import dataclass
-from datetime import datetime
 
-import pytz
 import rich
 from flask_sqlalchemy import SQLAlchemy
 from quart import (
@@ -21,13 +19,12 @@ from quart_jwt_extended import (  # noqa: F401
     create_access_token,
     get_jwt_identity,
     jwt_refresh_token_required,
-    jwt_required,
     set_access_cookies,
     unset_jwt_cookies,
 )
-from quart_jwt_extended import get_raw_jwt as get_jwt
 
-from crawjud.models.users import TokenBlocklist, Users
+from crawjud.models.users import TokenBlocklist as TokenBlocklist
+from crawjud.models.users import Users
 
 path_template = os.path.join(pathlib.Path(__file__).parent.resolve(), "templates")
 auth = Blueprint("auth", __name__, template_folder=path_template)
@@ -81,7 +78,6 @@ async def login() -> Response:
 
 
 @auth.route("/logout", methods=["POST"])
-@jwt_required
 async def logout() -> Response:
     """Log out the current user and clear session cookies.
 
@@ -89,18 +85,16 @@ async def logout() -> Response:
         Response: Redirect response to the login page.
 
     """
-    db: SQLAlchemy = current_app.extensions["sqlalchemy"]
-    token = get_jwt()
+    # db: SQLAlchemy = current_app.extensions["sqlalchemy"]
+    # token = request.cookies.get("access_token_cookie")
+    # if token:
+    #     jti = token["jti"]
+    #     ttype = token["type"]
+    #     now = datetime.now(pytz.timezone("America/Manaus"))
+    #     db.session.add(TokenBlocklist(jti=jti, type=ttype, created_at=now))
+    #     db.session.commit()
 
-    if token:
-        jti = token["jti"]
-        ttype = token["type"]
-        now = datetime.now(pytz.timezone("America/Manaus"))
-        db.session.add(TokenBlocklist(jti=jti, type=ttype, created_at=now))
-        db.session.commit()
-
-    response = await make_response(jsonify(msg=f"{ttype.capitalize()} token successfully revoked"))
-
+    response = await make_response(jsonify(msg="Logout efetuado com sucesso!"))
     try:
         unset_jwt_cookies(response)
 

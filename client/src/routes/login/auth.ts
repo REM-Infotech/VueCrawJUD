@@ -10,15 +10,7 @@ export async function logout(router: Router) {
     sessionStorage.setItem("message", "Logout Efetuado com sucesso!");
 
     if (refreshToken) {
-      const response = await api.post(
-        "/logout",
-        {},
-        {
-          headers: {
-            Authorization: "Bearer " + refreshToken,
-          },
-        },
-      );
+      const response = await api.post("/logout", {}, { withCredentials: true });
 
       if (response.status === 200 || response.status === 401) {
         sessionStorage.removeItem("token");
@@ -61,6 +53,7 @@ export async function authenticate(router: Router) {
       status: error.response?.status,
       data: error.response?.data,
     });
+    console.error(error);
     // Handle specific error cases
     if (error.code === "ERR_NETWORK") {
       alert("Cannot connect to server. Please check if the backend is running.");
