@@ -36,7 +36,7 @@ onMounted(() => {
   <div id="content">
     <SideBarComponent />
     <main>
-      <div class="container px-4">
+      <BContainer fluid="xl" class="px-4">
         <div class="card mt-4 mb-4">
           <div class="card-header">
             <h1 class="mb-3">Dashboard</h1>
@@ -46,7 +46,7 @@ onMounted(() => {
             <TableComponent />
           </div>
         </div>
-      </div>
+      </BContainer>
     </main>
   </div>
 </template>

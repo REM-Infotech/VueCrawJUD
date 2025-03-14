@@ -9,7 +9,9 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     BButton: typeof import('bootstrap-vue-next/components/BButton')['BButton']
+    BContainer: typeof import('bootstrap-vue-next/components/BContainer')['BContainer']
     BModal: typeof import('bootstrap-vue-next/components/BModal')['BModal']
+    BTable: typeof import('bootstrap-vue-next/components/BTable')['BTable']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
   }

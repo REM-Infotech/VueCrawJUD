@@ -136,6 +136,70 @@ class RunnerServices:
         asyncio.run(self.app.shutdown())
         asyncio.run(self.srv.shutdown())
 
+    def start_specific(self, **kwargs: str) -> None:
+        """Start all server components in separate threads and allow stopping with an event.
+
+        This method creates threads for the worker, Quart server, and Celery beat.
+        It listens for a keyboard interrupt and then signals all threads to stop.
+        """
+        start_dict = {}
+        server_list = [kwargs.get("server")]
+
+        if "," in kwargs.get("server"):
+            server_list = kwargs.get("server").split(",")
+
+        for server in server_list:
+            start_dict.update({server: "True"})
+
+        to_start = {
+            "Quart": StoreService(
+                process_name="Quart",
+                process_status="Running",
+                process_object=Thread(target=self.start_quart, daemon=True),
+                process_log_file="uvicorn_api.log",
+            ),
+            "Beat": StoreService(
+                process_name="Beat",
+                process_status="Running",
+                process_object=Process(target=start_beat, daemon=True),
+                process_log_file="beat_celery.log",
+            ),
+            "Worker": StoreService(
+                process_name="Worker",
+                process_status="Running",
+                process_object=Process(target=start_worker, daemon=True),
+                process_log_file="worker_celery.log",
+            ),
+        }
+        for k, store in to_start.items():
+            if not running_servers.get(k) and start_dict.get(k):
+                with Live(
+                    Spinner(
+                        name="dots",
+                        text=f"[bold yellow]Starting {k} application[/bold yellow]",
+                    ),
+                    refresh_per_second=4,
+                ) as live:
+                    sleep(1)
+                    running_servers.update({k: store})
+
+                    if k == "Quart":
+                        Thread(target=self.watch_shutdown, daemon=True).start()
+
+                    store.start()
+                    sleep(2)
+                    live.update(
+                        Text(
+                            text=f"✅ {k} application started successfully!",
+                            style="bold green",
+                        )
+                    )
+                    sleep(2)
+        clear()
+        printf(Text("✅ All Application server started successfully", style="bold green"))
+        sleep(2)
+        clear()
+
     def start_all(self) -> None:
         """Start all server components in separate threads and allow stopping with an event.
 

@@ -9,6 +9,10 @@
       "type": "debugpy",
       "request": "launch",
       "module": "crawjud",
+      "args": [
+        "--server",
+        "Quart"
+      ],
       "justMyCode": true
       //   "debugAdapterPath": "${workspaceFolder}/.venv/Lib/site-packages/debugpy/adapter",
     },

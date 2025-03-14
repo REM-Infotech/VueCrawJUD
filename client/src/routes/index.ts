@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
+import { api } from "../main";
 
 const routes = [
   {
@@ -29,8 +30,17 @@ const router = createRouter({
   routes,
 });
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   const isAuth = !!sessionStorage.getItem("token");
+
+  const response = await api.get("/");
+
+  if (response.status === 401) {
+    sessionStorage.removeItem("token");
+    sessionStorage.setItem("message", "Sessão expirada, faça login novamente!");
+    next({ name: "login" });
+  }
+
   if (to.meta.requiresAuth && !isAuth) {
     next({ name: "login" });
   } else {

@@ -15,9 +15,9 @@ from crawjud.manager.menu import MenuManager
 from crawjud.manager.runner import RunnerServices
 
 
-def main_server() -> None:
+def main_server(**kwargs: str) -> None:
     """Server main entry point."""
-    application_instance = MasterApp()
+    application_instance = MasterApp(**kwargs)
 
     environ.update({
         "SERVER_MANAGEMENT": "True",

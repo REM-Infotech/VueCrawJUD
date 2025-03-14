@@ -16,8 +16,10 @@ import { faMinus, faMaximize, faClose } from "@fortawesome/free-solid-svg-icons"
         data-bs-toggle="offcanvas"
         data-bs-target="#offcanvasWithBothOptions"
         aria-controls="offcanvasWithBothOptions"
-        >CrawJUD</a
       >
+        <img class="bi pe-none me-2" src="../assets/crawjud.png" alt="logo" width="40" />
+        <span class="align-middle fw-bold">Menu</span>
+      </a>
       <button
         class="navbar-toggler rounded"
         type="button"

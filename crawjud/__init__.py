@@ -44,12 +44,15 @@ class MasterApp(HeadCrawjudManager):
             self.app, self.asgi, self.celery = asyncio.run(create_app())
             live.update(Text("✅ Application server started.", style="bold green"))
 
-    def __init__(self) -> None:
+    def __init__(self, **kwargs: str) -> None:
         """Initialize the ASGI server."""
         self.boot_app()
 
         self.current_menu = self.main_menu
         self.current_menu_name = "Main Menu"
+
+        if kwargs:
+            self.start_specific(**kwargs)
 
     @property
     def functions(
