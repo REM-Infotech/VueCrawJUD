@@ -2,6 +2,7 @@
 
 import os
 import pathlib
+import traceback
 from dataclasses import dataclass
 from datetime import datetime
 
@@ -16,7 +17,14 @@ from quart import (
     make_response,
     request,
 )
-from quart_jwt_extended import create_access_token, get_jwt_identity, jwt_refresh_token_required, jwt_required
+from quart_jwt_extended import (  # noqa: F401
+    create_access_token,
+    get_jwt_identity,
+    jwt_refresh_token_required,
+    jwt_required,
+    set_access_cookies,
+    unset_jwt_cookies,
+)
 from quart_jwt_extended import get_raw_jwt as get_jwt
 
 from crawjud.models.users import TokenBlocklist, Users
@@ -58,7 +66,8 @@ async def login() -> Response:
 
             resp = jsonify({"token": access_token, "message": "Login efetuado com sucesso!"})
             resp.status_code = 200
-            resp.headers = {"Content-Type": "application/json"}
+            resp.headers.update({"Content-Type": "application/json"})
+            access_token = set_access_cookies(resp, access_token)
             return resp
 
         resp = jsonify({"message": "Usuário ou senha incorretos!"})
@@ -82,12 +91,23 @@ async def logout() -> Response:
     """
     db: SQLAlchemy = current_app.extensions["sqlalchemy"]
     token = get_jwt()
-    jti = token["jti"]
-    ttype = token["type"]
-    now = datetime.now(pytz.timezone("America/Manaus"))
-    db.session.add(TokenBlocklist(jti=jti, type=ttype, created_at=now))
-    db.session.commit()
-    return await make_response(jsonify(msg=f"{ttype.capitalize()} token successfully revoked"))
+
+    if token:
+        jti = token["jti"]
+        ttype = token["type"]
+        now = datetime.now(pytz.timezone("America/Manaus"))
+        db.session.add(TokenBlocklist(jti=jti, type=ttype, created_at=now))
+        db.session.commit()
+
+    response = await make_response(jsonify(msg=f"{ttype.capitalize()} token successfully revoked"))
+
+    try:
+        unset_jwt_cookies(response)
+
+    except Exception as e:
+        exc = traceback.format_exception(e)
+        current_app.logger.exception("\n".join(exc))
+    return response
 
 
 # Rota para atualizar o token de acesso

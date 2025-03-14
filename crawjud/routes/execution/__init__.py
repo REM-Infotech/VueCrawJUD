@@ -12,20 +12,26 @@ from quart import (
     Blueprint,
     Response,
     abort,
+    jsonify,
     make_response,
     redirect,
     render_template,
-    request,
     session,
 )
 from quart import current_app as app
-from quart_jwt_extended import jwt_required
-from sqlalchemy.orm import aliased
+from quart_jwt_extended import (  # noqa: F401
+    create_access_token,
+    get_jwt_identity,
+    jwt_refresh_token_required,
+    jwt_required,
+)
 
 from crawjud.core import db
-from crawjud.forms import SearchExec
+from crawjud.forms import SearchExec as SearchExec
 from crawjud.misc import generate_signed_url
-from crawjud.models import Executions, SuperUser, Users, admins
+from crawjud.models import Executions, Users
+from crawjud.models import SuperUser as SuperUser
+from crawjud.models import admins as admins
 
 path_template = os.path.join(pathlib.Path(__file__).parent.resolve(), "templates")
 exe = Blueprint("exe", __name__, template_folder=path_template)
@@ -41,59 +47,37 @@ async def executions() -> Response:
 
     """
     try:
-        form = await SearchExec.setup_form()
-        pid = request.args.get("pid", "")
+        data = []
 
-        if await form.validate_on_submit():
-            pid = form.campo_busca.data
+        current_user = get_jwt_identity()
 
-        chksupersu = (
-            db.session.query(SuperUser)
-            .select_from(Users)
-            .join(Users.supersu)
-            .filter(Users.login == session["login"])
-            .first()
-        )
+        executions = db.session.query(Executions).all()
+        user = db.session.query(Users).filter(Users.id == current_user).first()
 
-        executions = db.session.query(Executions)
-
-        if chksupersu:
-            alias = aliased(
-                Users,
-                (db.session.query(Users).filter(Users.login == session["login"]).subquery()),
+        if not user.supersu:
+            executions = list(
+                filter(lambda x: str(x.license_usr.license_token) == str(user.licenseusr.license_token), executions)
             )
 
-            executions = executions.join(alias, Executions.license_id == alias.licenseus_id)
+            if not user.admins:
+                executions = list(filter(lambda x: str(x.user.login) == str(session["login"]), executions))
 
-            chk_admin = (
-                db.session.query(admins)
-                .join(alias, admins.c.users_id == alias.id)
-                .filter(admins.c.license_user_id == alias.licenseus_id)
-                .first()
-            )
+        for item in executions:
+            data.append({
+                "pid": item.pid,
+                "user": item.user.nome_usuario,
+                "botname": item.bot.display_name,
+                "xlsx": item.arquivo_xlsx,
+                "start_date": item.data_execucao,
+                "status": item.status,
+                "stop_date": item.data_finalizacao,
+                "file_output": item.file_output,
+            })
 
-            if not chk_admin:
-                executions = executions.join(Users, Executions.user).filter(Users.login == session["login"])
-
-        if pid:
-            executions = executions.filter(Executions.pid.contains(pid))
-        database = executions.all()
+        return jsonify(data=data)
 
     except Exception:
         abort(500)
-
-    title = "Execuções"
-    page = "executions.html"
-    return await make_response(
-        await render_template(
-            "index.html",
-            url_socket=os.getenv("URL_WEB"),
-            page=page,
-            title=title,
-            database=database,
-            form=form,
-        )
-    )
 
 
 @exe.route("/executions/download/<filename>")

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import { faHome, faTable } from "@fortawesome/free-solid-svg-icons";
+import { faHome, faTable, faListCheck } from "@fortawesome/free-solid-svg-icons";
 import { RouterLink } from "vue-router";
 import { logout } from "../routes/login/auth";
 import { useRouter } from "vue-router";
@@ -41,17 +41,16 @@ const handleLogoutClick = (e: Event) => {
         <li class="nav-item mb-1">
           <a href="#" class="nav-link link-body-emphasis">
             <FontAwesomeIcon :icon="faTable" class="me-2" />
-            <span class="text">Dashboard</span>
+            <span class="text">Execuções</span>
           </a>
         </li>
         <li class="nav-item mb-1">
           <a href="#" class="nav-link link-body-emphasis">
-            <svg class="bi pe-none me-2" width="16" height="16">
-              <use xlink:href="#table"></use>
-            </svg>
-            Orders
+            <FontAwesomeIcon :icon="faListCheck" class="me-2" />
+            <span class="text">Tarefas Agendadas</span>
           </a>
         </li>
+        <li class="border-top my-3"></li>
         <li class="nav-item mb-1">
           <a href="#" class="nav-link link-body-emphasis">
             <svg class="bi pe-none me-2" width="16" height="16">
@@ -79,13 +78,13 @@ const handleLogoutClick = (e: Event) => {
           aria-expanded="false"
         >
           <img
-            src="https://github.com/mdo.png"
+            src="https://github.com/Robotz213.png"
             alt=""
             width="32"
             height="32"
             class="rounded-circle me-2"
           />
-          <strong>mdo</strong>
+          <strong>Robotz213</strong>
         </a>
         <ul class="dropdown-menu text-small shadow">
           <li><a class="dropdown-item" href="#">New project...</a></li>

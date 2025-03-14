@@ -1,30 +1,7 @@
-import axios from "axios";
+import { api } from "../../main";
 import jQuery from "jquery";
 import { Router } from "vue-router";
 const $ = jQuery;
-
-// Create axios instance with improved configuration
-const api = axios.create({
-  baseURL: "http://localhost:5173",
-  timeout: 5000, // 5 second timeout
-  headers: {
-    "Content-Type": "application/json",
-    Accept: "application/json",
-    Authorization: "Bearer " + sessionStorage.getItem("token"),
-  },
-  withCredentials: true, // Enable if using cookies/sessions
-});
-
-// Add request interceptor for debugging
-api.interceptors.request.use(
-  (config) => {
-    // console.log("Request:", config.method?.toUpperCase(), config.url);
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  },
-);
 
 export async function logout(router: Router) {
   try {

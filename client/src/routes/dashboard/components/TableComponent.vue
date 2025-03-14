@@ -6,84 +6,31 @@
     </div>
     <div class="card-body">
       <div class="table-responsive">
-        <table class="table table-striped table-hover" id="DataTable">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Usuário</th>
-              <th>Nome do Robô</th>
-              <th>Arquivo de Execução</th>
-              <th>Data da Execução</th>
-              <th>Status</th>
-              <th>Data finalização</th>
-              <th data-sortable="false">Arquivo de saida</th>
-            </tr>
-          </thead>
-          <tfoot>
-            <tr>
-              <th>#</th>
-              <th>Usuário</th>
-              <th>Nome do Robô</th>
-              <th>Arquivo de Execução</th>
-              <th>Data da Execução</th>
-              <th>Status</th>
-              <th>Data finalização</th>
-              <th data-sortable="false">Arquivo de saida</th>
-            </tr>
-          </tfoot>
-          <tbody>
-            <!-- {% if database %} {% for item in database %}
-            <tr>
-              {% if item.status == "Falha ao iniciar" or item.status == "Finalizado"%}
-              <th>{{ item.pid }}</th>
-              {% else %}
-              <th>
-                <a href='{{ url_for("logsbot.logs_bot", pid=item.pid) }}'>{{ item.pid }}</a>
-              </th>
-              {% endif %}
-              <td>{{ item.user.nome_usuario }}</td>
-              <td>{{ item.bot.display_name }}</td>
-              <td>{{ item.arquivo_xlsx }}</td>
-              <td>{{ item.data_execucao.strftime("%d/%m/%Y %H:%M") }}</td>
-              <td>{{ item.status }}</td>
-              <td>{{ item.data_finalizacao.strftime("%d/%m/%Y %H:%M") }}</td>
-              {% if item.file_output == "Arguardando Arquivo" %}
-              <td>{{ item.file_output }}</td>
-              {% else %}
-              <td>
-                <a
-                  href="{{ url_for('exe.download_file', filename=item.file_output) }}"
-                  class="btn btn-sm btn-icon-split btn-success mb-3"
-                >
-                  <span class="icon text-white-50">
-                    <i class="fa-solid fa-file-csv"></i>
-                  </span>
-                  <span class="text">Arquivo</span>
-                </a>
-              </td>
-              {% endif %}
-            </tr>
-            {% endfor %} {% endif %} -->
-          </tbody>
-        </table>
+        <BTable striped hover id="DataTables" :items="items" />
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { getExecutions } from "./requests";
+import { BTable } from "bootstrap-vue-next";
 import DataTable from "datatables.net-bs5";
-import { onMounted } from "vue";
-
-onMounted(() => {
-  var datatablesSimple = document.querySelector('table[id="DataTable"]');
-  if (datatablesSimple) {
-    new DataTable(datatablesSimple, {
-      searching: false,
-      deferRender: true,
-      deferLoading: 57,
-      processing: true,
-    });
-  }
+import { onMounted, ref } from "vue";
+import jQuery from "jquery";
+const $ = jQuery;
+var datatablesSimple = $("#DataTables");
+datatablesSimple.on("update", function () {
+  new DataTable(datatablesSimple, {
+    searching: false,
+    deferRender: true,
+    deferLoading: 57,
+    processing: true,
+    serverSide: true,
+  });
+});
+const items = ref([]);
+onMounted(async () => {
+  items.value = await getExecutions();
 });
 </script>

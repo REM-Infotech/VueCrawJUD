@@ -32,6 +32,11 @@ export default defineConfig({
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/logout/, ""),
       },
+      "/executions": {
+        target: "http://localhost:5000/executions",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/executions/, ""),
+      },
     },
   },
 });
