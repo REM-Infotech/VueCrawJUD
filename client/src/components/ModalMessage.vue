@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { ref } from "vue";
-
-const rogrammaticModal = ref(false);
+import { BModal } from "bootstrap-vue-next";
+const programmaticModal = ref(false);
 </script>
 
 <template>
-  <BModal v-model="rogrammaticModal" title="Hello, World!" id="ExampleModal"></BModal>
+  <BModal v-model="programmaticModal" title="Hello, World!" id="ExampleModal">
+    <BButton @click="programmaticModal = false">Fechar</BButton>
+  </BModal>
 </template>

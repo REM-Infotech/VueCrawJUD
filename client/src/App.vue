@@ -3,6 +3,6 @@ import ModalMessage from "./components/ModalMessage.vue";
 </script>
 
 <template>
-  <RouterView />
   <ModalMessage />
+  <RouterView />
 </template>
