@@ -2,6 +2,8 @@
 import { onMounted } from "vue";
 import NavBarComponent from "../../components/NavBarComponent.vue";
 import SideBarComponent from "../../components/SideBarComponent.vue";
+import ChartComponent from "./components/ChartComponent.vue";
+import TableComponent from "./components/TableComponent.vue";
 import { io } from "socket.io-client";
 import { useModal } from "bootstrap-vue-next";
 import jQuery from "jquery";
@@ -19,10 +21,10 @@ onMounted(() => {
 
 onMounted(() => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { show, hide, modal } = useModal("ExampleModal");
+  const { show, hide, modal } = useModal("ModalMessage");
   var message = sessionStorage.getItem("message");
   if (message) {
-    $("#ExampleModal").text(message);
+    $("#message").text(message);
     show();
     sessionStorage.removeItem("message");
   }
@@ -34,10 +36,14 @@ onMounted(() => {
   <div id="content">
     <SideBarComponent />
     <main>
-      <div class="container-fluid mt-4 px-5">
-        <div class="card">
+      <div class="container px-4">
+        <div class="card mt-4 mb-4">
           <div class="card-header">
-            <h3>Dashboard</h3>
+            <h1 class="mb-3">Dashboard</h1>
+          </div>
+          <div class="card-body bg-warning bg-opacity-75">
+            <ChartComponent />
+            <TableComponent />
           </div>
         </div>
       </div>

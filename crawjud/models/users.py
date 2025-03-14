@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from datetime import datetime
-from typing import Any, Dict
+from typing import Any
 from uuid import uuid4
 
 import bcrypt
@@ -17,14 +17,19 @@ salt = bcrypt.gensalt()
 
 
 @jwt.user_identity_loader
-def user_identity_lookup(user: Users) -> int:
+def user_identity_lookup(*args: Any, **kwargs: Any) -> int:
     """Get the user's identity."""
+    user: Users = args[0]
+
     return user.id
 
 
 @jwt.token_in_blacklist_loader
-def check_if_token_revoked(jwt_header: dict[str, str | int | Any], jwt_data: Dict[str, str | int | Any]) -> bool:
+def check_if_token_revoked(jwt_data: dict, *args: Any, **kwargs: Any) -> bool:
     """Check if the token is in the blocklist."""
+    arg = args  # noqa: F841
+    kw = kwargs  # noqa: F841
+
     jti = jwt_data["jti"]
     token = db.session.query(TokenBlocklist.id).filter_by(jti=jti).scalar()
 
@@ -32,10 +37,11 @@ def check_if_token_revoked(jwt_header: dict[str, str | int | Any], jwt_data: Dic
 
 
 @jwt.user_loader_callback_loader
-def user_lookup_callback(jwt_header: dict[str, str | int | Any], jwt_data: Dict[str, str | int | Any]) -> Users | None:
+def user_lookup_callback(*args: Any, **kwargs: Any) -> Users | None:
     """Get the user from the JWT data."""
-    identity = jwt_data["sub"]
-    return db.session.query(Users).filter_by(id=identity).one_or_none()
+    id_: int = args[0]
+
+    return db.session.query(Users).filter_by(id=id_).one_or_none()
 
 
 class TokenBlocklist(db.Model):

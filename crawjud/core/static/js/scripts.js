@@ -1,4 +1,4 @@
-$(document).ready(function () {
+$(function () {
   var url_Profile = $("#urlProfile").text();
   const src_profiles = [$("#NavProfilePIC"), $("#ProfilePIC")];
 

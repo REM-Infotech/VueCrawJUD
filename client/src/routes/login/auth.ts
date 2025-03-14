@@ -10,6 +10,7 @@ const api = axios.create({
   headers: {
     "Content-Type": "application/json",
     Accept: "application/json",
+    Authorization: "Bearer " + sessionStorage.getItem("token"),
   },
   withCredentials: true, // Enable if using cookies/sessions
 });
@@ -25,27 +26,34 @@ api.interceptors.request.use(
   },
 );
 
-export async function logout(router) {
+export async function logout(router: Router) {
   try {
-    const refreshToken = localStorage.getItem("token");
+    const refreshToken = sessionStorage.getItem("token");
 
     sessionStorage.setItem("message", "Logout Efetuado com sucesso!");
 
     if (refreshToken) {
-      const response = await api.post("/logout", {
-        refresh_token: refreshToken,
-      });
+      const response = await api.post(
+        "/logout",
+        {},
+        {
+          headers: {
+            Authorization: "Bearer " + refreshToken,
+          },
+        },
+      );
 
       if (response.status === 200 || response.status === 401) {
-        localStorage.removeItem("token");
+        sessionStorage.removeItem("token");
         router.push({ name: "login" });
       }
 
-      localStorage.removeItem("token");
+      sessionStorage.removeItem("token");
       router.push({ name: "login" });
     }
-  } catch {
-    localStorage.removeItem("token");
+  } catch (error) {
+    console.log(error);
+    sessionStorage.removeItem("token");
     router.push({ name: "login" });
   }
 }
@@ -60,7 +68,7 @@ export async function authenticate(router: Router) {
 
     if (response.status === 200) {
       const data: Record<string, string> = response.data as Record<string, string>;
-      localStorage.setItem("token", data.token);
+      sessionStorage.setItem("token", data.token);
 
       sessionStorage.setItem("message", "Login Efetuado com sucesso!");
 

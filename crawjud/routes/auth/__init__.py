@@ -56,7 +56,7 @@ async def login() -> Response:
         if usr and usr.check_password(form.password):
             access_token = create_access_token(identity=usr)
 
-            resp = jsonify({"access_token": access_token, "message": "Login efetuado com sucesso!"})
+            resp = jsonify({"token": access_token, "message": "Login efetuado com sucesso!"})
             resp.status_code = 200
             resp.headers = {"Content-Type": "application/json"}
             return resp

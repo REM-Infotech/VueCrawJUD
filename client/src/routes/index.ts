@@ -29,7 +29,7 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  const isAuth = !!localStorage.getItem("token");
+  const isAuth = !!sessionStorage.getItem("token");
   if (to.meta.requiresAuth && !isAuth) {
     next({ name: "login" });
   } else {

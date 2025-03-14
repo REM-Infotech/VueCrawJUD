@@ -35,10 +35,10 @@ const router = useRouter();
 const $ = jQuery;
 onMounted(() => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { show, hide, modal } = useModal("ExampleModal");
+  const { show, hide, modal } = useModal("ModalMessage");
   var message = sessionStorage.getItem("message");
   if (message) {
-    $("#ExampleModal").text(message);
+    $("#message").text(message);
     show();
     sessionStorage.removeItem("message");
   }
