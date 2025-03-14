@@ -4,26 +4,18 @@
       <div class="card mb-4">
         <div class="card-header">
           <i class="fas fa-chart-bar me-1"></i>
-          Execuções por Mês
+          Bar Chart Example
         </div>
-        <div class="card-body d-flex justify-content-center">
-          <div class="d-flex justify-content-center p-4" style="height: 35vh">
-            <canvas id="month_chart"></canvas>
-          </div>
-        </div>
+        <div class="card-body"><canvas id="myBarChart" width="100%" height="40"></canvas></div>
       </div>
     </div>
     <div class="col-xl-6">
       <div class="card mb-4">
         <div class="card-header">
-          <i class="fas fa-chart-pie me-1"></i>
-          Robôs mais utilizados
+          <i class="fas fa-chart-area me-1"></i>
+          Area Chart Example
         </div>
-        <div class="card-body d-flex justify-content-center">
-          <div class="d-flex justify-content-center p-4" style="height: 35vh">
-            <canvas id="most_executed"></canvas>
-          </div>
-        </div>
+        <div class="card-body"><canvas id="myAreaChart" width="100%" height="40"></canvas></div>
       </div>
     </div>
   </div>
@@ -42,224 +34,115 @@ Chart.defaults.font.family =
 Chart.defaults.color = "#292b2c";
 
 onMounted(() => {
-  const ctx_month = document.getElementById("month_chart") as HTMLCanvasElement;
-  if (!ctx_month) return;
+  var ctx1 = (document.getElementById("myAreaChart") as HTMLCanvasElement)?.getContext("2d");
+
+  if (!ctx1) return;
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  var month_chart = new Chart(ctx_month, {
-    type: "bar",
+  var myLineChart = new Chart(ctx1, {
+    type: "line",
     data: {
       labels: [
-        "Janeiro",
-        "Fevereiro",
-        "Março",
-        "Abril",
-        "Maio",
-        "Junho",
-        "Julho",
-        "Agosto",
-        "Setembro",
-        "Outubro",
-        "Novembro",
-        "Dezembro",
+        "Mar 1",
+        "Mar 2",
+        "Mar 3",
+        "Mar 4",
+        "Mar 5",
+        "Mar 6",
+        "Mar 7",
+        "Mar 8",
+        "Mar 9",
+        "Mar 10",
+        "Mar 11",
+        "Mar 12",
+        "Mar 13",
       ],
-
       datasets: [
         {
-          label: "Execuções",
-          backgroundColor: [
-            "#FF9800",
-            "#FF5722",
-            "#795548",
-            "#9E9E9E",
-            "#607D8B",
-            "#F44336",
-            "#E57373",
-            "#BA68C8",
-            "#8D6E63",
-            "#D84315",
-            "#A1887F",
-            "#4E342E",
-            "#3E2723",
-            "#D32F2F",
-            "#FFA726",
-            "#EF6C00",
-            "#BCAAA4",
-            "#A1887F",
-            "#8E24AA",
-            "#5D4037",
-            "#7B1FA2",
-            "#8E8E8E",
-            "#6D4C41",
-            "#FF7043",
-            "#FF8A65",
-            "#6A1B9A",
-            "#FFAB91",
-            "#F57F17",
-            "#B39DDB",
-            "#9C27B0",
-            "#E65100",
-            "#6A1B9A",
-            "#D4E157",
-            "#9C9C9C",
-            "#BF360C",
-            "#FFCCBC",
-            "#616161",
-            "#BDBDBD",
-            "#8D6E63",
-            "#C62828",
+          label: "Sessions",
+          tension: 0.3,
+          backgroundColor: "rgba(2,117,216,0.2)",
+          borderColor: "rgba(2,117,216,1)",
+          pointRadius: 5,
+          pointBackgroundColor: "rgba(2,117,216,1)",
+          pointBorderColor: "rgba(255,255,255,0.8)",
+          pointHoverRadius: 5,
+          pointHoverBackgroundColor: "rgba(2,117,216,1)",
+          pointHitRadius: 50,
+          pointBorderWidth: 2,
+          data: [
+            10000, 30162, 26263, 18394, 18287, 28682, 31274, 33259, 25849, 24159, 32651, 31984,
+            38451,
           ],
-          borderColor: [
-            "#CC7A00",
-            "#CC471A",
-            "#5D4037",
-            "#7E7E7E",
-            "#4A5C6B",
-            "#CC3726",
-            "#CC4F4F",
-            "#9546A8",
-            "#715A54",
-            "#AB3413",
-            "#826F66",
-            "#3D2E2A",
-            "#31211F",
-            "#B72B29",
-            "#E48920",
-            "#CB5C00",
-            "#9A7D73",
-            "#826F66",
-            "#7A1D90",
-            "#4C3B34",
-            "#681C85",
-            "#737373",
-            "#583F37",
-            "#CC5C37",
-            "#CC7557",
-            "#581682",
-            "#CC9171",
-            "#C26D14",
-            "#977BB8",
-            "#811B92",
-            "#B34700",
-            "#581682",
-            "#A4BD41",
-            "#808080",
-            "#99310B",
-            "#CCAC9C",
-            "#494949",
-            "#989898",
-            "#715A54",
-            "#A32222",
-          ],
-          data: [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1],
         },
       ],
     },
     options: {
-      responsive: true,
+      scales: {
+        x: {
+          time: {
+            unit: "day",
+          },
+          grid: {
+            display: false,
+          },
+          ticks: {
+            maxTicksLimit: 7,
+          },
+        },
+        y: {
+          ticks: {
+            minRotation: 0,
+            maxRotation: 40000,
+            maxTicksLimit: 5,
+          },
+          grid: {
+            color: "rgba(0, 0, 0, .125)",
+          },
+        },
+      },
     },
   });
 
-  const ctx_most_executed = document.getElementById("most_executed") as HTMLCanvasElement;
-  if (!ctx_most_executed) return;
+  var ctx2 = (document.getElementById("myBarChart") as HTMLCanvasElement)?.getContext("2d");
+  if (!ctx2) return;
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  var most_executed = new Chart(ctx_most_executed, {
-    type: "doughnut",
-
+  var myBarChart = new Chart(ctx2, {
+    type: "bar",
     data: {
+      labels: ["January", "February", "March", "April", "May", "June"],
       datasets: [
         {
-          label: "Execuções",
-          backgroundColor: [
-            "#FF9800",
-            "#FF5722",
-            "#795548",
-            "#9E9E9E",
-            "#607D8B",
-            "#F44336",
-            "#E57373",
-            "#BA68C8",
-            "#8D6E63",
-            "#D84315",
-            "#A1887F",
-            "#4E342E",
-            "#3E2723",
-            "#D32F2F",
-            "#FFA726",
-            "#EF6C00",
-            "#BCAAA4",
-            "#A1887F",
-            "#8E24AA",
-            "#5D4037",
-            "#7B1FA2",
-            "#8E8E8E",
-            "#6D4C41",
-            "#FF7043",
-            "#FF8A65",
-            "#6A1B9A",
-            "#FFAB91",
-            "#F57F17",
-            "#B39DDB",
-            "#9C27B0",
-            "#E65100",
-            "#6A1B9A",
-            "#D4E157",
-            "#9C9C9C",
-            "#BF360C",
-            "#FFCCBC",
-            "#616161",
-            "#BDBDBD",
-            "#8D6E63",
-            "#C62828",
-          ],
-          borderColor: [
-            "#CC7A00",
-            "#CC471A",
-            "#5D4037",
-            "#7E7E7E",
-            "#4A5C6B",
-            "#CC3726",
-            "#CC4F4F",
-            "#9546A8",
-            "#715A54",
-            "#AB3413",
-            "#826F66",
-            "#3D2E2A",
-            "#31211F",
-            "#B72B29",
-            "#E48920",
-            "#CB5C00",
-            "#9A7D73",
-            "#826F66",
-            "#7A1D90",
-            "#4C3B34",
-            "#681C85",
-            "#737373",
-            "#583F37",
-            "#CC5C37",
-            "#CC7557",
-            "#581682",
-            "#CC9171",
-            "#C26D14",
-            "#977BB8",
-            "#811B92",
-            "#B34700",
-            "#581682",
-            "#A4BD41",
-            "#808080",
-            "#99310B",
-            "#CCAC9C",
-            "#494949",
-            "#989898",
-            "#715A54",
-            "#A32222",
-          ],
-          data: [0.1, 0.1, 0.1],
+          label: "Revenue",
+          backgroundColor: "rgba(2,117,216,1)",
+          borderColor: "rgba(2,117,216,1)",
+          data: [4215, 5312, 6251, 7841, 9821, 14984],
         },
       ],
-      labels: ["Carregando", "Carregando", "Carregando"],
     },
     options: {
-      responsive: true,
+      scales: {
+        x: {
+          time: {
+            unit: "month",
+          },
+          grid: {
+            display: false,
+          },
+          ticks: {
+            maxTicksLimit: 6,
+          },
+        },
+        y: {
+          ticks: {
+            minRotation: 0,
+            maxRotation: 15000,
+            maxTicksLimit: 5,
+          },
+          grid: {
+            display: true,
+          },
+        },
+      },
     },
   });
 
