@@ -24,8 +24,8 @@ CreateApp();
 
 // Create axios instance with improved configuration
 export const api = axios.create({
-  baseURL: "http://localhost:5173",
-  timeout: 5000, // 5 second timeout
+  baseURL: "http://localhost:8000",
+  timeout: 60000, // 5 second timeout
 });
 
 // Add request interceptor for debugging
