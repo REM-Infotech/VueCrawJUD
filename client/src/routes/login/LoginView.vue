@@ -29,13 +29,13 @@ import { useRouter } from "vue-router";
 import { useModal } from "bootstrap-vue-next";
 import { onMounted } from "vue";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const { show, hide, modal } = useModal("ExampleModal");
 import jQuery from "jquery";
 const router = useRouter();
 
 const $ = jQuery;
 onMounted(() => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { show, hide, modal } = useModal("ExampleModal");
   var message = sessionStorage.getItem("message");
   if (message) {
     $("#ExampleModal").text(message);
