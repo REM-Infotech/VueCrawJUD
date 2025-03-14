@@ -24,14 +24,14 @@
 
 <script setup lang="ts">
 import { onBeforeMount } from "vue";
-import { authenticate } from "./auth";
 import { useRouter } from "vue-router";
 import { useModal } from "bootstrap-vue-next";
 import { onMounted } from "vue";
-
+import { Router } from "vue-router";
 import jQuery from "jquery";
+import { api } from "../../main";
 const router = useRouter();
-
+const { show } = useModal("ModalMessage");
 const $ = jQuery;
 onMounted(() => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -55,4 +55,38 @@ onBeforeMount(() => {
     $("#app").addClass("bg-indigo");
   }
 });
+
+async function authenticate(router: Router) {
+  try {
+    const response = await api.post("/auth", {
+      login: $("#login").val(),
+      password: $("#password").val(),
+      remember_me: $("#gridCheck").is(":checked"),
+    });
+
+    if (response.status === 200) {
+      const data: Record<string, string> = response.data as Record<string, string>;
+      sessionStorage.setItem("token", data.token);
+
+      sessionStorage.setItem("message", "Login Efetuado com sucesso!");
+
+      router.push({ name: "index" });
+      if ($("#app").hasClass("bg-indigo")) {
+        $("#app").removeClass("bg-indigo");
+        $("#app").addClass("bg-purple");
+      }
+    }
+  } catch (error) {
+    console.error("Login failed:", {
+      message: error.message,
+      status: error.response?.status,
+      data: error.response?.data,
+    });
+
+    $("#message").text("Erro ao realizar login");
+    show();
+
+    console.error(error);
+  }
+}
 </script>

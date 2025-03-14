@@ -5,6 +5,7 @@ const routes = [
     path: "/:pathMatch(.*)*",
     name: "NotFound",
     component: () => import("./handler/NotFoundView.vue"),
+    meta: { requiresAuth: true },
   },
 
   {
