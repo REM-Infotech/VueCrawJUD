@@ -13,9 +13,15 @@ export async function getExecutions() {
     const items = data.map((item) => {
       const status: string = item.status;
       let link_file = item.file_output;
+      const link_log = item.pid;
+      if (status.toLowerCase() === "em execução") {
+        link_file = `<a class="btn btn-sm btn-success disabled m-1" href="${link_file}" target="_blank" aria-disabled="true">Baixar Arquivo</a>
+                    <a class="btn btn-sm btn-primary m-1" href="/logs/${link_log}" target="_blank">Ver Log</a>`;
+      }
 
       if (status.toLowerCase() !== "em execução") {
-        link_file = `<a class="btn btn-sm btn-success" href="${link_file}" target="_blank">Baixar Arquivo</a>`;
+        link_file = `<a class="btn btn-sm btn-success m-1" href="${link_file}" target="_blank">Baixar Arquivo</a>
+                      <a class="btn btn-sm btn-primary m-1 disabled" href="/logs/${link_log}" target="_blank" aria-disabled="true">Ver Log</a>`;
       }
 
       return [

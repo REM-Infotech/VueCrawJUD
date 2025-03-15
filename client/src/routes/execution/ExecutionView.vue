@@ -35,10 +35,10 @@ onMounted(() => {
   <div id="content">
     <SideBarComponent />
     <main>
-      <BContainer fluid="xl" class="px-4">
+      <BContainer fluid class="px-4">
         <div class="card mt-4 mb-4">
           <div class="card-header">
-            <h1 class="mb-3">Dashboard</h1>
+            <h1 class="mb-3">Execuções</h1>
           </div>
           <div class="card-body bg-warning bg-opacity-75">
             <TableComponent />

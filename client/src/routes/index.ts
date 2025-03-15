@@ -11,7 +11,6 @@ const routes = [
       $("#app").addClass("bg-purple");
     },
   },
-
   {
     path: "/login",
     name: "login",
@@ -27,6 +26,15 @@ const routes = [
     },
   },
   {
+    path: "/execucoes",
+    name: "executions",
+    component: () => import("./execution/ExecutionView.vue"),
+    meta: { requiresAuth: true },
+    mount() {
+      $("#app").addClass("bg-purple");
+    },
+  },
+  {
     path: "/bot/form/:id",
     name: "bot_form",
     component: () => import("./bot/BotFormView.vue"),
@@ -36,7 +44,7 @@ const routes = [
     },
   },
   {
-    path: "/bot",
+    path: "/bots",
     name: "bot_dashboard",
     component: () => import("./bot/BotDashboardView.vue"),
     meta: { requiresAuth: true },

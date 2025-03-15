@@ -33,16 +33,16 @@ const handleLogoutClick = (e: Event) => {
       <hr />
       <ul class="nav nav-pills flex-column mb-auto">
         <li class="nav-item mb-1">
-          <a href="#" class="nav-link link-body-emphasis">
+          <RouterLink :to="{ name: 'index' }" class="nav-link link-body-emphasis">
             <FontAwesomeIcon :icon="faHome" class="me-2" />
             <span class="text">Home</span>
-          </a>
+          </RouterLink>
         </li>
         <li class="nav-item mb-1">
-          <a href="#" class="nav-link link-body-emphasis">
+          <RouterLink :to="{ name: 'executions' }" class="nav-link link-body-emphasis">
             <FontAwesomeIcon :icon="faTable" class="me-2" />
             <span class="text">Execuções</span>
-          </a>
+          </RouterLink>
         </li>
         <li class="nav-item mb-1">
           <a href="#" class="nav-link link-body-emphasis">
