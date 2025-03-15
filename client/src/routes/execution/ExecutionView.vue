@@ -61,7 +61,7 @@ onMounted(() => {
   }
 });
 
-let timeout = null;
+let timeout: ReturnType<typeof setTimeout> | null = null;
 
 const loadingBuzy = ref(false);
 const buzyButton = ref<HTMLElement | null>(null);
