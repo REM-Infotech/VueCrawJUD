@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import { faHome, faTable, faListCheck } from "@fortawesome/free-solid-svg-icons";
+import { faHome, faTable, faListCheck, faRobot } from "@fortawesome/free-solid-svg-icons";
 import { RouterLink } from "vue-router";
 import { logout } from "../routes/login/auth";
 import { useRouter } from "vue-router";
@@ -52,12 +52,10 @@ const handleLogoutClick = (e: Event) => {
         </li>
         <li class="border-top my-3"></li>
         <li class="nav-item mb-1">
-          <a href="#" class="nav-link link-body-emphasis">
-            <svg class="bi pe-none me-2" width="16" height="16">
-              <use xlink:href="#grid"></use>
-            </svg>
-            Products
-          </a>
+          <RouterLink :to="{ name: 'bot_dashboard' }" class="nav-link link-body-emphasis">
+            <FontAwesomeIcon :icon="faRobot" class="me-2" />
+            <span class="text">Robôs</span>
+          </RouterLink>
         </li>
         <li class="nav-item mb-1">
           <a href="#" class="nav-link link-body-emphasis">

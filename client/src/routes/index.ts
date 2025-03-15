@@ -7,6 +7,9 @@ const routes = [
     name: "NotFound",
     component: () => import("./handler/NotFoundView.vue"),
     meta: { requiresAuth: true },
+    mount() {
+      $("#app").addClass("bg-purple");
+    },
   },
 
   {
@@ -18,6 +21,24 @@ const routes = [
     path: "/",
     name: "index",
     component: () => import("./dashboard/DashboardView.vue"),
+    meta: { requiresAuth: true },
+    mount() {
+      $("#app").addClass("bg-purple");
+    },
+  },
+  {
+    path: "/bot/form/:id",
+    name: "bot_form",
+    component: () => import("./bot/BotFormView.vue"),
+    meta: { requiresAuth: true },
+    mount() {
+      $("#app").addClass("bg-purple");
+    },
+  },
+  {
+    path: "/bot",
+    name: "bot_dashboard",
+    component: () => import("./bot/BotDashboardView.vue"),
     meta: { requiresAuth: true },
     mount() {
       $("#app").addClass("bg-purple");
