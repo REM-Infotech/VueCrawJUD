@@ -24,7 +24,7 @@ CreateApp();
 
 // Create axios instance with improved configuration
 export const api = axios.create({
-  baseURL: "http://localhost:8000",
+  baseURL: "https://homolog.robotz.dev",
   timeout: 60000, // 5 second timeout
 });
 

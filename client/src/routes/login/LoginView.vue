@@ -20,7 +20,29 @@
         <label for="gridCheck" class="form-check-label text-white">Remember Me</label>
       </div>
       <hr />
-      <button type="submit" class="btn btn-primary">Sign in</button>
+      <BOverlay
+        :show="loadingBuzy"
+        rounded
+        opacity="0.6"
+        spinner-small
+        spinner-variant="primary"
+        class="d-inline-block"
+        @hidden="onBuzyHidden"
+      >
+        <BButton
+          type="button"
+          ref="buzyButton"
+          :disabled="loadingBuzy"
+          variant="primary"
+          @click="
+            (e) => {
+              setBuzyClick(e);
+            }
+          "
+        >
+          Login
+        </BButton>
+      </BOverlay>
     </form>
   </main>
 </template>
@@ -33,6 +55,7 @@ import { onMounted } from "vue";
 import { Router } from "vue-router";
 import jQuery from "jquery";
 import { api } from "../../main";
+import { loadingBuzy, onBuzyHidden, setBuzyClick } from "../animations";
 const router = useRouter();
 const { show } = useModal("ModalMessage");
 const $ = jQuery;
