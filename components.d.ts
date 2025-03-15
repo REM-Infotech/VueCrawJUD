@@ -11,6 +11,7 @@ declare module 'vue' {
     BButton: typeof import('bootstrap-vue-next/components/BButton')['BButton']
     BContainer: typeof import('bootstrap-vue-next/components/BContainer')['BContainer']
     BModal: typeof import('bootstrap-vue-next/components/BModal')['BModal']
+    BOverlay: typeof import('bootstrap-vue-next/components/BOverlay')['BOverlay']
     BTable: typeof import('bootstrap-vue-next/components/BTable')['BTable']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']

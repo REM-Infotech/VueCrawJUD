@@ -89,8 +89,6 @@ const router = useRouter();
 const items = ref<Execution[]>([]);
 onMounted(async () => {
   getExecutions().then((data) => {
-    console.log(data);
-
     if (data.code) {
       if (data.code === "ERR_BAD_REQUEST") {
         sessionStorage.setItem("message", "Sessão expirada, faça login novamente!");
@@ -112,8 +110,6 @@ onMounted(async () => {
           targets: [4, 6],
           // eslint-disable-next-line @typescript-eslint/no-unused-vars
           render: function (data: string, _type, _row) {
-            console.log(data);
-
             return moment(data, "ddd, DD MMM YYYY HH:mm:ss GMT").format("DD/MM/YYYY HH:mm");
           },
         },
