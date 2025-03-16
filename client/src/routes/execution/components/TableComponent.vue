@@ -1,3 +1,59 @@
+<script setup lang="ts">
+import moment from "moment";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { onBeforeMount, onMounted, ref } from "vue";
+import DataTable from "datatables.net-vue3";
+import DataTablesCore from "datatables.net-bs5";
+import { useRouter } from "vue-router";
+DataTable.use(DataTablesCore);
+
+let items = [];
+import { api } from "../../../main";
+import { faDownload } from "@fortawesome/free-solid-svg-icons";
+
+const data_ = ref(false);
+const router = useRouter();
+onMounted(async function () {
+  api
+    .get("/executions", {
+      withCredentials: true,
+    })
+    .then(async (response) => {
+      items = response.data.data.map((item) => {
+        return [
+          item.pid,
+          item.user,
+          item.botname,
+          item.xlsx,
+          () => {
+            return moment(item.start_date, "ddd, DD MMM YYYY HH:mm:ss GMT").format(
+              "DD/MM/YYYY HH:mm",
+            );
+          },
+          item.status,
+
+          () => {
+            return moment(item.stop_date, "ddd, DD MMM YYYY HH:mm:ss GMT").format(
+              "DD/MM/YYYY HH:mm",
+            );
+          },
+          item.file_output,
+        ];
+      });
+      data_.value = true;
+    })
+    .catch((error) => {
+      if (error.code) {
+        if (error.code === "ERR_BAD_REQUEST") {
+          sessionStorage.setItem("message", "Sessão expirada, faça login novamente!");
+          router.push({ name: "login" });
+        }
+      }
+    });
+});
+</script>
+
 <template>
   <div class="card mb-4">
     <div class="card-header">
@@ -5,12 +61,8 @@
       Execuções
     </div>
     <div class="card-body">
-      <div class="table-responsive">
-        <table
-          class="placeholder-glow table table-striped table-hover"
-          :items="items"
-          id="DataTables"
-        >
+      <div v-if="data_" class="table-responsive">
+        <DataTable :data="items" class="placeholder-glow table table-striped table-hover">
           <thead>
             <tr>
               <th>#</th>
@@ -23,6 +75,19 @@
               <th data-sortable="false">Arquivo de saida</th>
             </tr>
           </thead>
+          <template #column-7="props">
+            <a
+              v-if="props.cellData.toString().toLowerCase() !== 'arguardando arquivo'"
+              href="http://"
+              class="btn btn-sm btn-success"
+              data-bs-toggle="tooltip"
+              data-bs-title="Default tooltip"
+              ><FontAwesomeIcon :icon="faDownload"
+            /></a>
+            <span v-else>
+              {{ props.cellData }}
+            </span>
+          </template>
           <tfoot>
             <tr>
               <th>#</th>
@@ -35,6 +100,22 @@
               <th data-sortable="false">Arquivo de saida</th>
             </tr>
           </tfoot>
+        </DataTable>
+      </div>
+      <div v-if="!data_" class="table-responsive">
+        <table class="placeholder-glow table table-striped table-hover">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Usuário</th>
+              <th>Nome do Robô</th>
+              <th>Arquivo de Execução</th>
+              <th>Data da Execução</th>
+              <th>Status</th>
+              <th>Data finalização</th>
+              <th data-sortable="false">Arquivo de saida</th>
+            </tr>
+          </thead>
           <tbody>
             <tr class="text-center">
               <td colspan="8"><span class="placeholder w-100 rounded">Carregando</span></td>
@@ -60,61 +141,36 @@
             <tr class="text-center">
               <td colspan="8"><span class="placeholder w-100 rounded">Carregando</span></td>
             </tr>
+            <tr class="text-center">
+              <td colspan="8"><span class="placeholder w-100 rounded">Carregando</span></td>
+            </tr>
+            <tr class="text-center">
+              <td colspan="8"><span class="placeholder w-100 rounded">Carregando</span></td>
+            </tr>
+            <tr class="text-center">
+              <td colspan="8"><span class="placeholder w-100 rounded">Carregando</span></td>
+            </tr>
+            <tr class="text-center">
+              <td colspan="8"><span class="placeholder w-100 rounded">Carregando</span></td>
+            </tr>
+            <tr class="text-center">
+              <td colspan="8"><span class="placeholder w-100 rounded">Carregando</span></td>
+            </tr>
           </tbody>
+          <tfoot>
+            <tr>
+              <th>#</th>
+              <th>Usuário</th>
+              <th>Nome do Robô</th>
+              <th>Arquivo de Execução</th>
+              <th>Data da Execução</th>
+              <th>Status</th>
+              <th>Data finalização</th>
+              <th data-sortable="false">Arquivo de saida</th>
+            </tr>
+          </tfoot>
         </table>
       </div>
     </div>
   </div>
 </template>
-
-<script setup lang="ts">
-import moment from "moment";
-import { getExecutions } from "./requests";
-import DataTable from "datatables.net-bs5";
-import { onMounted, ref } from "vue";
-import { useRouter } from "vue-router";
-interface Execution {
-  pid: string;
-  user: string;
-  botname: string;
-  xlsx: string;
-  start_date: string;
-  status: string;
-  stop_date: string;
-  file_output: string;
-}
-
-const router = useRouter();
-
-const items = ref<Execution[]>([]);
-onMounted(async () => {
-  getExecutions().then((data) => {
-    if (data.code) {
-      if (data.code === "ERR_BAD_REQUEST") {
-        sessionStorage.setItem("message", "Sessão expirada, faça login novamente!");
-        router.push({ name: "login" });
-      }
-    }
-
-    new DataTable("#DataTables", {
-      paging: true,
-      searching: true,
-      ordering: true,
-      info: true,
-      lengthChange: true,
-      lengthMenu: [5, 10],
-      pageLength: 5,
-      data: data,
-      columnDefs: [
-        {
-          targets: [4, 6],
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          render: function (data: string, _type, _row) {
-            return moment(data, "ddd, DD MMM YYYY HH:mm:ss GMT").format("DD/MM/YYYY HH:mm");
-          },
-        },
-      ],
-    });
-  });
-});
-</script>

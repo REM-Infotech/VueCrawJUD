@@ -1,23 +1,24 @@
 <script setup lang="ts">
-import { onMounted } from "vue";
+// import { io } from "socket.io-client";
 import NavBarComponent from "../../components/NavBarComponent.vue";
 import SideBarComponent from "../../components/SideBarComponent.vue";
 import ChartComponent from "./components/ChartComponent.vue";
 import TableComponent from "./components/TableComponent.vue";
-import { io } from "socket.io-client";
 import { useModal } from "bootstrap-vue-next";
 import jQuery from "jquery";
+import { onMounted } from "vue";
 
 const $ = jQuery;
-onMounted(() => {
-  const socket = io("http://localhost:5000/log");
-  socket.on("connect", () => {
-    console.log("Connected to server");
-  });
-  socket.on("disconnect", () => {
-    console.log("Disconnected from crawjud");
-  });
-});
+
+// onMounted(() => {
+//   const socket = io("http://localhost:5000/log");
+//   socket.on("connect", () => {
+//     console.log("Connected to server");
+//   });
+//   socket.on("disconnect", () => {
+//     console.log("Disconnected from crawjud");
+//   });
+// });
 
 onMounted(() => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -37,7 +38,7 @@ onMounted(() => {
     <SideBarComponent />
     <div>
       <main>
-        <BContainer fluid="xl" class="px-4">
+        <BContainer fluid class="px-4">
           <ChartComponent />
           <TableComponent />
         </BContainer>
