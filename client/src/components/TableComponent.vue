@@ -9,7 +9,7 @@ import { useRouter } from "vue-router";
 DataTable.use(DataTablesCore);
 
 let items = [];
-import { api } from "../../../main";
+import { api } from "../main";
 import { faDownload, faEye } from "@fortawesome/free-solid-svg-icons";
 
 const data_ = ref(false);
@@ -55,7 +55,7 @@ onMounted(async function () {
 </script>
 
 <template>
-  <div class="card mb-4">
+  <div data-bs-theme="dark" class="card mb-4">
     <div class="card-header">
       <i class="fas fa-table me-1"></i>
       Execuções
@@ -122,21 +122,6 @@ onMounted(async function () {
             </tr>
           </thead>
           <tbody>
-            <tr class="text-center">
-              <td colspan="8"><span class="placeholder w-100 rounded">Carregando</span></td>
-            </tr>
-            <tr class="text-center">
-              <td colspan="8"><span class="placeholder w-100 rounded">Carregando</span></td>
-            </tr>
-            <tr class="text-center">
-              <td colspan="8"><span class="placeholder w-100 rounded">Carregando</span></td>
-            </tr>
-            <tr class="text-center">
-              <td colspan="8"><span class="placeholder w-100 rounded">Carregando</span></td>
-            </tr>
-            <tr class="text-center">
-              <td colspan="8"><span class="placeholder w-100 rounded">Carregando</span></td>
-            </tr>
             <tr class="text-center">
               <td colspan="8"><span class="placeholder w-100 rounded">Carregando</span></td>
             </tr>
