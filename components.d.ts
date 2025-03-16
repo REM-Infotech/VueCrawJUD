@@ -9,9 +9,15 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     BButton: typeof import('bootstrap-vue-next/components/BButton')['BButton']
+    BCard: typeof import('bootstrap-vue-next/components/BCard')['BCard']
+    BCardBody: typeof import('bootstrap-vue-next/components/BCard')['BCardBody']
+    BCardImg: typeof import('bootstrap-vue-next/components/BCard')['BCardImg']
+    BCardText: typeof import('bootstrap-vue-next/components/BCard')['BCardText']
+    BCol: typeof import('bootstrap-vue-next/components/BContainer')['BCol']
     BContainer: typeof import('bootstrap-vue-next/components/BContainer')['BContainer']
     BModal: typeof import('bootstrap-vue-next/components/BModal')['BModal']
     BOverlay: typeof import('bootstrap-vue-next/components/BOverlay')['BOverlay']
+    BRow: typeof import('bootstrap-vue-next/components/BContainer')['BRow']
     BTable: typeof import('bootstrap-vue-next/components/BTable')['BTable']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']

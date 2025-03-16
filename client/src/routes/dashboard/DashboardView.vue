@@ -35,18 +35,13 @@ onMounted(() => {
   <NavBarComponent />
   <div id="content" class="mt-4 mb-4">
     <SideBarComponent />
-    <main>
-      <BContainer fluid="xl" class="px-4">
-        <div class="card">
-          <div class="card-header">
-            <h1 class="mb-3">Dashboard</h1>
-          </div>
-          <div class="card-body bg-warning bg-opacity-75">
-            <ChartComponent />
-            <TableComponent />
-          </div>
-        </div>
-      </BContainer>
-    </main>
+    <div>
+      <main>
+        <BContainer fluid="xl" class="px-4">
+          <ChartComponent />
+          <TableComponent />
+        </BContainer>
+      </main>
+    </div>
   </div>
 </template>

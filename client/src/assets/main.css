@@ -1,5 +1,12 @@
 @import "./base.css";
 
+.sb-sidenav {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  flex-wrap: nowrap;
+}
+
 a,
 .green {
   text-decoration: none;

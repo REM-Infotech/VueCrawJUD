@@ -1,5 +1,4 @@
 import "./assets/main.css";
-import "./assets/sb.css";
 import "jquery/dist/jquery.min.js";
 import "@popperjs/core";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -24,6 +23,7 @@ CreateApp();
 
 // Create axios instance with improved configuration
 export const api = axios.create({
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   baseURL: (import.meta as any).env.SERVER_URL,
   timeout: 60000, // 5 second timeout
 });
