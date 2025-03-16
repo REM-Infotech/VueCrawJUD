@@ -10,7 +10,7 @@ DataTable.use(DataTablesCore);
 
 let items = [];
 import { api } from "../../../main";
-import { faDownload } from "@fortawesome/free-solid-svg-icons";
+import { faDownload, faEye } from "@fortawesome/free-solid-svg-icons";
 
 const data_ = ref(false);
 const router = useRouter();
@@ -77,16 +77,21 @@ onMounted(async function () {
           </thead>
           <template #column-7="props">
             <a
-              v-if="props.cellData.toString().toLowerCase() !== 'arguardando arquivo'"
-              href="http://"
+              v-if="props.rowData[5].toString().toLowerCase() !== 'em execução'"
+              href="#"
               class="btn btn-sm btn-success"
               data-bs-toggle="tooltip"
               data-bs-title="Default tooltip"
               ><FontAwesomeIcon :icon="faDownload"
             /></a>
-            <span v-else>
-              {{ props.cellData }}
-            </span>
+            <a
+              v-else-if="props.rowData[7].toString().toLowerCase() !== 'em execução'"
+              href="#"
+              class="btn btn-sm btn-primary"
+              data-bs-toggle="tooltip"
+              data-bs-title="Default tooltip"
+              ><FontAwesomeIcon :icon="faEye"
+            /></a>
           </template>
           <tfoot>
             <tr>
