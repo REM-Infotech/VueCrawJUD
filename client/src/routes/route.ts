@@ -3,7 +3,6 @@ export const routes = [
     path: "/:pathMatch(.*)*",
     name: "NotFound",
     component: () => import("./handler/NotFoundView.vue"),
-    meta: { requiresAuth: true },
   },
   {
     path: "/login",
@@ -22,12 +21,7 @@ export const routes = [
     component: () => import("./execution/ExecutionView.vue"),
     meta: { requiresAuth: true },
   },
-  {
-    path: "/bot/form/:id",
-    name: "bot_form",
-    component: () => import("./bot/BotFormView.vue"),
-    meta: { requiresAuth: true },
-  },
+
   {
     path: "/bots",
     name: "bot_dashboard",

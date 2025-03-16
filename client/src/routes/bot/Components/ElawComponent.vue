@@ -1,0 +1,6 @@
+<template>
+  <img
+    src="{{ url_for('static', filename='img/elaw.png') }}"
+    class="card-img-top p-4 img-thumbnail"
+  />
+</template>
