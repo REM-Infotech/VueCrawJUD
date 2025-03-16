@@ -1,6 +1,6 @@
 <template>
   <NavBarComponent />
-  <div id="content">
+  <div id="content" class="mt-4 mb-4">
     <SideBarComponent />
     <main>
       <BContainer fluid class="px-4">

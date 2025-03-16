@@ -1,6 +1,6 @@
 <template>
   <div class="container-fluid px-4" id="executions">
-    <div class="card mt-4 mb-4">
+    <div class="card">
       <div class="card-header">
         <div class="row">
           <div class="col-sm-6 col-md-6 me-auto">
