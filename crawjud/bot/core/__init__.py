@@ -17,7 +17,7 @@ import pandas as pd
 from openai import OpenAI
 from pytz import timezone
 
-from server.bot.common.exceptions import StartError
+from crawjud.bot.common.exceptions import StartError
 
 if platform.system() == "Windows":
     from pywinauto import Application
@@ -41,9 +41,9 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.support.wait import WebDriverWait
 
-from server.bot.common import ExecutionError
-from server.bot.shared import PropertiesCrawJUD
-from server.types import TypeHint
+from crawjud.bot.common import ExecutionError
+from crawjud.bot.shared import PropertiesCrawJUD
+from crawjud.types import TypeHint
 
 __all__ = [
     pd,

@@ -21,7 +21,7 @@ from quart import (
     session,
 )
 
-from server.types import AnyType
+from crawjud.types import AnyType
 
 
 class QuartLoginManager(LoginManager):

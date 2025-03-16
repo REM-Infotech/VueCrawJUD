@@ -8,7 +8,7 @@ from celery import Celery
 from celery.signals import after_setup_logger  # noqa: F401
 from quart import Quart
 
-from server.types import AnyType  # noqa: F401
+from crawjud.types import AnyType  # noqa: F401
 
 
 @after_setup_logger.connect
@@ -31,7 +31,7 @@ def config_loggers(
     """
     from logging.config import dictConfig
 
-    from server.logs import log_cfg
+    from crawjud.logs import log_cfg
 
     logger_name = f"{getenv('APPLICATION_APP')}_celery"
     log_file = Path(getcwd()).resolve().joinpath("crawjud", "logs", f"{logger_name}.log")

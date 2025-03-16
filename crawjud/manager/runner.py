@@ -24,19 +24,19 @@ from rich.text import Text  # noqa: F401
 from socketio import ASGIApp
 from uvicorn import Config, Server
 
-from server.core.config import StoreService, running_servers
-from server.core.configurator import get_hostname
-from server.core.watch import monitor_log
-from server.logs import log_cfg
-from server.types import app_name
-from server.utils.gen_seed import worker_name_generator
+from crawjud.core.config import StoreService, running_servers
+from crawjud.core.configurator import get_hostname
+from crawjud.core.watch import monitor_log
+from crawjud.logs import log_cfg
+from crawjud.types import app_name
+from crawjud.utils.gen_seed import worker_name_generator
 
 printf = Console().print
 
 
 def start_worker() -> None:
     """Start the Celery beat scheduler."""
-    from server.core import create_app
+    from crawjud.core import create_app
 
     app, _, celery = asyncio.run(create_app())
     environ.update({"APPLICATION_APP": "worker"})
@@ -69,7 +69,7 @@ def start_worker() -> None:
 
 def start_beat() -> None:
     """Start the Celery beat scheduler."""
-    from server.core import create_app
+    from crawjud.core import create_app
 
     environ.update({"APPLICATION_APP": "beat"})
 

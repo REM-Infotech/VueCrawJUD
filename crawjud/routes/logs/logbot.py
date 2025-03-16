@@ -12,9 +12,9 @@ from datetime import datetime  # noqa: F401
 from pytz import timezone  # noqa: F401
 from socketio import AsyncServer
 
-from server.core import app
-from server.utils import format_message_log, load_cache  # noqa: F401
-from server.utils.status import TaskExec
+from crawjud.core import app
+from crawjud.utils import format_message_log, load_cache  # noqa: F401
+from crawjud.utils.status import TaskExec
 
 logger = logging.getLogger(__name__)
 
@@ -128,9 +128,9 @@ async def terminate_bot(
         None
 
     """
-    from server.bot import WorkerBot
-    from server.core import db
-    from server.models import ThreadBots
+    from crawjud.bot import WorkerBot
+    from crawjud.core import db
+    from crawjud.models import ThreadBots
 
     async with app.app_context():
         try:
@@ -155,7 +155,7 @@ async def log_message(
     sid: str,
     data: dict[str, str] = None,
 ) -> None:
-    """Process and forward incoming log messages from server.bots.
+    """Process and forward incoming log messages from crawjud.bots.
 
     Args:
         sid (str): The session ID of the client sending the log.
@@ -187,7 +187,7 @@ async def statusbot(
     sid: str,
     data: dict = None,
 ) -> None:
-    """Handle status updates from server.bots.
+    """Handle status updates from crawjud.bots.
 
     Args:
         sid (str): The session ID of the client.

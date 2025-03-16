@@ -20,10 +20,10 @@ from quart.datastructures import FileStorage  # noqa: F401
 from werkzeug.utils import secure_filename  # noqa: F401
 from wtforms import BooleanField, FieldList, FileField, FormField, MultipleFileField, TimeField  # noqa: F401
 
-from server.forms.bot import PeriodicTaskFormGroup
-from server.models.bots import ThreadBots
-from server.types import AnyType, Numbers, strings
-from server.utils.status import TaskExec
+from crawjud.forms.bot import PeriodicTaskFormGroup
+from crawjud.models.bots import ThreadBots
+from crawjud.types import AnyType, Numbers, strings
+from crawjud.utils.status import TaskExec
 
 from ...forms import BotForm
 from ...misc import (

@@ -11,7 +11,7 @@ import pytz
 from flask_login import UserMixin
 from quart_jwt_extended import get_current_user
 
-from server.core import db, jwt
+from crawjud.core import db, jwt
 
 salt = bcrypt.gensalt()
 

@@ -11,12 +11,12 @@ Attributes:
 
 from typing import Union
 
-from server.bot.scripts.caixa import Caixa
-from server.bot.scripts.calculadoras import Calculadoras
-from server.bot.scripts.elaw import Elaw
-from server.bot.scripts.esaj import Esaj
-from server.bot.scripts.pje import PJe
-from server.bot.scripts.projudi import Projudi
+from crawjud.bot.scripts.caixa import Caixa
+from crawjud.bot.scripts.calculadoras import Calculadoras
+from crawjud.bot.scripts.elaw import Elaw
+from crawjud.bot.scripts.esaj import Esaj
+from crawjud.bot.scripts.pje import PJe
+from crawjud.bot.scripts.projudi import Projudi
 
 __all__ = [Projudi, Esaj, Elaw, PJe, Calculadoras, Caixa]
 

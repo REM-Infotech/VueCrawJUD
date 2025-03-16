@@ -16,8 +16,8 @@ from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.wait import WebDriverWait
 
-from server.bot.common import ExecutionError
-from server.bot.core import CrawJUD
+from crawjud.bot.common import ExecutionError
+from crawjud.bot.core import CrawJUD
 
 
 class Capa(CrawJUD):

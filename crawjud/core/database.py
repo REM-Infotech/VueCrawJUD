@@ -10,7 +10,7 @@ from pathlib import Path
 import aiofiles
 from quart import Quart
 
-from server.core import db
+from crawjud.core import db
 
 
 async def database_start(app: Quart) -> None:
@@ -33,13 +33,13 @@ async def database_start(app: Quart) -> None:
         - HOSTNAME: The address of the server
 
     """
-    from server.models import init_database
+    from crawjud.models import init_database
 
     if not Path("is_init.txt").exists():
         async with aiofiles.open("is_init.txt", "w") as f:
             await f.write(f"{await init_database(app, db)}")
 
-    from server.models import Users
+    from crawjud.models import Users
 
     if not db.engine.dialect.has_table(db.engine.connect(), Users.__tablename__):
         async with aiofiles.open("is_init.txt", "w") as f:

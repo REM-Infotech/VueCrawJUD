@@ -20,10 +20,10 @@ from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.ui import Select, WebDriverWait
 
-from server.bot.core import CrawJUD
+from crawjud.bot.core import CrawJUD
 
 if platform.system() == "Windows":
-    from server.bot.core import Application
+    from crawjud.bot.core import Application
 
 logger = logging.getLogger(__name__)
 

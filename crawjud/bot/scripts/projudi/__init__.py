@@ -9,12 +9,12 @@ import logging
 import traceback
 from typing import Callable, Union
 
-from server.bot.common.exceptions import StartError
-from server.bot.scripts.projudi.capa import Capa
-from server.bot.scripts.projudi.intimacoes import Intimacoes
-from server.bot.scripts.projudi.movimentacao import Movimentacao
-from server.bot.scripts.projudi.proc_parte import ProcParte as Proc_parte
-from server.bot.scripts.projudi.protocolo import Protocolo
+from crawjud.bot.common.exceptions import StartError
+from crawjud.bot.scripts.projudi.capa import Capa
+from crawjud.bot.scripts.projudi.intimacoes import Intimacoes
+from crawjud.bot.scripts.projudi.movimentacao import Movimentacao
+from crawjud.bot.scripts.projudi.proc_parte import ProcParte as Proc_parte
+from crawjud.bot.scripts.projudi.protocolo import Protocolo
 
 ClassBots = Union[Capa, Intimacoes, Movimentacao, Proc_parte, Protocolo]
 logger_ = logging.getLogger(__name__)

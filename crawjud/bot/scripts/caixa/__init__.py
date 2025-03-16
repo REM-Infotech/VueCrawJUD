@@ -8,8 +8,8 @@ import logging
 import traceback
 from typing import Callable, Union
 
-from server.bot.common import StartError
-from server.bot.scripts.caixa.emissor import Emissor
+from crawjud.bot.common import StartError
+from crawjud.bot.scripts.caixa.emissor import Emissor
 
 logger_ = logging.getLogger(__name__)
 ClassBots = Union[Emissor]

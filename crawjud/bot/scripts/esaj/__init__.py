@@ -8,12 +8,12 @@ import logging
 import traceback
 from typing import Callable, Union
 
-from server.bot.common import StartError
-from server.bot.scripts.esaj.busca_pags import BuscaPags as Busca_pags
-from server.bot.scripts.esaj.capa import Capa
-from server.bot.scripts.esaj.emissao import Emissao
-from server.bot.scripts.esaj.movimentacao import Movimentacao
-from server.bot.scripts.esaj.protocolo import Protocolo
+from crawjud.bot.common import StartError
+from crawjud.bot.scripts.esaj.busca_pags import BuscaPags as Busca_pags
+from crawjud.bot.scripts.esaj.capa import Capa
+from crawjud.bot.scripts.esaj.emissao import Emissao
+from crawjud.bot.scripts.esaj.movimentacao import Movimentacao
+from crawjud.bot.scripts.esaj.protocolo import Protocolo
 
 logger_ = logging.getLogger(__name__)
 

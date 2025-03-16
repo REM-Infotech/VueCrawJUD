@@ -24,9 +24,9 @@ from quart import current_app as app
 from quart_jwt_extended import jwt_required
 from quart_wtf import QuartForm
 
-from server.forms import BotForm
-from server.models import BotsCrawJUD
-from server.utils.gen_seed import generate_pid
+from crawjud.forms import BotForm
+from crawjud.models import BotsCrawJUD
+from crawjud.utils.gen_seed import generate_pid
 
 from ...misc import MakeModels
 from .botlaunch_methods import (

@@ -16,11 +16,11 @@ from socketio import AsyncServer
 from termcolor import colored
 from tqdm import tqdm
 
-from server.core import create_app
-from server.core.config import StoreService as StoreService
-from server.core.config import running_servers
-from server.manager import HeadCrawjudManager
-from server.types import app_name
+from crawjud.core import create_app
+from crawjud.core.config import StoreService as StoreService
+from crawjud.core.config import running_servers
+from crawjud.manager import HeadCrawjudManager
+from crawjud.types import app_name
 
 io = AsyncServer(
     async_mode="asgi",
@@ -193,7 +193,7 @@ class MasterApp(HeadCrawjudManager):
         )
         tqdm.write(file_path.as_uri())
         if file_path.exists():
-            from server.core.watch import monitor_log
+            from crawjud.core.watch import monitor_log
 
             monitor_log(file_path=file_path)
             tqdm.write(colored("[INFO] Log file closed.", "yellow", attrs=["bold"]))

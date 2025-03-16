@@ -7,7 +7,7 @@ from importlib import import_module
 from quart import Blueprint, Response, abort, make_response, render_template
 from quart_jwt_extended import jwt_required
 
-from server.decorators import check_privilegies
+from crawjud.decorators import check_privilegies
 
 path_template = os.path.join(pathlib.Path(__file__).parent.resolve(), "templates")
 supersu = Blueprint("supersu", __name__, template_folder=path_template)

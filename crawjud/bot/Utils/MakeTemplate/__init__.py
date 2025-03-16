@@ -6,8 +6,8 @@ Using openpyxl, build an Excel file with headers and styles based on CrawJUD att
 import openpyxl
 from openpyxl.styles import Font, PatternFill
 
-from server.bot.core import CrawJUD
-from server.bot.Utils.MakeTemplate.appends import Listas
+from crawjud.bot.core import CrawJUD
+from crawjud.bot.Utils.MakeTemplate.appends import Listas
 
 # from typing import list
 

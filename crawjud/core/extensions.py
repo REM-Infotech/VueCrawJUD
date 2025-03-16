@@ -6,12 +6,12 @@ from quart import Quart
 from redis import Redis
 from socketio import AsyncRedisManager, AsyncServer
 
-from server.core import db, jwt, login_manager, mail
+from crawjud.core import db, jwt, login_manager, mail
 
 
 async def init_extensions(app: Quart) -> AsyncServer:
     """Initialize and configure the application extensions."""
-    from server.utils import check_allowed_origin
+    from crawjud.utils import check_allowed_origin
 
     from .database import database_start
     from .security import security_config

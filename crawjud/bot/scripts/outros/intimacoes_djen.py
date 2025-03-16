@@ -5,7 +5,7 @@ from typing import Self
 
 from selenium.webdriver.common.by import By
 
-from server.bot.core import CrawJUD
+from crawjud.bot.core import CrawJUD
 
 
 class IntimaDJEN(CrawJUD):

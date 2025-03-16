@@ -11,7 +11,7 @@ from typing import Self
 import socketio
 from dotenv_vault import load_dotenv
 
-from server.bot.core import CrawJUD
+from crawjud.bot.core import CrawJUD
 
 load_dotenv()
 

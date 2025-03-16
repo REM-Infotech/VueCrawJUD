@@ -23,8 +23,8 @@ from quart_jwt_extended import (  # noqa: F401
     unset_jwt_cookies,
 )
 
-from server.models.users import TokenBlocklist as TokenBlocklist
-from server.models.users import Users
+from crawjud.models.users import TokenBlocklist as TokenBlocklist
+from crawjud.models.users import Users
 
 path_template = os.path.join(pathlib.Path(__file__).parent.resolve(), "templates")
 auth = Blueprint("auth", __name__, template_folder=path_template)

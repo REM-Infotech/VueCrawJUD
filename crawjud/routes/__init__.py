@@ -84,7 +84,7 @@ async def serve_profile(user: str) -> Response:
     """
     try:
         with app.app_context():
-            from server.models import Users
+            from crawjud.models import Users
 
             user = Users.query.filter(Users.login == user).first()
             image_data = user.blob_doc

@@ -10,9 +10,9 @@ from time import sleep
 from termcolor import colored
 from tqdm import tqdm
 
-from server import MasterApp
-from server.manager.menu import MenuManager
-from server.manager.runner import RunnerServices
+from crawjud import MasterApp
+from crawjud.manager.menu import MenuManager
+from crawjud.manager.runner import RunnerServices
 
 
 def main_server(**kwargs: str) -> None:

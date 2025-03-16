@@ -15,7 +15,7 @@ onMounted(() => {
     console.log("Connected to server");
   });
   socket.on("disconnect", () => {
-    console.log("Disconnected from server");
+    console.log("Disconnected from crawjud");
   });
 });
 

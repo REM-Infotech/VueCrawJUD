@@ -18,7 +18,7 @@ from quart import Quart as Quart
 from quart_jwt_extended import JWTManager
 from socketio import ASGIApp
 
-from server.custom import QuartLoginManager as LoginManager
+from crawjud.custom import QuartLoginManager as LoginManager
 
 warnings.filterwarnings("ignore", category=RuntimeWarning, module="google_crc32c")
 
@@ -51,6 +51,6 @@ async def create_app() -> tuple[Quart, ASGIApp, Celery]:
         tuple: A tuple containing ASGIApp and Celery worker.
 
     """
-    from server.core.configurator import app_configurator
+    from crawjud.core.configurator import app_configurator
 
     return await app_configurator(app)

@@ -16,15 +16,15 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support import expected_conditions as ec
 
-from server.bot.common import ExecutionError
-from server.bot.core import CrawJUD
-from server.bot.scripts.pje.common.varas_dict import varas as varas_pje
+from crawjud.bot.common import ExecutionError
+from crawjud.bot.core import CrawJUD
+from crawjud.bot.scripts.pje.common.varas_dict import varas as varas_pje
 
 
 class Pauta(CrawJUD):
     """Initialize and execute pauta operations for retrieving court hearing data now.
 
-    Inherit from server and manage the process of fetching pautas.
+    Inherit from crawjud and manage the process of fetching pautas.
     """
 
     @classmethod

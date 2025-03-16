@@ -4,7 +4,7 @@ from datetime import timedelta  # noqa: F401
 
 from quart import Quart
 
-from server.core import tlsm  # noqa: F401
+from crawjud.core import tlsm  # noqa: F401
 
 
 async def security_config(app: Quart) -> None:

@@ -20,17 +20,17 @@ from __future__ import annotations
 from importlib import import_module
 from typing import Self
 
-from server.bot.core import CrawJUD
-from server.bot.Utils.elements.elaw import ELAW_AME
-from server.bot.Utils.elements.esaj import ESAJ_AM
-from server.bot.Utils.elements.pje import PJE_AM
-from server.bot.Utils.elements.projudi import PROJUDI_AM
+from crawjud.bot.core import CrawJUD
+from crawjud.bot.Utils.elements.elaw import ELAW_AME
+from crawjud.bot.Utils.elements.esaj import ESAJ_AM
+from crawjud.bot.Utils.elements.pje import PJE_AM
+from crawjud.bot.Utils.elements.projudi import PROJUDI_AM
 
 
 class ElementsBot(CrawJUD):
     """Configure and retrieve elements bot instance.
 
-    Inherit from server and dynamically set the elements bot based on system
+    Inherit from crawjud and dynamically set the elements bot based on system
     and state_or_client attributes.
 
     Attributes:

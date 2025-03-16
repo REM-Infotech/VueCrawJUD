@@ -3,7 +3,7 @@
 from quart import Response, abort, make_response, render_template
 from quart_jwt_extended import jwt_required
 
-from server.decorators import check_privilegies
+from crawjud.decorators import check_privilegies
 
 from . import supersu
 

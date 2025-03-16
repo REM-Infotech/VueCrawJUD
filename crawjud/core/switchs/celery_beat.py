@@ -10,8 +10,8 @@ from quart import Quart
 from termcolor import colored
 from tqdm import tqdm
 
-from server.core.config import StoreService, running_servers
-from server.core.watch import monitor_log
+from crawjud.core.config import StoreService, running_servers
+from crawjud.core.watch import monitor_log
 
 
 async def start() -> None:

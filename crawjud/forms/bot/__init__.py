@@ -24,7 +24,7 @@ from wtforms import (
 from wtforms.validators import DataRequired, InputRequired
 from wtforms.widgets import CheckboxInput, ListWidget
 
-from server.types import AnyType, T
+from crawjud.types import AnyType, T
 
 permited_file = FileAllowed(["xlsx", "xls", "csv"], 'Apenas arquivos |".xlsx"/".xls"/".csv"| são permitidos!')
 permited_file2 = FileAllowed(["pdf", "jpg", "jpeg"], 'Apenas arquivos |".pdf"/".jpg"/".jpeg"| são permitidos!')

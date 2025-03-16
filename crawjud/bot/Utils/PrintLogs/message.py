@@ -16,7 +16,7 @@ import socketio
 import socketio.exceptions  # noqa: F401
 from dotenv_vault import load_dotenv
 
-from server.bot.core import CrawJUD
+from crawjud.bot.core import CrawJUD
 
 codificacao = "UTF-8"
 mensagens = []
@@ -26,7 +26,7 @@ load_dotenv()
 class PrintBot(CrawJUD):
     """Handle printing logs and sending log messages via SocketIo.
 
-    Inherit from server and provide methods to print, emit, and store logs.
+    Inherit from crawjud and provide methods to print, emit, and store logs.
     """
 
     def __init__(self) -> None:

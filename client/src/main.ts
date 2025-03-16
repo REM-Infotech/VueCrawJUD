@@ -24,7 +24,7 @@ CreateApp();
 
 // Create axios instance with improved configuration
 export const api = axios.create({
-  baseURL: import.meta.env.SERVER_URL,
+  baseURL: (import.meta as any).env.SERVER_URL,
   timeout: 60000, // 5 second timeout
 });
 

@@ -24,10 +24,10 @@ from quart import (
 )
 from quart import current_app as app
 
-from server.decorators import login_required
-from server.misc import generate_signed_url
-from server.models import Executions, LicensesUsers, Users
-from server.utils.status import TaskExec
+from crawjud.decorators import login_required
+from crawjud.misc import generate_signed_url
+from crawjud.models import Executions, LicensesUsers, Users
+from crawjud.utils.status import TaskExec
 
 from . import logsbot
 
@@ -74,8 +74,8 @@ async def logs_bot(pid: str) -> Response:
     async with app.app_context():
         try:
             # Load cached data for the room to send previous logs, if any.
-            from server.bot import WorkerBot
-            from server.models import ThreadBots
+            from crawjud.bot import WorkerBot
+            from crawjud.models import ThreadBots
 
             process_id = db.session.query(ThreadBots).filter(ThreadBots.pid == pid).first()
 
