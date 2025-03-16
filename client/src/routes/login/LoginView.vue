@@ -61,7 +61,7 @@ const { show } = useModal("ModalMessage");
 const $ = jQuery;
 
 onMounted(() => {
-  const { hide } = useModal("modal-center");
+  const { hide } = useModal("modal-load");
   const { show } = useModal("ModalMessage");
   hide();
   var message = sessionStorage.getItem("message");

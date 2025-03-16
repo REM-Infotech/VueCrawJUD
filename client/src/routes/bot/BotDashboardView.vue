@@ -3,38 +3,27 @@
 import { onBeforeMount, onMounted, ref } from "vue";
 
 // Global Components
+import { markRaw } from "vue";
 import NavBarComponent from "../../components/NavBarComponent.vue";
 import SideBarComponent from "../../components/SideBarComponent.vue";
-
-// Bot Dash Component Figures
-import CaixaComponent from "./Components/CaixaComponent.vue";
-import ElawComponent from "./Components/ElawComponent.vue";
-import EsajComponent from "./Components/EsajComponent.vue";
-import ProjudiComponent from "./Components/ProjudiComponent.vue";
-import TjdftComponent from "./Components/TjdftComponent.vue";
-import PjeComponent from "./Components/PjeComponent.vue";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { api } from "../../main";
 
-const Caixa = CaixaComponent;
-const Elaw = ElawComponent;
-const Esaj = EsajComponent;
-const Projudi = ProjudiComponent;
-const Tjdft = TjdftComponent;
-const Pje = PjeComponent;
+const form_visible = ref(false);
+const FormComponent = markRaw({ componente: null });
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const FigureComponent = {
-  Caixa,
-  Elaw,
-  Esaj,
-  Projudi,
-  Tjdft,
-  Pje,
-};
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const capitalize = (str: string): string => str[0].toUpperCase() + str.slice(1);
+
+async function setForm(form_name: string) {
+  console.log(form_name);
+  const component = await import(`./components/${form_name}.vue`);
+  FormComponent.componente = component.default;
+  setTimeout(() => {
+    form_visible.value = true;
+  }, 2000);
+}
 
 const items = () => {
   const data: Array<Record<string, string | number>> = [
@@ -284,32 +273,42 @@ const items = () => {
         <div class="row">
           <div class="col-md-3 p-4 end-0" v-for="item in items()" :key="item.id">
             <BCard
-              img-src="/client/src/assets/crawjud.png"
+              data-bs-theme="dark"
+              img-src="/client/src/assets/robot-icon.svg"
               img-alt="Image"
               overlay
               header-tag="header"
               footer-tag="footer"
               tag="article"
+              style="height: 29.8rem"
             >
               <template #header>
                 <span class="fw-bold">{{ item.display_name }}</span>
               </template>
               <BCardText>
-                Some quick example text to build on the card title and make up the bulk of the
-                card's content.
+                <span class="overflow-auto" style="width: 8rem">{{ item.text }} </span>
               </BCardText>
               <template #footer>
-                <BButton href="#" variant="outline-success" class="d-grid gap-2">
-                  <em>Acessar Robô</em>
-                </BButton>
+                <BButton
+                  @click="setForm(item.form_cfg as string)"
+                  class="d-grid gap-2"
+                  v-b-modal.ModalFormBot
+                  variant="success"
+                  ><em>Acessar Robô</em></BButton
+                >
               </template>
             </BCard>
           </div>
         </div>
       </BContainer>
     </main>
-    <BModal id="ModalFormBot" size="lg" centered title="">
-      <p class="my-4">Vertically centered modal!</p>
+    <BModal id="ModalFormBot" data-bs-theme="dark" size="lg" centered title="">
+      <div v-if="form_visible">
+        <component :is="FormComponent.componente"> </component>
+      </div>
+      <div v-else>
+        <span class="placeholder w-100 rounded"></span>
+      </div>
     </BModal>
   </div>
 </template>

@@ -55,6 +55,13 @@
   }
 }
 
+.bg-robot {
+  --bs-bg-opacity: 1;
+  background-color: rgba(36, 4, 63, 0.425);
+  color: white;
+  // background-color: #{$indigo-300};
+}
+
 // .navbar-indigo {
 //   --#{$prefix}navbar-color: #{$white};
 //   --#{$prefix}navbar-hover-color: #{$white};

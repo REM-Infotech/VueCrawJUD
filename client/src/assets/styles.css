@@ -7057,4 +7057,9 @@ progress {
   a:hover {
     background-color: hsla(300, 97%, 37%, 0.2);
   }
+}
+.bg-robot {
+  --bs-bg-opacity: 1;
+  background-color: rgba(36, 4, 63, 0.425);
+  color: white;
 }/*# sourceMappingURL=styles.css.map */

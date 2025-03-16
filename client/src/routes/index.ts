@@ -12,7 +12,7 @@ const router = createRouter({
 
 router.beforeEach(async (to, from, next) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { show, hide } = useModal("modal-center");
+  const { show, hide } = useModal("modal-load");
 
   const isAuth = !!sessionStorage.getItem("token");
   const response = await api.get("/");
@@ -37,7 +37,7 @@ router.beforeEach(async (to, from, next) => {
 // Global afterEach hook para gerenciar a classe do app
 router.afterEach((to) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { show, hide } = useModal("modal-center");
+  const { show, hide } = useModal("modal-load");
   if (to.meta.requiresAuth) {
     if ($("#app").hasClass("bg-indigo")) {
       $("#app").removeClass("bg-indigo");

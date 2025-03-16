@@ -1,7 +1,0 @@
-<template>
-  <img
-    src="{{ url_for('static', filename='img/figure_crawjud.png') }}"
-    alt="logo CrawJUD"
-    class="card-img-top p-4 img-thumbnail"
-  />
-</template>

@@ -22,12 +22,12 @@ const handleLogoutClick = (e: Event) => {
 
 <template>
   <div
+    data-bs-theme="dark"
     class="offcanvas offcanvas-start bg-dark-purple-transparent"
     data-bs-scroll="true"
     tabindex="-1"
     id="offcanvasWithBothOptions"
     aria-labelledby="offcanvasWithBothOptionsLabel"
-    data-bs-theme="dark"
   >
     <div class="offcanvas-body">
       <RouterLink

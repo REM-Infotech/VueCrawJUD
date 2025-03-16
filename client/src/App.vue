@@ -8,7 +8,7 @@ import ModalMessage from "./components/ModalMessage.vue";
   <RouterView />
   <BModal
     centered
-    id="modal-center"
+    id="modal-load"
     no-footer
     no-header
     size="sm"
