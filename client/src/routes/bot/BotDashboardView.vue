@@ -302,7 +302,14 @@ const items = () => {
         </div>
       </BContainer>
     </main>
-    <BModal id="ModalFormBot" data-bs-theme="dark" size="lg" centered title="">
+    <BModal
+      id="ModalFormBot"
+      data-bs-theme="dark"
+      size="lg"
+      centered
+      title=""
+      @hide="form_visible = false"
+    >
       <div v-if="form_visible">
         <component :is="FormComponent.componente"> </component>
       </div>
