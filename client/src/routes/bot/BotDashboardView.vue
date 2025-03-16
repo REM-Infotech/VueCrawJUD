@@ -284,7 +284,7 @@ const items = () => {
         <div class="row">
           <div class="col-md-3 p-4 end-0" v-for="item in items()" :key="item.id">
             <BCard
-              img-src="https://picsum.photos/400/400/?image=41"
+              img-src="/client/src/assets/crawjud.png"
               img-alt="Image"
               overlay
               header-tag="header"
@@ -292,7 +292,7 @@ const items = () => {
               tag="article"
             >
               <template #header>
-                {{ item.display_name }}
+                <span class="fw-bold">{{ item.display_name }}</span>
               </template>
               <BCardText>
                 Some quick example text to build on the card title and make up the bulk of the
