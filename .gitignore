@@ -5,6 +5,7 @@ __pycache__/
 Temp/
 # C extensions
 *.so
+change_msg.py
 Browser/
 Archives/
 # Distribution / packaging
