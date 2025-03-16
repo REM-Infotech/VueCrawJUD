@@ -1,6 +1,13 @@
 <script setup lang="ts">
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import { faHome, faTable, faListCheck, faRobot } from "@fortawesome/free-solid-svg-icons";
+import {
+  faHome,
+  faTable,
+  faListCheck,
+  faRobot,
+  faArrowRightFromBracket,
+  faUser,
+} from "@fortawesome/free-solid-svg-icons";
 import { RouterLink } from "vue-router";
 import { logout } from "../routes/login/auth";
 import { useRouter } from "vue-router";
@@ -15,7 +22,7 @@ const handleLogoutClick = (e: Event) => {
 
 <template>
   <div
-    class="offcanvas offcanvas-start bg-dark-purple"
+    class="offcanvas offcanvas-start bg-dark-purple-transparent"
     data-bs-scroll="true"
     tabindex="-1"
     id="offcanvasWithBothOptions"
@@ -84,13 +91,21 @@ const handleLogoutClick = (e: Event) => {
           />
           <strong>Robotz213</strong>
         </a>
-        <ul class="dropdown-menu text-small shadow">
+        <ul class="dropdown-menu text-small shadow bg-dark-purple2">
           <li><a class="dropdown-item" href="#">New project...</a></li>
           <li><a class="dropdown-item" href="#">Settings</a></li>
-          <li><a class="dropdown-item" href="#">Profile</a></li>
+          <li>
+            <a class="dropdown-item" href="#">
+              <FontAwesomeIcon :icon="faUser" class="me-2" />
+              <span class="text">Profile</span>
+            </a>
+          </li>
           <li><hr class="dropdown-divider" /></li>
           <li>
-            <a class="dropdown-item" href="#" @click="handleLogoutClick">Logout</a>
+            <a class="dropdown-item" href="#" @click="handleLogoutClick">
+              <FontAwesomeIcon :icon="faArrowRightFromBracket" class="me-2" />
+              <span class="text">Logout</span>
+            </a>
           </li>
         </ul>
       </div>

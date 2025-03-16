@@ -2,46 +2,8 @@ import { createRouter, createWebHistory } from "vue-router";
 import { api } from "../main";
 import { useModal } from "bootstrap-vue-next";
 import jQuery from "jquery";
-
+import { routes } from "./route";
 const $ = jQuery;
-
-const routes = [
-  {
-    path: "/:pathMatch(.*)*",
-    name: "NotFound",
-    component: () => import("./handler/NotFoundView.vue"),
-    meta: { requiresAuth: true },
-  },
-  {
-    path: "/login",
-    name: "login",
-    component: () => import("./login/LoginView.vue"),
-  },
-  {
-    path: "/",
-    name: "index",
-    component: () => import("./dashboard/DashboardView.vue"),
-    meta: { requiresAuth: true },
-  },
-  {
-    path: "/execucoes",
-    name: "executions",
-    component: () => import("./execution/ExecutionView.vue"),
-    meta: { requiresAuth: true },
-  },
-  {
-    path: "/bot/form/:id",
-    name: "bot_form",
-    component: () => import("./bot/BotFormView.vue"),
-    meta: { requiresAuth: true },
-  },
-  {
-    path: "/bots",
-    name: "bot_dashboard",
-    component: () => import("./bot/BotDashboardView.vue"),
-    meta: { requiresAuth: true },
-  },
-];
 
 const router = createRouter({
   history: createWebHistory(),
@@ -53,22 +15,20 @@ router.beforeEach(async (to, from, next) => {
   const { show, hide } = useModal("modal-center");
 
   const isAuth = !!sessionStorage.getItem("token");
-
+  const response = await api.get("/");
   if (to.meta.requiresAuth) {
-    show();
-    if (!isAuth) {
-      return next({ name: "login" });
-    }
-  }
+    if (!isAuth || response.status === 401) {
+      if (!isAuth) {
+        sessionStorage.setItem("message", "É necessário fazer login para acessar essa página!");
+      } else if (response.status === 401) {
+        sessionStorage.setItem("message", "Sessão expirada, faça login novamente!");
+      }
 
-  if (isAuth) {
-    const response = await api.get("/");
-
-    if (response.status === 401) {
       sessionStorage.removeItem("token");
-      sessionStorage.setItem("message", "Sessão expirada, faça login novamente!");
+
       return next({ name: "login" });
     }
+    show();
   }
 
   next();
@@ -79,10 +39,13 @@ router.afterEach((to) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { show, hide } = useModal("modal-center");
   if (to.meta.requiresAuth) {
-    $("#app").addClass("bg-purple");
+    if ($("#app").hasClass("bg-indigo")) {
+      $("#app").removeClass("bg-indigo");
+      $("#app").addClass("bg-purple");
+    }
     setTimeout(() => {
       hide();
-    }, 100);
+    }, 500);
   } else {
     if ($("#app").hasClass("bg-purple")) {
       $("#app").removeClass("bg-purple");

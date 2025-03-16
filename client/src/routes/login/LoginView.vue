@@ -59,9 +59,11 @@ import { loadingBuzy, onBuzyHidden, setBuzyClick } from "../animations";
 const router = useRouter();
 const { show } = useModal("ModalMessage");
 const $ = jQuery;
+
 onMounted(() => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { show, hide, modal } = useModal("ModalMessage");
+  const { hide } = useModal("modal-center");
+  const { show } = useModal("ModalMessage");
+  hide();
   var message = sessionStorage.getItem("message");
   if (message) {
     $("#message").text(message);
@@ -97,10 +99,6 @@ async function authenticate(router: Router) {
       sessionStorage.setItem("message", "Login Efetuado com sucesso!");
 
       router.push({ name: "index" });
-      if ($("#app").hasClass("bg-indigo")) {
-        $("#app").removeClass("bg-indigo");
-        $("#app").addClass("bg-purple");
-      }
     }
   } catch (error) {
     console.error("Login failed:", {
