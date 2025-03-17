@@ -3,29 +3,9 @@
 import { onBeforeMount, onMounted, ref } from "vue";
 
 // Global Components
-import { markRaw } from "vue";
 import NavBarComponent from "../../components/NavBarComponent.vue";
 import SideBarComponent from "../../components/SideBarComponent.vue";
-import FileAuth from "./components/FileAuth.vue";
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { api } from "../../main";
-
-const form_visible = ref(false);
-const FormComponent = markRaw({ componente: null });
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const capitalize = (str: string): string => str[0].toUpperCase() + str.slice(1);
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-async function setForm(form_name: string) {
-  console.log(form_name);
-  const component = await import(`./components/${form_name}.vue`);
-  FormComponent.componente = component.default;
-  setTimeout(() => {
-    form_visible.value = true;
-  }, 2000);
-}
+import BotForm from "./components/BotForm.vue";
 
 const items = () => {
   const data: Array<Record<string, string | number>> = [
@@ -300,23 +280,6 @@ const items = () => {
         </div>
       </BContainer>
     </main>
-    <BModal
-      id="ModalFormBot"
-      data-bs-theme="dark"
-      size="xl"
-      centered
-      title=""
-      @hide="form_visible = false"
-    >
-      <!-- <div v-if="form_visible">
-        <component :is="FormComponent.componente"> </component>
-      </div>
-      <div v-else>
-        <span class="placeholder w-100 rounded"></span>
-      </div> -->
-      <div>
-        <FileAuth />
-      </div>
-    </BModal>
   </div>
+  <BotForm />
 </template>
