@@ -11,6 +11,10 @@ import App from "./App.vue";
 import router from "./routes";
 import "../plugins/axios.ts";
 import axios from "axios";
+import jQuery from "jquery";
+
+export const $ = jQuery;
+
 function CreateApp() {
   const app = createApp(App);
 

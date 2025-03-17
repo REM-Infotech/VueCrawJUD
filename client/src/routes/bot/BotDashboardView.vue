@@ -255,21 +255,167 @@ const items = () => {
         <div class="row">
           <div class="col-md-3 p-4 end-0" v-for="item in items()" :key="item.id">
             <BCard
-              data-bs-theme="dark"
-              img-src="/client/src/assets/robot-icon.svg"
-              img-alt="Image"
-              overlay
+              v-if="item.system == 'PROJUDI'"
+              class="bg-secondary bg-opacity-25"
               header-tag="header"
+              header-class="bg-secondary text-white  bg-opacity-75"
               footer-tag="footer"
+              footer-class="bg-secondary text-white bg-opacity-75"
               tag="article"
-              style="height: 38.2rem"
             >
+              <BCardImg
+                src="/client/src/assets/projudi.png"
+                class="bg-white mb-3 p-3 bg-opacity-75 rounded"
+                alt="Image"
+                overlay
+              />
               <template #header>
                 <span class="fw-bold">{{ item.display_name }}</span>
               </template>
-              <BCardText>
-                <span class="overflow-auto" style="width: 8rem">{{ item.text }} </span>
-              </BCardText>
+              <BCardBody style="height: 6rem" class="bg-white bg-opacity-75 rounded">
+                <span class="overflow-auto" style="height: 50rem">{{ item.text }} </span>
+              </BCardBody>
+
+              <template #footer>
+                <BButton class="d-grid gap-2" v-b-modal.ModalFormBot variant="success"
+                  ><em>Acessar Robô</em></BButton
+                >
+              </template>
+            </BCard>
+            <BCard
+              v-else-if="item.system == 'ELAW'"
+              class="bg-secondary bg-opacity-25"
+              header-tag="header"
+              header-class="bg-secondary text-white  bg-opacity-75"
+              footer-tag="footer"
+              footer-class="bg-secondary text-white bg-opacity-75"
+              tag="article"
+            >
+              <BCardImg
+                src="/client/src/assets/elaw.svg"
+                class="bg-white mb-3 p-3 bg-opacity-75 rounded"
+                alt="Image"
+                overlay
+              />
+              <template #header>
+                <span class="fw-bold">{{ item.display_name }}</span>
+              </template>
+              <BCardBody style="height: 6rem" class="bg-white bg-opacity-75 rounded">
+                <span class="overflow-auto" style="height: 50rem">{{ item.text }} </span>
+              </BCardBody>
+
+              <template #footer>
+                <BButton class="d-grid gap-2" v-b-modal.ModalFormBot variant="success"
+                  ><em>Acessar Robô</em></BButton
+                >
+              </template>
+            </BCard>
+            <BCard
+              v-else-if="item.system == 'ESAJ'"
+              class="bg-secondary bg-opacity-25"
+              header-tag="header"
+              header-class="bg-secondary text-white  bg-opacity-75"
+              footer-tag="footer"
+              footer-class="bg-secondary text-white bg-opacity-75"
+              tag="article"
+            >
+              <BCardImg
+                src="/client/src/assets/esaj.svg"
+                class="bg-white mb-3 p-3 bg-opacity-75 rounded"
+                alt="Image"
+                overlay
+              />
+              <template #header>
+                <span class="fw-bold">{{ item.display_name }}</span>
+              </template>
+              <BCardBody style="height: 6rem" class="bg-white bg-opacity-75 rounded">
+                <span class="overflow-auto" style="height: 50rem">{{ item.text }} </span>
+              </BCardBody>
+
+              <template #footer>
+                <BButton class="d-grid gap-2" v-b-modal.ModalFormBot variant="success"
+                  ><em>Acessar Robô</em></BButton
+                >
+              </template>
+            </BCard>
+            <BCard
+              v-else-if="item.system == 'CAIXA'"
+              class="bg-secondary bg-opacity-25"
+              header-tag="header"
+              header-class="bg-secondary text-white  bg-opacity-75"
+              footer-tag="footer"
+              footer-class="bg-secondary text-white bg-opacity-75"
+              tag="article"
+            >
+              <BCardImg
+                src="/client/src/assets/caixa.svg"
+                class="bg-white mb-3 p-3 bg-opacity-75 rounded"
+                alt="Image"
+                overlay
+              />
+              <template #header>
+                <span class="fw-bold">{{ item.display_name }}</span>
+              </template>
+              <BCardBody style="height: 6rem" class="bg-white bg-opacity-75 rounded">
+                <span class="overflow-auto" style="height: 50rem">{{ item.text }} </span>
+              </BCardBody>
+
+              <template #footer>
+                <BButton class="d-grid gap-2" v-b-modal.ModalFormBot variant="success"
+                  ><em>Acessar Robô</em></BButton
+                >
+              </template>
+            </BCard>
+            <BCard
+              v-else-if="item.system == 'PJE'"
+              class="bg-secondary bg-opacity-25"
+              header-tag="header"
+              header-class="bg-secondary text-white  bg-opacity-75"
+              footer-tag="footer"
+              footer-class="bg-secondary text-white bg-opacity-75"
+              tag="article"
+            >
+              <BCardImg
+                src="/client/src/assets/esaj.svg"
+                class="bg-white mb-3 p-3 bg-opacity-75 rounded"
+                alt="Image"
+                overlay
+              />
+              <template #header>
+                <span class="fw-bold">{{ item.display_name }}</span>
+              </template>
+              <BCardBody style="height: 6rem" class="bg-white bg-opacity-75 rounded">
+                <span class="overflow-auto" style="height: 50rem">{{ item.text }} </span>
+              </BCardBody>
+
+              <template #footer>
+                <BButton class="d-grid gap-2" v-b-modal.ModalFormBot variant="success"
+                  ><em>Acessar Robô</em></BButton
+                >
+              </template>
+            </BCard>
+            <BCard
+              v-else-if="item.system == 'TJDFT'"
+              class="bg-secondary bg-opacity-25"
+              header-tag="header"
+              header-class="bg-secondary text-white  bg-opacity-75"
+              footer-tag="footer"
+              footer-class="bg-secondary text-white bg-opacity-75"
+              tag="article"
+            >
+              <BCardImg
+                src="/client/src/assets/esaj.svg"
+                class="bg-white mb-3 p-3 bg-opacity-75 rounded"
+                alt="Image"
+                overlay
+              />
+              <template #header>
+                <span class="fw-bold">{{ item.display_name }}</span>
+              </template>
+              <BCardBody style="height: 6rem" class="bg-white bg-opacity-75 rounded">
+                <span class="overflow-auto" style="height: 50rem">{{ item.text }} </span>
+              </BCardBody>
+
               <template #footer>
                 <BButton class="d-grid gap-2" v-b-modal.ModalFormBot variant="success"
                   ><em>Acessar Robô</em></BButton
