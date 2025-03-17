@@ -15,6 +15,7 @@ declare module 'vue' {
     BCardText: typeof import('bootstrap-vue-next/components/BCard')['BCardText']
     BCol: typeof import('bootstrap-vue-next/components/BContainer')['BCol']
     BContainer: typeof import('bootstrap-vue-next/components/BContainer')['BContainer']
+    BForm: typeof import('bootstrap-vue-next/components/BForm')['BForm']
     BModal: typeof import('bootstrap-vue-next/components/BModal')['BModal']
     BOverlay: typeof import('bootstrap-vue-next/components/BOverlay')['BOverlay']
     BRow: typeof import('bootstrap-vue-next/components/BContainer')['BRow']

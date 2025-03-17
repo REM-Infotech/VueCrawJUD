@@ -305,7 +305,7 @@ const items = () => {
     <BModal
       id="ModalFormBot"
       data-bs-theme="dark"
-      size="lg"
+      size="xl"
       centered
       title=""
       @hide="form_visible = false"
