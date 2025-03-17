@@ -251,7 +251,7 @@ const items = () => {
   <div id="content" class="mt-4 mb-4">
     <SideBarComponent />
     <main>
-      <BContainer fluid="lg" class="px-4">
+      <BContainer fluid class="px-4">
         <div class="row">
           <div class="col-md-3 p-4 end-0" v-for="item in items()" :key="item.id">
             <BCard
@@ -262,7 +262,7 @@ const items = () => {
               header-tag="header"
               footer-tag="footer"
               tag="article"
-              style="height: 29.8rem"
+              style="height: 38.2rem"
             >
               <template #header>
                 <span class="fw-bold">{{ item.display_name }}</span>
