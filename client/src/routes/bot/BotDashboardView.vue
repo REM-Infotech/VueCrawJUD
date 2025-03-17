@@ -6,6 +6,7 @@ import { onBeforeMount, onMounted, ref } from "vue";
 import { markRaw } from "vue";
 import NavBarComponent from "../../components/NavBarComponent.vue";
 import SideBarComponent from "../../components/SideBarComponent.vue";
+import FileAuth from "./components/FileAuth.vue";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { api } from "../../main";
@@ -16,6 +17,7 @@ const FormComponent = markRaw({ componente: null });
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const capitalize = (str: string): string => str[0].toUpperCase() + str.slice(1);
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 async function setForm(form_name: string) {
   console.log(form_name);
   const component = await import(`./components/${form_name}.vue`);
@@ -289,11 +291,7 @@ const items = () => {
                 <span class="overflow-auto" style="width: 8rem">{{ item.text }} </span>
               </BCardText>
               <template #footer>
-                <BButton
-                  @click="setForm(item.form_cfg as string)"
-                  class="d-grid gap-2"
-                  v-b-modal.ModalFormBot
-                  variant="success"
+                <BButton class="d-grid gap-2" v-b-modal.ModalFormBot variant="success"
                   ><em>Acessar Robô</em></BButton
                 >
               </template>
@@ -310,11 +308,14 @@ const items = () => {
       title=""
       @hide="form_visible = false"
     >
-      <div v-if="form_visible">
+      <!-- <div v-if="form_visible">
         <component :is="FormComponent.componente"> </component>
       </div>
       <div v-else>
         <span class="placeholder w-100 rounded"></span>
+      </div> -->
+      <div>
+        <FileAuth />
       </div>
     </BModal>
   </div>

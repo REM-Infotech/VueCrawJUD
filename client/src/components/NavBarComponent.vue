@@ -1,9 +1,17 @@
 <script setup lang="ts">
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { faMinus, faMaximize, faClose } from "@fortawesome/free-solid-svg-icons";
+import {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  faMinus,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  faMaximize,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  faClose,
+  faSun,
+  faMoon,
+  faCircleHalfStroke,
+} from "@fortawesome/free-solid-svg-icons";
 </script>
 
 <template>
@@ -51,9 +59,51 @@ import { faMinus, faMaximize, faClose } from "@fortawesome/free-solid-svg-icons"
         <button class="btn btn-danger m-1">
           <FontAwesomeIcon :icon="faClose" />
         </button> -->
-        <form role="search">
-          <input class="form-control m-1" type="search" placeholder="Search" aria-label="Search" />
-        </form>
+        <div class="dropdown ms-3 me-2" data-bs-theme="dark">
+          <button
+            class="btn btn-secondary dropdown-toggle"
+            type="button"
+            id="dropdownMenuButtonDark"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            <FontAwesomeIcon :icon="faSun" />
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end mt-2" aria-labelledby="dropdownMenuButtonDark">
+            <li>
+              <button
+                type="button"
+                class="dropdown-item d-flex align-items-center"
+                data-bs-theme-value="light"
+                aria-pressed="false"
+              >
+                <FontAwesomeIcon :icon="faSun" class="me-2" />
+                Claro
+              </button>
+            </li>
+            <li>
+              <button
+                type="button"
+                class="dropdown-item d-flex align-items-center"
+                data-bs-theme-value="dark"
+                aria-pressed="true"
+              >
+                <FontAwesomeIcon :icon="faMoon" class="me-2" />
+                Escuro
+              </button>
+            </li>
+            <li>
+              <button
+                type="button"
+                class="dropdown-item d-flex align-items-center"
+                aria-pressed="false"
+              >
+                <FontAwesomeIcon :icon="faCircleHalfStroke" class="me-2" />
+                Auto
+              </button>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   </nav>
