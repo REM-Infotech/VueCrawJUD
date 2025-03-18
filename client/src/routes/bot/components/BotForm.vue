@@ -7,7 +7,25 @@ import useFileList from "./file_list";
 import DropZone from "./FileDropZone.vue";
 import { onMounted } from "vue";
 import "datatables.net-select";
+import { ref } from "vue";
 
+const ex1Options = [
+  { value: null, text: "Selecione uma Credencial" },
+  { value: "a", text: "This is First option" },
+  { value: "b", text: "Selected Option" },
+  { value: { C: "3PO" }, text: "This is an option with object value" },
+  { value: "d", text: "This one is disabled", disabled: true },
+];
+
+const ex2Options = [
+  { value: null, text: "Please select an optio 2n" },
+  { value: "a", text: "This is First option" },
+  { value: "b", text: "Selected Option" },
+  { value: { C: "3PO" }, text: "This is an option with object value" },
+  { value: "d", text: "This one is disabled", disabled: true },
+];
+
+const selected = ref(null);
 DataTable.use(DataTablesCore);
 
 let dt;
@@ -61,24 +79,8 @@ function selectAll() {
                   </div>
                 </DropZone>
                 <div class="col-md-8 p-3 mb-3">
-                  <div class="form-floating mb-3">
-                    <input
-                      type="email"
-                      class="form-control"
-                      id="floatingInput"
-                      placeholder="name@example.com"
-                    />
-                    <label for="floatingInput">Email address</label>
-                  </div>
-                  <div class="form-floating">
-                    <input
-                      type="password"
-                      class="form-control"
-                      id="floatingPassword"
-                      placeholder="Password"
-                    />
-                    <label for="floatingPassword">Password</label>
-                  </div>
+                  <BFormSelect class="mb-3" v-model="selected" :options="ex1Options" />
+                  <BFormSelect class="mb-3" v-model="selected" :options="ex2Options" />
                 </div>
               </div>
             </div>
@@ -142,7 +144,35 @@ function selectAll() {
         </div>
       </BForm>
     </div>
+    <template #footer>
+      <div class="d-grid gap-0">
+        <BButton class="btn-icon-split" variant="success">
+          <span class="icon text-white-50">
+            <FontAwesomeIcon :icon="faTrash" class="" />
+          </span>
+          <span class="text">Iniciar Execução</span>
+        </BButton>
+      </div>
+    </template>
   </BModal>
+  <!-- <div class="form-floating mb-3">
+                    <input
+                      type="email"
+                      class="form-control"
+                      id="floatingInput"
+                      placeholder="name@example.com"
+                    />
+                    <label for="floatingInput">Email address</label>
+                  </div>
+                  <div class="form-floating">
+                    <input
+                      type="password"
+                      class="form-control"
+                      id="floatingPassword"
+                      placeholder="Password"
+                    />
+                    <label for="floatingPassword">Password</label>
+                  </div> -->
 </template>
 
 <style>
