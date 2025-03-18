@@ -26,6 +26,7 @@ const ex2Options = [
 ];
 
 const selected = ref(null);
+const selected2 = ref(null);
 DataTable.use(DataTablesCore);
 
 let dt;
@@ -80,7 +81,7 @@ function selectAll() {
                 </DropZone>
                 <div class="col-md-8 p-3 mb-3">
                   <BFormSelect class="mb-3" v-model="selected" :options="ex1Options" />
-                  <BFormSelect class="mb-3" v-model="selected" :options="ex2Options" />
+                  <BFormSelect class="mb-3" v-model="selected2" :options="ex2Options" />
                 </div>
               </div>
             </div>
