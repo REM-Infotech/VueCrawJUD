@@ -5,24 +5,37 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { faFileDownload, faTrash, faCheckSquare, faPlay } from "@fortawesome/free-solid-svg-icons";
 import FormConfig from "./FormConfig.ts";
 import DropZone from "./FileDropZone.vue";
-import { onMounted } from "vue";
+import { onMounted, watch } from "vue";
 
 import { ref } from "vue";
 import { api } from "../../../main.ts";
 
 const selected = ref(null);
+const need_files = ref(true);
+const need_options = ref(true);
+const bot_protocolo = ref(false);
+const confirm_terms = ref("not_accepted");
 const selected2 = ref(null);
+const disabled_state = ref(true);
 DataTable.use(DataTablesCore);
 
-const credentials = ref([{ value: null, text: "Selecione uma Credencial" }]);
+const credentials = ref<unknown[]>([{ value: null, text: "Carregando", disabled: true }]);
 
-const state_client = ref([{ value: null, text: "" }]);
+const state_client = ref<unknown[]>([{ value: null, text: "Carregando", disabled: true }]);
 
 const TitleForm = ref();
 let dt;
 
 onMounted(() => {
   dt = table_file.value.dt;
+});
+
+watch(confirm_terms, (newValue) => {
+  console.log(newValue);
+
+  let marked_state: boolean = !newValue;
+
+  disabled_state.value = marked_state;
 });
 
 const {
@@ -46,10 +59,20 @@ function remove() {
 function selectAll() {
   dt.rows().select();
 }
+
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const setup_form = async (_e) => {
   const item = JSON.parse(sessionStorage.getItem("current_bot") as string);
   TitleForm.value = item.display_name;
+  if (item.form_cfg === "only_auth") {
+    need_files.value = false;
+  } else if (item.form_cfg === "only_file") {
+    need_options.value = false;
+  }
+
+  if (item.type == "PROTOCOLO") {
+    bot_protocolo.value = true;
+  }
 
   const response_creds = await api.post(
     `/acquire_credentials`,
@@ -80,20 +103,17 @@ const setup_form = async (_e) => {
       xsrfCookieName: "csrf_access_token",
     },
   );
-
-  response_creds.data.map((cred) => {
-    credentials.value.push(cred);
-  });
-
-  response_state_client.data.map((cred) => {
-    state_client.value.push(cred);
-  });
+  credentials.value = response_creds.data;
+  state_client.value = response_state_client.data;
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const reset_form = async (_e) => {
-  credentials.value = [{ value: null, text: "Selecione uma opção" }];
-  state_client.value = [{ value: null, text: "Selecione uma opção" }];
+  credentials.value = [{ value: null, text: "Carregando", disabled: true }];
+  state_client.value = [{ value: null, text: "Carregando", disabled: true }];
+  need_files.value = true;
+  need_options.value = true;
+  bot_protocolo.value = false;
 };
 </script>
 
@@ -111,18 +131,40 @@ const reset_form = async (_e) => {
     <div>
       <BForm>
         <div class="row g-3 p-2 m-1">
-          <div class="col-12">
+          <div class="col-12" v-if="need_options">
             <div class="card p-3">
               <div class="card-body row">
                 <div class="col-12 p-3 mb-3">
                   <BFormSelect class="mb-3" v-model="selected" :options="credentials" />
                   <BFormSelect class="mb-3" v-model="selected2" :options="state_client" />
                 </div>
+                <div class="col-12 p-3 mb-3">
+                  <div class="form-floating" v-if="bot_protocolo">
+                    <input
+                      type="password"
+                      class="form-control"
+                      id="floatSenhaToken"
+                      placeholder="Password"
+                    />
+                    <label for="floatSenhaToken">Senha Token</label>
+                  </div>
+                  <div class="col-12 p-3 mb-3">
+                    <BFormCheckbox
+                      id="checkbox-1"
+                      v-model="confirm_terms"
+                      name="checkbox-1"
+                      value="accepted"
+                      unchecked-value="not_accepted"
+                    >
+                      Confirmo que os dados inseridos estão corretos
+                    </BFormCheckbox>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
           <hr />
-          <div class="col-lg-12 mb-3">
+          <div v-if="need_files" class="col-lg-12 mb-3">
             <div class="card">
               <div class="card-header">
                 <h4>Arquivos</h4>
@@ -186,8 +228,8 @@ const reset_form = async (_e) => {
       </BForm>
     </div>
     <template #footer>
-      <div class="d-grid gap-0">
-        <BButton class="btn-icon-split" variant="success">
+      <div class="">
+        <BButton class="btn-icon-split" variant="success" :disabled="disabled_state">
           <span class="icon text-white-50">
             <FontAwesomeIcon :icon="faPlay" class="" />
           </span>

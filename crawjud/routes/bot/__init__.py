@@ -58,6 +58,8 @@ async def acquire_credentials() -> Response:
         if form_cfg == "only_file":
             return jsonify({"value": "Opção não utilizada", "text": "Opção não utilizada", "disabled": True})
 
+        cred = [{"value": None, "text": "Selecione uma credencial", "disabled": True}]
+
         license_token = db.session.query(Users).filter
         license_token = (
             db.session.query(LicensesUsers)
@@ -75,12 +77,12 @@ async def acquire_credentials() -> Response:
             .filter(LicensesUsers.license_token == license_token)
             .all()
         )
-
-        return jsonify([
+        cred.extend([
             {"value": credential.nome_credencial, "text": credential.nome_credencial}
             for credential in creds
             if credential.system == system.upper()
         ])
+        return jsonify(cred)
 
     except Exception as e:
         app.logger.error("\n".join(traceback.format_exception(e)))
@@ -117,10 +119,10 @@ async def acquire_systemclient() -> Response:
                 )
                 .all()
             ])
-            return jsonify()
+            return jsonify(opt)
 
         elif state == "EVERYONE":
-            opt = [{"value": None, "text": "Selecione um Estado", "disabled": True}]
+            opt = [{"value": "", "text": "Selecione um Estado", "disabled": True}]
             opt.extend([
                 {"value": client.client, "text": client.client}
                 for client in db.session.query(BotsCrawJUD)
@@ -130,7 +132,7 @@ async def acquire_systemclient() -> Response:
                 )
                 .all()
             ])
-            jsonify(opt)
+            return jsonify(opt)
 
     except Exception as e:
         app.logger.error("\n".join(traceback.format_exception(e)))
