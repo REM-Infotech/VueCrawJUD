@@ -1,6 +1,6 @@
 import { useModal } from "bootstrap-vue-next";
 import { ref } from "vue";
-import { $, api } from "../../../main";
+import { $ } from "../../../main";
 
 export default function () {
   // const vars
@@ -80,39 +80,6 @@ export default function () {
     }
   }
 
-  async function ConfigureForm(item) {
-    const response_creds = await api.post(
-      `/acquire_credentials`,
-      {
-        system: item.system,
-        state: item.state,
-      },
-      {
-        withXSRFToken: true,
-        withCredentials: true,
-        xsrfCookieName: "csrf_access_token",
-      },
-    );
-    const response_state_client = await api.post(
-      "/acquire_systemclient",
-      {
-        system: item.system,
-        state: item.state,
-      },
-      {
-        withXSRFToken: true,
-        withCredentials: true,
-        xsrfCookieName: "csrf_access_token",
-      },
-    );
-
-    const data_cred = response_creds.data;
-    const data_system_client = response_state_client.data;
-
-    console.log(data_cred.data);
-    console.log(data_system_client.data);
-  }
-
   function fileExists(otherName) {
     return files.value.some(({ name }) => name === otherName);
   }
@@ -134,7 +101,6 @@ export default function () {
     FilesListable,
     table_file,
     columns,
-    ConfigureForm,
   };
 }
 

@@ -56,6 +56,8 @@ const setup_form = async (_e) => {
     {
       system: item.system,
       state: item.state,
+      client: item.client,
+      form_cfg: item.form_cfg,
     },
     {
       withXSRFToken: true,
@@ -68,6 +70,9 @@ const setup_form = async (_e) => {
     {
       system: item.system,
       state: item.state,
+      client: item.client,
+      type: item.type,
+      form_cfg: item.form_cfg,
     },
     {
       withXSRFToken: true,
@@ -76,11 +81,11 @@ const setup_form = async (_e) => {
     },
   );
 
-  response_creds.data.data.map((cred) => {
+  response_creds.data.map((cred) => {
     credentials.value.push(cred);
   });
 
-  response_state_client.data.data.map((cred) => {
+  response_state_client.data.map((cred) => {
     state_client.value.push(cred);
   });
 };
@@ -125,9 +130,10 @@ const reset_form = async (_e) => {
               <div class="card-body">
                 <div id="drop_zone">
                   <DropZone
-                    class="rounded rounded-4 p-3 bg-secondary bg-opacity-25 text-white drop-area d-flex justify-content-center align-items-center"
+                    class="rounded rounded-4 p-3 mb-3 bg-secondary bg-opacity-25 text-white drop-area d-flex justify-content-center align-items-center"
                     @files-dropped="addFiles"
                     #default="{ dropZoneActive }"
+                    style="height: 15rem"
                   >
                     <div v-if="dropZoneActive">
                       <div

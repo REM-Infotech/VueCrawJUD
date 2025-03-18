@@ -46,6 +46,12 @@ const handleLogoutClick = (e: Event) => {
           </RouterLink>
         </li>
         <li class="nav-item mb-1">
+          <RouterLink :to="{ name: 'bot_dashboard' }" class="nav-link link-body-emphasis">
+            <FontAwesomeIcon :icon="faRobot" class="me-2" />
+            <span class="text">Robôs</span>
+          </RouterLink>
+        </li>
+        <li class="nav-item mb-1">
           <RouterLink :to="{ name: 'executions' }" class="nav-link link-body-emphasis">
             <FontAwesomeIcon :icon="faTable" class="me-2" />
             <span class="text">Execuções</span>
@@ -58,20 +64,14 @@ const handleLogoutClick = (e: Event) => {
           </a>
         </li>
         <li class="border-top my-3"></li>
-        <li class="nav-item mb-1">
-          <RouterLink :to="{ name: 'bot_dashboard' }" class="nav-link link-body-emphasis">
-            <FontAwesomeIcon :icon="faRobot" class="me-2" />
-            <span class="text">Robôs</span>
-          </RouterLink>
-        </li>
-        <li class="nav-item mb-1">
+        <!-- <li class="nav-item mb-1">
           <a href="#" class="nav-link link-body-emphasis">
             <svg class="bi pe-none me-2" width="16" height="16">
               <use xlink:href="#people-circle"></use>
             </svg>
             Customers
           </a>
-        </li>
+        </li> -->
       </ul>
     </div>
     <footer class="offcanvas-footer">

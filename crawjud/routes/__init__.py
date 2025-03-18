@@ -30,6 +30,7 @@ from werkzeug.exceptions import HTTPException
 
 
 @app.route("/", methods=["GET"])
+@jwt_required
 async def index() -> Response:
     """Redirect to the authentication login page.
 

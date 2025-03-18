@@ -23,11 +23,13 @@ from quart import (
     url_for,
 )
 from quart import current_app as app
-from quart_jwt_extended import jwt_required
+from quart_jwt_extended import get_jwt_identity, jwt_required
 from quart_wtf import QuartForm
 
 from crawjud.forms import BotForm
 from crawjud.models import BotsCrawJUD
+from crawjud.models.bots import Credentials
+from crawjud.models.users import LicensesUsers, Users
 from crawjud.utils.gen_seed import generate_pid
 
 from ...misc import MakeModels
@@ -47,7 +49,38 @@ bot = Blueprint("bot", __name__, template_folder=path_template)
 async def acquire_credentials() -> Response:
     """Return a list credentials."""
     try:
-        return jsonify(data=[{"value": 123, "text": "teste"}])
+        db: SQLAlchemy = app.extensions["sqlalchemy"]
+        json_data: dict[str, str] = await request.json
+        system = json_data["system"]
+        usr = get_jwt_identity()
+        form_cfg = json_data["form_cfg"]
+
+        if form_cfg == "only_file":
+            return jsonify({"value": "Opção não utilizada", "text": "Opção não utilizada", "disabled": True})
+
+        license_token = db.session.query(Users).filter
+        license_token = (
+            db.session.query(LicensesUsers)
+            .select_from(Users)
+            .join(Users, LicensesUsers.user)
+            .filter(Users.id == usr)
+            .first()
+            .license_token
+        )
+
+        creds = (
+            db.session.query(Credentials)
+            .select_from(LicensesUsers)
+            .join(LicensesUsers, Credentials.license_usr)
+            .filter(LicensesUsers.license_token == license_token)
+            .all()
+        )
+
+        return jsonify([
+            {"value": credential.nome_credencial, "text": credential.nome_credencial}
+            for credential in creds
+            if credential.system == system.upper()
+        ])
 
     except Exception as e:
         app.logger.error("\n".join(traceback.format_exception(e)))
@@ -59,7 +92,45 @@ async def acquire_credentials() -> Response:
 async def acquire_systemclient() -> Response:
     """Return a list credentials."""
     try:
-        return jsonify(data=[{"value": 123, "text": "teste"}])
+        db: SQLAlchemy = app.extensions["sqlalchemy"]
+        json_data: dict[str, str] = await request.json
+        system = json_data["system"]
+        typebot = json_data["type"]
+
+        client = json_data["client"]
+        state = json_data["state"]
+
+        # usr = get_jwt_identity()
+        form_cfg = json_data["form_cfg"]
+
+        if form_cfg == "only_file":
+            return jsonify({"value": "Opção não utilizada", "text": "Opção não utilizada", "disabled": True})
+
+        if client == "EVERYONE":
+            opt = [{"value": None, "text": "Selecione um cliente", "disabled": True}]
+            opt.extend([
+                {"value": state.state, "text": state.state}
+                for state in db.session.query(BotsCrawJUD)
+                .filter(
+                    BotsCrawJUD.type == typebot.upper(),
+                    BotsCrawJUD.system == system.upper(),
+                )
+                .all()
+            ])
+            return jsonify()
+
+        elif state == "EVERYONE":
+            opt = [{"value": None, "text": "Selecione um Estado", "disabled": True}]
+            opt.extend([
+                {"value": client.client, "text": client.client}
+                for client in db.session.query(BotsCrawJUD)
+                .filter(
+                    BotsCrawJUD.type == typebot.upper(),
+                    BotsCrawJUD.system == system.upper(),
+                )
+                .all()
+            ])
+            jsonify(opt)
 
     except Exception as e:
         app.logger.error("\n".join(traceback.format_exception(e)))
