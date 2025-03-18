@@ -6,13 +6,19 @@ import { faFileDownload, faTrash, faCheckSquare, faPlay } from "@fortawesome/fre
 import FormConfig from "./FormConfig.ts";
 import DropZone from "./FileDropZone.vue";
 import { onMounted } from "vue";
-import "datatables.net-select";
+
 import { ref } from "vue";
+import { api } from "../../../main.ts";
 
 const selected = ref(null);
 const selected2 = ref(null);
 DataTable.use(DataTablesCore);
 
+const credentials = ref([{ value: null, text: "Selecione uma Credencial" }]);
+
+const state_client = ref([{ value: null, text: "" }]);
+
+const TitleForm = ref();
 let dt;
 
 onMounted(() => {
@@ -27,8 +33,6 @@ const {
   FilesListable,
   table_file,
   columns,
-  credentials,
-  state_client,
 } = FormConfig();
 
 function remove() {
@@ -42,10 +46,63 @@ function remove() {
 function selectAll() {
   dt.rows().select();
 }
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const setup_form = async (_e) => {
+  const item = JSON.parse(sessionStorage.getItem("current_bot") as string);
+  TitleForm.value = item.display_name;
+
+  const response_creds = await api.post(
+    `/acquire_credentials`,
+    {
+      system: item.system,
+      state: item.state,
+    },
+    {
+      withXSRFToken: true,
+      withCredentials: true,
+      xsrfCookieName: "csrf_access_token",
+    },
+  );
+  const response_state_client = await api.post(
+    "/acquire_systemclient",
+    {
+      system: item.system,
+      state: item.state,
+    },
+    {
+      withXSRFToken: true,
+      withCredentials: true,
+      xsrfCookieName: "csrf_access_token",
+    },
+  );
+
+  response_creds.data.data.map((cred) => {
+    credentials.value.push(cred);
+  });
+
+  response_state_client.data.data.map((cred) => {
+    state_client.value.push(cred);
+  });
+};
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const reset_form = async (_e) => {
+  credentials.value = [{ value: null, text: "Selecione uma opção" }];
+  state_client.value = [{ value: null, text: "Selecione uma opção" }];
+};
 </script>
 
 <template>
-  <BModal id="ModalFormBot" data-bs-theme="dark" size="xl" centered>
+  <BModal
+    id="ModalFormBot"
+    data-bs-theme="dark"
+    size="xl"
+    centered
+    @show="setup_form"
+    :title="TitleForm"
+    class="text-white"
+    @hide="reset_form"
+  >
     <div>
       <BForm>
         <div class="row g-3 p-2 m-1">

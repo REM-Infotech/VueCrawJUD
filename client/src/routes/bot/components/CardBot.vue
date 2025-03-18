@@ -1,7 +1,4 @@
 <script setup lang="ts">
-import FormConfig from "./FormConfig.ts";
-const { ConfigureForm } = FormConfig();
-
 import { onBeforeMount, ref } from "vue";
 import { api } from "../../../main.ts";
 
@@ -11,6 +8,10 @@ onBeforeMount(async () => {
   const resp = await api.get("/bots_list");
   items.value = resp.data;
 });
+
+const current_bot = (item) => {
+  sessionStorage.setItem("current_bot", JSON.stringify(item));
+};
 
 const src_image = (system: string) => {
   if (system == "PROJUDI") {
@@ -37,7 +38,7 @@ const src_image = (system: string) => {
             class="d-grid gap-2"
             v-b-modal.ModalFormBot
             variant="success"
-            @click="ConfigureForm(item)"
+            @click="current_bot(item)"
             ><em>Acessar Robô</em></BButton
           >
         </template>

@@ -9,10 +9,6 @@ export default function () {
   const FilesListable = ref<{ index: number; file: [UploadableFile, string] }[]>([]);
   const files = ref<UploadableFile[]>([]);
 
-  const credentials = ref([{ value: null, text: "Selecione uma Credencial" }]);
-
-  const state_client = ref([{ value: null, text: "" }]);
-
   const columns = [
     {
       data: "index",
@@ -115,9 +111,6 @@ export default function () {
 
     console.log(data_cred.data);
     console.log(data_system_client.data);
-
-    credentials.value.push(data_cred.data);
-    state_client.value.push(data_system_client.data);
   }
 
   function fileExists(otherName) {
@@ -142,8 +135,6 @@ export default function () {
     table_file,
     columns,
     ConfigureForm,
-    credentials,
-    state_client,
   };
 }
 

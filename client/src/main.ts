@@ -4,6 +4,7 @@ import { createBootstrap } from "bootstrap-vue-next";
 import "bootstrap-vue-next/dist/bootstrap-vue-next.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.min.js";
+import "datatables.net-select";
 import jQuery from "jquery";
 import "jquery/dist/jquery.min.js";
 import { createApp } from "vue";
