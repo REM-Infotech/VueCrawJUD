@@ -42,6 +42,12 @@ path_template = os.path.join(Path(__file__).parent.resolve(), "templates")
 bot = Blueprint("bot", __name__, template_folder=path_template)
 
 
+@bot.route("/acquire_credentials", methods=["post"])
+def acquire_credentials() -> Response:
+    """Return a list credentials."""
+    return jsonify([{"value": 123, "text": "teste"}])
+
+
 @bot.route("/bots_list", methods=["get"])
 async def bots_list() -> Response:
     """Return a list bots."""
