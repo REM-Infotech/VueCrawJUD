@@ -1,13 +1,17 @@
-import { ref } from "vue";
 import { useModal } from "bootstrap-vue-next";
-import { $ } from "../../../main";
+import { ref } from "vue";
+import { $, api } from "../../../main";
 
 export default function () {
+  // const vars
   const { show } = useModal("ModalMessage");
   const table_file = ref();
-  let messages_xlsx: string[] = [];
   const FilesListable = ref<{ index: number; file: [UploadableFile, string] }[]>([]);
   const files = ref<UploadableFile[]>([]);
+
+  const credentials = ref([{ value: null, text: "Selecione uma Credencial" }]);
+
+  const state_client = ref([{ value: null, text: "" }]);
 
   const columns = [
     {
@@ -20,6 +24,10 @@ export default function () {
     },
   ];
 
+  // variables
+  let messages_xlsx: string[] = [];
+
+  // functions
   function addFiles(newFiles) {
     const XLSX_TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
     const filesArray = [...newFiles];
@@ -76,6 +84,31 @@ export default function () {
     }
   }
 
+  async function ConfigureForm(item) {
+    const response_creds = await api.post(
+      `/acquire_credentials}`,
+      {
+        system: item.system,
+        state: item.state,
+      },
+      { withCredentials: true },
+    );
+    const response_state_client = await api.post(
+      "/acquire_systemclient",
+      {
+        system: item.system,
+        state: item.state,
+      },
+      { withCredentials: true },
+    );
+
+    const data_cred = response_creds.data;
+    const data_system_client = response_state_client.data;
+
+    credentials.value.push(data_cred);
+    state_client.value.push(data_system_client);
+  }
+
   function fileExists(otherName) {
     return files.value.some(({ name }) => name === otherName);
   }
@@ -90,7 +123,17 @@ export default function () {
     if (index > -1) files.value.splice(index, 1);
   }
 
-  return { files, addFiles, removeFile, FilesListable, table_file, columns };
+  return {
+    files,
+    addFiles,
+    removeFile,
+    FilesListable,
+    table_file,
+    columns,
+    ConfigureForm,
+    credentials,
+    state_client,
+  };
 }
 
 class UploadableFile {

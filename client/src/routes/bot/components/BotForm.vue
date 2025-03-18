@@ -3,27 +3,11 @@ import DataTable from "datatables.net-vue3";
 import DataTablesCore from "datatables.net-bs5";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { faFileDownload, faTrash, faCheckSquare } from "@fortawesome/free-solid-svg-icons";
-import useFileList from "./file_list";
+import FormConfig from "./FormConfig.ts";
 import DropZone from "./FileDropZone.vue";
 import { onMounted } from "vue";
 import "datatables.net-select";
 import { ref } from "vue";
-
-const ex1Options = [
-  { value: null, text: "Selecione uma Credencial" },
-  { value: "a", text: "This is First option" },
-  { value: "b", text: "Selected Option" },
-  { value: { C: "3PO" }, text: "This is an option with object value" },
-  { value: "d", text: "This one is disabled", disabled: true },
-];
-
-const ex2Options = [
-  { value: null, text: "Please select an optio 2n" },
-  { value: "a", text: "This is First option" },
-  { value: "b", text: "Selected Option" },
-  { value: { C: "3PO" }, text: "This is an option with object value" },
-  { value: "d", text: "This one is disabled", disabled: true },
-];
 
 const selected = ref(null);
 const selected2 = ref(null);
@@ -35,8 +19,17 @@ onMounted(() => {
   dt = table_file.value.dt;
 });
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const { files, addFiles, removeFile, FilesListable, table_file, columns } = useFileList();
+const {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  files,
+  addFiles,
+  removeFile,
+  FilesListable,
+  table_file,
+  columns,
+  credentials,
+  state_client,
+} = FormConfig();
 
 function remove() {
   dt.rows({ selected: true }).every(function () {
@@ -80,8 +73,8 @@ function selectAll() {
                   </div>
                 </DropZone>
                 <div class="col-md-8 p-3 mb-3">
-                  <BFormSelect class="mb-3" v-model="selected" :options="ex1Options" />
-                  <BFormSelect class="mb-3" v-model="selected2" :options="ex2Options" />
+                  <BFormSelect class="mb-3" v-model="selected" :options="credentials" />
+                  <BFormSelect class="mb-3" v-model="selected2" :options="state_client" />
                 </div>
               </div>
             </div>
@@ -120,25 +113,6 @@ function selectAll() {
                   </span>
                   <span class="text">Remover Selecionados</span>
                 </BButton>
-                <!-- <div class="row">
-                  <div class="col-sm-3">
-                    <BButton @click="selectAll" class="btn-icon-split" variant="primary">
-                      <span class="icon text-white-50">
-                        <FontAwesomeIcon :icon="faCheckSquare" class="" />
-                      </span>
-                      <span class="text">Selecionar Todos</span>
-                    </BButton>
-                  </div>
-                  <div class="col-sm-3">
-                    <BButton @click="remove" class="btn-icon-split" variant="danger">
-                      <span class="icon text-white-50">
-                        <FontAwesomeIcon :icon="faTrash" class="" />
-                      </span>
-                      <span class="text">Remover Selecionados</span>
-                    </BButton>
-                  </div>
-                  <div class="col-sm-2"></div>
-                </div> -->
               </div>
             </div>
           </div>
@@ -156,24 +130,6 @@ function selectAll() {
       </div>
     </template>
   </BModal>
-  <!-- <div class="form-floating mb-3">
-                    <input
-                      type="email"
-                      class="form-control"
-                      id="floatingInput"
-                      placeholder="name@example.com"
-                    />
-                    <label for="floatingInput">Email address</label>
-                  </div>
-                  <div class="form-floating">
-                    <input
-                      type="password"
-                      class="form-control"
-                      id="floatingPassword"
-                      placeholder="Password"
-                    />
-                    <label for="floatingPassword">Password</label>
-                  </div> -->
 </template>
 
 <style>

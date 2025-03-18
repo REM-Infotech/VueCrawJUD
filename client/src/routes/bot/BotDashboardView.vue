@@ -7,16 +7,11 @@ import NavBarComponent from "../../components/NavBarComponent.vue";
 import SideBarComponent from "../../components/SideBarComponent.vue";
 import BotForm from "./components/BotForm.vue";
 import { api } from "../../main";
-
-const system = ref();
+import FormConfig from "./components/FormConfig.ts";
 
 const items = ref<{ system: string; id: number; display_name: string; text: string }[]>([]);
 
-const setSystem = (item) => {
-  system.value = item;
-
-  console.log(system);
-};
+const { ConfigureForm } = FormConfig();
 
 const src_image = (system: string) => {
   if (system == "PROJUDI") {
@@ -66,7 +61,7 @@ onBeforeMount(async () => {
                   class="d-grid gap-2"
                   v-b-modal.ModalFormBot
                   variant="success"
-                  @click="setSystem(item)"
+                  @click="ConfigureForm(item)"
                   ><em>Acessar Robô</em></BButton
                 >
               </template>
