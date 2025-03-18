@@ -44,16 +44,26 @@ bot = Blueprint("bot", __name__, template_folder=path_template)
 
 @bot.route("/acquire_credentials", methods=["post"])
 @jwt_required
-def acquire_credentials() -> Response:
+async def acquire_credentials() -> Response:
     """Return a list credentials."""
-    return jsonify([{"value": 123, "text": "teste"}])
+    try:
+        return jsonify(data=[{"value": 123, "text": "teste"}])
+
+    except Exception as e:
+        app.logger.error("\n".join(traceback.format_exception(e)))
+        return jsonify({"value": 123, "text": "teste"})
 
 
 @bot.route("/acquire_systemclient", methods=["post"])
 @jwt_required
-def acquire_systemclient() -> Response:
+async def acquire_systemclient() -> Response:
     """Return a list credentials."""
-    return jsonify([{"value": 123, "text": "teste"}])
+    try:
+        return jsonify(data=[{"value": 123, "text": "teste"}])
+
+    except Exception as e:
+        app.logger.error("\n".join(traceback.format_exception(e)))
+        return jsonify({"value": 123, "text": "teste"})
 
 
 @bot.route("/bots_list", methods=["get"])

@@ -85,20 +85,39 @@ export default function () {
   }
 
   async function ConfigureForm(item) {
-    const response_creds = await api.post(`/acquire_credentials`, {
-      system: item.system,
-      state: item.state,
-    });
-    const response_state_client = await api.post("/acquire_systemclient", {
-      system: item.system,
-      state: item.state,
-    });
+    const response_creds = await api.post(
+      `/acquire_credentials`,
+      {
+        system: item.system,
+        state: item.state,
+      },
+      {
+        withXSRFToken: true,
+        withCredentials: true,
+        xsrfCookieName: "csrf_access_token",
+      },
+    );
+    const response_state_client = await api.post(
+      "/acquire_systemclient",
+      {
+        system: item.system,
+        state: item.state,
+      },
+      {
+        withXSRFToken: true,
+        withCredentials: true,
+        xsrfCookieName: "csrf_access_token",
+      },
+    );
 
     const data_cred = response_creds.data;
     const data_system_client = response_state_client.data;
 
-    credentials.value.push(data_cred);
-    state_client.value.push(data_system_client);
+    console.log(data_cred.data);
+    console.log(data_system_client.data);
+
+    credentials.value.push(data_cred.data);
+    state_client.value.push(data_system_client.data);
   }
 
   function fileExists(otherName) {

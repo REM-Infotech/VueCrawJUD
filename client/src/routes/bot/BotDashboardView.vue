@@ -32,27 +32,14 @@ onBeforeMount(async () => {
   <div id="content" class="mt-4 mb-4">
     <SideBarComponent />
     <main>
-      <BContainer fluid class="px-4">
+      <BContainer fluid="lg" class="px-4">
         <div class="row">
           <div class="col-md-3 p-4 end-0" v-for="item in items" :key="item.id">
-            <BCard
-              class="bg-secondary bg-opacity-25"
-              header-tag="header"
-              header-class="bg-secondary text-white  bg-opacity-75"
-              footer-tag="footer"
-              footer-class="bg-secondary text-white bg-opacity-75"
-              tag="article"
-            >
-              <BCardImg
-                :src="src_image(item.system)"
-                class="bg-white mb-3 p-3 bg-opacity-75 rounded"
-                alt="Image"
-                overlay
-              />
+            <BCard :img-src="src_image(item.system)" data-bs-theme="dark" tag="article">
               <template #header>
                 <span class="fw-bold">{{ item.display_name }}</span>
               </template>
-              <BCardBody style="height: 6rem" class="bg-white bg-opacity-75 rounded">
+              <BCardBody style="height: 6rem" class="">
                 <span class="overflow-auto" style="height: 50rem">{{ item.text }} </span>
               </BCardBody>
 
