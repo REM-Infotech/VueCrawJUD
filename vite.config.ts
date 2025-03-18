@@ -38,6 +38,11 @@ export default defineConfig({
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/executions/, ""),
       },
+      "/bots_list": {
+        target: "http://localhost:5000/bots_list",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/bots_list/, ""),
+      },
     },
   },
 });

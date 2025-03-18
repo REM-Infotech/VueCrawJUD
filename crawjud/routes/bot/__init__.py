@@ -1,10 +1,11 @@
 """Module for bot operation routes."""
 
+import json  # noqa: F401
 import os
-import pathlib
 import sys  # noqa: F401
 import traceback
 import warnings
+from pathlib import Path
 
 from flask_sqlalchemy import SQLAlchemy
 from quart import (
@@ -12,6 +13,7 @@ from quart import (
     Response,
     abort,
     flash,
+    jsonify,
     make_response,
     redirect,
     render_template,
@@ -36,8 +38,43 @@ from .botlaunch_methods import (
     setup_task_worker,
 )
 
-path_template = os.path.join(pathlib.Path(__file__).parent.resolve(), "templates")
+path_template = os.path.join(Path(__file__).parent.resolve(), "templates")
 bot = Blueprint("bot", __name__, template_folder=path_template)
+
+
+@bot.route("/bots_list", methods=["get"])
+async def bots_list() -> Response:
+    """Return a list bots."""
+    try:
+        bots_ = []
+
+        db: SQLAlchemy = app.extensions["sqlalchemy"]
+        # path_current_file = Path(__file__).parent.resolve()
+        # path_json = path_current_file.joinpath("bots.json")
+        # # with path_json.open("r", encoding="utf-8") as f:
+        # #     # bots_ = json.loads(f.read())
+
+        # # return jsonify(bots_)
+
+        bots = db.session.query(BotsCrawJUD).all()
+
+        for bot in bots:
+            bots_.append({
+                "id": bot.id,
+                "display_name": bot.display_name,
+                "system": bot.system.upper(),
+                "state": bot.state.upper(),
+                "client": bot.client.upper(),
+                "type": bot.type.upper(),
+                "form_cfg": bot.form_cfg.lower(),
+                "classification": bot.classification.upper(),
+                "text": bot.text,
+            })
+
+        return jsonify(bots_)
+
+    except Exception as e:
+        app.logger.error("\n".join(traceback.format_exception(e)))
 
 
 @bot.route("/get_model/<id_>/<system>/<typebot>/<filename>", methods=["GET"])
