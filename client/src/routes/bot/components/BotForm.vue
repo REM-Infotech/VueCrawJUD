@@ -2,7 +2,7 @@
 import DataTable from "datatables.net-vue3";
 import DataTablesCore from "datatables.net-bs5";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import { faFileDownload, faTrash, faCheckSquare } from "@fortawesome/free-solid-svg-icons";
+import { faFileDownload, faTrash, faCheckSquare, faPlay } from "@fortawesome/free-solid-svg-icons";
 import FormConfig from "./FormConfig.ts";
 import DropZone from "./FileDropZone.vue";
 import { onMounted } from "vue";
@@ -49,42 +49,45 @@ function selectAll() {
     <div>
       <BForm>
         <div class="row g-3 p-2 m-1">
-          <div class="col-lg-12 mb-3">
+          <div class="col-12">
             <div class="card p-3">
               <div class="card-body row">
-                <DropZone
-                  class="col-md-4 p-3 mb-3 bg-secondary bg-opacity-25 text-white border border-5 rounded rounded-4 drop-area d-flex justify-content-center align-items-center"
-                  @files-dropped="addFiles"
-                  #default="{ dropZoneActive }"
-                >
-                  <div v-if="dropZoneActive">
-                    <div
-                      class="nav-link link-body-emphasis bg-secondary rounded text-center align-middle p-3"
-                    >
-                      <FontAwesomeIcon :icon="faFileDownload" class="me-2" />
-                      <p>Solte os arquivos aqui</p>
-                    </div>
-                  </div>
-                  <div v-else>
-                    <div class="nav-link link-body-emphasis text-center align-middle p-3">
-                      <FontAwesomeIcon :icon="faFileDownload" class="me-2" />
-                      <p class="fs-6">Clique ou solte os arquivos aqui</p>
-                    </div>
-                  </div>
-                </DropZone>
-                <div class="col-md-8 p-3 mb-3">
+                <div class="col-12 p-3 mb-3">
                   <BFormSelect class="mb-3" v-model="selected" :options="credentials" />
                   <BFormSelect class="mb-3" v-model="selected2" :options="state_client" />
                 </div>
               </div>
             </div>
           </div>
+          <hr />
           <div class="col-lg-12 mb-3">
             <div class="card">
               <div class="card-header">
                 <h4>Arquivos</h4>
               </div>
               <div class="card-body">
+                <div id="drop_zone">
+                  <DropZone
+                    class="rounded rounded-4 p-3 bg-secondary bg-opacity-25 text-white drop-area d-flex justify-content-center align-items-center"
+                    @files-dropped="addFiles"
+                    #default="{ dropZoneActive }"
+                  >
+                    <div v-if="dropZoneActive">
+                      <div
+                        class="nav-link link-body-emphasis bg-secondary rounded text-center align-middle p-3"
+                      >
+                        <FontAwesomeIcon :icon="faFileDownload" class="me-2" />
+                        <p>Solte os arquivos aqui</p>
+                      </div>
+                    </div>
+                    <div v-else>
+                      <div class="nav-link link-body-emphasis text-center align-middle p-3">
+                        <FontAwesomeIcon :icon="faFileDownload" class="me-2" />
+                        <p class="fs-6">Clique ou solte os arquivos aqui</p>
+                      </div>
+                    </div>
+                  </DropZone>
+                </div>
                 <div class="table-responsive">
                   <DataTable
                     id="FilesTable"
@@ -123,7 +126,7 @@ function selectAll() {
       <div class="d-grid gap-0">
         <BButton class="btn-icon-split" variant="success">
           <span class="icon text-white-50">
-            <FontAwesomeIcon :icon="faTrash" class="" />
+            <FontAwesomeIcon :icon="faPlay" class="" />
           </span>
           <span class="text">Iniciar Execução</span>
         </BButton>
