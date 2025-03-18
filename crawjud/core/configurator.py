@@ -66,10 +66,11 @@ async def app_configurator(app: Quart) -> tuple[Quart, ASGIApp, Celery]:
         asgi = ASGIApp(io, app)
 
     allowed_origins = [
+        "http://localhost:8000",
         r"http:\/\/localhost*",
         r"https:\/\/.*\.nicholas\.dev\.br",
         r"https:\/\/.*\.robotz\.dev",
         r"https:\/\/.*\.rhsolutions\.info",
         r"https:\/\/.*\.rhsolut\.com\.br",
     ]
-    return cors(app, allow_origin=allowed_origins), asgi, celery
+    return cors(app, allow_origin=allowed_origins, allow_credentials=True), asgi, celery

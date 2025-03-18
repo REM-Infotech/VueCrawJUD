@@ -101,12 +101,6 @@ async function authenticate(router: Router) {
       router.push({ name: "index" });
     }
   } catch (error) {
-    console.error("Login failed:", {
-      message: error.message,
-      status: error.response?.status,
-      data: error.response?.data,
-    });
-
     $("#message").text("Erro ao realizar login");
     show();
 

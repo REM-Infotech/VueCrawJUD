@@ -18,8 +18,6 @@ from quart import Quart as Quart
 from quart_jwt_extended import JWTManager
 from socketio import ASGIApp
 
-from crawjud.custom import QuartLoginManager as LoginManager
-
 warnings.filterwarnings("ignore", category=RuntimeWarning, module="google_crc32c")
 
 load_dotenv()
@@ -28,10 +26,10 @@ db = SQLAlchemy()
 tlsm = Talisman()
 mail = Mail()
 jwt = JWTManager()
-login_manager = LoginManager()
-login_manager.login_view = "auth.login"
-login_manager.login_message = "Faça login para acessar essa página."
-login_manager.login_message_category = "info"
+# login_manager = LoginManager()
+# login_manager.login_view = "auth.login"
+# login_manager.login_message = "Faça login para acessar essa página."
+# login_manager.login_message_category = "info"
 
 template_path = str(Path(__file__).parent.resolve().joinpath("templates"))
 src_path = str(Path(__file__).parent.resolve().joinpath("static"))

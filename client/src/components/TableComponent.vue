@@ -45,10 +45,11 @@ onMounted(async function () {
     })
     .catch((error) => {
       if (error.code) {
-        if (error.code === "ERR_BAD_REQUEST") {
+        if (error.status === 401) {
           sessionStorage.setItem("message", "Sessão expirada, faça login novamente!");
           router.push({ name: "login" });
         }
+        console.log(error);
       }
     });
 });

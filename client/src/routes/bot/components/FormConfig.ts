@@ -85,22 +85,14 @@ export default function () {
   }
 
   async function ConfigureForm(item) {
-    const response_creds = await api.post(
-      `/acquire_credentials}`,
-      {
-        system: item.system,
-        state: item.state,
-      },
-      { withCredentials: true },
-    );
-    const response_state_client = await api.post(
-      "/acquire_systemclient",
-      {
-        system: item.system,
-        state: item.state,
-      },
-      { withCredentials: true },
-    );
+    const response_creds = await api.post(`/acquire_credentials`, {
+      system: item.system,
+      state: item.state,
+    });
+    const response_state_client = await api.post("/acquire_systemclient", {
+      system: item.system,
+      state: item.state,
+    });
 
     const data_cred = response_creds.data;
     const data_system_client = response_state_client.data;

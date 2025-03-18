@@ -6,7 +6,7 @@ from quart import Quart
 from redis import Redis
 from socketio import AsyncRedisManager, AsyncServer
 
-from crawjud.core import db, jwt, login_manager, mail
+from crawjud.core import db, jwt, mail
 
 
 async def init_extensions(app: Quart) -> AsyncServer:
@@ -23,7 +23,7 @@ async def init_extensions(app: Quart) -> AsyncServer:
     database_redis_io = getenv("REDIS_DB_IO")
     mail.init_app(app)
     db.init_app(app)
-    login_manager.init_app(app)
+    # login_manager.init_app(app)
     jwt.init_app(app)
     redis_manager = AsyncRedisManager(url=f"redis://:{pass_redis}@{host_redis}:{port_redis}/{database_redis_io}")
     io = AsyncServer(

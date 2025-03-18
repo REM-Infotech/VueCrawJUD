@@ -22,7 +22,7 @@ const src_image = (system: string) => {
 };
 
 onBeforeMount(async () => {
-  const resp = await api.get("/bots_list", { withCredentials: true });
+  const resp = await api.get("/bots_list");
   items.value = resp.data;
 });
 </script>

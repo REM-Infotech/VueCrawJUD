@@ -18,11 +18,10 @@ from deep_translator import GoogleTranslator
 from quart import (
     Response,
     abort,
+    jsonify,
     make_response,
-    redirect,
     render_template,
     send_from_directory,
-    url_for,
 )
 from quart import current_app as app
 from quart_jwt_extended import jwt_required
@@ -38,7 +37,7 @@ async def index() -> Response:
         Response: A Quart redirect response to the login page.
 
     """
-    return await make_response(redirect(url_for("auth.login")), 302)
+    return await make_response(jsonify(), 200)
 
 
 @app.route("/favicon.png", methods=["GET"])

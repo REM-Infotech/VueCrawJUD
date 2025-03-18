@@ -1,7 +1,7 @@
-import { createRouter, createWebHistory } from "vue-router";
-import { api } from "../main";
 import { useModal } from "bootstrap-vue-next";
 import jQuery from "jquery";
+import { createRouter, createWebHistory } from "vue-router";
+import { api } from "../main";
 import { routes } from "./route";
 const $ = jQuery;
 

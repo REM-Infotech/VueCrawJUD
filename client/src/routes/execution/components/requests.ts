@@ -4,7 +4,6 @@ export async function getExecutions() {
   try {
     const response = await api.get("/executions", {
       headers: {
-        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
         "Content-Type": "application/json",
       },
     });
