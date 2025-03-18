@@ -1,10 +1,10 @@
 import { fileURLToPath, URL } from "node:url";
 
-import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
-import vueDevTools from "vite-plugin-vue-devtools";
-import Components from "unplugin-vue-components/vite";
 import { BootstrapVueNextResolver } from "bootstrap-vue-next";
+import Components from "unplugin-vue-components/vite";
+import { defineConfig } from "vite";
+import vueDevTools from "vite-plugin-vue-devtools";
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -42,6 +42,11 @@ export default defineConfig({
         target: "http://localhost:5000/bots_list",
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/bots_list/, ""),
+      },
+      "/acquire_credentials": {
+        target: "http://localhost:5000/acquire_credentials",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/acquire_credentials/, ""),
       },
     },
   },
