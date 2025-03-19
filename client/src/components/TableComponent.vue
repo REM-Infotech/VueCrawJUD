@@ -85,9 +85,10 @@ onMounted(async function () {
               data-bs-title="Default tooltip"
               ><FontAwesomeIcon :icon="faDownload"
             /></a>
+
             <a
-              v-else-if="props.rowData[7].toString().toLowerCase() !== 'em execução'"
-              href="#"
+              v-else-if="props.rowData[5].toString().toLowerCase() === 'em execução'"
+              :href="`/logs_bot/${props.rowData[0]}`"
               class="btn btn-sm btn-primary"
               data-bs-toggle="tooltip"
               data-bs-title="Default tooltip"

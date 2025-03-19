@@ -216,10 +216,16 @@ async def dashboard() -> Response:
 @jwt_required
 async def botlaunch(id_: int, system: str, typebot: str) -> Response:
     """Launch the specified bot process."""
-    form = await request.form
+    form = {}
+    data = await request.form
     files = await request.files  # noqa: F841
     pid = generate_pid()
     try:
+        form.update(data)
+        form.update(files)
+
+        periodic_bot = False
+
         db: SQLAlchemy = app.extensions["sqlalchemy"]
         bot_info = await get_bot_info(db, id_)
         if not bot_info:
@@ -231,9 +237,17 @@ async def botlaunch(id_: int, system: str, typebot: str) -> Response:
         resp = await make_response(jsonify(pid=pid), 200)
 
         if not form:
-            resp = await make_response(jsonify(response="ok"), 403)
+            resp = await make_response(jsonify(response="ok"), 403)  # noqa: F841
 
-        return resp
+        return await setup_task_worker(  # noqa: B012
+            id_=id_,
+            pid=pid,
+            form=form,
+            system=system,
+            typebot=typebot,
+            periodic_bot=periodic_bot,
+            bot_info=bot_info,
+        )
 
     except Exception:
         app.logger.exception(traceback.format_exc())

@@ -72,27 +72,21 @@ const stop_execut = () => {
         <BContainer fluid class="px-4">
           <div class="card">
             <div class="card-header">
-              <div class="row">
-                <div class="col-sm-6 col-md-6 me-auto">
+              <div class="d-flex gap-3">
+                <div class="justify-content-xxl-end align-middle me-auto text-center">
                   <h4>Estatisticas</h4>
                 </div>
-                <div class="col-sm-6 col-md-3">
-                  <div class="row justify-content-end">
-                    <div class="col-md-6">
-                      <a
-                        class="btn btn-outline-success disabled"
-                        aria-disabled="true"
-                        id="download-button"
-                        href="#"
-                        >Baixar Documento</a
-                      >
-                    </div>
-                    <div class="col-md-6">
-                      <button type="button" class="btn btn-warning" @click="stop_execut()">
-                        Encerrar Execução
-                      </button>
-                    </div>
-                  </div>
+                <div class="justify-content-xxl-end">
+                  <a
+                    class="btn btn-outline-success disabled me-2"
+                    aria-disabled="true"
+                    id="download-button"
+                    href="#"
+                    >Baixar Documento</a
+                  >
+                  <button type="button" class="btn btn-warning" @click="stop_execut()">
+                    Encerrar Execução
+                  </button>
                 </div>
               </div>
             </div>
