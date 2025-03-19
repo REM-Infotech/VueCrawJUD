@@ -202,7 +202,7 @@ async def get_form_data(
 
 
 async def perform_submited_form(
-    form: BotForm | PeriodicTaskFormGroup,
+    form: dict[str, str | bool | FileStorage],
     data: dict,
     files: dict,
     system: str,
@@ -210,14 +210,9 @@ async def perform_submited_form(
     periodic_task: bool = False,
 ) -> tuple[dict, dict, bool]:
     """Perform the submitted form."""
-    form_data = form._fields.items()
+    data.update({"schedule": periodic_task})
 
-    periodic_task = form._fields.get("periodic_task", periodic_task)
-    if isinstance(periodic_task, BooleanField):
-        periodic_task = periodic_task.data
-        data.update({"schedule": periodic_task})
-
-    for field_name, attributes_field in form_data:
+    for field_name, attributes_field in form.items():
         data_field: Union[
             strings,
             Numbers,
