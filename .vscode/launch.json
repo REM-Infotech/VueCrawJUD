@@ -11,7 +11,7 @@
       "module": "crawjud",
       "args": [
         "--server",
-        "Quart"
+        "Quart,Worker"
       ],
       "justMyCode": true
       //   "debugAdapterPath": "${workspaceFolder}/.venv/Lib/site-packages/debugpy/adapter",
