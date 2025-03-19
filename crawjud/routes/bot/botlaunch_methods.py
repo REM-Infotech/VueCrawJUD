@@ -17,11 +17,13 @@ from quart import (
 )
 from quart import current_app as app
 from quart.datastructures import FileStorage  # noqa: F401
+from quart_jwt_extended import get_jwt_identity
 from werkzeug.utils import secure_filename  # noqa: F401
 from wtforms import BooleanField, FieldList, FileField, FormField, MultipleFileField, TimeField  # noqa: F401
 
 from crawjud.forms.bot import PeriodicTaskFormGroup
 from crawjud.models.bots import ThreadBots
+from crawjud.models.users import Users
 from crawjud.types import AnyType, Numbers, strings
 from crawjud.utils.status import TaskExec
 
@@ -75,6 +77,21 @@ FORM_CONFIGURATOR = {
 }
 
 
+async def license_user(usr: int, db: SQLAlchemy) -> str:
+    """Return license token."""
+    license_token = db.session.query(Users).filter
+    license_token = (
+        db.session.query(LicensesUsers)
+        .select_from(Users)
+        .join(Users, LicensesUsers.user)
+        .filter(Users.id == usr)
+        .first()
+        .license_token
+    )
+
+    return license_token
+
+
 def handle_credentials(value: str, data: dict, system: str, files: dict) -> None:
     """Handle credentials for form submission."""
     db: SQLAlchemy = app.extensions["sqlalchemy"]
@@ -121,11 +138,12 @@ def handle_credentials(value: str, data: dict, system: str, files: dict) -> None
 
 def get_bot_info(db: SQLAlchemy, id_: int) -> BotsCrawJUD | None:
     """Retrieve bot information from the database."""
+    license_token = license_user(get_jwt_identity(), app.extensions["sqlalchemy"])
     return (
         db.session.query(BotsCrawJUD)
         .select_from(LicensesUsers)
         .join(LicensesUsers.bots)
-        .filter(LicensesUsers.license_token == session["license_token"])
+        .filter(LicensesUsers.license_token == license_token)
         .filter(BotsCrawJUD.id == id_)
         .first()
     )

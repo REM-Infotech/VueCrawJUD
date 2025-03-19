@@ -7,9 +7,16 @@
     @dragleave.prevent="setInactive"
     @drop.prevent="onDrop"
   >
-    <slot :dropZoneActive="active"></slot>
+    <slot :dropZoneActive="active" aria-required="true"></slot>
     <!-- Input de arquivo oculto -->
-    <input ref="fileInput" type="file" multiple style="display: none" @change="onFileChange" />
+    <input
+      ref="fileInput"
+      type="file"
+      multiple
+      style="display: none"
+      @change="onFileChange"
+      aria-required="true"
+    />
   </div>
 </template>
 

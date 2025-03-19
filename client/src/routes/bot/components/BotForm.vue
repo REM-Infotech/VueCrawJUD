@@ -3,20 +3,23 @@ import DataTable from "datatables.net-vue3";
 import DataTablesCore from "datatables.net-bs5";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { faFileDownload, faTrash, faCheckSquare, faPlay } from "@fortawesome/free-solid-svg-icons";
+import { useModal } from "bootstrap-vue-next";
 import FormConfig from "./FormConfig.ts";
 import DropZone from "./FileDropZone.vue";
-import { onMounted, watch } from "vue";
+import { onMounted } from "vue";
 
 import { ref } from "vue";
-import { api } from "../../../main.ts";
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { $, api } from "../../../main.ts";
+
+const { show } = useModal("modal-load");
 
 const selected = ref(null);
 const need_files = ref(true);
 const need_options = ref(true);
 const bot_protocolo = ref(false);
-const confirm_terms = ref("not_accepted");
 const selected2 = ref(null);
-const disabled_state = ref(true);
 DataTable.use(DataTablesCore);
 
 const credentials = ref<unknown[]>([{ value: null, text: "Carregando", disabled: true }]);
@@ -28,14 +31,6 @@ let dt;
 
 onMounted(() => {
   dt = table_file.value.dt;
-});
-
-watch(confirm_terms, (newValue) => {
-  console.log(newValue);
-
-  let marked_state: boolean = !newValue;
-
-  disabled_state.value = marked_state;
 });
 
 const {
@@ -109,12 +104,38 @@ const setup_form = async (_e) => {
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const reset_form = async (_e) => {
-  credentials.value = [{ value: null, text: "Carregando", disabled: true }];
-  state_client.value = [{ value: null, text: "Carregando", disabled: true }];
+  credentials.value = [{ value: null, text: "Carregando" }];
+  state_client.value = [{ value: null, text: "Carregando" }];
   need_files.value = true;
   need_options.value = true;
   bot_protocolo.value = false;
 };
+
+const validate_form = () => {
+  console.log("ok");
+};
+
+async function peformSubmit() {
+  show();
+  validate_form();
+  const item = JSON.parse(sessionStorage.getItem("current_bot") as string);
+
+  const formData = new FormData();
+  formData.append("credential", selected.value || "");
+  formData.append("state", selected2.value || "");
+  FilesListable.value.forEach((fileItem) => {
+    formData.append("files", fileItem.file[0].file);
+  });
+
+  const system: string = item.system.toLowerCase();
+  const type: string = item.type.toLowerCase();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const response = await api.post(`/bot/${item.id}/${system}/${type}`, formData, {
+    withXSRFToken: true,
+    withCredentials: true,
+    xsrfCookieName: "csrf_access_token",
+  });
+}
 </script>
 
 <template>
@@ -129,16 +150,14 @@ const reset_form = async (_e) => {
     @hide="reset_form"
   >
     <div>
-      <BForm>
+      <BForm id="FormBot">
         <div class="row g-3 p-2 m-1">
-          <div class="col-12" v-if="need_options">
-            <div class="card p-3">
-              <div class="card-body row">
-                <div class="col-12 p-3 mb-3">
-                  <BFormSelect class="mb-3" v-model="selected" :options="credentials" />
-                  <BFormSelect class="mb-3" v-model="selected2" :options="state_client" />
-                </div>
-                <div class="col-12 p-3 mb-3">
+          <div class="col-12 card" v-if="need_options">
+            <div class="p-3">
+              <div class="card-body">
+                <BFormSelect class="mb-3" v-model="selected" :options="credentials" />
+                <BFormSelect class="mb-3" v-model="selected2" :options="state_client" />
+                <div class="mb-3">
                   <div class="form-floating" v-if="bot_protocolo">
                     <input
                       type="password"
@@ -148,18 +167,8 @@ const reset_form = async (_e) => {
                     />
                     <label for="floatSenhaToken">Senha Token</label>
                   </div>
-                  <div class="col-12 p-3 mb-3">
-                    <BFormCheckbox
-                      id="checkbox-1"
-                      v-model="confirm_terms"
-                      name="checkbox-1"
-                      value="accepted"
-                      unchecked-value="not_accepted"
-                    >
-                      Confirmo que os dados inseridos estão corretos
-                    </BFormCheckbox>
-                  </div>
                 </div>
+                <div class="col-12 p-3"></div>
               </div>
             </div>
           </div>
@@ -224,12 +233,22 @@ const reset_form = async (_e) => {
               </div>
             </div>
           </div>
+          <div class="col-12 mb-3 p-3 border border-2 rounded rounded-4">
+            <BFormCheckbox
+              id="checkbox-1"
+              name="checkbox-1"
+              value="accepted"
+              unchecked-value="not_accepted"
+            >
+              Confirmo que os dados inseridos estão corretos
+            </BFormCheckbox>
+          </div>
         </div>
       </BForm>
     </div>
     <template #footer>
-      <div class="">
-        <BButton class="btn-icon-split" variant="success" :disabled="disabled_state">
+      <div class="d-grid gap-0">
+        <BButton class="btn-icon-split" id="InitBot" variant="success" @click="peformSubmit()">
           <span class="icon text-white-50">
             <FontAwesomeIcon :icon="faPlay" class="" />
           </span>

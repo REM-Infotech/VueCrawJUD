@@ -19,26 +19,26 @@ from quart import (
     render_template,
     request,
     send_file,
-    session,
     url_for,
 )
 from quart import current_app as app
 from quart_jwt_extended import get_jwt_identity, jwt_required
 from quart_wtf import QuartForm
 
-from crawjud.forms import BotForm
+from crawjud.forms import BotForm as BotForm
 from crawjud.models import BotsCrawJUD
 from crawjud.models.bots import Credentials
-from crawjud.models.users import LicensesUsers, Users
+from crawjud.models.users import LicensesUsers
 from crawjud.utils.gen_seed import generate_pid
 
 from ...misc import MakeModels
 from .botlaunch_methods import (
     get_bot_info,
-    get_form_data,
     handle_form_errors,
+    license_user,
     setup_task_worker,
 )
+from .botlaunch_methods import get_form_data as get_form_data
 
 path_template = os.path.join(Path(__file__).parent.resolve(), "templates")
 bot = Blueprint("bot", __name__, template_folder=path_template)
@@ -52,7 +52,7 @@ async def acquire_credentials() -> Response:
         db: SQLAlchemy = app.extensions["sqlalchemy"]
         json_data: dict[str, str] = await request.json
         system = json_data["system"]
-        usr = get_jwt_identity()
+
         form_cfg = json_data["form_cfg"]
 
         if form_cfg == "only_file":
@@ -60,15 +60,7 @@ async def acquire_credentials() -> Response:
 
         cred = [{"value": None, "text": "Selecione uma credencial", "disabled": True}]
 
-        license_token = db.session.query(Users).filter
-        license_token = (
-            db.session.query(LicensesUsers)
-            .select_from(Users)
-            .join(Users, LicensesUsers.user)
-            .filter(Users.id == usr)
-            .first()
-            .license_token
-        )
+        license_token = license_user(get_jwt_identity(), app.extensions["sqlalchemy"])
 
         creds = (
             db.session.query(Credentials)
@@ -108,11 +100,12 @@ async def acquire_systemclient() -> Response:
         if form_cfg == "only_file":
             return jsonify({"value": "Opção não utilizada", "text": "Opção não utilizada", "disabled": True})
 
-        if client == "EVERYONE":
+        if state == "EVERYONE":
             opt = [{"value": None, "text": "Selecione um cliente", "disabled": True}]
+
             opt.extend([
-                {"value": state.state, "text": state.state}
-                for state in db.session.query(BotsCrawJUD)
+                {"value": client.client, "text": client.client}
+                for client in db.session.query(BotsCrawJUD)
                 .filter(
                     BotsCrawJUD.type == typebot.upper(),
                     BotsCrawJUD.system == system.upper(),
@@ -121,11 +114,11 @@ async def acquire_systemclient() -> Response:
             ])
             return jsonify(opt)
 
-        elif state == "EVERYONE":
+        elif client == "EVERYONE":
             opt = [{"value": "", "text": "Selecione um Estado", "disabled": True}]
             opt.extend([
-                {"value": client.client, "text": client.client}
-                for client in db.session.query(BotsCrawJUD)
+                {"value": state.state, "text": state.state}
+                for state in db.session.query(BotsCrawJUD)
                 .filter(
                     BotsCrawJUD.type == typebot.upper(),
                     BotsCrawJUD.system == system.upper(),
@@ -226,10 +219,6 @@ async def dashboard() -> Response:
 @jwt_required
 async def botlaunch(id_: int, system: str, typebot: str) -> Response:
     """Launch the specified bot process."""
-    if not session.get("license_token"):
-        await flash("Sessão expirada. Faça login novamente.", "error")
-        return await make_response(redirect(url_for("auth.login")))
-
     try:
         db: SQLAlchemy = app.extensions["sqlalchemy"]
         bot_info = get_bot_info(db, id_)
@@ -240,15 +229,9 @@ async def botlaunch(id_: int, system: str, typebot: str) -> Response:
         display_name = bot_info.display_name
         title = display_name
 
-        states, clients, credts, form_config = get_form_data(db, system, typebot, bot_info)
+        form = await request.form
+        files = await request.files  # noqa: F841
 
-        form = await BotForm.setup_form(
-            dynamic_fields=form_config,
-            state=states,
-            creds=credts,
-            clients=clients,
-            system=system,
-        )
         with warnings.catch_warnings():
             warnings.simplefilter("ignore", RuntimeWarning)
             if await QuartForm.validate_on_submit(form):
