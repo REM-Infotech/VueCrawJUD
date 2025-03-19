@@ -3,7 +3,7 @@
 import mimetypes  # noqa: F401
 from datetime import date, datetime, time  # noqa: F401
 from pathlib import Path  # noqa: F401
-from typing import Any, Union  # , AsyncGenerator
+from typing import Any  # , AsyncGenerator
 
 from celery import Celery, Task
 from flask_sqlalchemy import SQLAlchemy
@@ -17,13 +17,13 @@ from quart import (
 from quart import current_app as app
 from quart.datastructures import FileStorage  # noqa: F401
 from quart_jwt_extended import get_jwt_identity
+from tqdm import tqdm
 from werkzeug.utils import secure_filename  # noqa: F401
 from wtforms import BooleanField, FieldList, FileField, FormField, MultipleFileField, TimeField  # noqa: F401
 
-from crawjud.forms.bot import PeriodicTaskFormGroup
 from crawjud.models.bots import ThreadBots
 from crawjud.models.users import Users
-from crawjud.types import AnyType, Numbers, strings
+from crawjud.types import AnyType
 from crawjud.utils.status import TaskExec
 
 from ...forms import BotForm
@@ -212,51 +212,59 @@ async def perform_submited_form(
     """Perform the submitted form."""
     data.update({"schedule": periodic_task})
 
-    for field_name, attributes_field in form.items():
-        data_field: Union[
-            strings,
-            Numbers,
-            FileStorage,
-        ] = attributes_field.data
+    for key, value in form.items():
+        if key == "creds":
+            await handle_credentials(value, data, system, files)
 
-        if any([
-            field_name == "confirm_fields",
-            field_name == "periodic_task",
-            field_name == "csrf_token",
-        ]):
-            continue
+        elif key == "files":
+            pass
 
-        if attributes_field.type == "FileField" and field_name == "xlsx":
-            data.update({"xlsx": secure_filename(data_field.filename)})
-            files.update({secure_filename(data_field.filename): data_field})
-            continue
+        tqdm.write(f"{key}={value}")
+        continue
+        # data_field: Union[
+        #     strings,
+        #     Numbers,
+        #     FileStorage,
+        # ] = attributes_field.data
 
-        elif attributes_field.type == "MultipleFileField":
-            for file_ in data_field:
-                files.update({secure_filename(file_.filename): file_})
-            continue
+        # if any([
+        #     field_name == "confirm_fields",
+        #     field_name == "periodic_task",
+        #     field_name == "csrf_token",
+        # ]):
+        #     continue
 
-        elif isinstance(attributes_field, FieldList):
-            if periodic_task is False:
-                continue
+        # if attributes_field.type == "FileField" and field_name == "xlsx":
+        #     data.update({"xlsx": secure_filename(data_field.filename)})
+        #     files.update({secure_filename(data_field.filename): data_field})
+        #     continue
 
-            for entry in attributes_field.entries:
-                entry_form: PeriodicTaskFormGroup = entry.form
-                await perform_submited_form(entry_form, data, files, system, typebot, periodic_task)
-            continue
+        # elif attributes_field.type == "MultipleFileField":
+        #     for file_ in data_field:
+        #         files.update({secure_filename(file_.filename): file_})
+        #     continue
 
-        elif field_name == "creds":
-            await handle_credentials(data_field, data, system, files)
-            continue
+        # elif isinstance(attributes_field, FieldList):
+        #     if periodic_task is False:
+        #         continue
 
-        if isinstance(attributes_field, TimeField):
-            data_field = data_field.strftime("%H:%M:%S")
+        #     for entry in attributes_field.entries:
+        #         entry_form: PeriodicTaskFormGroup = entry.form
+        #         await perform_submited_form(entry_form, data, files, system, typebot, periodic_task)
+        #     continue
 
-        elif field_name == "password":
-            data.update({"token": data_field})
-            continue
+        # elif field_name == "creds":
+        #     await handle_credentials(data_field, data, system, files)
+        #     continue
 
-        data.update({field_name: data_field})
+        # if isinstance(attributes_field, TimeField):
+        #     data_field = data_field.strftime("%H:%M:%S")
+
+        # elif field_name == "password":
+        #     data.update({"token": data_field})
+        #     continue
+
+        # data.update({field_name: data_field})
 
     return data, files, periodic_task
 
