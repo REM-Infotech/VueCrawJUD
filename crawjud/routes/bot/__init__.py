@@ -71,11 +71,11 @@ async def acquire_credentials() -> Response:
             for credential in creds
             if credential.system == system.upper()
         ])
-        return jsonify(cred)
+        return jsonify(info=cred)
 
     except Exception as e:
         app.logger.error("\n".join(traceback.format_exception(e)))
-        return jsonify({"value": 123, "text": "teste"})
+        return jsonify({}, 500)
 
 
 @bot.route("/acquire_systemclient", methods=["post"])
@@ -114,6 +114,7 @@ async def acquire_systemclient() -> Response:
 
         elif client == "EVERYONE":
             opt = [{"value": None, "text": "Selecione um Estado", "disabled": True}]
+            type_ = "state"
             opt.extend([
                 {"value": state.state, "text": state.state}
                 for state in db.session.query(BotsCrawJUD)
@@ -127,7 +128,7 @@ async def acquire_systemclient() -> Response:
 
     except Exception as e:
         app.logger.error("\n".join(traceback.format_exception(e)))
-        return jsonify({"value": 123, "text": "teste"})
+        return jsonify({}, 500)
 
 
 @bot.route("/bots_list", methods=["get"])
