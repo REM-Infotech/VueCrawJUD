@@ -10,28 +10,20 @@ import { onMounted } from "vue";
 
 import { ref } from "vue";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { $, api } from "../../../main.ts";
+import { useRouter } from "vue-router";
 
+let dt;
 const { show } = useModal("modal-load");
-
+const TitleForm = ref();
 const selected = ref(null);
 const need_files = ref(true);
 const need_options = ref(true);
 const bot_protocolo = ref(false);
 const selected2 = ref(null);
-DataTable.use(DataTablesCore);
-
+const router = useRouter();
 const credentials = ref<unknown[]>([{ value: null, text: "Carregando", disabled: true }]);
-
 const state_client = ref<unknown[]>([{ value: null, text: "Carregando", disabled: true }]);
-
-const TitleForm = ref();
-let dt;
-
-onMounted(() => {
-  dt = table_file.value.dt;
-});
 
 const {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -54,6 +46,23 @@ function remove() {
 function selectAll() {
   dt.rows().select();
 }
+
+onMounted(() => {
+  dt = table_file.value.dt;
+});
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const reset_form = async (_e) => {
+  credentials.value = [{ value: null, text: "Carregando" }];
+  state_client.value = [{ value: null, text: "Carregando" }];
+  need_files.value = true;
+  need_options.value = true;
+  bot_protocolo.value = false;
+};
+
+const validate_form = () => {
+  console.log("ok");
+};
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const setup_form = async (_e) => {
@@ -102,18 +111,7 @@ const setup_form = async (_e) => {
   state_client.value = response_state_client.data;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const reset_form = async (_e) => {
-  credentials.value = [{ value: null, text: "Carregando" }];
-  state_client.value = [{ value: null, text: "Carregando" }];
-  need_files.value = true;
-  need_options.value = true;
-  bot_protocolo.value = false;
-};
-
-const validate_form = () => {
-  console.log("ok");
-};
+DataTable.use(DataTablesCore);
 
 async function peformSubmit(event: Event) {
   event.preventDefault();
@@ -130,12 +128,18 @@ async function peformSubmit(event: Event) {
 
   const system: string = item.system.toLowerCase();
   const type: string = item.type.toLowerCase();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
   const response = await api.post(`/bot/${item.id}/${system}/${type}`, formData, {
     withXSRFToken: true,
     withCredentials: true,
     xsrfCookieName: "csrf_access_token",
   });
+  if (response.status === 200) {
+    const pid = response.data.pid;
+    router.push({ name: "logs_bot", params: { pid: pid } });
+
+    $("#message").text(`Execução iniciada! PID: ${pid}`);
+  }
 }
 </script>
 

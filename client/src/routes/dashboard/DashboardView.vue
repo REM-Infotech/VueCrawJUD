@@ -1,5 +1,4 @@
 <script setup lang="ts">
-// import { io } from "socket.io-client";
 import NavBarComponent from "../../components/NavBarComponent.vue";
 import SideBarComponent from "../../components/SideBarComponent.vue";
 import ChartComponent from "./components/ChartComponent.vue";
@@ -9,16 +8,6 @@ import jQuery from "jquery";
 import { onMounted } from "vue";
 
 const $ = jQuery;
-
-// onMounted(() => {
-//   const socket = io("http://localhost:5000/log");
-//   socket.on("connect", () => {
-//     console.log("Connected to server");
-//   });
-//   socket.on("disconnect", () => {
-//     console.log("Disconnected from crawjud");
-//   });
-// });
 
 onMounted(() => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

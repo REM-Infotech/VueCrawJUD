@@ -1,116 +1,177 @@
+<script setup lang="ts">
+import { io } from "socket.io-client";
+
+import { onMounted } from "vue";
+import { useRoute } from "vue-router";
+import { Chart } from "chart.js/auto";
+import { faPieChart } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import NavBarComponent from "../../components/NavBarComponent.vue";
+import SideBarComponent from "../../components/SideBarComponent.vue";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { $ } from "../../main";
+
+const route = useRoute();
+const pid = route.params.pid as string;
+
+const socket = io("http://localhost:5000/log", {
+  extraHeaders: {
+    pid: pid,
+  },
+});
+
+// Set new default font family and font color to mimic Bootstrap's default styling
+Chart.defaults.font.family =
+  '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
+Chart.defaults.color = "#292b2c";
+
+onMounted(() => {
+  var ctx = (document.getElementById("LogsBotChart") as HTMLCanvasElement)?.getContext("2d");
+  if (!ctx) return;
+  new Chart(ctx, {
+    type: "doughnut",
+    data: {
+      labels: ["RESTANTES", "SUCESSOS", "ERROS"],
+      datasets: [
+        {
+          data: [0.1, 0.1, 0.1],
+          backgroundColor: ["#0096C7", "#42cf06", "#FF0000"],
+        },
+      ],
+    },
+  });
+});
+
+socket.on("disconnect", () => {
+  console.log("Disconnected from crawjud");
+});
+socket.on("connect", function () {
+  socket.emit("join", { pid: pid });
+});
+
+socket.on("log_message", function (data) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  var messagePid = data.pid;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  var pos = parseInt(data.pos);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  var typeLog = data.type;
+});
+
+const stop_execut = () => {
+  console.log("ok");
+};
+</script>
+
 <template>
-  <div class="container-fluid px-4" id="executions">
-    <div class="card">
-      <div class="card-header">
-        <div class="row">
-          <div class="col-sm-6 col-md-6 me-auto">
-            <h4>Estatisticas</h4>
-          </div>
-          <div class="col-sm-6 col-md-3">
-            <div class="row justify-content-end">
-              <div class="col-md-6">
-                <a
-                  class="btn btn-outline-success disabled"
-                  aria-disabled="true"
-                  id="download-button"
-                  href="#"
-                  >Baixar Documento</a
+  <NavBarComponent />
+  <div id="content" class="mt-4 mb-4">
+    <SideBarComponent />
+    <div>
+      <main>
+        <BContainer fluid class="px-4">
+          <div class="card">
+            <div class="card-header">
+              <div class="row">
+                <div class="col-sm-6 col-md-6 me-auto">
+                  <h4>Estatisticas</h4>
+                </div>
+                <div class="col-sm-6 col-md-3">
+                  <div class="row justify-content-end">
+                    <div class="col-md-6">
+                      <a
+                        class="btn btn-outline-success disabled"
+                        aria-disabled="true"
+                        id="download-button"
+                        href="#"
+                        >Baixar Documento</a
+                      >
+                    </div>
+                    <div class="col-md-6">
+                      <button type="button" class="btn btn-warning" @click="stop_execut()">
+                        Encerrar Execução
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="card-body bg-warning bg-opacity-75">
+              <div class="row">
+                <div class="col-xl-6 col-md-6">
+                  <div class="card fixed-height-card border-0" style="height: 35rem">
+                    <div class="card-header">
+                      <div class="row justify-content-between align-items-center">
+                        <div class="col-md-5">
+                          <span class="fw-semibold me-3">
+                            <i class="fas fa-chart-pie"></i>
+                            <FontAwesomeIcon :icon="faPieChart" />
+                          </span>
+                          <span class="fw-semibold">Logs </span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="card-body bg-black overflow-auto">
+                      <div class="container-fluid">
+                        <div class="overflow-y-scroll">
+                          <ul id="messages" class="list-group list-group-flush"></ul>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="card-footer small text-muted fw-semibold">
+                      <span id="status">Status: Em Execução | Total: </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-xl-6 col-md-6">
+                  <div class="card mb-4 fixed-height-card" style="height: 35rem">
+                    <div class="card-header">
+                      <div class="row justify-content-between align-items-center">
+                        <div class="col-md-5">
+                          <span class="fw-semibold me-3">
+                            <i class="fas fa-chart-pie"></i>
+                            <FontAwesomeIcon :icon="faPieChart" />
+                          </span>
+                          <span class="fw-semibold">Logs </span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="card-body">
+                      <div class="container-fluid d-grid justify-content-xl-center w-50">
+                        <canvas id="LogsBotChart"></canvas>
+                      </div>
+                    </div>
+                    <div class="card-footer small text-muted fw-semibold">
+                      <span id="remaining">Restantes: -.- </span> |
+                      <span id="success">Sucessos: -.- </span> |
+                      <span id="errors">Erros: -.- </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="card-footer bg-secondary">
+              <div class="container-fluid mt-2 mb-2">
+                <div
+                  id="progress_bar"
+                  class="progress"
+                  role="progressbar"
+                  aria-label="Info example"
+                  aria-valuenow="0"
+                  aria-valuemin="0"
+                  aria-valuemax="100"
                 >
-              </div>
-              <div class="col-md-6">
-                <button type="button" class="btn btn-warning" id="stop_execut">
-                  Encerrar Execução
-                </button>
+                  <div
+                    id="progress_info"
+                    class="progress-bar bg-info text-dark"
+                    style="width: 0%"
+                  ></div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </div>
-      <div class="card-body bg-warning bg-opacity-75">
-        <div class="row">
-          <div class="col-xl-6 col-md-6">
-            <div class="card fixed-height-card border-0" style="height: 600px">
-              <div class="card-header">
-                <div class="row justify-content-between align-items-center">
-                  <div class="col-md-5">
-                    <span class="fw-semibold">
-                      <i class="fas fa-chart-pie me-1"></i>
-                    </span>
-                    <span class="fw-semibold">Logs </span>
-                  </div>
-                </div>
-              </div>
-              <div class="card-body bg-black overflow-auto">
-                <div class="container-fluid">
-                  <div class="overflow-y-scroll">
-                    <ul id="messages" class="list-group list-group-flush"></ul>
-                  </div>
-                </div>
-              </div>
-              <div class="card-footer small text-muted fw-semibold">
-                <span id="status">Status: Em Execução | Total: </span>
-              </div>
-            </div>
-          </div>
-          <div class="col-xl-6 col-md-6">
-            <div class="card mb-4 fixed-height-card" style="height: 600px">
-              <div class="card-header">
-                <div class="row justify-content-between align-items-center">
-                  <div class="col-md-5">
-                    <span class="fw-semibold">
-                      <i class="fas fa-chart-pie me-1"></i>
-                    </span>
-                    <span class="fw-semibold"> Gráfico da execução </span>
-                  </div>
-                </div>
-              </div>
-              <div class="card-body">
-                <canvas id="LogsBotChart" width="100%" height="50"></canvas>
-              </div>
-              <div class="card-footer small text-muted fw-semibold">
-                <span id="remaining">Restantes: -.- </span> |
-                <span id="success">Sucessos: -.- </span> |
-                <span id="errors">Erros: -.- </span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="card-footer bg-secondary">
-        <div class="container-fluid mt-2 mb-2">
-          <div
-            id="progress_bar"
-            class="progress"
-            role="progressbar"
-            aria-label="Info example"
-            aria-valuenow="0"
-            aria-valuemin="0"
-            aria-valuemax="100"
-          >
-            <div id="progress_info" class="progress-bar bg-info text-dark" style="width: 0%"></div>
-          </div>
-        </div>
-      </div>
+        </BContainer>
+      </main>
     </div>
   </div>
-
-  <!-- <div class="modal fade" id="confirmaencerramento" tabindex="-1" aria-labelledby="confirmaencerramentoLabel"
-    aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="confirmaencerramentoLabel">Parar Execução</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                Confirma parada?
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">não</button>
-                <a class="btn btn-danger" href="{{url_for('logsbot.stop_bot', pid = pid)}}">Confirmar</a>
-            </div>
-        </div>
-    </div>
-</div> -->
-  <script src="{{ url_for('static', filename='js/logsbot.js') }}"></script>
 </template>

@@ -136,8 +136,3 @@ async def handle_http_exception(error: HTTPException) -> Response:
         await render_template("handler/index.html", name=name, desc=desc, code=error.code),
         error.code,
     )
-
-
-@app.errorhandler(401)
-async def unauthorized(err):
-    return jsonify({"err": ""}), 401

@@ -21,11 +21,16 @@ export const routes = [
     component: () => import("./execution/ExecutionView.vue"),
     meta: { requiresAuth: true },
   },
-
   {
     path: "/bots",
     name: "bot_dashboard",
     component: () => import("./bot/BotDashboardView.vue"),
+    meta: { requiresAuth: true },
+  },
+  {
+    path: "/logs_bot/:pid",
+    name: "logs_bot",
+    component: () => import("./logs/LogBotView.vue"),
     meta: { requiresAuth: true },
   },
 ];

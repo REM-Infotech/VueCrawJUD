@@ -20,7 +20,7 @@ from quart import (
 )
 from quart import current_app as app
 from quart_jwt_extended import get_jwt_identity, jwt_required
-from quart_wtf import QuartForm
+from quart_wtf import QuartForm  # noqa: F401
 
 from crawjud.forms import BotForm as BotForm
 from crawjud.models import BotsCrawJUD
@@ -31,9 +31,9 @@ from crawjud.utils.gen_seed import generate_pid
 from ...misc import MakeModels
 from .botlaunch_methods import (
     get_bot_info,
-    handle_form_errors,
+    handle_form_errors,  # noqa: F401
     license_user,
-    setup_task_worker,
+    setup_task_worker,  # noqa: F401
 )
 from .botlaunch_methods import get_form_data as get_form_data
 
@@ -112,7 +112,7 @@ async def acquire_systemclient() -> Response:
             return jsonify(opt)
 
         elif client == "EVERYONE":
-            opt = [{"value": "", "text": "Selecione um Estado", "disabled": True}]
+            opt = [{"value": None, "text": "Selecione um Estado", "disabled": True}]
             opt.extend([
                 {"value": state.state, "text": state.state}
                 for state in db.session.query(BotsCrawJUD)
@@ -218,7 +218,7 @@ async def botlaunch(id_: int, system: str, typebot: str) -> Response:
     """Launch the specified bot process."""
     form = await request.form
     files = await request.files  # noqa: F841
-
+    pid = generate_pid()
     try:
         db: SQLAlchemy = app.extensions["sqlalchemy"]
         bot_info = await get_bot_info(db, id_)
@@ -226,9 +226,9 @@ async def botlaunch(id_: int, system: str, typebot: str) -> Response:
             return await make_response(jsonify(response="Acesso negado!"), 401)
 
         display_name = bot_info.display_name
-        title = display_name
+        title = display_name  # noqa: F841
 
-        resp = await make_response(jsonify(response="ok"), 200)
+        resp = await make_response(jsonify(pid=pid), 200)
 
         if not form:
             resp = await make_response(jsonify(response="ok"), 403)
@@ -243,37 +243,36 @@ async def botlaunch(id_: int, system: str, typebot: str) -> Response:
         try:
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore", RuntimeWarning)
-                if await QuartForm.validate_on_submit(form):
-                    periodic_bot = False
-                    pid = generate_pid()
+            #     if await QuartForm.validate_on_submit(form):
+            #         periodic_bot = False
 
-                    return await setup_task_worker(  # noqa: B012
-                        id_=id_,
-                        pid=pid,
-                        form=form,
-                        system=system,
-                        typebot=typebot,
-                        periodic_bot=periodic_bot,
-                        bot_info=bot_info,
-                    )
+            #         return await setup_task_worker(  # noqa: B012
+            #             id_=id_,
+            #             pid=pid,
+            #             form=form,
+            #             system=system,
+            #             typebot=typebot,
+            #             periodic_bot=periodic_bot,
+            #             bot_info=bot_info,
+            #         )
 
-            await handle_form_errors(form)
+            # await handle_form_errors(form)
 
-            url = request.base_url.replace("http://", "https://")
-            return await make_response(  # noqa: B012
-                await render_template(
-                    "index.html",
-                    page="botform.html",
-                    url=url,
-                    model_name=f"{system}_{typebot}",
-                    display_name=display_name,
-                    form=form,
-                    title=title,
-                    id=id_,
-                    system=system,
-                    typebot=typebot,
-                )
-            )
+            # url = request.base_url.replace("http://", "https://")
+            # return await make_response(  # noqa: B012
+            #     await render_template(
+            #         "index.html",
+            #         page="botform.html",
+            #         url=url,
+            #         model_name=f"{system}_{typebot}",
+            #         display_name=display_name,
+            #         form=form,
+            #         title=title,
+            #         id=id_,
+            #         system=system,
+            #         typebot=typebot,
+            #     )
+            # )
         except Exception:
             app.logger.exception(traceback.format_exc())
-            abort(500, description="Erro interno.")
+            # abort(500, description="Erro interno.")

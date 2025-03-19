@@ -118,13 +118,7 @@ class RunnerServices:
         log_level = logging.INFO
         if getenv("DEBUG", "False").lower() == "true":
             log_level = logging.DEBUG
-        cfg = Config(
-            self.asgi,
-            host=hostname,
-            port=port,
-            log_config=cfg,
-            log_level=log_level,
-        )
+        cfg = Config(self.asgi, host=hostname, port=port, log_config=cfg, log_level=log_level, reload=True)
         self.srv = Server(cfg)
         Thread(target=self.srv.run, daemon=True).start()
 
