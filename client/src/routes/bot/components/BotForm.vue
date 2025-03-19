@@ -2,7 +2,7 @@
 import DataTable from "datatables.net-vue3";
 import DataTablesCore from "datatables.net-bs5";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import { faFileDownload, faTrash, faCheckSquare, faPlay } from "@fortawesome/free-solid-svg-icons";
+import { faFileDownload, faTrash, faCheckSquare } from "@fortawesome/free-solid-svg-icons";
 import { useModal } from "bootstrap-vue-next";
 import FormConfig from "./FormConfig.ts";
 import DropZone from "./FileDropZone.vue";
@@ -115,7 +115,8 @@ const validate_form = () => {
   console.log("ok");
 };
 
-async function peformSubmit() {
+async function peformSubmit(event: Event) {
+  event.preventDefault();
   show();
   validate_form();
   const item = JSON.parse(sessionStorage.getItem("current_bot") as string);
@@ -150,7 +151,7 @@ async function peformSubmit() {
     @hide="reset_form"
   >
     <div>
-      <BForm id="FormBot">
+      <BForm id="FormBot" @submit="peformSubmit">
         <div class="row g-3 p-2 m-1">
           <div class="col-12 card" v-if="need_options">
             <div class="p-3">
@@ -243,18 +244,14 @@ async function peformSubmit() {
               Confirmo que os dados inseridos estão corretos
             </BFormCheckbox>
           </div>
+          <BButton class="col-12" id="InitBot" type="submit" variant="outline-success">
+            <span class="fw-bold">Iniciar Execução</span>
+          </BButton>
         </div>
       </BForm>
     </div>
     <template #footer>
-      <div class="d-grid gap-0">
-        <BButton class="btn-icon-split" id="InitBot" variant="success" @click="peformSubmit()">
-          <span class="icon text-white-50">
-            <FontAwesomeIcon :icon="faPlay" class="" />
-          </span>
-          <span class="text">Iniciar Execução</span>
-        </BButton>
-      </div>
+      <div class="d-grid gap-0"></div>
     </template>
   </BModal>
 </template>

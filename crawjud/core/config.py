@@ -107,9 +107,9 @@ class Config:
     SQLALCHEMY_TRACK_MODIFICATIONS: type[bool] = False
 
     # FLASK CONFIG
-    # PREFERRED_URL_SCHEME: type[str] = "https"
-    # SESSION_COOKIE_HTTPONLY: type[bool] = False
-    # SESSION_COOKIE_SECURE: type[bool] = True
+    PREFERRED_URL_SCHEME: type[str] = "https"
+    SESSION_COOKIE_HTTPONLY: type[bool] = True
+    SESSION_COOKIE_SECURE: type[bool] = True
     PERMANENT_SESSION_LIFETIME: type[int] = timedelta(days=31).max.seconds
 
     TEMP_PATH: Path = workdir.joinpath("bot", "temp").resolve()

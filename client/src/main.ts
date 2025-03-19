@@ -28,7 +28,7 @@ CreateApp();
 
 // Create axios instance with improved configuration
 export const api = axios.create({
-  baseURL: "http://localhost:5000",
+  baseURL: "https://api.robotz.dev",
   withXSRFToken: true,
   withCredentials: true,
   xsrfCookieName: "access_token_cookie",

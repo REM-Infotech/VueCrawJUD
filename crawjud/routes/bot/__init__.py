@@ -12,14 +12,11 @@ from quart import (
     Blueprint,
     Response,
     abort,
-    flash,
     jsonify,
     make_response,
-    redirect,
     render_template,
     request,
     send_file,
-    url_for,
 )
 from quart import current_app as app
 from quart_jwt_extended import get_jwt_identity, jwt_required
@@ -60,7 +57,7 @@ async def acquire_credentials() -> Response:
 
         cred = [{"value": None, "text": "Selecione uma credencial", "disabled": True}]
 
-        license_token = license_user(get_jwt_identity(), app.extensions["sqlalchemy"])
+        license_token = await license_user(get_jwt_identity(), app.extensions["sqlalchemy"])
 
         creds = (
             db.session.query(Credentials)
@@ -215,57 +212,68 @@ async def dashboard() -> Response:
         abort(500, description=f"Erro interno. {e!s}")
 
 
-@bot.route("/bot/<id_>/<system>/<typebot>", methods=["GET", "POST"])
+@bot.route("/bot/<id_>/<system>/<typebot>", methods=["POST"])
 @jwt_required
 async def botlaunch(id_: int, system: str, typebot: str) -> Response:
     """Launch the specified bot process."""
+    form = await request.form
+    files = await request.files  # noqa: F841
+
     try:
         db: SQLAlchemy = app.extensions["sqlalchemy"]
-        bot_info = get_bot_info(db, id_)
+        bot_info = await get_bot_info(db, id_)
         if not bot_info:
-            await flash("Acesso negado!", "error")
-            return await make_response(redirect(url_for("bot.dashboard")))
+            return await make_response(jsonify(response="Acesso negado!"), 401)
 
         display_name = bot_info.display_name
         title = display_name
 
-        form = await request.form
-        files = await request.files  # noqa: F841
+        resp = await make_response(jsonify(response="ok"), 200)
 
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", RuntimeWarning)
-            if await QuartForm.validate_on_submit(form):
-                periodic_bot = False
-                pid = generate_pid()
+        if not form:
+            resp = await make_response(jsonify(response="ok"), 403)
 
-                return await setup_task_worker(
-                    id_=id_,
-                    pid=pid,
-                    form=form,
-                    system=system,
-                    typebot=typebot,
-                    periodic_bot=periodic_bot,
-                    bot_info=bot_info,
-                )
-
-        await handle_form_errors(form)
-
-        url = request.base_url.replace("http://", "https://")
-        return await make_response(
-            await render_template(
-                "index.html",
-                page="botform.html",
-                url=url,
-                model_name=f"{system}_{typebot}",
-                display_name=display_name,
-                form=form,
-                title=title,
-                id=id_,
-                system=system,
-                typebot=typebot,
-            )
-        )
+        return resp
 
     except Exception:
         app.logger.exception(traceback.format_exc())
         abort(500, description="Erro interno.")
+
+    finally:
+        try:
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore", RuntimeWarning)
+                if await QuartForm.validate_on_submit(form):
+                    periodic_bot = False
+                    pid = generate_pid()
+
+                    return await setup_task_worker(  # noqa: B012
+                        id_=id_,
+                        pid=pid,
+                        form=form,
+                        system=system,
+                        typebot=typebot,
+                        periodic_bot=periodic_bot,
+                        bot_info=bot_info,
+                    )
+
+            await handle_form_errors(form)
+
+            url = request.base_url.replace("http://", "https://")
+            return await make_response(  # noqa: B012
+                await render_template(
+                    "index.html",
+                    page="botform.html",
+                    url=url,
+                    model_name=f"{system}_{typebot}",
+                    display_name=display_name,
+                    form=form,
+                    title=title,
+                    id=id_,
+                    system=system,
+                    typebot=typebot,
+                )
+            )
+        except Exception:
+            app.logger.exception(traceback.format_exc())
+            abort(500, description="Erro interno.")

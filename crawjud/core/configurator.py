@@ -11,6 +11,7 @@ from celery.app.base import Celery
 from quart import Quart
 from quart_cors import cors
 from socketio import ASGIApp
+from uvicorn.middleware.proxy_headers import ProxyHeadersMiddleware
 
 objects_config = {
     "development": "crawjud.core.config.DevelopmentConfig",
@@ -56,7 +57,7 @@ async def app_configurator(app: Quart) -> tuple[Quart, ASGIApp, Celery]:
         celery = await make_celery(app)
         celery.set_default()
         app.extensions["celery"] = celery
-
+        app.asgi_app = ProxyHeadersMiddleware(app.asgi_app)
         celery.autodiscover_tasks(["crawjud.bot", "crawjud.utils"])
 
         io = await init_extensions(app)
@@ -67,6 +68,7 @@ async def app_configurator(app: Quart) -> tuple[Quart, ASGIApp, Celery]:
 
     allowed_origins = [
         "http://localhost:8000",
+        "https://homolog.robotz.dev",
         r"http:\/\/localhost*",
         r"https:\/\/.*\.nicholas\.dev\.br",
         r"https:\/\/.*\.robotz\.dev",
