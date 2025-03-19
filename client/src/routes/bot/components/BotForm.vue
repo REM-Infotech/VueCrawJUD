@@ -20,6 +20,9 @@ const selected = ref(null);
 const need_files = ref(true);
 const need_options = ref(true);
 const bot_protocolo = ref(false);
+
+const state_client_type = ref("");
+
 const selected2 = ref(null);
 const router = useRouter();
 const credentials = ref<unknown[]>([{ value: null, text: "Carregando", disabled: true }]);
@@ -107,8 +110,14 @@ const setup_form = async (_e) => {
       xsrfCookieName: "csrf_access_token",
     },
   );
-  credentials.value = response_creds.data;
-  state_client.value = response_state_client.data;
+
+  const cred_info = response_creds.data.info;
+  const state_client_info = response_state_client.data.info;
+
+  credentials.value = cred_info;
+  state_client.value = state_client_info;
+
+  state_client_type.value = response_state_client.data.type;
 };
 
 DataTable.use(DataTablesCore);
@@ -120,8 +129,8 @@ async function peformSubmit(event: Event) {
   const item = JSON.parse(sessionStorage.getItem("current_bot") as string);
 
   const formData = new FormData();
-  formData.append("credential", selected.value || "");
-  formData.append("state", selected2.value || "");
+  formData.append("creds", selected.value || "");
+  formData.append(state_client_type.value, selected2.value || "");
   FilesListable.value.forEach((fileItem) => {
     formData.append("files", fileItem.file[0].file);
   });

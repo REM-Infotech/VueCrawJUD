@@ -98,6 +98,7 @@ async def acquire_systemclient() -> Response:
             return jsonify({"value": "Opção não utilizada", "text": "Opção não utilizada", "disabled": True})
 
         if state == "EVERYONE":
+            type_ = "client"
             opt = [{"value": None, "text": "Selecione um cliente", "disabled": True}]
 
             opt.extend([
@@ -109,7 +110,7 @@ async def acquire_systemclient() -> Response:
                 )
                 .all()
             ])
-            return jsonify(opt)
+            return jsonify(info=opt, type=type_)
 
         elif client == "EVERYONE":
             opt = [{"value": None, "text": "Selecione um Estado", "disabled": True}]
@@ -122,7 +123,7 @@ async def acquire_systemclient() -> Response:
                 )
                 .all()
             ])
-            return jsonify(opt)
+            return jsonify(info=opt, type=type_)
 
     except Exception as e:
         app.logger.error("\n".join(traceback.format_exception(e)))
