@@ -12,7 +12,6 @@ from quart import (
     flash,
     make_response,
     redirect,
-    session,
     url_for,
 )
 from quart import current_app as app
@@ -92,14 +91,14 @@ async def license_user(usr: int, db: SQLAlchemy) -> str:
     return license_token
 
 
-def handle_credentials(value: str, data: dict, system: str, files: dict) -> None:
+async def handle_credentials(value: str, data: dict, system: str, files: dict) -> None:
     """Handle credentials for form submission."""
     db: SQLAlchemy = app.extensions["sqlalchemy"]
     temporarypath = app.config["TEMP_DIR"]
     creds = (
         db.session.query(Credentials)
         .join(LicensesUsers)
-        .filter(LicensesUsers.license_token == session["license_token"])
+        .filter(LicensesUsers.license_token == await license_user(get_jwt_identity(), db))
         .all()
     )
     for credential in creds:
@@ -149,7 +148,7 @@ async def get_bot_info(db: SQLAlchemy, id_: int) -> BotsCrawJUD | None:
     )
 
 
-def get_form_data(
+async def get_form_data(
     db: SQLAlchemy, system: str, typebot: str, bot_info: BotsCrawJUD
 ) -> tuple[list[tuple], list[tuple], list[tuple[Any, Any]], list]:
     """Retrieve form data including states, clients, credentials, and form configuration."""
@@ -172,7 +171,7 @@ def get_form_data(
     creds = (
         db.session.query(Credentials)
         .join(LicensesUsers)
-        .filter(LicensesUsers.license_token == session["license_token"])
+        .filter(LicensesUsers.license_token == await license_user(get_jwt_identity(), db))
         .all()
     )
 
@@ -202,7 +201,7 @@ def get_form_data(
     return states, clients, credts, form_config
 
 
-def perform_submited_form(
+async def perform_submited_form(
     form: BotForm | PeriodicTaskFormGroup,
     data: dict,
     files: dict,
@@ -248,11 +247,11 @@ def perform_submited_form(
 
             for entry in attributes_field.entries:
                 entry_form: PeriodicTaskFormGroup = entry.form
-                perform_submited_form(entry_form, data, files, system, typebot, periodic_task)
+                await perform_submited_form(entry_form, data, files, system, typebot, periodic_task)
             continue
 
         elif field_name == "creds":
-            handle_credentials(data_field, data, system, files)
+            await handle_credentials(data_field, data, system, files)
             continue
 
         if isinstance(attributes_field, TimeField):
@@ -281,7 +280,7 @@ async def setup_task_worker(
         db: SQLAlchemy = app.extensions["sqlalchemy"]
         celery_app: Celery = app.extensions["celery"]
         is_started = 200
-        user = session["login"]  # noqa: F841
+        user = db.session.query(Users).filter_by(id=get_jwt_identity()).first().login
         data: dict[str, str] = {}
         files: dict[str, FileStorage] = {}
         periodic_bot = False
@@ -289,7 +288,7 @@ async def setup_task_worker(
 
         data.update({"pid": pid})
 
-        data, files, periodic_bot = perform_submited_form(
+        data, files, periodic_bot = await perform_submited_form(
             form=form,
             data=data,
             files=files,
