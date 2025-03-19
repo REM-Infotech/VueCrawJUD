@@ -6,55 +6,58 @@ import { routes } from "./route";
 const $ = jQuery;
 
 const router = createRouter({
-  history: createWebHistory(),
-  routes,
+    history: createWebHistory(),
+    routes,
 });
 
 router.beforeEach(async (to, from, next) => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { show, hide } = useModal("modal-load");
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { show, hide } = useModal("modal-load");
 
-  const isAuth = !!sessionStorage.getItem("token");
+    const isAuth = !!sessionStorage.getItem("token");
 
-  try {
-    await api.get("/");
-  } catch (response) {
-    if (to.meta.requiresAuth) {
-      if (!isAuth || response.status === 401 || response.status === 422) {
-        if (!isAuth) {
-          sessionStorage.setItem("message", "É necessário fazer login para acessar essa página!");
-        } else if (response.status === 401 || response.status === 422) {
-          sessionStorage.setItem("message", "Sessão expirada, faça login novamente!");
+    try {
+        await api.get("/");
+    } catch (response) {
+        if (to.meta.requiresAuth) {
+            if (!isAuth || response.status === 401 || response.status === 422) {
+                if (!isAuth) {
+                    sessionStorage.setItem(
+                        "message",
+                        "É necessário fazer login para acessar essa página!",
+                    );
+                } else if (response.status === 401 || response.status === 422) {
+                    sessionStorage.setItem("message", "Sessão expirada, faça login novamente!");
+                }
+
+                sessionStorage.removeItem("token");
+
+                return next({ name: "login" });
+            }
         }
-
-        sessionStorage.removeItem("token");
-
-        return next({ name: "login" });
-      }
     }
-  }
-  show();
-  next();
+    show();
+    next();
 });
 
 // Global afterEach hook para gerenciar a classe do app
 router.afterEach((to) => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { show, hide } = useModal("modal-load");
-  if (to.meta.requiresAuth) {
-    if ($("#app").hasClass("bg-indigo")) {
-      $("#app").removeClass("bg-indigo");
-      $("#app").addClass("bg-purple");
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { show, hide } = useModal("modal-load");
+    if (to.meta.requiresAuth) {
+        if ($("#app").hasClass("bg-indigo")) {
+            $("#app").removeClass("bg-indigo");
+            $("#app").addClass("bg-purple");
+        }
+        setTimeout(() => {
+            hide();
+        }, 500);
+    } else {
+        if ($("#app").hasClass("bg-purple")) {
+            $("#app").removeClass("bg-purple");
+        }
+        $("#app").addClass("bg-indigo");
     }
-    setTimeout(() => {
-      hide();
-    }, 500);
-  } else {
-    if ($("#app").hasClass("bg-purple")) {
-      $("#app").removeClass("bg-purple");
-    }
-    $("#app").addClass("bg-indigo");
-  }
 });
 
 export default router;

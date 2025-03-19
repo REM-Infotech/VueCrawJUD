@@ -10,6 +10,7 @@ from flask_sqlalchemy import SQLAlchemy
 from quart import (
     Response,
     flash,
+    jsonify,
     make_response,
     redirect,
     url_for,
@@ -17,7 +18,6 @@ from quart import (
 from quart import current_app as app
 from quart.datastructures import FileStorage  # noqa: F401
 from quart_jwt_extended import get_jwt_identity
-from tqdm import tqdm
 from werkzeug.utils import secure_filename  # noqa: F401
 from wtforms import BooleanField, FieldList, FileField, FormField, MultipleFileField, TimeField  # noqa: F401
 
@@ -215,56 +215,16 @@ async def perform_submited_form(
     for key, value in form.items():
         if key == "creds":
             await handle_credentials(value, data, system, files)
+            continue
 
-        elif key == "files":
-            pass
+        elif isinstance(value, FileStorage):
+            files.update({secure_filename(value.filename): value})
+            if value.content_type == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
+                data.update({"xlsx": secure_filename(value.filename)})
+            continue
 
-        tqdm.write(f"{key}={value}")
+        data.update({key: value})
         continue
-        # data_field: Union[
-        #     strings,
-        #     Numbers,
-        #     FileStorage,
-        # ] = attributes_field.data
-
-        # if any([
-        #     field_name == "confirm_fields",
-        #     field_name == "periodic_task",
-        #     field_name == "csrf_token",
-        # ]):
-        #     continue
-
-        # if attributes_field.type == "FileField" and field_name == "xlsx":
-        #     data.update({"xlsx": secure_filename(data_field.filename)})
-        #     files.update({secure_filename(data_field.filename): data_field})
-        #     continue
-
-        # elif attributes_field.type == "MultipleFileField":
-        #     for file_ in data_field:
-        #         files.update({secure_filename(file_.filename): file_})
-        #     continue
-
-        # elif isinstance(attributes_field, FieldList):
-        #     if periodic_task is False:
-        #         continue
-
-        #     for entry in attributes_field.entries:
-        #         entry_form: PeriodicTaskFormGroup = entry.form
-        #         await perform_submited_form(entry_form, data, files, system, typebot, periodic_task)
-        #     continue
-
-        # elif field_name == "creds":
-        #     await handle_credentials(data_field, data, system, files)
-        #     continue
-
-        # if isinstance(attributes_field, TimeField):
-        #     data_field = data_field.strftime("%H:%M:%S")
-
-        # elif field_name == "password":
-        #     data.update({"token": data_field})
-        #     continue
-
-        # data.update({field_name: data_field})
 
     return data, files, periodic_task
 
@@ -367,22 +327,11 @@ async def setup_task_worker(
                 ),
             )
         await flash(message=f"Execução iniciada com sucesso! PID: {pid}")
-        return await make_response(
-            redirect(
-                url_for(
-                    "logsbot.logs_bot",
-                    pid=pid,
-                ),
-            ),
-        )
+        return await make_response(jsonify(pid=pid), 200)
 
     elif is_started != 200:
         await flash("Erro ao iniciar a execução!", "error")
-        return await make_response(
-            redirect(
-                f"/bot/{id_}/{system}/{typebot}",
-            ),
-        )
+        return await make_response(jsonify(pid=pid), 200)
 
 
 async def handle_form_errors(form: BotForm) -> None:

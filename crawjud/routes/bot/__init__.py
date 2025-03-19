@@ -236,10 +236,8 @@ async def botlaunch(id_: int, system: str, typebot: str) -> Response:
         display_name = bot_info.display_name
         title = display_name  # noqa: F841
 
-        resp = await make_response(jsonify(pid=pid), 200)
-
         if not form:
-            resp = await make_response(jsonify(response="ok"), 403)  # noqa: F841
+            return await make_response(jsonify(response="ok"), 403)  # noqa: F841
 
         return await setup_task_worker(  # noqa: B012
             id_=id_,

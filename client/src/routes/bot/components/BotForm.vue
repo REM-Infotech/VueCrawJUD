@@ -133,9 +133,13 @@ async function peformSubmit(event: Event) {
     const formData = new FormData();
     formData.append("creds", selected.value || "");
     formData.append(state_client_type.value, selected2.value || "");
+
     FilesListable.value.forEach((fileItem) => {
-        formData.append("files", fileItem.file[0].file);
+        console.log(fileItem);
+        formData.append(fileItem.file[0].name, fileItem.file[0].file);
     });
+
+    console.log(FilesListable.value);
 
     const system: string = item.system.toLowerCase();
     const type: string = item.type.toLowerCase();
