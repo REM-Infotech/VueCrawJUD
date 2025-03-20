@@ -21,6 +21,7 @@ from quart import (
     jsonify,
     make_response,
     render_template,
+    request,
     send_from_directory,
 )
 from quart import current_app as app
@@ -30,7 +31,6 @@ from werkzeug.exceptions import HTTPException
 
 
 @app.route("/", methods=["GET"])
-@jwt_required
 async def index() -> Response:
     """Redirect to the authentication login page.
 
@@ -136,3 +136,19 @@ async def handle_http_exception(error: HTTPException) -> Response:
         await render_template("handler/index.html", name=name, desc=desc, code=error.code),
         error.code,
     )
+
+
+@app.before_request
+async def handle_cloudflare_headers() -> None:
+    """Ajusta cabeçalhos de solicitação para trabalhar com Cloudflare."""
+    if request.headers.get("X-Forwarded-For"):
+        # Confie no IP fornecido pelo Cloudflare
+        request.remote_addr = request.headers.get("X-Forwarded-For").split(",")[0]
+
+    if request.headers.get("CF-Connecting-IP"):
+        # Confie no IP fornecido pelo Cloudflare
+        request.remote_addr = request.headers.get("CF-Connecting-IP")
+
+    # Ajuste o esquema conforme necessário
+    if request.headers.get("X-Forwarded-Proto") == "https":
+        request.scheme = "https"

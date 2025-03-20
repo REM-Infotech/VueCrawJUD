@@ -75,6 +75,7 @@ class Config:
     LOG_LEVEL = logging.INFO
     DEBUG: type[bool] = False
     TESTING: type[bool] = False
+    JWT_SECRET_KEY: type[str] = secrets.token_hex()
     SECRET_KEY: type[str] = secrets.token_hex()
     TEMPLATES_AUTO_RELOAD: type[bool] = False
 
@@ -140,13 +141,18 @@ class Config:
 
     Path(ARCHIVES_PATH).mkdir(exist_ok=True)
 
-    JWT_COOKIE_CSRF_PROTECT = True  # Ativa proteção CSRF
-    JWT_CSRF_IN_COOKIES = True
-
-    JWT_SECRET_KEY: type[str] = secrets.token_hex()
+    JWT_TOKEN_LOCATION = ["cookies"]
     JWT_ACCESS_TOKEN_EXPIRES = timedelta(minutes=15)  # Token expira em 15 minutos
     JWT_REFRESH_TOKEN_EXPIRES = timedelta(days=7)  # Refresh Token expira em 7 dias
-    JWT_TOKEN_LOCATION = ["cookies"]
+
+    JWT_ACCESS_COOKIE_NAME: type[str] = "access_token_cookie"
+    JWT_REFRESH_COOKIE_NAME: type[str] = "refresh_token_cookie"
+
+    JWT_COOKIE_SECURE: type[bool] = True
+    JWT_COOKIE_DOMAIN: type[str] = "api.robotz.dev"
+    JWT_COOKIE_SAMESITE: type[str] = "Lax"
+    JWT_COOKIE_CSRF_PROTECT = True
+    JWT_CSRF_IN_COOKIES = True
 
     for paths in [
         DOCS_PATH,

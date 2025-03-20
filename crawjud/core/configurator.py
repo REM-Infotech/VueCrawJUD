@@ -5,6 +5,7 @@ into a Quart application instance from various sources.
 """
 
 import os
+import re
 import subprocess
 
 from celery.app.base import Celery
@@ -57,7 +58,7 @@ async def app_configurator(app: Quart) -> tuple[Quart, ASGIApp, Celery]:
         celery = await make_celery(app)
         celery.set_default()
         app.extensions["celery"] = celery
-        app.asgi_app = ProxyHeadersMiddleware(app.asgi_app)
+        # app.asgi_app = ProxyHeadersMiddleware(app.asgi_app)
         celery.autodiscover_tasks(["crawjud.bot", "crawjud.utils"])
 
         io = await init_extensions(app)
@@ -67,12 +68,13 @@ async def app_configurator(app: Quart) -> tuple[Quart, ASGIApp, Celery]:
         asgi = ASGIApp(io, app)
 
     allowed_origins = [
-        "http://localhost:8000",
-        "https://homolog.robotz.dev",
-        r"http:\/\/localhost*",
-        r"https:\/\/.*\.nicholas\.dev\.br",
-        r"https:\/\/.*\.robotz\.dev",
-        r"https:\/\/.*\.rhsolutions\.info",
-        r"https:\/\/.*\.rhsolut\.com\.br",
+        re.compile(r"http://127\.0\.0\.1:\d*"),
+        re.compile(r"http://\d*\.\d*\.\d*:\d*"),
+        re.compile(r"http://localhost:\d*"),
+        re.compile(r"https://.*\.nicholas\.dev\.br"),
+        re.compile(r"https://.*\.robotz\.dev"),
+        re.compile(r"https://.*\.rhsolutions\.info"),
+        re.compile(r"https://.*\.rhsolut\.com\.br"),
     ]
+
     return cors(app, allow_origin=allowed_origins, allow_credentials=True), asgi, celery

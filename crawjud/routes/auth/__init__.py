@@ -61,10 +61,23 @@ async def login() -> Response:
         if usr and usr.check_password(form.password):
             access_token = create_access_token(identity=usr)
 
-            resp = jsonify({"token": access_token, "message": "Login efetuado com sucesso!"})
+            resp = await make_response(jsonify({"token": access_token, "message": "Login efetuado com sucesso!"}))
+            if request.headers.get("X-Forwarded-For"):
+                # Confie no IP fornecido pelo Cloudflare
+                resp.headers["X-Forwarded-For"] = request.headers.get("X-Forwarded-For").split(",")[0]
+
+            if request.headers.get("CF-Connecting-IP"):
+                # Confie no IP fornecido pelo Cloudflare
+                resp.headers["CF-Connecting-IP"] = request.headers.get("CF-Connecting-IP")
+                request.remote_addr = request.headers.get("CF-Connecting-IP")
+
+            # Ajuste o esquema conforme necessário
+            if request.headers.get("X-Forwarded-Proto") == "https":
+                resp.headers["X-Forwarded-Proto"] = "https"
+
             resp.status_code = 200
-            resp.headers.update({"Content-Type": "application/json"})
-            access_token = set_access_cookies(resp, access_token)
+
+            set_access_cookies(resp, access_token)
             return resp
 
         resp = jsonify({"message": "Usuário ou senha incorretos!"})

@@ -17,22 +17,22 @@ import router from "./routes";
 export const $ = jQuery;
 
 function CreateApp() {
-    const app = createApp(App);
+  const app = createApp(App);
 
-    app.use(createBootstrap()); // Important
-    app.use(router);
+  app.use(createBootstrap()); // Important
+  app.use(router);
 
-    app.mount("#app");
+  app.mount("#app");
 }
 CreateApp();
 
 // Create axios instance with improved configuration
 export const api = axios.create({
-    baseURL: "http://localhost:5000",
-    withXSRFToken: true,
-    withCredentials: true,
-    xsrfCookieName: "access_token_cookie",
-    xsrfHeaderName: "X-CSRF-TOKEN",
+  baseURL: "https://api.robotz.dev",
+  // withXSRFToken: true,
+  withCredentials: true,
+  // xsrfCookieName: "access_token_cookie",
+  // xsrfHeaderName: "X-CSRF-TOKEN",
 });
 
 // // Add request interceptor for debugging
