@@ -28,20 +28,21 @@ CreateApp();
 
 // Create axios instance with improved configuration
 export const api = axios.create({
-  baseURL: "https://api.robotz.dev",
-  // withXSRFToken: true,
+  baseURL: "https://homolog.robotz.dev",
+  withXSRFToken: true,
   withCredentials: true,
-  // xsrfCookieName: "access_token_cookie",
-  // xsrfHeaderName: "X-CSRF-TOKEN",
+  xsrfCookieName: "access_token_cookie",
+  xsrfHeaderName: "X-CSRF-TOKEN",
 });
 
-// // Add request interceptor for debugging
-// api.interceptors.request.use(
-//   (config) => {
-//     console.log("Request:", config.method?.toUpperCase(), config.url);
-//     return config;
-//   },
-//   (error) => {
-//     return Promise.reject(error);
-//   },
-// );
+// Add request interceptor for debugging
+api.interceptors.request.use(
+  (config) => {
+    console.log("Request:", config.method?.toUpperCase(), config.url);
+    console.log(config);
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  },
+);
