@@ -2,16 +2,18 @@
 import { io } from "socket.io-client";
 
 import { onMounted } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { Chart, ChartType } from "chart.js/auto";
 import { faPieChart } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import NavBarComponent from "../../components/NavBarComponent.vue";
 import SideBarComponent from "../../components/SideBarComponent.vue";
-
+const { show: show_message } = useModal("ModalMessage");
 import { $ } from "../../main";
+import { useModal } from "bootstrap-vue-next";
 
 const route = useRoute();
+const router = useRouter();
 const pid = route.params.pid as string;
 let Pages;
 const percent_progress = document.getElementById("progress_info");
@@ -48,6 +50,9 @@ onMounted(() => {
       ],
     },
   });
+
+  $("#message").text(`Execução iniciada! PID: ${pid}`);
+  show_message();
 });
 
 socket.on("disconnect", () => {
@@ -140,18 +145,26 @@ socket.on("log_message", function (data) {
   if (messagePid == pid) {
     const randomId = `id_${Math.random().toString(36).substring(2, 9)}`;
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    var pos = parseInt(data.pos);
-
-    var typeLog = data.type;
+    const pos: number = parseInt(data.pos);
+    const message: string = data.message;
+    var typeLog: string = data.type;
     const ul_messages = $("#messages");
     ul_messages.append(
-      `<li id="${randomId}" class="fw-bold" style="color: ${colors_message[typeLog]}">${data.message}</li>`,
+      `<li id="${randomId}" class="fw-bold" style="color: ${colors_message[typeLog]}">${message}</li>`,
     );
 
     setTimeout(() => {
       updateElements(data);
       document.getElementById(randomId)?.scrollIntoView({ behavior: "smooth", block: "end" });
     }, 500);
+
+    if (message.toLowerCase().includes("fim da execução")) {
+      router.push({ name: "executions" });
+      setTimeout(() => {
+        $("#message").text(`Execução finalizada!`);
+        show_message();
+      }, 500);
+    }
   }
 });
 
