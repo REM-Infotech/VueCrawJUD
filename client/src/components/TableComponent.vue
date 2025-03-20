@@ -54,11 +54,11 @@ onMounted(async function () {
     .catch((error) => {
       if (error.code) {
         if (error.status === 401) {
-          console.log(error);
+          // console.log(error);
           sessionStorage.setItem("message", "Sessão expirada, faça login novamente!");
           router.push({ name: "login" });
         }
-        console.log(error);
+        // console.log(error);
       }
     });
 });

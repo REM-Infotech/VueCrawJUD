@@ -3,10 +3,9 @@ import jQuery from "jquery";
 import { Router } from "vue-router";
 import { api } from "../main";
 const $ = jQuery;
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const { show } = useModal("ModalMessage");
 
 export default function () {
+  const { show } = useModal("ModalMessage");
   async function logout(router: Router) {
     try {
       const refreshToken = sessionStorage.getItem("token");
@@ -24,8 +23,8 @@ export default function () {
         sessionStorage.removeItem("token");
         router.push({ name: "login" });
       }
-    } catch (error) {
-      console.log(error);
+    } catch {
+      // console.log(error);
       sessionStorage.removeItem("token");
       router.push({ name: "login" });
     }
@@ -60,7 +59,10 @@ export default function () {
         router.push({ name: "index" });
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
+
+      $("#message").text(error.data.message);
+      show();
     }
   }
 

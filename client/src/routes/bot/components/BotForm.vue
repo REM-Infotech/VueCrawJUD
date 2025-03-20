@@ -133,11 +133,11 @@ async function peformSubmit(event: Event) {
   formData.append(state_client_type.value, selected2.value || "");
 
   FilesListable.value.forEach((fileItem) => {
-    console.log(fileItem);
+    // console.log(fileItem);
     formData.append(fileItem.file[0].name, fileItem.file[0].file);
   });
 
-  console.log(FilesListable.value);
+  // console.log(FilesListable.value);
 
   const system: string = item.system.toLowerCase();
   const type: string = item.type.toLowerCase();
