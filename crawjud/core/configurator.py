@@ -49,10 +49,9 @@ async def app_configurator(app: Quart) -> tuple[Quart, ASGIApp, Celery]:
     app.config.from_object(ambient)
 
     async with app.app_context():
+        from crawjud.core.extensions import init_extensions
+        from crawjud.core.routing import register_routes
         from crawjud.utils import make_celery
-
-        from .extensions import init_extensions
-        from .routing import register_routes
 
         celery = None
         celery = await make_celery(app)

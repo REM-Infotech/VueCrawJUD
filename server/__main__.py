@@ -1,3 +1,5 @@
+"""Entrypoint for the server application."""
+
 import asyncio
 
 import uvicorn

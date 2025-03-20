@@ -11,10 +11,9 @@ from server import db, jwt, mail
 
 async def init_extensions(app: Quart) -> AsyncServer:
     """Initialize and configure the application extensions."""
+    from crawjud.core.database import database_start
+    from crawjud.core.security import security_config
     from crawjud.utils import check_allowed_origin
-
-    from .database import database_start
-    from .security import security_config
 
     host_redis = getenv("REDIS_HOST")
     pass_redis = getenv("REDIS_PASSWORD")

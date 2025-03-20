@@ -6,9 +6,8 @@ from quart_wtf import QuartForm
 from wtforms import BooleanField, PasswordField, SelectField, StringField, SubmitField
 from wtforms.validators import DataRequired, Length
 
+from crawjud.forms.validators import NotSelecioneValidator
 from crawjud.types import AnyType, T
-
-from ..validators import NotSelecioneValidator
 
 
 class UserForm(QuartForm):

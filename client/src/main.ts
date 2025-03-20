@@ -12,7 +12,7 @@ import "../plugins/axios.ts";
 import App from "./App.vue";
 import "./assets/main.css";
 import "./assets/styles.css";
-import router from "./routes";
+import router from "./routes/route.ts";
 
 export const $ = jQuery;
 
@@ -28,11 +28,7 @@ CreateApp();
 
 // Create axios instance with improved configuration
 export const api = axios.create({
-  baseURL: "https://homolog.robotz.dev",
-  withXSRFToken: true,
-  withCredentials: true,
-  xsrfCookieName: "access_token_cookie",
-  xsrfHeaderName: "X-CSRF-TOKEN",
+  baseURL: "http://195.200.1.226:5000",
 });
 
 // Add request interceptor for debugging

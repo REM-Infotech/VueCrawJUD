@@ -455,7 +455,7 @@ class TaskExec:
     @classmethod
     async def make_permalink(cls, pid: str) -> str:
         """Create a permalink for the bot output file."""
-        from ..gcs_mgmt import get_file
+        from crawjud.utils.gcs_mgmt import get_file
 
         filename = get_file(pid)
 
@@ -473,7 +473,7 @@ class TaskExec:
             pid (str): The process identifier of the bot.
 
         """
-        from ..gcs_mgmt import get_file
+        from crawjud.utils.gcs_mgmt import get_file
 
         filename = get_file(pid)
         file_path: Path = None

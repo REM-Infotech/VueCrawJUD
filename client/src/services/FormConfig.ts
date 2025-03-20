@@ -1,6 +1,6 @@
 import { useModal } from "bootstrap-vue-next";
 import { ref } from "vue";
-import { $ } from "../../../main";
+import { $ } from "../main";
 
 export default function () {
   // const vars

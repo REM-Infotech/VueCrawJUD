@@ -4,7 +4,7 @@ import DataTablesCore from "datatables.net-bs5";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { faFileDownload, faTrash, faCheckSquare } from "@fortawesome/free-solid-svg-icons";
 import { useModal } from "bootstrap-vue-next";
-import FormConfig from "./FormConfig.ts";
+import FormConfig from "../../../services/FormConfig.ts";
 import DropZone from "./FileDropZone.vue";
 import { onMounted } from "vue";
 

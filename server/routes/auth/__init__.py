@@ -52,6 +52,10 @@ async def login() -> Response:
     try:
         db: SQLAlchemy = current_app.extensions["sqlalchemy"]
         request_json: dict[str, str] = await request.json
+
+        if not request_json:
+            return await make_response(jsonify({"message": "Erro ao efetuar login!"}), 400)
+
         username = request_json.get("login")
         password = request_json.get("password")
         remember = request_json.get("remember_me")
@@ -62,18 +66,18 @@ async def login() -> Response:
             access_token = create_access_token(identity=usr)
 
             resp = await make_response(jsonify({"token": access_token, "message": "Login efetuado com sucesso!"}))
-            if request.headers.get("X-Forwarded-For"):
-                # Confie no IP fornecido pelo Cloudflare
-                resp.headers["X-Forwarded-For"] = request.headers.get("X-Forwarded-For").split(",")[0]
+            # if request.headers.get("X-Forwarded-For"):
+            #     # Confie no IP fornecido pelo Cloudflare
+            #     resp.headers["X-Forwarded-For"] = request.headers.get("X-Forwarded-For").split(",")[0]
 
-            if request.headers.get("CF-Connecting-IP"):
-                # Confie no IP fornecido pelo Cloudflare
-                resp.headers["CF-Connecting-IP"] = request.headers.get("CF-Connecting-IP")
-                request.remote_addr = request.headers.get("CF-Connecting-IP")
+            # if request.headers.get("CF-Connecting-IP"):
+            #     # Confie no IP fornecido pelo Cloudflare
+            #     resp.headers["CF-Connecting-IP"] = request.headers.get("CF-Connecting-IP")
+            #     request.remote_addr = request.headers.get("CF-Connecting-IP")
 
-            # Ajuste o esquema conforme necessário
-            if request.headers.get("X-Forwarded-Proto") == "https":
-                resp.headers["X-Forwarded-Proto"] = "https"
+            # # Ajuste o esquema conforme necessário
+            # if request.headers.get("X-Forwarded-Proto") == "https":
+            #     resp.headers["X-Forwarded-Proto"] = "https"
 
             resp.status_code = 200
 

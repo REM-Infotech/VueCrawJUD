@@ -133,7 +133,7 @@ async def handle_http_exception(error: HTTPException) -> Response:
     desc = tradutor.translate(error.description)
 
     return await make_response(
-        await render_template("handler/index.html", name=name, desc=desc, code=error.code),
+        await jsonify(name=name, description=desc),
         error.code,
     )
 

@@ -10,7 +10,7 @@ Example:
 
 """
 
-from .convert_types import convert_to_type
-from .redis_client_bot import Redis
+from crawjud.custom.plugins.convert_types import convert_to_type
+from crawjud.custom.plugins.redis_client_bot import Redis
 
 __all__ = ["Redis", "convert_to_type"]
