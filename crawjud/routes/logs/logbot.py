@@ -10,16 +10,16 @@ import traceback
 from datetime import datetime  # noqa: F401
 
 from pytz import timezone  # noqa: F401
-from socketio import AsyncServer
+from socketio import AsyncServer  # noqa: F401
 
-from crawjud.core import app
 from crawjud.utils import format_message_log, load_cache  # noqa: F401
 from crawjud.utils.status import TaskExec
+from server import app
 
 logger = logging.getLogger(__name__)
 
 # Retrieve the Socket.IO server extension from the Flask app.
-io: AsyncServer = app.extensions["socketio"]
+io = app.extensions["socketio"]  # type: AsyncServer
 
 
 @io.on("connect", namespace="/log")
@@ -129,8 +129,8 @@ async def terminate_bot(
 
     """
     from crawjud.bot import WorkerBot
-    from crawjud.core import db
     from crawjud.models import ThreadBots
+    from server import db
 
     async with app.app_context():
         try:

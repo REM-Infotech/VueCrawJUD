@@ -8,7 +8,7 @@ from datetime import datetime
 
 import pytz
 
-from crawjud.core import db
+from server import db
 
 
 class BotsCrawJUD(db.Model):

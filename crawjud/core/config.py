@@ -3,13 +3,18 @@
 from __future__ import annotations
 
 import logging
+import platform
 import secrets
 from datetime import timedelta
 from os import environ, getcwd
 from pathlib import Path
 from threading import Thread
 
-from billiard.connection import PipeConnection
+if platform.system == "Windows":
+    from billiard.connection import PipeConnection
+
+elif platform.system == "Linux":
+    from multiprocessing.connection import Connection as PipeConnection
 from billiard.context import Process
 from dotenv_vault import load_dotenv
 
