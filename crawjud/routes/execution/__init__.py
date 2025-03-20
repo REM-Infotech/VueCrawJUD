@@ -14,7 +14,6 @@ from quart import (
     abort,
     jsonify,
     make_response,
-    redirect,
     render_template,
     session,
 )
@@ -95,11 +94,7 @@ async def download_file(filename: str) -> Response:
     signed_url = generate_signed_url(filename)
 
     # Redireciona para a URL assinada
-    return await make_response(
-        redirect(
-            signed_url,
-        ),
-    )
+    return await make_response(jsonify(url=signed_url))
 
 
 def schedule_route() -> None:

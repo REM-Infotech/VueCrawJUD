@@ -6,11 +6,16 @@ import { onBeforeMount, onMounted, ref } from "vue";
 import DataTable from "datatables.net-vue3";
 import DataTablesCore from "datatables.net-bs5";
 import { useRouter } from "vue-router";
+import { useModal } from "bootstrap-vue-next";
 DataTable.use(DataTablesCore);
 
+const { show: show_load, hide: hide_load } = useModal("modal-load");
+const { show: show_message } = useModal("ModalMessage");
+
 let items = [];
-import { api } from "../main";
+import { $, api } from "../main";
 import { faDownload, faEye } from "@fortawesome/free-solid-svg-icons";
+import { AxiosResponse } from "axios";
 
 const data_ = ref(false);
 const router = useRouter();
@@ -53,6 +58,29 @@ onMounted(async function () {
       }
     });
 });
+
+const download_file = async (file: string) => {
+  show_load();
+
+  setTimeout(async () => {
+    try {
+      const response: AxiosResponse = await api.get(`/executions/download/${file}`);
+      const data = response.data;
+      const url: string = data.url;
+      window.open(url, "_blank");
+
+      setTimeout(() => {
+        hide_load();
+      }, 500);
+
+      $("#message").text(`Download do arquivo "${file}" iniciado!`);
+      show_message();
+      //
+    } catch (err) {
+      console.error(err);
+    }
+  }, 1000);
+};
 </script>
 
 <template>
@@ -77,14 +105,15 @@ onMounted(async function () {
             </tr>
           </thead>
           <template #column-7="props">
-            <a
+            <button
               v-if="props.rowData[5].toString().toLowerCase() !== 'em execução'"
-              href="#"
               class="btn btn-sm btn-success"
               data-bs-toggle="tooltip"
               data-bs-title="Default tooltip"
-              ><FontAwesomeIcon :icon="faDownload"
-            /></a>
+              @click="download_file(props.cellData)"
+            >
+              <FontAwesomeIcon :icon="faDownload" />
+            </button>
 
             <a
               v-else-if="props.rowData[5].toString().toLowerCase() === 'em execução'"

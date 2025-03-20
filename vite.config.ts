@@ -22,7 +22,13 @@ export default defineConfig({
   },
   server: {
     allowedHosts: true,
+
     // proxy: {
+    //   "/acquire_credentials": {
+    //     target: "http://localhost:5000/acquire_credentials",
+    //     changeOrigin: true,
+    //     rewrite: (path) => path.replace(/^\/acquire_credentials/, ""),
+    //   },
     //   "/auth": {
     //     target: "http://localhost:5000/auth",
     //     changeOrigin: true,

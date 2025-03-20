@@ -16,286 +16,271 @@ const pid = route.params.pid as string;
 let Pages;
 const percent_progress = document.getElementById("progress_info");
 const socket = io("http://localhost:5000/log", {
-    extraHeaders: {
-        pid: pid,
-    },
+  extraHeaders: {
+    pid: pid,
+  },
 });
 let LogsBotChart: Chart | null = null;
 const colors_message = {
-    info: "orange",
-    error: "RED",
-    log: "#d3e3f5",
-    success: "#42cf06",
+  info: "orange",
+  error: "RED",
+  log: "#d3e3f5",
+  success: "#42cf06",
 };
 
 // Set new default font family and font color to mimic Bootstrap's default styling
 Chart.defaults.font.family =
-    '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
+  '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
 Chart.defaults.color = "#292b2c";
 
 onMounted(() => {
-    const ctx = (document.getElementById("LogsBotChart") as HTMLCanvasElement)?.getContext("2d");
-    if (!ctx) return;
-    LogsBotChart = new Chart(ctx, {
-        type: "doughnut",
-        data: {
-            labels: ["RESTANTES", "SUCESSOS", "ERROS"],
-            datasets: [
-                {
-                    data: [0.1, 0.1, 0.1],
-                    backgroundColor: ["#0096C7", "#42cf06", "#FF0000"],
-                },
-            ],
+  const ctx = (document.getElementById("LogsBotChart") as HTMLCanvasElement)?.getContext("2d");
+  if (!ctx) return;
+  LogsBotChart = new Chart(ctx, {
+    type: "doughnut",
+    data: {
+      labels: ["RESTANTES", "SUCESSOS", "ERROS"],
+      datasets: [
+        {
+          data: [0.1, 0.1, 0.1],
+          backgroundColor: ["#0096C7", "#42cf06", "#FF0000"],
         },
-    });
+      ],
+    },
+  });
 });
 
 socket.on("disconnect", () => {
-    console.log("Disconnected from crawjud");
+  console.log("Disconnected from crawjud");
 });
 socket.on("connect", function () {
-    socket.emit("join", { pid: pid });
+  socket.emit("join", { pid: pid });
 });
 
 socket.on("log_message", function (data) {
-    var messagePid = data.pid;
+  var messagePid = data.pid;
 
-    function updateElements(data) {
-        var typeLog = String(data.type);
-        var total = parseInt(data.total);
-        var remaining = parseInt(data.remaining);
-        var success = parseInt(data.success);
-        var errors = parseInt(data.errors);
-        var status = data.status;
-        var executed = success + errors;
+  function updateElements(data) {
+    var typeLog = String(data.type);
+    var total = parseInt(data.total);
+    var remaining = parseInt(data.remaining);
+    var success = parseInt(data.success);
+    var errors = parseInt(data.errors);
+    var status = data.status;
+    var executed = success + errors;
 
-        if (
-            Number.isNaN(total) ||
-            Number.isNaN(remaining) ||
-            Number.isNaN(success) ||
-            Number.isNaN(errors)
-        ) {
-            return;
-        }
-
-        var CountErrors = document.querySelector('span[id="errors"]') as HTMLElement;
-        var Countremaining = document.querySelector('span[id="remaining"]') as HTMLElement;
-        var CountSuccess = document.querySelector('span[id="success"]') as HTMLElement;
-        var TextStatus = document.querySelector('span[id="status"]') as HTMLElement;
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        var lastRemainign = LogsBotChart
-            ? parseInt(String(LogsBotChart.data.datasets[0].data[0] ?? 0))
-            : 0;
-
-        if (typeLog === "info") {
-            Pages = Pages + 1;
-            console.log(typeLog);
-        }
-
-        if (remaining < 0) {
-            remaining = 0;
-        }
-
-        if (remaining === 0) {
-            remaining = Pages;
-        }
-
-        CountErrors.innerHTML = `Erros: ${errors}`;
-        Countremaining.innerHTML = `Restantes: ${remaining}`;
-        TextStatus.innerHTML = `Status: ${status} | Total: ${total}`;
-
-        var progress = (executed / total) * 100;
-        var textNode = document.createTextNode(progress.toFixed(2) + "%");
-
-        if (!LogsBotChart) return;
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const chartType: ChartType = (LogsBotChart.config as any).type;
-        var grafMode = data.graphicMode;
-
-        if (status !== "Finalizado") {
-            CountSuccess.innerHTML = `Sucessos: ${success}`;
-            LogsBotChart.data.datasets[0].data = [remaining, success, errors];
-        }
-
-        if (grafMode !== undefined && grafMode !== chartType) {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            (LogsBotChart.config as any).type = grafMode;
-            // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-            LogsBotChart.data.datasets[0].data;
-            if (LogsBotChart.data.labels && Array.isArray(LogsBotChart.data.labels)) {
-                LogsBotChart.data.labels[0] = "PÁGINAS";
-            }
-            Countremaining.innerHTML = `Páginas: ${remaining}`;
-        }
-
-        if (parseInt(data.remaining) > 0 && percent_progress) {
-            percent_progress.innerHTML = "";
-            percent_progress.appendChild(textNode);
-            percent_progress.style.width = progress + "%";
-        }
-
-        LogsBotChart.update();
+    if (
+      Number.isNaN(total) ||
+      Number.isNaN(remaining) ||
+      Number.isNaN(success) ||
+      Number.isNaN(errors)
+    ) {
+      return;
     }
 
-    if (messagePid == pid) {
-        const randomId = `id_${Math.random().toString(36).substring(2, 9)}`;
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        var pos = parseInt(data.pos);
+    var CountErrors = document.querySelector('span[id="errors"]') as HTMLElement;
+    var Countremaining = document.querySelector('span[id="remaining"]') as HTMLElement;
+    var CountSuccess = document.querySelector('span[id="success"]') as HTMLElement;
+    var TextStatus = document.querySelector('span[id="status"]') as HTMLElement;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    var lastRemainign = LogsBotChart
+      ? parseInt(String(LogsBotChart.data.datasets[0].data[0] ?? 0))
+      : 0;
 
-        var typeLog = data.type;
-        const ul_messages = $("#messages");
-        ul_messages.append(
-            `<li id="${randomId}" class="fw-bold" style="color: ${colors_message[typeLog]}">${data.message}</li>`,
-        );
-
-        setTimeout(() => {
-            updateElements(data);
-            document.getElementById(randomId)?.scrollIntoView({ behavior: "smooth", block: "end" });
-        }, 500);
+    if (typeLog === "info") {
+      Pages = Pages + 1;
+      console.log(typeLog);
     }
-});
 
-const stop_execut = () => {
-    socket.emit("terminate_bot", { pid: pid });
-    const ul_messages = $("#messages");
+    if (remaining < 0) {
+      remaining = 0;
+    }
 
+    if (remaining === 0) {
+      remaining = Pages;
+    }
+
+    CountErrors.innerHTML = `Erros: ${errors}`;
+    Countremaining.innerHTML = `Restantes: ${remaining}`;
+    TextStatus.innerHTML = `Status: ${status} | Total: ${total}`;
+
+    var progress = (executed / total) * 100;
+    var textNode = document.createTextNode(progress.toFixed(2) + "%");
+
+    if (!LogsBotChart) return;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const chartType: ChartType = (LogsBotChart.config as any).type;
+    var grafMode = data.graphicMode;
+
+    if (status !== "Finalizado") {
+      CountSuccess.innerHTML = `Sucessos: ${success}`;
+      LogsBotChart.data.datasets[0].data = [remaining, success, errors];
+    }
+
+    if (grafMode !== undefined && grafMode !== chartType) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (LogsBotChart.config as any).type = grafMode;
+      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+      LogsBotChart.data.datasets[0].data;
+      if (LogsBotChart.data.labels && Array.isArray(LogsBotChart.data.labels)) {
+        LogsBotChart.data.labels[0] = "PÁGINAS";
+      }
+      Countremaining.innerHTML = `Páginas: ${remaining}`;
+    }
+
+    if (parseInt(data.remaining) > 0 && percent_progress) {
+      percent_progress.innerHTML = "";
+      percent_progress.appendChild(textNode);
+      percent_progress.style.width = progress + "%";
+    }
+
+    LogsBotChart.update();
+  }
+
+  if (messagePid == pid) {
     const randomId = `id_${Math.random().toString(36).substring(2, 9)}`;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    var pos = parseInt(data.pos);
 
+    var typeLog = data.type;
+    const ul_messages = $("#messages");
     ul_messages.append(
-        `<li id=${randomId} class="fw-bold" style="color: ${colors_message["info"]}">Parando execução</li>`,
+      `<li id="${randomId}" class="fw-bold" style="color: ${colors_message[typeLog]}">${data.message}</li>`,
     );
 
     setTimeout(() => {
-        document.getElementById(randomId)?.scrollIntoView({ behavior: "smooth", block: "end" });
+      updateElements(data);
+      document.getElementById(randomId)?.scrollIntoView({ behavior: "smooth", block: "end" });
     }, 500);
+  }
+});
+
+const stop_execut = () => {
+  socket.emit("terminate_bot", { pid: pid });
+  const ul_messages = $("#messages");
+
+  const randomId = `id_${Math.random().toString(36).substring(2, 9)}`;
+
+  ul_messages.append(
+    `<li id=${randomId} class="fw-bold" style="color: ${colors_message["info"]}">Parando execução</li>`,
+  );
+
+  setTimeout(() => {
+    document.getElementById(randomId)?.scrollIntoView({ behavior: "smooth", block: "end" });
+  }, 500);
 };
 </script>
 
 <template>
-    <NavBarComponent />
-    <div id="content" class="mt-4 mb-4">
-        <SideBarComponent />
-        <div>
-            <main>
-                <BContainer fluid class="px-4">
-                    <div class="card">
-                        <div class="card-header">
-                            <div class="d-flex gap-3">
-                                <div
-                                    class="justify-content-xxl-end align-middle me-auto text-center"
-                                >
-                                    <h4>Estatisticas</h4>
-                                </div>
-                                <div class="justify-content-xxl-end">
-                                    <a
-                                        class="btn btn-outline-success disabled me-2"
-                                        aria-disabled="true"
-                                        id="download-button"
-                                        href="#"
-                                        >Baixar Documento</a
-                                    >
-                                    <button
-                                        type="button"
-                                        class="btn btn-warning"
-                                        @click="stop_execut()"
-                                    >
-                                        Encerrar Execução
-                                    </button>
-                                </div>
-                            </div>
+  <NavBarComponent />
+  <div id="content" class="mt-4 mb-4">
+    <SideBarComponent />
+    <div>
+      <main>
+        <BContainer fluid class="px-4">
+          <div class="card">
+            <div class="card-header">
+              <div class="d-flex gap-3">
+                <div class="justify-content-xxl-end align-middle me-auto text-center">
+                  <h4>Estatisticas</h4>
+                </div>
+                <div class="justify-content-xxl-end">
+                  <a
+                    class="btn btn-outline-success disabled me-2"
+                    aria-disabled="true"
+                    id="download-button"
+                    href="#"
+                    >Baixar Documento</a
+                  >
+                  <button type="button" class="btn btn-warning" @click="stop_execut()">
+                    Encerrar Execução
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="card-body bg-warning bg-opacity-75">
+              <div class="row">
+                <div class="col-xl-6 col-md-6">
+                  <div class="card fixed-height-card border-0" style="height: 35rem">
+                    <div class="card-header">
+                      <div class="row justify-content-between align-items-center">
+                        <div class="col-md-5">
+                          <span class="fw-semibold me-3">
+                            <i class="fas fa-chart-pie"></i>
+                            <FontAwesomeIcon :icon="faPieChart" />
+                          </span>
+                          <span class="fw-semibold">Logs </span>
                         </div>
-                        <div class="card-body bg-warning bg-opacity-75">
-                            <div class="row">
-                                <div class="col-xl-6 col-md-6">
-                                    <div
-                                        class="card fixed-height-card border-0"
-                                        style="height: 35rem"
-                                    >
-                                        <div class="card-header">
-                                            <div
-                                                class="row justify-content-between align-items-center"
-                                            >
-                                                <div class="col-md-5">
-                                                    <span class="fw-semibold me-3">
-                                                        <i class="fas fa-chart-pie"></i>
-                                                        <FontAwesomeIcon :icon="faPieChart" />
-                                                    </span>
-                                                    <span class="fw-semibold">Logs </span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="card-body bg-black overflow-auto">
-                                            <div class="container-fluid">
-                                                <ul
-                                                    id="messages"
-                                                    class="list-group list-group-flush over overflow-hidden"
-                                                ></ul>
-                                            </div>
-                                        </div>
-                                        <div class="card-footer small text-muted fw-semibold">
-                                            <span id="status">Status: Em Execução | Total: </span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-xl-6 col-md-6">
-                                    <div class="card mb-4 fixed-height-card" style="height: 35rem">
-                                        <div class="card-header">
-                                            <div
-                                                class="row justify-content-between align-items-center"
-                                            >
-                                                <div class="col-md-5">
-                                                    <span class="fw-semibold me-3">
-                                                        <i class="fas fa-chart-pie"></i>
-                                                        <FontAwesomeIcon :icon="faPieChart" />
-                                                    </span>
-                                                    <span class="fw-semibold">Logs </span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="card-body">
-                                            <div
-                                                class="container-fluid d-grid justify-content-xl-center w-50"
-                                            >
-                                                <canvas id="LogsBotChart"></canvas>
-                                            </div>
-                                        </div>
-                                        <div class="card-footer small text-muted fw-semibold">
-                                            <span id="remaining">Restantes: -.- </span> |
-                                            <span id="success">Sucessos: -.- </span> |
-                                            <span id="errors">Erros: -.- </span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-footer bg-secondary">
-                            <div class="container-fluid mt-2 mb-2">
-                                <div
-                                    id="progress_bar"
-                                    class="progress"
-                                    role="progressbar"
-                                    aria-label="Info example"
-                                    aria-valuenow="0"
-                                    aria-valuemin="0"
-                                    aria-valuemax="100"
-                                >
-                                    <div
-                                        id="progress_info"
-                                        class="progress-bar bg-info text-dark"
-                                        style="width: 0%"
-                                    ></div>
-                                </div>
-                            </div>
-                        </div>
+                      </div>
                     </div>
-                </BContainer>
-            </main>
-        </div>
+                    <div class="card-body bg-black overflow-auto">
+                      <div class="container-fluid">
+                        <ul
+                          id="messages"
+                          class="list-group list-group-flush over overflow-hidden"
+                        ></ul>
+                      </div>
+                    </div>
+                    <div class="card-footer small text-muted fw-semibold">
+                      <span id="status">Status: Em Execução | Total: </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-xl-6 col-md-6">
+                  <div class="card mb-4 fixed-height-card" style="height: 35rem">
+                    <div class="card-header">
+                      <div class="row justify-content-between align-items-center">
+                        <div class="col-md-5">
+                          <span class="fw-semibold me-3">
+                            <i class="fas fa-chart-pie"></i>
+                            <FontAwesomeIcon :icon="faPieChart" />
+                          </span>
+                          <span class="fw-semibold">Logs </span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="card-body">
+                      <div class="container-fluid d-grid justify-content-xl-center w-50">
+                        <canvas id="LogsBotChart"></canvas>
+                      </div>
+                    </div>
+                    <div class="card-footer small text-muted fw-semibold">
+                      <span id="remaining">Restantes: -.- </span> |
+                      <span id="success">Sucessos: -.- </span> |
+                      <span id="errors">Erros: -.- </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="card-footer bg-secondary">
+              <div class="container-fluid mt-2 mb-2">
+                <div
+                  id="progress_bar"
+                  class="progress"
+                  role="progressbar"
+                  aria-label="Info example"
+                  aria-valuenow="0"
+                  aria-valuemin="0"
+                  aria-valuemax="100"
+                >
+                  <div
+                    id="progress_info"
+                    class="progress-bar bg-info text-dark"
+                    style="width: 0%"
+                  ></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </BContainer>
+      </main>
     </div>
+  </div>
 </template>
 
 <style>
 .inner-scroll {
-    overflow-y: hidden !important;
+  overflow-y: hidden !important;
 }
 </style>

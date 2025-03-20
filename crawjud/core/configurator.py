@@ -57,7 +57,7 @@ async def app_configurator(app: Quart) -> tuple[Quart, ASGIApp, Celery]:
         celery = await make_celery(app)
         celery.set_default()
         app.extensions["celery"] = celery
-        # app.asgi_app = ProxyHeadersMiddleware(app.asgi_app)
+        app.asgi_app = ProxyHeadersMiddleware(app.asgi_app)
         celery.autodiscover_tasks(["crawjud.bot", "crawjud.utils"])
 
         io = await init_extensions(app)

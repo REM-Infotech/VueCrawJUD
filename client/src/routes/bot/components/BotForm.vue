@@ -177,13 +177,8 @@ async function peformSubmit(event: Event) {
                 <BFormSelect class="mb-3" v-model="selected2" :options="state_client" />
                 <div class="mb-3">
                   <div class="form-floating" v-if="bot_protocolo">
-                    <input
-                      type="password"
-                      class="form-control"
-                      id="floatSenhaToken"
-                      placeholder="Password"
-                    />
-                    <label for="floatSenhaToken">Senha Token</label>
+                    <input type="password" class="form-control" id="token" placeholder="Password" />
+                    <label for="token">Senha Token</label>
                   </div>
                 </div>
                 <div class="col-12 p-3"></div>
