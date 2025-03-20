@@ -28,7 +28,14 @@ CreateApp();
 
 // Create axios instance with improved configuration
 export const api = axios.create({
-  baseURL: "http://195.200.1.226:5000",
+  baseURL: "https://api.reminfotech.net.br",
+  headers: {
+    // Note: Changing the Content-Type may avoid the preflight but could affect your API expectations.
+    "Content-Type": "application/x-www-form-urlencoded", // Use a "simple" header if possible
+  },
+  withCredentials: true,
+  xsrfCookieName: "access_token_cookie",
+  xsrfHeaderName: "X-CSRF-TOKEN",
 });
 
 // Add request interceptor for debugging

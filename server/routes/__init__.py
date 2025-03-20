@@ -20,8 +20,6 @@ from quart import (
     abort,
     jsonify,
     make_response,
-    render_template,
-    request,
     send_from_directory,
 )
 from quart import current_app as app
@@ -132,23 +130,16 @@ async def handle_http_exception(error: HTTPException) -> Response:
     name = tradutor.translate(error.name)
     desc = tradutor.translate(error.description)
 
-    return await make_response(
-        await jsonify(name=name, description=desc),
-        error.code,
-    )
+    return await make_response(jsonify(name=name, description=desc), error.code)
 
 
-@app.before_request
-async def handle_cloudflare_headers() -> None:
-    """Ajusta cabeçalhos de solicitação para trabalhar com Cloudflare."""
-    if request.headers.get("X-Forwarded-For"):
-        # Confie no IP fornecido pelo Cloudflare
-        request.remote_addr = request.headers.get("X-Forwarded-For").split(",")[0]
+@app.after_request
+def print_response(response: Response) -> Response:
+    """Log the response after the request is processed."""
+    app.logger.info(f"Response: {response}")
 
-    if request.headers.get("CF-Connecting-IP"):
-        # Confie no IP fornecido pelo Cloudflare
-        request.remote_addr = request.headers.get("CF-Connecting-IP")
+    # response.headers["Access-Control-Allow-Origin"] = "*"
+    # response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
+    # response.headers["Access-Control-Allow-Methods"] = "POST, OPTIONS, GET"
 
-    # Ajuste o esquema conforme necessário
-    if request.headers.get("X-Forwarded-Proto") == "https":
-        request.scheme = "https"
+    return response

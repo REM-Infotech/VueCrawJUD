@@ -1,5 +1,6 @@
 """Quart application package."""
 
+import re
 from importlib import import_module
 from os import getenv
 
@@ -7,9 +8,11 @@ import quart_flask_patch  # noqa: F401
 from flask_mail import Mail
 from flask_sqlalchemy import SQLAlchemy
 from quart import Quart
+from quart_cors import cors
 from quart_jwt_extended import JWTManager
 from redis import Redis
 from socketio import ASGIApp, AsyncRedisManager, AsyncServer
+from uvicorn.middleware.proxy_headers import ProxyHeadersMiddleware  # noqa: F401
 
 app = Quart(__name__)
 mail = Mail()
@@ -98,4 +101,23 @@ async def create_app(confg: object) -> ASGIApp:
         await init_extensions(app)
         await register_routes(app)
 
-    return ASGIApp(app.extensions["socketio"], app)
+    allowed_origins = [
+        re.compile(r"http://127\.0\.0\.1:\d*"),
+        re.compile(r"http://\d*\.\d*\.\d*:\d*"),
+        re.compile(r"http://localhost:\d*"),
+        re.compile(r"https://.*\.nicholas\.dev\.br"),
+        re.compile(r"https://.*\.robotz\.dev"),
+        re.compile(r"https://.*\.rhsolutions\.info"),
+        re.compile(r"https://.*\.rhsolut\.com\.br"),
+    ]
+    app.asgi_app = ProxyHeadersMiddleware(app.asgi_app)
+    return ASGIApp(
+        app.extensions["socketio"],
+        cors(
+            app,
+            allow_origin=allowed_origins,
+            allow_credentials=True,
+            allow_methods=["POST", "OPTIONS", "GET"],
+            allow_headers=["Content-Type", "Authorization"],
+        ),
+    )

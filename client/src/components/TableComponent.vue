@@ -22,7 +22,10 @@ const router = useRouter();
 onMounted(async function () {
   api
     .get("/executions", {
+      withXSRFToken: true,
       withCredentials: true,
+      xsrfCookieName: "access_token_cookie",
+      xsrfHeaderName: "X-CSRF-TOKEN",
     })
     .then(async (response) => {
       items = response.data.data.map((item) => {
@@ -51,6 +54,7 @@ onMounted(async function () {
     .catch((error) => {
       if (error.code) {
         if (error.status === 401) {
+          console.log(error);
           sessionStorage.setItem("message", "Sessão expirada, faça login novamente!");
           router.push({ name: "login" });
         }

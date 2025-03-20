@@ -9,9 +9,10 @@ import {
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import { RouterLink } from "vue-router";
-import { logout } from "../routes/login/auth";
-import { useRouter } from "vue-router";
+import AuthService from "../services/auth";
 
+import { useRouter } from "vue-router";
+const { logout } = AuthService();
 const router = useRouter();
 
 const handleLogoutClick = (e: Event) => {

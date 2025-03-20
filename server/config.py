@@ -154,8 +154,6 @@ class Config:
     JWT_REFRESH_COOKIE_NAME: type[str] = "refresh_token_cookie"
 
     JWT_COOKIE_SECURE: type[bool] = True
-    JWT_COOKIE_DOMAIN: type[str] = "api.robotz.dev"
-    JWT_COOKIE_SAMESITE: type[str] = "Lax"
     JWT_COOKIE_CSRF_PROTECT = True
     JWT_CSRF_IN_COOKIES = True
 

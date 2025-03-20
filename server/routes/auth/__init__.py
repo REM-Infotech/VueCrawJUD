@@ -41,7 +41,7 @@ class LoginForm:
     remember_me: bool
 
 
-@auth.route("/auth", methods=["GET", "POST"])
+@auth.route("/login", methods=["GET", "POST", "OPTIONS"])
 async def login() -> Response:
     """Authenticate the user and start a session.
 
@@ -50,6 +50,16 @@ async def login() -> Response:
 
     """
     try:
+        if request.method == "OPTIONS":
+            # Set CORS headers for the preflight (OPTIONS) request.
+            response = await make_response("", 200)
+            response.headers["Access-Control-Allow-Origin"] = request.headers.get("Origin", "*")
+            response.headers["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
+            response.headers["Access-Control-Allow-Headers"] = request.headers.get(
+                "Access-Control-Request-Headers", "Content-Type, Authorization"
+            )
+            return response
+
         db: SQLAlchemy = current_app.extensions["sqlalchemy"]
         request_json: dict[str, str] = await request.json
 
@@ -80,7 +90,7 @@ async def login() -> Response:
             #     resp.headers["X-Forwarded-Proto"] = "https"
 
             resp.status_code = 200
-
+            resp.set_cookie("access_token_cookie", access_token)
             set_access_cookies(resp, access_token)
             return resp
 

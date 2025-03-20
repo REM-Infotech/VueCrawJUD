@@ -21,33 +21,29 @@ export default defineConfig({
     },
   },
   server: {
-    allowedHosts: true,
+    allowedHosts: ["195.200.1.226", "crawjud2.robotz.dev", "crawjud.reminfotech.net.br"],
 
     // proxy: {
     //   "/acquire_credentials": {
-    //     target: "http://localhost:5000/acquire_credentials",
-    //     changeOrigin: true,
-    //     rewrite: (path) => path.replace(/^\/acquire_credentials/, ""),
+    //     target: "http://195.200.1.226:5000",
+    //     // changeOrigin: true,
     //   },
     //   "/auth": {
-    //     target: "http://localhost:5000/auth",
-    //     changeOrigin: true,
-    //     rewrite: (path) => path.replace(/^\/auth/, ""),
+    //     target: "http://195.200.1.226:5000",
+    //     // changeOrigin: true,
+    //     secure: false,
     //   },
     //   "/logout": {
-    //     target: "http://localhost:5000/logout",
-    //     changeOrigin: true,
-    //     rewrite: (path) => path.replace(/^\/logout/, ""),
+    //     target: "http://195.200.1.226:5000",
+    //     // changeOrigin: true,
     //   },
     //   "/executions": {
-    //     target: "http://localhost:5000/executions",
-    //     changeOrigin: true,
-    //     rewrite: (path) => path.replace(/^\/executions/, ""),
+    //     target: "http://195.200.1.226:5000",
+    //     // changeOrigin: true,
     //   },
     //   "/bots_list": {
-    //     target: "http://localhost:5000/bots_list",
-    //     changeOrigin: true,
-    //     rewrite: (path) => path.replace(/^\/bots_list/, ""),
+    //     target: "http://195.200.1.226:5000",
+    //     // changeOrigin: true,
     //   },
     // },
   },
