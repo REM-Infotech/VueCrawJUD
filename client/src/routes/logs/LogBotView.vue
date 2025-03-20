@@ -3,22 +3,30 @@ import { io } from "socket.io-client";
 
 import { onMounted } from "vue";
 import { useRoute } from "vue-router";
-import { Chart } from "chart.js/auto";
+import { Chart, ChartType } from "chart.js/auto";
 import { faPieChart } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import NavBarComponent from "../../components/NavBarComponent.vue";
 import SideBarComponent from "../../components/SideBarComponent.vue";
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+
 import { $ } from "../../main";
 
 const route = useRoute();
 const pid = route.params.pid as string;
-
+let Pages;
+const percent_progress = document.getElementById("progress_info");
 const socket = io("http://localhost:5000/log", {
     extraHeaders: {
         pid: pid,
     },
 });
+let LogsBotChart: Chart | null = null;
+const colors_message = {
+    info: "orange",
+    error: "RED",
+    log: "#d3e3f5",
+    success: "#42cf06",
+};
 
 // Set new default font family and font color to mimic Bootstrap's default styling
 Chart.defaults.font.family =
@@ -26,9 +34,9 @@ Chart.defaults.font.family =
 Chart.defaults.color = "#292b2c";
 
 onMounted(() => {
-    var ctx = (document.getElementById("LogsBotChart") as HTMLCanvasElement)?.getContext("2d");
+    const ctx = (document.getElementById("LogsBotChart") as HTMLCanvasElement)?.getContext("2d");
     if (!ctx) return;
-    new Chart(ctx, {
+    LogsBotChart = new Chart(ctx, {
         type: "doughnut",
         data: {
             labels: ["RESTANTES", "SUCESSOS", "ERROS"],
@@ -50,18 +58,116 @@ socket.on("connect", function () {
 });
 
 socket.on("log_message", function (data) {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     var messagePid = data.pid;
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    var pos = parseInt(data.pos);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    var typeLog = data.type;
 
-    console.log(data);
+    function updateElements(data) {
+        var typeLog = String(data.type);
+        var total = parseInt(data.total);
+        var remaining = parseInt(data.remaining);
+        var success = parseInt(data.success);
+        var errors = parseInt(data.errors);
+        var status = data.status;
+        var executed = success + errors;
+
+        if (
+            Number.isNaN(total) ||
+            Number.isNaN(remaining) ||
+            Number.isNaN(success) ||
+            Number.isNaN(errors)
+        ) {
+            return;
+        }
+
+        var CountErrors = document.querySelector('span[id="errors"]') as HTMLElement;
+        var Countremaining = document.querySelector('span[id="remaining"]') as HTMLElement;
+        var CountSuccess = document.querySelector('span[id="success"]') as HTMLElement;
+        var TextStatus = document.querySelector('span[id="status"]') as HTMLElement;
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        var lastRemainign = LogsBotChart
+            ? parseInt(String(LogsBotChart.data.datasets[0].data[0] ?? 0))
+            : 0;
+
+        if (typeLog === "info") {
+            Pages = Pages + 1;
+            console.log(typeLog);
+        }
+
+        if (remaining < 0) {
+            remaining = 0;
+        }
+
+        if (remaining === 0) {
+            remaining = Pages;
+        }
+
+        CountErrors.innerHTML = `Erros: ${errors}`;
+        Countremaining.innerHTML = `Restantes: ${remaining}`;
+        TextStatus.innerHTML = `Status: ${status} | Total: ${total}`;
+
+        var progress = (executed / total) * 100;
+        var textNode = document.createTextNode(progress.toFixed(2) + "%");
+
+        if (!LogsBotChart) return;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const chartType: ChartType = (LogsBotChart.config as any).type;
+        var grafMode = data.graphicMode;
+
+        if (status !== "Finalizado") {
+            CountSuccess.innerHTML = `Sucessos: ${success}`;
+            LogsBotChart.data.datasets[0].data = [remaining, success, errors];
+        }
+
+        if (grafMode !== undefined && grafMode !== chartType) {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            (LogsBotChart.config as any).type = grafMode;
+            // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+            LogsBotChart.data.datasets[0].data;
+            if (LogsBotChart.data.labels && Array.isArray(LogsBotChart.data.labels)) {
+                LogsBotChart.data.labels[0] = "PÁGINAS";
+            }
+            Countremaining.innerHTML = `Páginas: ${remaining}`;
+        }
+
+        if (parseInt(data.remaining) > 0 && percent_progress) {
+            percent_progress.innerHTML = "";
+            percent_progress.appendChild(textNode);
+            percent_progress.style.width = progress + "%";
+        }
+
+        LogsBotChart.update();
+    }
+
+    if (messagePid == pid) {
+        const randomId = `id_${Math.random().toString(36).substring(2, 9)}`;
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        var pos = parseInt(data.pos);
+
+        var typeLog = data.type;
+        const ul_messages = $("#messages");
+        ul_messages.append(
+            `<li id="${randomId}" class="fw-bold" style="color: ${colors_message[typeLog]}">${data.message}</li>`,
+        );
+
+        setTimeout(() => {
+            updateElements(data);
+            document.getElementById(randomId)?.scrollIntoView({ behavior: "smooth", block: "end" });
+        }, 500);
+    }
 });
 
 const stop_execut = () => {
-    console.log("ok");
+    socket.emit("terminate_bot", { pid: pid });
+    const ul_messages = $("#messages");
+
+    const randomId = `id_${Math.random().toString(36).substring(2, 9)}`;
+
+    ul_messages.append(
+        `<li id=${randomId} class="fw-bold" style="color: ${colors_message["info"]}">Parando execução</li>`,
+    );
+
+    setTimeout(() => {
+        document.getElementById(randomId)?.scrollIntoView({ behavior: "smooth", block: "end" });
+    }, 500);
 };
 </script>
 
@@ -120,12 +226,10 @@ const stop_execut = () => {
                                         </div>
                                         <div class="card-body bg-black overflow-auto">
                                             <div class="container-fluid">
-                                                <div class="overflow-y-scroll">
-                                                    <ul
-                                                        id="messages"
-                                                        class="list-group list-group-flush"
-                                                    ></ul>
-                                                </div>
+                                                <ul
+                                                    id="messages"
+                                                    class="list-group list-group-flush over overflow-hidden"
+                                                ></ul>
                                             </div>
                                         </div>
                                         <div class="card-footer small text-muted fw-semibold">
@@ -189,3 +293,9 @@ const stop_execut = () => {
         </div>
     </div>
 </template>
+
+<style>
+.inner-scroll {
+    overflow-y: hidden !important;
+}
+</style>

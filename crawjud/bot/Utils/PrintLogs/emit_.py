@@ -124,4 +124,4 @@ class SendMessage(CrawJUD):
             url (str): The server URL.
 
         """
-        self.sio.connect(url, namespaces=["/log"], headers={"pid": self.pid})
+        self.sio.connect("http://localhost:5000", namespaces=["/log"], headers={"pid": self.pid})
