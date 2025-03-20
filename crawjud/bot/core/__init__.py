@@ -20,7 +20,11 @@ from pytz import timezone
 from crawjud.bot.common.exceptions import StartError
 
 if platform.system() == "Windows":
-    from pywinauto import Application
+    try:
+        from pywinauto import Application
+
+    except ImportError as e:
+        print(e)  # noqa: T201
 
 from rich.console import Group
 from rich.live import Live

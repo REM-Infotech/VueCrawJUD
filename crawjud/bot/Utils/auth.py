@@ -23,7 +23,11 @@ from selenium.webdriver.support.ui import Select, WebDriverWait
 from crawjud.bot.core import CrawJUD
 
 if platform.system() == "Windows":
-    from crawjud.bot.core import Application
+    try:
+        from crawjud.bot.core import Application
+
+    except ImportError as e:
+        print(e)  # noqa: T201
 
 logger = logging.getLogger(__name__)
 
