@@ -129,8 +129,8 @@ async def terminate_bot(
 
     """
     from api import db
+    from api.models import ThreadBots
     from crawjud.bot import WorkerBot
-    from crawjud.models import ThreadBots
 
     async with app.app_context():
         try:

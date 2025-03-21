@@ -22,11 +22,12 @@ from quart import current_app as app
 from quart_jwt_extended import get_jwt_identity, jwt_required
 from quart_wtf import QuartForm  # noqa: F401
 
+from api.models import BotsCrawJUD
+from api.models.bots import Credentials
+from api.models.users import LicensesUsers
+
 # from crawjud.forms import BotForm as BotForm
 from crawjud.misc import MakeModels
-from crawjud.models import BotsCrawJUD
-from crawjud.models.bots import Credentials
-from crawjud.models.users import LicensesUsers
 from crawjud.utils.gen_seed import generate_pid
 
 from .botlaunch_methods import (

@@ -29,7 +29,7 @@ from werkzeug.utils import secure_filename
 from api import db
 
 # from crawjud.forms.credentials import CredentialsForm
-from crawjud.models import BotsCrawJUD, Credentials, LicensesUsers
+from api.models import BotsCrawJUD, Credentials, LicensesUsers
 
 path_template = os.path.join(pathlib.Path(__file__).parent.resolve(), "templates")
 cred = Blueprint("creds", __name__, template_folder=path_template)

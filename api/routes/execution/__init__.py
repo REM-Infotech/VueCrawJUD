@@ -26,12 +26,12 @@ from quart_jwt_extended import (  # noqa: F401
 )
 
 from api import db
+from api.models import Executions, Users
+from api.models import SuperUser as SuperUser
+from api.models import admins as admins
 
 # from crawjud.forms import SearchExec as SearchExec
 from crawjud.misc import generate_signed_url
-from crawjud.models import Executions, Users
-from crawjud.models import SuperUser as SuperUser
-from crawjud.models import admins as admins
 
 path_template = os.path.join(pathlib.Path(__file__).parent.resolve(), "templates")
 exe = Blueprint("exe", __name__, template_folder=path_template)

@@ -10,7 +10,7 @@ from quart import current_app as app
 from quart_jwt_extended import jwt_required
 
 # from crawjud.forms import UserForm, UserFormEdit
-from crawjud.models import LicensesUsers, SuperUser, Users
+from api.models import LicensesUsers, SuperUser, Users
 
 path_template = os.path.join(pathlib.Path(__file__).parent.resolve(), "templates")
 admin = Blueprint("admin", __name__, template_folder=path_template)

@@ -17,7 +17,7 @@ from quart import Blueprint, Response, abort, jsonify, make_response, render_tem
 from quart_jwt_extended import jwt_required
 
 from api import db
-from crawjud.models import Executions, LicensesUsers, SuperUser, Users
+from api.models import Executions, LicensesUsers, SuperUser, Users
 
 translator = GoogleTranslator(source="en", target="pt")
 

@@ -21,13 +21,14 @@ from quart_jwt_extended import get_jwt_identity
 from werkzeug.utils import secure_filename  # noqa: F401
 from wtforms import BooleanField, FieldList, FileField, FormField, MultipleFileField, TimeField  # noqa: F401
 
+from api.models import BotsCrawJUD, Credentials, LicensesUsers
+from api.models.bots import ThreadBots
+from api.models.users import Users
+
 # from crawjud.forms import BotForm
 from crawjud.misc import (
     generate_pid,  # noqa: F401
 )
-from crawjud.models import BotsCrawJUD, Credentials, LicensesUsers
-from crawjud.models.bots import ThreadBots
-from crawjud.models.users import Users
 from crawjud.types import AnyType
 from crawjud.utils.status import TaskExec
 
