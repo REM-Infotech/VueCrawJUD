@@ -21,10 +21,10 @@ from importlib import import_module
 from typing import Self
 
 from crawjud.bot.core import CrawJUD
-from crawjud.bot.Utils.elements.elaw import ELAW_AME
-from crawjud.bot.Utils.elements.esaj import ESAJ_AM
-from crawjud.bot.Utils.elements.pje import PJE_AM
-from crawjud.bot.Utils.elements.projudi import PROJUDI_AM
+from crawjud.bot.utils.elements.elaw import ELAW_AME
+from crawjud.bot.utils.elements.esaj import ESAJ_AM
+from crawjud.bot.utils.elements.pje import PJE_AM
+from crawjud.bot.utils.elements.projudi import PROJUDI_AM
 
 
 class ElementsBot(CrawJUD):

@@ -37,7 +37,7 @@ from crawjud.bot.core import (
 if __name__ == "__main__":
     from getchrome_version import another_chrome_ver, chrome_ver
 else:
-    from crawjud.bot.Utils.Driver.getchrome_version import another_chrome_ver, chrome_ver  # noqa: F401
+    from crawjud.bot.utils.Driver.getchrome_version import another_chrome_ver, chrome_ver  # noqa: F401
 
 
 class DriverBot(CrawJUD):
