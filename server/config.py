@@ -147,14 +147,14 @@ class Config:
     Path(ARCHIVES_PATH).mkdir(exist_ok=True)
 
     JWT_TOKEN_LOCATION = ["cookies", "headers"]
-    JWT_ACCESS_TOKEN_EXPIRES = timedelta(minutes=15)  # Token expira em 15 minutos
+    # JWT_ACCESS_TOKEN_EXPIRES = timedelta(minutes=15)  # Token expira em 15 minutos
     JWT_REFRESH_TOKEN_EXPIRES = timedelta(days=7)  # Refresh Token expira em 7 dias
 
     JWT_ACCESS_COOKIE_NAME: type[str] = "access_token_cookie"
     JWT_REFRESH_COOKIE_NAME: type[str] = "refresh_token_cookie"
 
     JWT_COOKIE_SECURE: type[bool] = True
-    JWT_COOKIE_CSRF_PROTECT = False
+    JWT_COOKIE_CSRF_PROTECT = True
     JWT_CSRF_IN_COOKIES = True
 
     for paths in [

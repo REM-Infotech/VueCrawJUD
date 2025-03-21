@@ -36,7 +36,7 @@ export const api = axios.create({
   withCredentials: true,
   withXSRFToken: true,
   xsrfCookieName: "access_token_cookie",
-  xsrfHeaderName: "X-CSRF-TOKEN",
+  xsrfHeaderName: "csrf_access_token",
 });
 
 // Add request interceptor for debugging

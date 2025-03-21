@@ -85,60 +85,23 @@ const setup_form = async (_e) => {
   }
 
   try {
-    response_creds = await api.post(
-      `/acquire_credentials`,
-      {
-        system: item.system,
-        state: item.state,
-        client: item.client,
-        form_cfg: item.form_cfg,
-      },
-      {
-        withXSRFToken: true,
-        withCredentials: true,
-        headers: {
-          "X-CSRF-TOKEN": sessionStorage.getItem("access_csrf"),
-        },
-      },
-    );
+    response_creds = await api.post(`/acquire_credentials`, {
+      system: item.system,
+      state: item.state,
+      client: item.client,
+      form_cfg: item.form_cfg,
+    });
   } catch (response) {
     // Check if response.status is 4** error and not 404
-    if (
-      response.response.status >= 400 &&
-      response.response.status < 500 &&
-      response.response.status != 404
-    ) {
-      $("#message").text("Sessão expirada! Faça login novamente.");
-      router.push({ name: "login" });
-      show_message();
-    }
-    return;
-  }
 
-  try {
-    response_state_client = await api.post(
-      "/acquire_systemclient",
-      {
-        system: item.system,
-        state: item.state,
-        client: item.client,
-        type: item.type,
-        form_cfg: item.form_cfg,
-      },
-      {
-        withXSRFToken: true,
-        withCredentials: true,
-        headers: {
-          "X-CSRF-TOKEN": sessionStorage.getItem("access_csrf"),
-        },
-      },
-    );
-  } catch (response) {
-    // Check if response.status is 4** error and not 404
+    console.log(response);
+
     if (
       response.response.status >= 400 &&
       response.response.status < 500 &&
-      response.response.status != 404
+      response.response.status != 404 &&
+      response.data.msg != null &&
+      response.data.msg != "Missing CSRF token"
     ) {
       $("#message").text("Sessão expirada! Faça login novamente.");
       router.push({ name: "login" });
@@ -194,6 +157,7 @@ async function peformSubmit(event: Event) {
     })
     .catch((response) => {
       // check if response.status is 4** error
+
       if (
         response.response.status >= 400 &&
         response.response.status < 500 &&

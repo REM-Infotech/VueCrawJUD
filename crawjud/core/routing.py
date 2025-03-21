@@ -34,7 +34,7 @@ async def register_routes(app: Quart) -> None:
         import_module("server.routes.logs", package=__package__)
         import_module("crawjud.routes", package=__package__)
 
-    from server.routes.auth import auth
+    from server.auth import auth
     from server.routes.bot import bot
     from server.routes.config import admin, supersu, usr
     from server.routes.credentials import cred
