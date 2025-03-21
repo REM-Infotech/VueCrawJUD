@@ -55,118 +55,131 @@ onMounted(() => {
   show_message();
 });
 
-io.on("disconnect", () => {
-  console.log("Disconnected from crawjud");
-});
-io.on("connect", function () {
-  io.emit("join", { pid: pid });
-});
+try {
+  io.on("error", (error) => {
+    console.log(error);
+  });
 
-io.on("log_message", function (data) {
-  var messagePid = data.pid;
+  io.on("disconnect", () => {
+    console.log("Disconnected from crawjud");
+  });
+  io.on("connect", function () {
+    io.emit("join", { pid: pid });
+    console.log("Connected to crawjud");
+  });
 
-  function updateElements(data) {
-    var typeLog = String(data.type);
-    var total = parseInt(data.total);
-    var remaining = parseInt(data.remaining);
-    var success = parseInt(data.success);
-    var errors = parseInt(data.errors);
-    var status = data.status;
-    var executed = success + errors;
+  io.on("join", () => {
+    console.log("Joinned!");
+  });
 
-    if (
-      Number.isNaN(total) ||
-      Number.isNaN(remaining) ||
-      Number.isNaN(success) ||
-      Number.isNaN(errors)
-    ) {
-      return;
-    }
+  io.on("log_message", function (data) {
+    var messagePid = data.pid;
 
-    var CountErrors = document.querySelector('span[id="errors"]') as HTMLElement;
-    var Countremaining = document.querySelector('span[id="remaining"]') as HTMLElement;
-    var CountSuccess = document.querySelector('span[id="success"]') as HTMLElement;
-    var TextStatus = document.querySelector('span[id="status"]') as HTMLElement;
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    var lastRemainign = LogsBotChart
-      ? parseInt(String(LogsBotChart.data.datasets[0].data[0] ?? 0))
-      : 0;
+    function updateElements(data) {
+      var typeLog = String(data.type);
+      var total = parseInt(data.total);
+      var remaining = parseInt(data.remaining);
+      var success = parseInt(data.success);
+      var errors = parseInt(data.errors);
+      var status = data.status;
+      var executed = success + errors;
 
-    if (typeLog === "info") {
-      Pages = Pages + 1;
-      console.log(typeLog);
-    }
-
-    if (remaining < 0) {
-      remaining = 0;
-    }
-
-    if (remaining === 0) {
-      remaining = Pages;
-    }
-
-    CountErrors.innerHTML = `Erros: ${errors}`;
-    Countremaining.innerHTML = `Restantes: ${remaining}`;
-    TextStatus.innerHTML = `Status: ${status} | Total: ${total}`;
-
-    var progress = (executed / total) * 100;
-    var textNode = document.createTextNode(progress.toFixed(2) + "%");
-
-    if (!LogsBotChart) return;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const chartType: ChartType = (LogsBotChart.config as any).type;
-    var grafMode = data.graphicMode;
-
-    if (status !== "Finalizado") {
-      CountSuccess.innerHTML = `Sucessos: ${success}`;
-      LogsBotChart.data.datasets[0].data = [remaining, success, errors];
-    }
-
-    if (grafMode !== undefined && grafMode !== chartType) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (LogsBotChart.config as any).type = grafMode;
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-      LogsBotChart.data.datasets[0].data;
-      if (LogsBotChart.data.labels && Array.isArray(LogsBotChart.data.labels)) {
-        LogsBotChart.data.labels[0] = "PÁGINAS";
+      if (
+        Number.isNaN(total) ||
+        Number.isNaN(remaining) ||
+        Number.isNaN(success) ||
+        Number.isNaN(errors)
+      ) {
+        return;
       }
-      Countremaining.innerHTML = `Páginas: ${remaining}`;
+
+      var CountErrors = document.querySelector('span[id="errors"]') as HTMLElement;
+      var Countremaining = document.querySelector('span[id="remaining"]') as HTMLElement;
+      var CountSuccess = document.querySelector('span[id="success"]') as HTMLElement;
+      var TextStatus = document.querySelector('span[id="status"]') as HTMLElement;
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      var lastRemainign = LogsBotChart
+        ? parseInt(String(LogsBotChart.data.datasets[0].data[0] ?? 0))
+        : 0;
+
+      if (typeLog === "info") {
+        Pages = Pages + 1;
+        console.log(typeLog);
+      }
+
+      if (remaining < 0) {
+        remaining = 0;
+      }
+
+      if (remaining === 0) {
+        remaining = Pages;
+      }
+
+      CountErrors.innerHTML = `Erros: ${errors}`;
+      Countremaining.innerHTML = `Restantes: ${remaining}`;
+      TextStatus.innerHTML = `Status: ${status} | Total: ${total}`;
+
+      var progress = (executed / total) * 100;
+      var textNode = document.createTextNode(progress.toFixed(2) + "%");
+
+      if (!LogsBotChart) return;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const chartType: ChartType = (LogsBotChart.config as any).type;
+      var grafMode = data.graphicMode;
+
+      if (status !== "Finalizado") {
+        CountSuccess.innerHTML = `Sucessos: ${success}`;
+        LogsBotChart.data.datasets[0].data = [remaining, success, errors];
+      }
+
+      if (grafMode !== undefined && grafMode !== chartType) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (LogsBotChart.config as any).type = grafMode;
+        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+        LogsBotChart.data.datasets[0].data;
+        if (LogsBotChart.data.labels && Array.isArray(LogsBotChart.data.labels)) {
+          LogsBotChart.data.labels[0] = "PÁGINAS";
+        }
+        Countremaining.innerHTML = `Páginas: ${remaining}`;
+      }
+
+      if (parseInt(data.remaining) > 0 && percent_progress) {
+        percent_progress.innerHTML = "";
+        percent_progress.appendChild(textNode);
+        percent_progress.style.width = progress + "%";
+      }
+
+      LogsBotChart.update();
     }
 
-    if (parseInt(data.remaining) > 0 && percent_progress) {
-      percent_progress.innerHTML = "";
-      percent_progress.appendChild(textNode);
-      percent_progress.style.width = progress + "%";
-    }
+    if (messagePid == pid) {
+      const randomId = `id_${Math.random().toString(36).substring(2, 9)}`;
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const pos: number = parseInt(data.pos);
+      const message: string = data.message;
+      var typeLog: string = data.type;
+      const ul_messages = $("#messages");
+      ul_messages.append(
+        `<li id="${randomId}" class="fw-bold" style="color: ${colors_message[typeLog]}">${message}</li>`,
+      );
 
-    LogsBotChart.update();
-  }
-
-  if (messagePid == pid) {
-    const randomId = `id_${Math.random().toString(36).substring(2, 9)}`;
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const pos: number = parseInt(data.pos);
-    const message: string = data.message;
-    var typeLog: string = data.type;
-    const ul_messages = $("#messages");
-    ul_messages.append(
-      `<li id="${randomId}" class="fw-bold" style="color: ${colors_message[typeLog]}">${message}</li>`,
-    );
-
-    setTimeout(() => {
-      updateElements(data);
-      document.getElementById(randomId)?.scrollIntoView({ behavior: "smooth", block: "end" });
-    }, 500);
-
-    if (message.toLowerCase().includes("fim da execução")) {
-      router.push({ name: "executions" });
       setTimeout(() => {
-        $("#message").text(`Execução finalizada!`);
-        show_message();
+        updateElements(data);
+        document.getElementById(randomId)?.scrollIntoView({ behavior: "smooth", block: "end" });
       }, 500);
+
+      if (message.toLowerCase().includes("fim da execução")) {
+        router.push({ name: "executions" });
+        setTimeout(() => {
+          $("#message").text(`Execução finalizada!`);
+          show_message();
+        }, 500);
+      }
     }
-  }
-});
+  });
+} catch (error) {
+  console.log(error);
+}
 
 const stop_execut = () => {
   io.emit("terminate_bot", { pid: pid });

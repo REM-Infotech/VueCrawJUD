@@ -1,11 +1,12 @@
 """Run the server components in separate threads and allow stopping with an event."""
 
 import asyncio
-from os import environ, getcwd
+import logging
+from os import environ, getcwd, getenv
 from pathlib import Path
 from platform import node
 from queue import Queue  # noqa: F401
-from threading import Condition, Thread, current_thread  # noqa: F401
+from threading import Condition, Event, Thread, current_thread  # noqa: F401
 from time import sleep
 from typing import Any, TypeVar  # noqa: F401
 
@@ -14,8 +15,6 @@ from celery import Celery
 from celery.apps.beat import Beat  # noqa: F401
 from celery.apps.worker import Worker
 from clear import clear
-from hypercorn import Config
-from hypercorn.asyncio import serve
 from pynput._util import AbstractListener  # noqa: F401
 from quart import Quart
 from rich.console import Console  # noqa: F401
@@ -23,6 +22,8 @@ from rich.live import Live  # noqa: F401
 from rich.spinner import Spinner
 from rich.text import Text  # noqa: F401
 from socketio import ASGIApp
+from uvicorn.config import Config
+from uvicorn.server import Server
 
 from api import app
 from api.config import StoreService, running_servers
@@ -92,7 +93,7 @@ def start_beat() -> None:
 class RunnerServices:
     """Run the server components in separate threads and allow stopping with an event."""
 
-    _event_stop = asyncio.Event()
+    _event_stop: Event = None
     celery_: Celery = None
     app_: Quart = None
     srv_ = None
@@ -108,21 +109,31 @@ class RunnerServices:
             stop_event (Event): Event to signal the thread to stop.
 
         """
-        # app = asyncio.run(create_app(DevelopmentConfig))
-
-        config = Config()
-        config.bind = ["0.0.0.0:5000"]
-        config.loglevel = "debug"
-        config.use_reloader = True
-
-        log_file = Path(getcwd()).joinpath("logs", "hypercorn_api.log")
+        log_file = Path(getcwd()).joinpath("logs", "uvicorn_api.log")
         cfg, _ = log_cfg(log_file=log_file)
-        config.logconfig_dict = cfg
+        port = getenv("SERVER_PORT", 5000)
+        hostname = "0.0.0.0"  # noqa: S104
 
-        shutdown_trigger = asyncio.Event()
-        self.event_stop = shutdown_trigger
+        log_level = logging.INFO
+        if getenv("DEBUG", "False").lower() == "true":
+            log_level = logging.DEBUG
+        cfg = Config(
+            self.app,
+            host=hostname,
+            port=port,
+            log_config=cfg,
+            log_level=log_level,
+        )
+        self.srv = Server(cfg)
+        Thread(target=self.srv.run, daemon=True).start()
 
-        asyncio.run(serve(app, config, mode="asgi", shutdown_trigger=shutdown_trigger.wait))
+    def watch_shutdown(self) -> None:
+        """Watch for a keyboard interrupt and signal all threads to stop."""
+        self.event_stop.wait()
+        self.event_stop.set()
+
+        asyncio.run(self.app.shutdown())
+        asyncio.run(self.srv.shutdown())
 
     def start_specific(self, **kwargs: str) -> None:
         """Start all server components in separate threads and allow stopping with an event.
@@ -222,6 +233,9 @@ class RunnerServices:
                     sleep(1)
                     running_servers.update({k: store})
 
+                    if k == "Quart":
+                        Thread(target=self.watch_shutdown, daemon=True).start()
+
                     store.start()
                     sleep(2)
                     live.update(
@@ -308,11 +322,11 @@ class RunnerServices:
         self.start(app_name)
 
     @property
-    def event_stop(self) -> asyncio.Event:
+    def event_stop(self) -> Event:
         """Return the event stop."""
         return self._event_stop
 
     @event_stop.setter
-    def event_stop(self, value: asyncio.Event) -> None:
+    def event_stop(self, value: Event) -> None:
         """Set the event stop."""
         self._event_stop = value

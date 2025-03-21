@@ -153,6 +153,7 @@ async def init_extensions(app: Quart) -> AsyncServer:
         client_manager=redis_manager,
         ping_interval=25,
         ping_timeout=10,
+        namespaces=["/bot", "/logs"],
     )
 
     async with app.app_context():
@@ -171,7 +172,7 @@ async def create_app(confg: object) -> ASGIApp:
     app.config.from_object(confg)
 
     async with app.app_context():
-        await init_extensions(app)
+        io = await init_extensions(app)
         await register_routes(app)
 
     allowed_origins = [
@@ -187,7 +188,7 @@ async def create_app(confg: object) -> ASGIApp:
     ]
     app.asgi_app = ProxyHeadersMiddleware(app.asgi_app)
     return ASGIApp(
-        app.extensions["socketio"],
+        io,
         cors(
             app,
             allow_origin=allowed_origins,

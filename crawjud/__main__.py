@@ -1,9 +1,9 @@
 """Worker CrawJUD Manager."""
 
 import asyncio
-from asyncio import Event
 from os import getenv
 from pathlib import Path
+from threading import Event
 from time import sleep
 from typing import Callable, Dict
 

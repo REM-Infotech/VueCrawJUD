@@ -57,7 +57,7 @@ class DriverBot(CrawJUD):
         "--ignore-certificate-errors",
         "--display=:99",
         "--window-size=1600,900",
-        # "--no-sandbox",
+        "--no-sandbox",
         "--kiosk-printing",
         # disable Render and GPU
         # "--disable-gpu",
