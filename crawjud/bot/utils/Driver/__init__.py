@@ -175,6 +175,9 @@ class DriverBot(CrawJUD):
             if path_chrome is None:
                 path_chrome = self.pid_path.joinpath(getdriver()).resolve()
 
+            if platform.system() == "Linux":
+                path_chrome.chmod(0o777)
+
             serve = Service(path_chrome)
             driver = Chrome(service=serve, options=chrome_options)
 

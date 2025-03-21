@@ -19,7 +19,6 @@ from pynput._util import AbstractListener  # noqa: F401
 from quart import Quart
 from rich.console import Console  # noqa: F401
 from rich.live import Live  # noqa: F401
-from rich.spinner import Spinner
 from rich.text import Text  # noqa: F401
 from socketio import ASGIApp
 from uvicorn.config import Config
@@ -172,22 +171,9 @@ class RunnerServices:
         }
         for k, store in to_start.items():
             if not running_servers.get(k) and start_dict.get(k):
-                with Live(
-                    Spinner(
-                        name="dots",
-                        text=f"[bold yellow]Starting {k} application[/bold yellow]",
-                    ),
-                    refresh_per_second=4,
-                ) as live:
-                    running_servers.update({k: store})
+                running_servers.update({k: store})
+                store.start()
 
-                    store.start()
-                    live.update(
-                        Text(
-                            text=f"✅ {k} application started successfully!",
-                            style="bold green",
-                        )
-                    )
         clear()
         printf(Text("✅ All Application server started successfully", style="bold green"))
         sleep(2)
@@ -223,28 +209,14 @@ class RunnerServices:
 
         for k, store in to_start.items():
             if not running_servers.get(k):
-                with Live(
-                    Spinner(
-                        name="dots",
-                        text=f"[bold yellow]Starting {k} application[/bold yellow]",
-                    ),
-                    refresh_per_second=4,
-                ) as live:
-                    sleep(1)
-                    running_servers.update({k: store})
+                running_servers.update({k: store})
+                sleep(1)
 
-                    if k == "Quart":
-                        Thread(target=self.watch_shutdown, daemon=True).start()
+                if k == "Quart":
+                    Thread(target=self.watch_shutdown, daemon=True).start()
 
-                    store.start()
-                    sleep(2)
-                    live.update(
-                        Text(
-                            text=f"✅ {k} application started successfully!",
-                            style="bold green",
-                        )
-                    )
-                    sleep(2)
+                store.start()
+
         clear()
         printf(Text("✅ All Application server started successfully", style="bold green"))
         sleep(2)

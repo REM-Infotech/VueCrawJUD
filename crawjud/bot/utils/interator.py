@@ -50,9 +50,9 @@ class Interact(CrawJUD):
 
         if send is None:
             element.click()
-            sleep(0.05)
+            sleep(0.1)
             for c in str(word):
-                sleep(0.001)
+                sleep(0.5)
                 element.send_keys(c)
 
     def click(self, element: WebElement) -> None:

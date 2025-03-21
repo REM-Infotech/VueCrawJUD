@@ -9,9 +9,6 @@ from typing import Callable, Dict
 
 import inquirer
 from clear import clear
-from rich.live import Live
-from rich.spinner import Spinner
-from rich.text import Text
 from termcolor import colored
 from tqdm import tqdm
 
@@ -38,10 +35,7 @@ class WorkerCrawJUD(HeadCrawjudManager):
         env_ambient = getenv("AMBIENT_CONFIG")
         ambient = objects_config[env_ambient]
 
-        with Live(Spinner("dots", text="[bold yellow]Starting application server"), refresh_per_second=10) as live:
-            live.update(Spinner("dots", text="[bold yellow]Starting application server"))
-            self.app = asyncio.run(create_app(ambient))
-            live.update(Text("✅ Application server started.", style="bold green"))
+        self.app = asyncio.run(create_app(ambient))
 
     def __init__(self, **kwargs: str) -> None:
         """Initialize the ASGI server."""
@@ -142,22 +136,12 @@ class WorkerCrawJUD(HeadCrawjudManager):
             running_servers_ = [running_servers_ for running_servers_ in running_servers_]  # noqa: C416
             running_servers_ = running_servers_[::-1]
             for application_name, application in running_servers_:
-                with Live(
-                    Spinner("dots", text=f"[bold yellow]Stopping {application_name} application"), refresh_per_second=10
-                ) as live:
-                    if application_name == "Quart":
-                        self.event_stop.set()
+                if application_name == "Quart":
+                    self.event_stop.set()
 
-                    sleep(1)
-                    application.stop()
-                    sleep(1)
-                    live.update(
-                        Text(
-                            text=f"✅ {application_name} application stopped successfully!",
-                            style="bold green",
-                        )
-                    )
-                    sleep(1)
+                sleep(1)
+                application.stop()
+                sleep(1)
 
         self.return_main_menu()
 

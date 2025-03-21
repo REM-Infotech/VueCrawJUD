@@ -12,6 +12,7 @@ import platform
 import traceback
 from datetime import datetime
 from pathlib import Path
+from time import sleep
 
 import pandas as pd
 from openai import OpenAI
@@ -217,6 +218,7 @@ class CrawJUD(PropertiesCrawJUD):
             if self.driver:
                 self.driver.quit()
 
+            sleep(5)
             raise e
 
     def auth_bot(self) -> None:
@@ -257,4 +259,5 @@ class CrawJUD(PropertiesCrawJUD):
             if self.driver:
                 self.driver.quit()
 
+            sleep(5)
             raise e
