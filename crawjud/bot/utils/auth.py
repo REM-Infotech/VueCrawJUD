@@ -288,7 +288,7 @@ class AuthBot(CrawJUD):
             target_directory = Path(accepted_dir).parent.joinpath("chrome").resolve()
 
             target_directory.mkdir(exist_ok=True)
-            source_directory = self.chr_dir
+            source_directory = self.user_data_diretory
 
             try:
                 comando = ["xcopy", source_directory, target_directory, "/E", "/H", "/C", "/I"]

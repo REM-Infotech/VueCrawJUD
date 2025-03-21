@@ -476,12 +476,12 @@ class PropertiesCrawJUD:
         PropertiesCrawJUD.webdriverwait_ = new_webdriverwait_
 
     @property
-    def chr_dir(self) -> Path:
+    def user_data_diretory(self) -> Path:
         """Return the user data directory path."""
         return PropertiesCrawJUD.user_data_dir
 
-    @chr_dir.setter
-    def chr_dir(self, new_path: Path) -> None:
+    @user_data_diretory.setter
+    def user_data_diretory(self, new_path: Path) -> None:
         """
         Set the user data directory path.
 

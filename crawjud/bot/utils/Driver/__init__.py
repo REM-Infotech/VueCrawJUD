@@ -13,16 +13,22 @@ from os import getcwd, path
 from pathlib import Path
 
 import requests
+from selenium.webdriver import (
+    Chrome,  # noqa: F401
+    Firefox,  # noqa: F401
+)
+from selenium.webdriver.chrome.options import Options as ChromeOptions  # noqa: F401
+from selenium.webdriver.firefox.options import Options as FireFoxOptions  # noqa: F401
 from selenium.webdriver.remote.webdriver import WebDriver
+from selenium.webdriver.support.wait import WebDriverWait
+from webdriver_manager.firefox import GeckoDriverManager  # noqa: F401
 
 from crawjud.bot.core import (
     BarColumn,
-    Chrome,
     CrawJUD,
     DownloadColumn,
     Group,
     Live,
-    Options,
     Panel,
     Progress,
     Service,
@@ -31,7 +37,6 @@ from crawjud.bot.core import (
     TimeElapsedColumn,
     TimeRemainingColumn,
     TransferSpeedColumn,
-    WebDriverWait,
 )
 
 if __name__ == "__main__":
@@ -99,7 +104,7 @@ class DriverBot(CrawJUD):
             if path_exist:
                 for root, _, __ in self.path_accepted.walk():
                     try:
-                        shutil.copytree(root, self.chr_dir)
+                        shutil.copytree(root, self.user_data_diretory)
                     except Exception:
                         err = traceback.format_exc()
                         self.logger.exception(err)
@@ -107,21 +112,28 @@ class DriverBot(CrawJUD):
             elif not path_exist:
                 self.path_accepted.mkdir(parents=True, exist_ok=True)
 
-    def add_options(self, chrome_options: Options) -> None:
+    def add_options(self, webdriver_options: FireFoxOptions | ChromeOptions) -> None:
         """Add options to the Chrome WebDriver instance."""
-        self.chr_dir = Path(self.pid_path).joinpath("chrome").resolve()
-        chrome_options.add_argument(f"user-data-dir={str(self.chr_dir)}")
+        path_profile = "chrome"
+        if isinstance(webdriver_options, FireFoxOptions):
+            path_profile = "firefox"
+
+        self.user_data_diretory = Path(self.pid_path).joinpath(path_profile).resolve()
+
+        self.user_data_diretory.mkdir(parents=True, exist_ok=True)
+
+        webdriver_options.add_argument(f"user-data-dir={str(self.user_data_diretory)}")
 
         list_args = self.list_args
         for argument in list_args:
-            chrome_options.add_argument(argument)
+            webdriver_options.add_argument(argument)
 
         this_path = Path(__file__).parent.resolve().joinpath("extensions")
         for root, _, files in this_path.walk():
             for file_ in files:
                 if ".crx" in file_:
                     path_plugin = str(root.joinpath(file_).resolve())
-                    chrome_options.add_extension(path_plugin)
+                    webdriver_options.add_extension(path_plugin)
 
         chrome_prefs = {
             "download.prompt_for_download": False,
@@ -131,7 +143,8 @@ class DriverBot(CrawJUD):
             "download.default_directory": f"{self.pid_path}",
         }
 
-        chrome_options.add_experimental_option("prefs", chrome_prefs)
+        if isinstance(webdriver_options, ChromeOptions):
+            webdriver_options.add_experimental_option("prefs", chrome_prefs)
 
     def driver_launch(self, message: str = "Inicializando WebDriver") -> tuple[WebDriver, WebDriverWait]:
         """
@@ -154,35 +167,49 @@ class DriverBot(CrawJUD):
             self.type_log = "log"
             self.prt()
 
-            chrome_options = Options()
+            if platform.system() == "Windows":
+                webdriver_options = ChromeOptions()
 
-            # chrome_options.binary_location = str(Path(getcwd()).joinpath("chrome-win64", "chrome.exe"))
+                # webdriver_options.binary_location = str(Path(getcwd()).joinpath("chrome-win64", "chrome.exe"))
 
-            self.create_path_accepted()
-            self.add_options(chrome_options)
+                self.create_path_accepted()
+                self.add_options(webdriver_options)
 
-            getdriver = SetupDriver(destination=self.pid_path)
-            path_chrome = None
-            if message != "Inicializando WebDriver":
-                version = getdriver.code_ver
-                chrome_name = f"chromedriver{version}"
-                if platform.system() == "Windows":
-                    chrome_name += ".exe"
+                getdriver = SetupDriver(destination=self.pid_path)
+                path_chrome = None
+                if message != "Inicializando WebDriver":
+                    version = getdriver.code_ver
+                    chrome_name = f"chromedriver{version}"
+                    if platform.system() == "Windows":
+                        chrome_name += ".exe"
 
-                existspath_ = self.pid_path.joinpath(chrome_name)
-                path_chrome = existspath_ if existspath_.exists() else None
+                    existspath_ = self.pid_path.joinpath(chrome_name)
+                    path_chrome = existspath_ if existspath_.exists() else None
 
-            if path_chrome is None:
-                path_chrome = self.pid_path.joinpath(getdriver()).resolve()
+                if path_chrome is None:
+                    path_chrome = self.pid_path.joinpath(getdriver()).resolve()
 
-            if platform.system() == "Linux":
-                path_chrome.chmod(0o777)
+                if platform.system() == "Linux":
+                    path_chrome.chmod(0o777)
 
-            serve = Service(path_chrome)
-            driver = Chrome(service=serve, options=chrome_options)
+                serve = Service(path_chrome)
+                driver = Chrome(service=serve, options=webdriver_options)
 
-            wait = WebDriverWait(driver, 20, 0.01)
-            driver.delete_all_cookies()
+                wait = WebDriverWait(driver, 20, 0.01)
+                driver.delete_all_cookies()
+
+            elif platform.system() == "Linux":
+                firefox_options = FireFoxOptions()
+                firefox_options.binary_location = "/usr/bin/firefox"
+                self.create_path_accepted()
+                self.add_options(firefox_options)
+
+                geckodriver = GeckoDriverManager().install()
+                Path(geckodriver).chmod(0o777)
+                serve = Service(geckodriver)
+                driver = Firefox(service=serve, options=firefox_options)
+                wait = WebDriverWait(driver, 20, 0.01)
+                driver.delete_all_cookies()
 
             self.message = "WebDriver inicializado"
             self.type_log = "log"
