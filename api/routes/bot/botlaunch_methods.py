@@ -21,7 +21,7 @@ from quart_jwt_extended import get_jwt_identity
 from werkzeug.utils import secure_filename  # noqa: F401
 from wtforms import BooleanField, FieldList, FileField, FormField, MultipleFileField, TimeField  # noqa: F401
 
-from crawjud.forms import BotForm
+# from crawjud.forms import BotForm
 from crawjud.misc import (
     generate_pid,  # noqa: F401
 )
@@ -236,7 +236,7 @@ async def perform_submited_form(
 async def setup_task_worker(
     id_: int,
     pid: str,
-    form: BotForm,
+    form: dict,
     system: str,
     typebot: str,
     bot_info: BotsCrawJUD,
@@ -336,11 +336,3 @@ async def setup_task_worker(
     elif is_started != 200:
         await flash("Erro ao iniciar a execução!", "error")
         return await make_response(jsonify(pid=pid), 200)
-
-
-async def handle_form_errors(form: BotForm) -> None:
-    """Handle form validation errors."""
-    if form.errors:
-        for field_err in form.errors:
-            for error in form.errors[field_err]:
-                await flash(f"Erro: {error}", "error")

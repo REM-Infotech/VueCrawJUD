@@ -26,7 +26,8 @@ from quart_jwt_extended import (  # noqa: F401
 )
 
 from api import db
-from crawjud.forms import SearchExec as SearchExec
+
+# from crawjud.forms import SearchExec as SearchExec
 from crawjud.misc import generate_signed_url
 from crawjud.models import Executions, Users
 from crawjud.models import SuperUser as SuperUser

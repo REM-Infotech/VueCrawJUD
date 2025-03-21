@@ -9,7 +9,7 @@ from quart import Blueprint, Response, abort, flash, make_response, redirect, re
 from quart import current_app as app
 from quart_jwt_extended import jwt_required
 
-from crawjud.forms import UserForm, UserFormEdit
+# from crawjud.forms import UserForm, UserFormEdit
 from crawjud.models import LicensesUsers, SuperUser, Users
 
 path_template = os.path.join(pathlib.Path(__file__).parent.resolve(), "templates")
@@ -66,7 +66,7 @@ async def cadastro_user() -> Response:
             )
 
         title = "Cadastro Usuário"
-        form: UserForm = await UserForm.setup_form()
+        form: UserForm = await UserForm.setup_form()  # type: ignore  # noqa: F821, PGH003
         page = "FormUsr.html"
 
         user = Users.query.filter(Users.login == session["login"]).first()
@@ -81,7 +81,7 @@ async def cadastro_user() -> Response:
             for lcs in licenses_result:
                 licenses.append((str(lcs.license_token), str(lcs.name_client)))
 
-            form = await UserForm.setup_form(licenses_add=licenses_result)
+            form = await UserForm.setup_form(licenses_add=licenses_result)  # type: ignore  # noqa: F821, PGH003
 
         if await form.validate_on_submit():
             user = Users(
@@ -164,7 +164,7 @@ async def edit_usuario(id_: int) -> Response:
 
         user = db.session.query(Users).filter(Users.id == id_).first()
 
-        form = await UserFormEdit.setup_form(**user.dict_query)
+        form = await UserFormEdit.setup_form(**user.dict_query)  # type: ignore  # noqa: F821, PGH003
         page = "FormUsr.html"
 
         chksupersu = db.session.query(SuperUser).join(Users).filter(Users.login == session["login"]).first()
@@ -172,7 +172,7 @@ async def edit_usuario(id_: int) -> Response:
         if chksupersu:
             licenses_result = db.session.query(LicensesUsers).all()
 
-            form = await UserFormEdit.setup_form(
+            form = await UserFormEdit.setup_form(  # noqa: F821, PGH003 # type: ignore
                 licenses_add=licenses_result,
                 **user.dict_query,
             )

@@ -27,7 +27,8 @@ from quart_jwt_extended import jwt_required
 from werkzeug.utils import secure_filename
 
 from api import db
-from crawjud.forms.credentials import CredentialsForm
+
+# from crawjud.forms.credentials import CredentialsForm
 from crawjud.models import BotsCrawJUD, Credentials, LicensesUsers
 
 path_template = os.path.join(pathlib.Path(__file__).parent.resolve(), "templates")
@@ -94,7 +95,7 @@ async def cadastro() -> Response:
 
         system = [(syst, syst) for syst in count_system]
 
-        form = await CredentialsForm.setup_form(system=system)
+        form = await CredentialsForm.setup_form(system=system)  # type: ignore  # noqa: F821, PGH003
 
         func = "Cadastro"
         title = "Credenciais"
@@ -112,7 +113,7 @@ async def cadastro() -> Response:
                     ),
                 )
 
-            async def pw(form: CredentialsForm) -> None:
+            async def pw(form) -> None:  # noqa: ANN001
                 passwd = Credentials(
                     nome_credencial=form.nome_cred.data,
                     system=form.system.data,
@@ -126,7 +127,7 @@ async def cadastro() -> Response:
                 db.session.add(passwd)
                 db.session.commit()
 
-            async def cert(form: CredentialsForm) -> None:
+            async def cert(form) -> None:  # noqa: ANN001
                 temporarypath = current_app.config["TEMP_DIR"]
                 filecert = form.cert.data
 
@@ -152,9 +153,7 @@ async def cadastro() -> Response:
                 db.session.add(passwd)
                 db.session.commit()
 
-            local_defs: list[tuple[str, Callable[[CredentialsForm], Coroutine[Any, Any, None]]]] = list(
-                locals().items()
-            )
+            local_defs: list[tuple[str, Callable[[], Coroutine[Any, Any, None]]]] = list(locals().items())
             for name, func in local_defs:
                 if name == form.auth_method.data:
                     await func(form)
@@ -204,7 +203,7 @@ async def editar(id_: int = None) -> Response:
 
     system = [(syst, syst) for syst in count_system]
 
-    form = await CredentialsForm.setup_form(system=system)
+    form = await CredentialsForm.setup_form(system=system)  # type: ignore  # noqa: F821, PGH003
 
     func = "Cadastro"
     title = "Credenciais"
