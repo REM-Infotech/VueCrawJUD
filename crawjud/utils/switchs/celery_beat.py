@@ -11,7 +11,7 @@ from termcolor import colored
 from tqdm import tqdm
 
 from api.config import StoreService, running_servers
-from crawjud.core.watch import monitor_log
+from crawjud.utils.watch import monitor_log
 
 
 async def start() -> None:

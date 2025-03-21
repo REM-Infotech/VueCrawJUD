@@ -1,12 +1,16 @@
 """CrawJUD Robots Process Automation Application."""
 
 import asyncio
+import warnings
+from os import environ
 from pathlib import Path
 from threading import Event
 from time import sleep
 from typing import Callable, Dict
 
 import inquirer
+import quart_flask_patch  # noqa: F401
+from celery import Celery
 from clear import clear
 from rich import print as printf  # noqa: F401
 from rich.live import Live
@@ -16,11 +20,12 @@ from socketio import AsyncServer
 from termcolor import colored
 from tqdm import tqdm
 
+from api import app
 from api.config import StoreService as StoreService
 from api.config import running_servers
-from crawjud.core import create_app
 from crawjud.manager import HeadCrawjudManager
 from crawjud.types import app_name
+from crawjud.utils import make_celery  # noqa: F401
 
 io = AsyncServer(
     async_mode="asgi",
@@ -28,6 +33,33 @@ io = AsyncServer(
     ping_interval=25,
     ping_timeout=10,
 )
+
+
+warnings.filterwarnings("ignore", category=RuntimeWarning, module="google_crc32c")
+
+
+values = environ.get
+is_init = Path("is_init.txt").resolve()
+
+
+async def create_celery_app() -> Celery:
+    """Load configuration settings into the Quart application.
+
+    Args:
+        app: The Quart application instance to configure
+
+    Returns:
+        None
+
+    """
+    async with app.app_context():
+        celery = None
+        celery = await make_celery(app)
+        celery.set_default()
+        app.extensions["celery"] = celery
+        celery.autodiscover_tasks(["crawjud.bot", "crawjud.utils"])
+
+    return celery
 
 
 class MasterApp(HeadCrawjudManager):
@@ -41,7 +73,7 @@ class MasterApp(HeadCrawjudManager):
         self.event_stop = Event()
         with Live(Spinner("dots", text="[bold yellow]Starting application server"), refresh_per_second=10) as live:
             live.update(Spinner("dots", text="[bold yellow]Starting application server"))
-            self.app, self.asgi, self.celery = asyncio.run(create_app())
+            self.app, self.asgi, self.celery = asyncio.run(create_celery_app())
             live.update(Text("✅ Application server started.", style="bold green"))
 
     def __init__(self, **kwargs: str) -> None:
@@ -193,7 +225,7 @@ class MasterApp(HeadCrawjudManager):
         )
         tqdm.write(file_path.as_uri())
         if file_path.exists():
-            from crawjud.core.watch import monitor_log
+            from crawjud.utils.watch import monitor_log
 
             monitor_log(file_path=file_path)
             tqdm.write(colored("[INFO] Log file closed.", "yellow", attrs=["bold"]))

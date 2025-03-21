@@ -1,12 +1,16 @@
 """Quart application package."""
 
 import re
+from datetime import timedelta
 from importlib import import_module
 from os import getenv
+from pathlib import Path
 
+import aiofiles
 import quart_flask_patch  # noqa: F401
 from flask_mail import Mail
 from flask_sqlalchemy import SQLAlchemy
+from flask_talisman import Talisman
 from quart import Quart
 from quart_cors import cors
 from quart_jwt_extended import JWTManager
@@ -18,6 +22,54 @@ app = Quart(__name__)
 mail = Mail()
 jwt = JWTManager()
 db = SQLAlchemy()
+tlsm = Talisman()
+
+
+async def security_config(app: Quart) -> None:
+    """Configure the application security settings."""
+    # # Configure the Content Security Policy (CSP) for the application.
+    tlsm.init_app(
+        app,
+        content_security_policy=app.config["CSP"],
+        session_cookie_http_only=True,
+        session_cookie_samesite="Lax",
+        strict_transport_security=True,
+        strict_transport_security_max_age=timedelta(days=31).max.seconds,
+        x_content_type_options=True,
+    )
+
+
+async def database_start(app: Quart) -> None:
+    """Initialize and configure the application database.
+
+    This function performs the following tasks:
+    1. Checks if the current server exists in the database
+    2. Creates a new server entry if it doesn't exist
+    3. Initializes all database tables
+
+    Args:
+        app (Quart): The Quart application instance
+
+    Returns:
+        None
+
+    Note:
+        This function requires the following environment variables:
+        - NAMESERVER: The name of the server
+        - HOSTNAME: The address of the server
+
+    """
+    from crawjud.models import init_database
+
+    if not Path("is_init.txt").exists():
+        async with aiofiles.open("is_init.txt", "w") as f:
+            await f.write(f"{await init_database(app, db)}")
+
+    from crawjud.models import Users
+
+    if not db.engine.dialect.has_table(db.engine.connect(), Users.__tablename__):
+        async with aiofiles.open("is_init.txt", "w") as f:
+            await f.write(f"{await init_database(app, db)}")
 
 
 async def register_routes(app: Quart) -> None:
@@ -61,9 +113,6 @@ async def register_routes(app: Quart) -> None:
 async def init_extensions(app: Quart) -> AsyncServer:
     """Initialize and configure the application extensions."""
     from crawjud.utils import check_allowed_origin
-
-    from .database import database_start
-    from .security import security_config
 
     host_redis = getenv("REDIS_HOST")
     pass_redis = getenv("REDIS_PASSWORD")

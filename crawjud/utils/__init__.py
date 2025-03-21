@@ -1,5 +1,7 @@
 """Miscellaneous utilities and helpers for the CrawJUD-Bots application."""
 
+import subprocess
+
 from dotenv_vault import load_dotenv
 
 from .check_cors import check_allowed_origin
@@ -16,8 +18,23 @@ from .status import (
     makezip,
 )
 
+
+def get_hostname() -> str:
+    """Get the hostname of the current machine."""
+    return subprocess.run(
+        [
+            "powershell",
+            "hostname",
+        ],
+        capture_output=True,
+        text=True,
+        check=False,
+    ).stdout.strip()
+
+
 signed_url_lifetime = 300
 __all__ = [
+    get_hostname,
     worker_name_generator,
     DatabaseScheduler,
     GeoLoc,

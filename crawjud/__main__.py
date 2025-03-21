@@ -3,7 +3,7 @@
 import argparse
 import sys
 
-from crawjud.core.main import main_server
+from crawjud.main import main_server
 
 if __name__ == "__main__":
     argv = sys.argv[1:]
