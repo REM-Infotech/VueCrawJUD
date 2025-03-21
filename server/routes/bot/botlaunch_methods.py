@@ -137,7 +137,8 @@ async def handle_credentials(value: str, data: dict, system: str, files: dict) -
 async def get_bot_info(db: SQLAlchemy, id_: int) -> BotsCrawJUD | None:
     """Retrieve bot information from the database."""
     license_token = await license_user(get_jwt_identity(), app.extensions["sqlalchemy"])
-    return (
+
+    result = (
         db.session.query(BotsCrawJUD)
         .select_from(LicensesUsers)
         .join(LicensesUsers.bots)
@@ -145,6 +146,8 @@ async def get_bot_info(db: SQLAlchemy, id_: int) -> BotsCrawJUD | None:
         .filter(BotsCrawJUD.id == id_)
         .first()
     )
+
+    return result
 
 
 async def get_form_data(

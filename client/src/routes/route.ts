@@ -1,7 +1,6 @@
 import { useModal } from "bootstrap-vue-next";
 import jQuery from "jquery";
 import { createRouter, createWebHistory } from "vue-router";
-import { api } from "../main";
 const $ = jQuery;
 
 const routes = [
@@ -44,33 +43,6 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(),
   routes,
-});
-
-router.beforeEach(async (to, from, next) => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { show, hide } = useModal("modal-load");
-
-  const isAuth = !!sessionStorage.getItem("token");
-
-  try {
-    await api.get("/");
-  } catch (response) {
-    if (to.meta.requiresAuth) {
-      if (!isAuth || response.status === 401 || response.status === 422) {
-        if (!isAuth) {
-          sessionStorage.setItem("message", "É necessário fazer login para acessar essa página!");
-        } else if (response.status === 401 || response.status === 422) {
-          sessionStorage.setItem("message", "Sessão expirada, faça login novamente!");
-        }
-
-        sessionStorage.removeItem("token");
-
-        return next({ name: "login" });
-      }
-    }
-  }
-  show();
-  next();
 });
 
 // Global afterEach hook para gerenciar a classe do app

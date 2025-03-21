@@ -6,15 +6,11 @@ const $ = jQuery;
 
 export default function () {
   const { show } = useModal("ModalMessage");
+
   async function logout(router: Router) {
-    try {
-      const refreshToken = sessionStorage.getItem("token");
-
-      sessionStorage.setItem("message", "Logout Efetuado com sucesso!");
-
-      if (refreshToken) {
-        const response = await api.post("/logout");
-
+    api
+      .post("/logout")
+      .then((response) => {
         if (response.status === 200 || response.status === 401) {
           sessionStorage.removeItem("token");
           router.push({ name: "login" });
@@ -22,20 +18,30 @@ export default function () {
 
         sessionStorage.removeItem("token");
         router.push({ name: "login" });
-      }
-    } catch {
-      // console.log(error);
-      sessionStorage.removeItem("token");
-      router.push({ name: "login" });
-    }
+
+        $("#message").text("Logout Efetuado com sucesso!");
+        show();
+      })
+      .catch((response) => {
+        if (response.status === 200 || response.status === 401) {
+          sessionStorage.removeItem("token");
+          router.push({ name: "login" });
+        }
+
+        $("#message").text(response.data.message);
+        show();
+
+        sessionStorage.removeItem("token");
+        router.push({ name: "login" });
+      });
   }
 
   async function authenticate(router: Router) {
-    try {
-      const login = $("#login").val();
-      const password = $("#password").val();
+    const login = $("#login").val();
+    const password = $("#password").val();
 
-      const response = await api.post(
+    api
+      .post(
         "/login",
         {
           login: login,
@@ -43,27 +49,31 @@ export default function () {
           remember_me: $("#gridCheck").is(":checked"),
         },
         {
-          headers: { "Content-Type": "application/json", Authorization: "" },
+          headers: {
+            "Content-Type": "application/json",
+          },
           withCredentials: true,
           withXSRFToken: true,
           xsrfCookieName: "access_token_cookie",
         },
-      );
+      )
+      .then((response) => {
+        if (response.status === 200) {
+          const data: Record<string, string> = response.data as Record<string, string>;
+          sessionStorage.setItem("token", data.token);
+          sessionStorage.setItem("x-csrf-token", data["access_csrf"]);
 
-      if (response.status === 200) {
-        const data: Record<string, string> = response.data as Record<string, string>;
-        sessionStorage.setItem("token", data.token);
+          console.log(data["access_csrf"]);
 
-        sessionStorage.setItem("message", "Login Efetuado com sucesso!");
+          sessionStorage.setItem("message", "Login Efetuado com sucesso!");
 
-        router.push({ name: "index" });
-      }
-    } catch (error) {
-      // console.log(error);
-
-      $("#message").text(error.data.message);
-      show();
-    }
+          router.push({ name: "index" });
+        }
+      })
+      .catch((error) => {
+        $("#message").text(error.data.message);
+        show();
+      });
   }
 
   return { logout, authenticate };

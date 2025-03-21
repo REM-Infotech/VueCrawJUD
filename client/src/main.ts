@@ -34,6 +34,7 @@ export const api = axios.create({
     "Content-Type": "application/x-www-form-urlencoded", // Use a "simple" header if possible
   },
   withCredentials: true,
+  withXSRFToken: true,
   xsrfCookieName: "access_token_cookie",
   xsrfHeaderName: "X-CSRF-TOKEN",
 });

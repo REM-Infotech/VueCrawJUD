@@ -48,6 +48,11 @@ async def acquire_credentials() -> Response:
     try:
         db: SQLAlchemy = app.extensions["sqlalchemy"]
         json_data: dict[str, str] = await request.json
+        form_data = request.form
+
+        if not json_data:
+            json_data = await form_data
+
         system = json_data["system"]
 
         form_cfg = json_data["form_cfg"]
@@ -85,6 +90,11 @@ async def acquire_systemclient() -> Response:
     try:
         db: SQLAlchemy = app.extensions["sqlalchemy"]
         json_data: dict[str, str] = await request.json
+        form_data = request.form
+
+        if not json_data:
+            json_data = await form_data
+
         system = json_data["system"]
         typebot = json_data["type"]
 

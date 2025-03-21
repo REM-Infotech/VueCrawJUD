@@ -15,6 +15,7 @@ import { useRouter } from "vue-router";
 
 let dt;
 const { show } = useModal("modal-load");
+const { show: show_message } = useModal("ModalMessage");
 const TitleForm = ref();
 const selected = ref(null);
 const need_files = ref(true);
@@ -70,6 +71,8 @@ const validate_form = () => {
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const setup_form = async (_e) => {
   const item = JSON.parse(sessionStorage.getItem("current_bot") as string);
+  let response_creds;
+  let response_state_client;
   TitleForm.value = item.display_name;
   if (item.form_cfg === "only_auth") {
     need_files.value = false;
@@ -81,35 +84,68 @@ const setup_form = async (_e) => {
     bot_protocolo.value = true;
   }
 
-  const response_creds = await api.post(
-    `/acquire_credentials`,
-    {
-      system: item.system,
-      state: item.state,
-      client: item.client,
-      form_cfg: item.form_cfg,
-    },
-    {
-      withXSRFToken: true,
-      withCredentials: true,
-      xsrfCookieName: "csrf_access_token",
-    },
-  );
-  const response_state_client = await api.post(
-    "/acquire_systemclient",
-    {
-      system: item.system,
-      state: item.state,
-      client: item.client,
-      type: item.type,
-      form_cfg: item.form_cfg,
-    },
-    {
-      withXSRFToken: true,
-      withCredentials: true,
-      xsrfCookieName: "csrf_access_token",
-    },
-  );
+  try {
+    response_creds = await api.post(
+      `/acquire_credentials`,
+      {
+        system: item.system,
+        state: item.state,
+        client: item.client,
+        form_cfg: item.form_cfg,
+      },
+      {
+        withXSRFToken: true,
+        withCredentials: true,
+        headers: {
+          "X-CSRF-TOKEN": sessionStorage.getItem("access_csrf"),
+        },
+      },
+    );
+  } catch (response) {
+    // Check if response.status is 4** error and not 404
+    if (
+      response.response.status >= 400 &&
+      response.response.status < 500 &&
+      response.response.status != 404
+    ) {
+      $("#message").text("Sessão expirada! Faça login novamente.");
+      router.push({ name: "login" });
+      show_message();
+    }
+    return;
+  }
+
+  try {
+    response_state_client = await api.post(
+      "/acquire_systemclient",
+      {
+        system: item.system,
+        state: item.state,
+        client: item.client,
+        type: item.type,
+        form_cfg: item.form_cfg,
+      },
+      {
+        withXSRFToken: true,
+        withCredentials: true,
+        headers: {
+          "X-CSRF-TOKEN": sessionStorage.getItem("access_csrf"),
+        },
+      },
+    );
+  } catch (response) {
+    // Check if response.status is 4** error and not 404
+    if (
+      response.response.status >= 400 &&
+      response.response.status < 500 &&
+      response.response.status != 404
+    ) {
+      $("#message").text("Sessão expirada! Faça login novamente.");
+      router.push({ name: "login" });
+      show_message();
+    }
+    return;
+  }
 
   const cred_info = response_creds.data.info;
   const state_client_info = response_state_client.data.info;
@@ -142,17 +178,32 @@ async function peformSubmit(event: Event) {
   const system: string = item.system.toLowerCase();
   const type: string = item.type.toLowerCase();
 
-  const response = await api.post(`/bot/${item.id}/${system}/${type}`, formData, {
-    withXSRFToken: true,
-    withCredentials: true,
-    xsrfCookieName: "csrf_access_token",
-  });
-  if (response.status === 200) {
-    const pid = response.data.pid;
-    router.push({ name: "logs_bot", params: { pid: pid } });
+  api
+    .post(`/bot/${item.id}/${system}/${type}`, formData, {
+      withXSRFToken: true,
+      withCredentials: true,
+      // xsrfCookieName: "csrf_access_token",
+    })
+    .then((response) => {
+      if (response.status === 200) {
+        const pid = response.data.pid;
+        router.push({ name: "logs_bot", params: { pid: pid } });
 
-    $("#message").text(`Execução iniciada! PID: ${pid}`);
-  }
+        $("#message").text(`Execução iniciada! PID: ${pid}`);
+      }
+    })
+    .catch((response) => {
+      // check if response.status is 4** error
+      if (
+        response.response.status >= 400 &&
+        response.response.status < 500 &&
+        response.response.status != 404
+      ) {
+        $("#message").text("Sessão expirada! Faça login novamente.");
+        router.push({ name: "login" });
+        show_message();
+      }
+    });
 }
 </script>
 

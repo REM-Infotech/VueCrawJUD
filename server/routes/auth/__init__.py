@@ -17,9 +17,13 @@ from quart import (
 )
 from quart_jwt_extended import (  # noqa: F401
     create_access_token,
+    create_refresh_token,
+    decode_token,
+    get_csrf_token,
     get_jwt_identity,
     jwt_refresh_token_required,
     set_access_cookies,
+    set_refresh_cookies,
     unset_jwt_cookies,
 )
 
@@ -75,7 +79,17 @@ async def login() -> Response:
         if usr and usr.check_password(form.password):
             access_token = create_access_token(identity=usr)
 
-            resp = await make_response(jsonify({"token": access_token, "message": "Login efetuado com sucesso!"}))
+            access_token = create_access_token(identity=usr)
+            refresh_token = create_refresh_token(identity=usr)
+
+            # token = decode_token(access_token)
+
+            resp = await make_response(
+                jsonify({
+                    "token": access_token,
+                    "message": "Login efetuado com sucesso!",
+                })
+            )
             # if request.headers.get("X-Forwarded-For"):
             #     # Confie no IP fornecido pelo Cloudflare
             #     resp.headers["X-Forwarded-For"] = request.headers.get("X-Forwarded-For").split(",")[0]
@@ -88,10 +102,13 @@ async def login() -> Response:
             # # Ajuste o esquema conforme necessário
             # if request.headers.get("X-Forwarded-Proto") == "https":
             #     resp.headers["X-Forwarded-Proto"] = "https"
+            # Create the tokens we will be sending back to the user
 
+            # Set the JWT cookies in the response
             resp.status_code = 200
-            resp.set_cookie("access_token_cookie", access_token)
             set_access_cookies(resp, access_token)
+            set_refresh_cookies(resp, refresh_token)
+
             return resp
 
         resp = jsonify({"message": "Usuário ou senha incorretos!"})

@@ -15,7 +15,6 @@ const { show: show_message } = useModal("ModalMessage");
 let items = [];
 import { $, api } from "../main";
 import { faDownload, faEye } from "@fortawesome/free-solid-svg-icons";
-import { AxiosResponse } from "axios";
 
 const data_ = ref(false);
 const router = useRouter();
@@ -67,22 +66,32 @@ const download_file = async (file: string) => {
   show_load();
 
   setTimeout(async () => {
-    try {
-      const response: AxiosResponse = await api.get(`/executions/download/${file}`);
-      const data = response.data;
-      const url: string = data.url;
-      window.open(url, "_blank");
+    api
+      .get(`/executions/download/${file}`)
+      .then((response) => {
+        const data = response.data;
+        const url: string = data.url;
+        window.open(url, "_blank");
 
-      setTimeout(() => {
-        hide_load();
-      }, 500);
+        setTimeout(() => {
+          hide_load();
+        }, 500);
 
-      $("#message").text(`Download do arquivo "${file}" iniciado!`);
-      show_message();
-      //
-    } catch (err) {
-      console.error(err);
-    }
+        $("#message").text(`Download do arquivo "${file}" iniciado!`);
+        show_message();
+      })
+      .catch((response) => {
+        // check if response is 4** error and not 404
+        if (
+          response.response.status >= 400 &&
+          response.response.status < 500 &&
+          response.response.status !== 404
+        ) {
+          $("#message").text("Sessão expirada! Faça login novamente.");
+          router.push({ name: "login" });
+          show_message();
+        }
+      });
   }, 1000);
 };
 </script>
