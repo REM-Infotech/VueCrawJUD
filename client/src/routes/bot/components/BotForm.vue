@@ -123,13 +123,25 @@ const setup_form = async (_e) => {
   }
 
   try {
-    response_state_client = await api.post(`/acquire_systemclient`, {
-      system: item.system,
-      state: item.state,
-      client: item.client,
-      form_cfg: item.form_cfg,
-      type: item.type,
-    });
+    response_state_client = await api.post(
+      `/acquire_systemclient`,
+      {
+        system: item.system,
+        state: item.state,
+        client: item.client,
+        form_cfg: item.form_cfg,
+        type: item.type,
+      },
+      {
+        headers: {
+          "x-csrf-token": sessionStorage.getItem("x-csrf-token") || "",
+        },
+        withXSRFToken(config) {
+          console.log(config);
+          return true;
+        },
+      },
+    );
   } catch (response) {
     // Check if response.status is 4** error and not 404
 

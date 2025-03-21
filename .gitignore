@@ -3,6 +3,7 @@ __pycache__/
 *.py[cod]
 *$py.class
 Temp/
+temp/
 # C extensions
 *.so
 change_msg.py

@@ -26,7 +26,7 @@ class MenuManager:
                 "Quart Application",
                 "Celery Worker",
                 "Celery Beat",
-                "Start All Services",
+                "Start Services",
                 "Get Executions Logs",
                 "Clear Prompt",
                 "Close Server",

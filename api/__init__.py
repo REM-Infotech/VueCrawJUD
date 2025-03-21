@@ -8,6 +8,7 @@ from pathlib import Path
 
 import aiofiles
 import quart_flask_patch  # noqa: F401
+from celery import Celery
 from flask_mail import Mail
 from flask_sqlalchemy import SQLAlchemy
 from flask_talisman import Talisman
@@ -16,13 +17,35 @@ from quart_cors import cors
 from quart_jwt_extended import JWTManager
 from redis import Redis
 from socketio import ASGIApp, AsyncRedisManager, AsyncServer
-from uvicorn.middleware.proxy_headers import ProxyHeadersMiddleware  # noqa: F401
+from uvicorn.middleware.proxy_headers import ProxyHeadersMiddleware
 
 app = Quart(__name__)
 mail = Mail()
 jwt = JWTManager()
 db = SQLAlchemy()
 tlsm = Talisman()
+
+
+async def create_celery_app() -> Celery:
+    """Load configuration settings into the Quart application.
+
+    Args:
+        app: The Quart application instance to configure
+
+    Returns:
+        None
+
+    """
+    from crawjud.utils import make_celery
+
+    async with app.app_context():
+        celery = None
+        celery = await make_celery(app)
+        celery.set_default()
+        app.extensions["celery"] = celery
+        celery.autodiscover_tasks(["crawjud.bot", "crawjud.utils"])
+
+    return celery
 
 
 async def security_config(app: Quart) -> None:
@@ -135,6 +158,7 @@ async def init_extensions(app: Quart) -> AsyncServer:
     async with app.app_context():
         await database_start(app)
         await security_config(app)
+        await create_celery_app()
 
     app.extensions["redis"] = Redis(host=host_redis, port=port_redis, password=pass_redis, db=database_redis)
     app.extensions["socketio"] = io

@@ -47,16 +47,18 @@ const router = createRouter({
 
 // Global afterEach hook para gerenciar a classe do app
 router.afterEach((to) => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { show, hide } = useModal("modal-load");
   if (to.meta.requiresAuth) {
     if ($("#app").hasClass("bg-indigo")) {
       $("#app").removeClass("bg-indigo");
       $("#app").addClass("bg-purple");
     }
+
+    show();
+
     setTimeout(() => {
       hide();
-    }, 500);
+    }, 1000);
   } else {
     if ($("#app").hasClass("bg-purple")) {
       $("#app").removeClass("bg-purple");
