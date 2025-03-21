@@ -31,7 +31,7 @@ def monitor_log(file_name: str = None, file_path: Path = None) -> None:
     stop_event = Event()
 
     if not file_path:
-        file_path = Path(getcwd()).joinpath("crawjud", "logs", file_name)
+        file_path = Path(getcwd()).joinpath("logs", file_name)
 
     if not isinstance(file_path, Path):
         raise ValueError("file_path must be a pathlib.Path object.")

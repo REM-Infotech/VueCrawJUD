@@ -23,8 +23,8 @@ from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.support.wait import WebDriverWait
 from socketio import Client
 
-from api.logs import log_cfg
 from crawjud.types import SubDict, TypeValues
+from logs import log_cfg
 
 if TYPE_CHECKING:
     from crawjud.bot.Utils import ELAW_AME, ESAJ_AM, PJE_AM, PROJUDI_AM

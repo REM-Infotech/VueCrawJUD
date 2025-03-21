@@ -14,7 +14,7 @@ from api import create_app
 if __name__ == "__main__":
     clear()
     from api.config import DevelopmentConfig
-    from api.logs import log_cfg
+    from logs import log_cfg
 
     app = asyncio.run(create_app(DevelopmentConfig))
 
@@ -28,4 +28,3 @@ if __name__ == "__main__":
     config.logconfig_dict = cfg
 
     asyncio.run(hypercorn.asyncio.serve(app, config, mode="asgi"))
-    # uvicorn.run(app, host="0.0.0.0", port=5000)  # noqa: S104
