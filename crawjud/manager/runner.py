@@ -24,12 +24,12 @@ from rich.text import Text  # noqa: F401
 from socketio import ASGIApp
 from uvicorn import Config, Server
 
+from api.config import StoreService, running_servers
+from api.logs import log_cfg
 from crawjud.core.configurator import get_hostname
 from crawjud.core.watch import monitor_log
 from crawjud.types import app_name
 from crawjud.utils.gen_seed import worker_name_generator
-from server.config import StoreService, running_servers
-from server.logs import log_cfg
 
 printf = Console().print
 

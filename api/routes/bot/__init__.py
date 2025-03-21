@@ -241,7 +241,7 @@ async def botlaunch(id_: int, system: str, typebot: str) -> Response:
         db: SQLAlchemy = app.extensions["sqlalchemy"]
         bot_info = await get_bot_info(db, id_)
         if not bot_info:
-            return await make_response(jsonify(response="Acesso negado!"), 401)
+            return await make_response(jsonify(response="Erro ao iniciar"), 500)
 
         display_name = bot_info.display_name
         title = display_name  # noqa: F841

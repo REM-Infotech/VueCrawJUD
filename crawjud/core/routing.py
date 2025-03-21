@@ -31,16 +31,16 @@ async def register_routes(app: Quart) -> None:
     """
     async with app.app_context():
         # Dynamically import additional route modules as needed.
-        import_module("server.routes.logs", package=__package__)
+        import_module("api.routes.logs", package=__package__)
         import_module("crawjud.routes", package=__package__)
 
-    from server.auth import auth
-    from server.routes.bot import bot
-    from server.routes.config import admin, supersu, usr
-    from server.routes.credentials import cred
-    from server.routes.dashboard import dash
-    from server.routes.execution import exe
-    from server.routes.logs import logsbot
+    from api.routes.auth import auth
+    from api.routes.bot import bot
+    from api.routes.config import admin, supersu, usr
+    from api.routes.credentials import cred
+    from api.routes.dashboard import dash
+    from api.routes.execution import exe
+    from api.routes.logs import logsbot
 
     listBlueprints = [bot, auth, logsbot, exe, dash, cred, admin, supersu, usr]  # noqa: N806
 

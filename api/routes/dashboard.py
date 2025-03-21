@@ -16,8 +16,8 @@ from deep_translator import GoogleTranslator
 from quart import Blueprint, Response, abort, jsonify, make_response, render_template, request, session
 from quart_jwt_extended import jwt_required
 
+from api import db
 from crawjud.models import Executions, LicensesUsers, SuperUser, Users
-from server import db
 
 translator = GoogleTranslator(source="en", target="pt")
 

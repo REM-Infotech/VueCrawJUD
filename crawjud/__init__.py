@@ -16,11 +16,11 @@ from socketio import AsyncServer
 from termcolor import colored
 from tqdm import tqdm
 
+from api.config import StoreService as StoreService
+from api.config import running_servers
 from crawjud.core import create_app
 from crawjud.manager import HeadCrawjudManager
 from crawjud.types import app_name
-from server.config import StoreService as StoreService
-from server.config import running_servers
 
 io = AsyncServer(
     async_mode="asgi",

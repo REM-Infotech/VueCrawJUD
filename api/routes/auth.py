@@ -78,8 +78,6 @@ async def login() -> Response:
         usr = db.session.query(Users).filter(Users.login == form.login).first()
         if usr and usr.check_password(form.password):
             access_token = create_access_token(identity=usr)
-
-            access_token = create_access_token(identity=usr)
             refresh_token = create_refresh_token(identity=usr)
 
             # token = decode_token(access_token)
@@ -88,21 +86,9 @@ async def login() -> Response:
                 jsonify({
                     "token": access_token,
                     "message": "Login efetuado com sucesso!",
+                    "x-csrf-token": get_csrf_token(access_token),
                 })
             )
-            # if request.headers.get("X-Forwarded-For"):
-            #     # Confie no IP fornecido pelo Cloudflare
-            #     resp.headers["X-Forwarded-For"] = request.headers.get("X-Forwarded-For").split(",")[0]
-
-            # if request.headers.get("CF-Connecting-IP"):
-            #     # Confie no IP fornecido pelo Cloudflare
-            #     resp.headers["CF-Connecting-IP"] = request.headers.get("CF-Connecting-IP")
-            #     request.remote_addr = request.headers.get("CF-Connecting-IP")
-
-            # # Ajuste o esquema conforme necessário
-            # if request.headers.get("X-Forwarded-Proto") == "https":
-            #     resp.headers["X-Forwarded-Proto"] = "https"
-            # Create the tokens we will be sending back to the user
 
             # Set the JWT cookies in the response
             resp.status_code = 200

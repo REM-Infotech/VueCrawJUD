@@ -44,7 +44,7 @@ def log_cfg(
                 "format": "%(levelname)s:%(name)s:%(message)s",
             },
             "json": {
-                "()": "server.logs.handlers.JsonFormatter",
+                "()": "api.logs.handlers.JsonFormatter",
             },
         },
         "handlers": {
@@ -57,7 +57,7 @@ def log_cfg(
                 "backupCount": bkp_ct,
             },
             "redis_handler": {
-                "class": "server.logs.handlers.RedisHandler",
+                "class": "api.logs.handlers.RedisHandler",
                 "uri": getenv("REDIS_URL", "redis://localhost:6379/0"),
                 "level": log_level,
                 "formatter": "json",

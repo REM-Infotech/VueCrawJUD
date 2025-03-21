@@ -32,11 +32,10 @@ export const api = axios.create({
   headers: {
     // Note: Changing the Content-Type may avoid the preflight but could affect your API expectations.
     "Content-Type": "application/x-www-form-urlencoded", // Use a "simple" header if possible
+    "x-csrf-token": sessionStorage.getItem("x-csrf-token") || "",
   },
   withCredentials: true,
   withXSRFToken: true,
-  xsrfCookieName: "access_token_cookie",
-  xsrfHeaderName: "csrf_access_token",
 });
 
 // Add request interceptor for debugging

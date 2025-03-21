@@ -9,12 +9,12 @@ import hypercorn.run
 from clear import clear
 from trio import Path
 
-from server import create_app
+from api import create_app
 
 if __name__ == "__main__":
     clear()
-    from server.config import DevelopmentConfig
-    from server.logs import log_cfg
+    from api.config import DevelopmentConfig
+    from api.logs import log_cfg
 
     app = asyncio.run(create_app(DevelopmentConfig))
 

@@ -6,7 +6,7 @@ from quart import Quart
 from redis import Redis
 from socketio import AsyncRedisManager, AsyncServer
 
-from server import db, jwt, mail
+from api import db, jwt, mail
 
 
 async def init_extensions(app: Quart) -> AsyncServer:

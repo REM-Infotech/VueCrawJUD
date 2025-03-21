@@ -10,7 +10,7 @@ from pathlib import Path
 import aiofiles
 from quart import Quart
 
-from server import db
+from api import db
 
 
 async def database_start(app: Quart) -> None:

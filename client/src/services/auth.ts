@@ -61,9 +61,8 @@ export default function () {
         if (response.status === 200) {
           const data: Record<string, string> = response.data as Record<string, string>;
           sessionStorage.setItem("token", data.token);
-          sessionStorage.setItem("x-csrf-token", data["access_csrf"]);
-
-          console.log(data["access_csrf"]);
+          sessionStorage.setItem("x-csrf-token", data["x-csrf-token"]);
+          console.log(data["x-csrf-token"]);
 
           sessionStorage.setItem("message", "Login Efetuado com sucesso!");
 
@@ -71,6 +70,8 @@ export default function () {
         }
       })
       .catch((error) => {
+        console.log(error);
+
         $("#message").text(error.data.message);
         show();
       });

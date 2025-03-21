@@ -41,16 +41,16 @@ async def register_routes(app: Quart) -> None:
     """
     async with app.app_context():
         # Dynamically import additional route modules as needed.
-        import_module("server.routes.logs", package=__package__)
-        import_module("server.routes", package=__package__)
+        import_module("api.routes.logs", package=__package__)
+        import_module("api.routes", package=__package__)
 
-    from server.auth import auth
-    from server.routes.bot import bot
-    from server.routes.config import admin, supersu, usr
-    from server.routes.credentials import cred
-    from server.routes.dashboard import dash
-    from server.routes.execution import exe
-    from server.routes.logs import logsbot
+    from api.routes.auth import auth
+    from api.routes.bot import bot
+    from api.routes.config import admin, supersu, usr
+    from api.routes.credentials import cred
+    from api.routes.dashboard import dash
+    from api.routes.execution import exe
+    from api.routes.logs import logsbot
 
     listBlueprints = [bot, auth, logsbot, exe, dash, cred, admin, supersu, usr]  # noqa: N806
 
@@ -102,6 +102,7 @@ async def create_app(confg: object) -> ASGIApp:
         await register_routes(app)
 
     allowed_origins = [
+        "https://crawjud.reminfotech.net.br",
         re.compile(r"http://127\.0\.0\.1:\d*"),
         re.compile(r"http://\d*\.\d*\.\d*:\d*"),
         re.compile(r"http://localhost:\d*"),
@@ -119,6 +120,6 @@ async def create_app(confg: object) -> ASGIApp:
             allow_origin=allowed_origins,
             allow_credentials=True,
             allow_methods=["POST", "OPTIONS", "GET"],
-            allow_headers=["Content-Type", "Authorization"],
+            allow_headers=["Content-Type", "Authorization", "x-csrf-token", "X-CSRF-TOKEN"],
         ),
     )

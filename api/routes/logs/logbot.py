@@ -12,9 +12,9 @@ from datetime import datetime  # noqa: F401
 from pytz import timezone  # noqa: F401
 from socketio import AsyncServer  # noqa: F401
 
+from api import app
 from crawjud.utils import format_message_log, load_cache  # noqa: F401
 from crawjud.utils.status import TaskExec
-from server import app
 
 logger = logging.getLogger(__name__)
 
@@ -128,9 +128,9 @@ async def terminate_bot(
         None
 
     """
+    from api import db
     from crawjud.bot import WorkerBot
     from crawjud.models import ThreadBots
-    from server import db
 
     async with app.app_context():
         try:

@@ -3,8 +3,8 @@
 This module aggregates the blueprints for admin, supersu, and user configurations.
 """
 
-from server.routes.config.admin import admin
-from server.routes.config.superSu import supersu
-from server.routes.config.user import usr
+from api.routes.config.admin import admin
+from api.routes.config.superSu import supersu
+from api.routes.config.user import usr
 
 __all__ = [usr, admin, supersu]

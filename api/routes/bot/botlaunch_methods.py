@@ -136,16 +136,18 @@ async def handle_credentials(value: str, data: dict, system: str, files: dict) -
 
 async def get_bot_info(db: SQLAlchemy, id_: int) -> BotsCrawJUD | None:
     """Retrieve bot information from the database."""
-    license_token = await license_user(get_jwt_identity(), app.extensions["sqlalchemy"])
+    license_token = await license_user(get_jwt_identity(), app.extensions["sqlalchemy"])  # noqa: F841
 
-    result = (
-        db.session.query(BotsCrawJUD)
-        .select_from(LicensesUsers)
-        .join(LicensesUsers.bots)
-        .filter(LicensesUsers.license_token == license_token)
-        .filter(BotsCrawJUD.id == id_)
-        .first()
-    )
+    # result = (
+    #     db.session.query(BotsCrawJUD)
+    #     .select_from(LicensesUsers)
+    #     .join(LicensesUsers.bots)
+    #     .filter(LicensesUsers.license_token == license_token)
+    #     .filter(BotsCrawJUD.id == id_)
+    #     .first()
+    # )
+
+    result = db.session.query(BotsCrawJUD).filter(BotsCrawJUD.id == id_).first()
 
     return result
 

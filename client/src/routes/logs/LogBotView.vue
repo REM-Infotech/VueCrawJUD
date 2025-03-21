@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { io } from "socket.io-client";
+import { io as socketio } from "socket.io-client";
 
 import { onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
@@ -17,7 +17,7 @@ const router = useRouter();
 const pid = route.params.pid as string;
 let Pages;
 const percent_progress = document.getElementById("progress_info");
-const socket = io("http://localhost:5000/log", {
+const io = socketio("https://api.reminfotech.net.br/log", {
   extraHeaders: {
     pid: pid,
   },
@@ -55,14 +55,14 @@ onMounted(() => {
   show_message();
 });
 
-socket.on("disconnect", () => {
+io.on("disconnect", () => {
   console.log("Disconnected from crawjud");
 });
-socket.on("connect", function () {
-  socket.emit("join", { pid: pid });
+io.on("connect", function () {
+  io.emit("join", { pid: pid });
 });
 
-socket.on("log_message", function (data) {
+io.on("log_message", function (data) {
   var messagePid = data.pid;
 
   function updateElements(data) {
@@ -169,7 +169,7 @@ socket.on("log_message", function (data) {
 });
 
 const stop_execut = () => {
-  socket.emit("terminate_bot", { pid: pid });
+  io.emit("terminate_bot", { pid: pid });
   const ul_messages = $("#messages");
 
   const randomId = `id_${Math.random().toString(36).substring(2, 9)}`;
