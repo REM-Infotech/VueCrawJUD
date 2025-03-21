@@ -7,15 +7,12 @@ from importlib import import_module
 from quart import Blueprint, Response, abort, make_response, render_template
 from quart_jwt_extended import jwt_required
 
-from crawjud.decorators import check_privilegies
-
 path_template = os.path.join(pathlib.Path(__file__).parent.resolve(), "templates")
 supersu = Blueprint("supersu", __name__, template_folder=path_template)
 
 
 @supersu.route("/configurações_crawjud", methods=["GET"])
 @jwt_required
-@check_privilegies
 async def config() -> Response:
     """Render the configuration template for CrawJUD.
 

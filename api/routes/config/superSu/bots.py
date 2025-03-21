@@ -3,14 +3,11 @@
 from quart import Response, abort, make_response, render_template
 from quart_jwt_extended import jwt_required
 
-from crawjud.decorators import check_privilegies
-
 from . import supersu
 
 
 @supersu.route("/cadastro/cliente", methods=["GET", "POST"])
 @jwt_required
-@check_privilegies
 async def cadastro_bot() -> Response:
     """Render the client registration template.
 
@@ -31,7 +28,6 @@ async def cadastro_bot() -> Response:
 
 @supersu.route("/editar/cliente", methods=["GET", "POST"])
 @jwt_required
-@check_privilegies
 async def licencas_associadas() -> Response:
     """Render the client edit template.
 
