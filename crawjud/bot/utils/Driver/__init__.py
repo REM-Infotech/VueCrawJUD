@@ -114,15 +114,14 @@ class DriverBot(CrawJUD):
 
     def add_options(self, webdriver_options: FireFoxOptions | ChromeOptions) -> None:
         """Add options to the Chrome WebDriver instance."""
-        path_profile = "chrome"
-        if isinstance(webdriver_options, FireFoxOptions):
-            path_profile = "firefox"
+        if isinstance(webdriver_options, ChromeOptions):
+            path_profile = "chrome"
 
-        self.user_data_diretory = Path(self.pid_path).joinpath(path_profile).resolve()
+            self.user_data_diretory = Path(self.pid_path).joinpath(path_profile).resolve()
 
-        self.user_data_diretory.mkdir(parents=True, exist_ok=True)
+            self.user_data_diretory.mkdir(parents=True, exist_ok=True)
 
-        webdriver_options.add_argument(f"user-data-dir={str(self.user_data_diretory)}")
+            webdriver_options.add_argument(f"user-data-dir={str(self.user_data_diretory)}")
 
         list_args = self.list_args
         for argument in list_args:
@@ -200,6 +199,8 @@ class DriverBot(CrawJUD):
 
             elif platform.system() == "Linux":
                 firefox_options = FireFoxOptions()
+                Path("/root/geckoprofile").chmod(0o777)
+                firefox_options.profile = "/root/geckoprofile"
                 firefox_options.binary_location = "/usr/bin/firefox"
                 self.create_path_accepted()
                 self.add_options(firefox_options)
