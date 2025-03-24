@@ -5,12 +5,13 @@ Classes:
 
 """
 
+import asyncio
 from os import getenv
 from time import sleep
 from typing import Self
 
-import socketio
 from dotenv_vault import load_dotenv
+from socketio import AsyncSimpleClient
 
 from crawjud.bot.core import CrawJUD
 
@@ -46,11 +47,11 @@ class SendMessage(CrawJUD):
         }
 
         if status_bot != "Em Execução":
-            self.socket_message(data, "stop_bot")
+            asyncio.run(self.socket_message(data, "stop_bot"))
 
-        self.socket_message(data)
+        asyncio.run(self.socket_message(data))
 
-    def socket_message(self: Self, data: dict, event: str = "log_message") -> None:
+    async def socket_message(self: Self, data: dict, event: str = "log_message") -> None:
         """Emit log message to the socket with termination checks.
 
         Updates data with system info if termination patterns are detected and
@@ -62,28 +63,30 @@ class SendMessage(CrawJUD):
 
         """
         url = getenv("URL_WEB")
-        err = None
+        err = None  # noqa: F841
 
-        try:
-            # Verifica se já está conectado antes de tentar se conectar
-            if self.connected is False:
-                self.connect_socket(url)
-            sleep(0.5)
-            self.sio.emit(event, data, namespace="/log")
-            sleep(0.5)
-        except socketio.exceptions.BadNamespaceError as e:
-            err = self.badnamespace(e, url, event, data)
+        async with AsyncSimpleClient() as sio:
+            await sio.connect(url, namespace="/log")
+            await sio.emit(event, data)
 
-        except socketio.exceptions.ConnectionError as e:
-            err = self.connectionerror(e, url, event, data)
+        # try:
+        #     # Verifica se já está conectado antes de tentar se conectar
+        #     if self.connected is False:
+        #         self.connect_socket(url)
+        #     sleep(0.5)
+        #     self.sio.emit(event, data, namespace="/log")
+        #     sleep(0.5)
+        # except socketio.exceptions.BadNamespaceError as e:
+        #     err = self.badnamespace(e, url, event, data)
 
-        except Exception as e:
-            err = str(e)
+        # except socketio.exceptions.ConnectionError as e:
+        #     err = self.connectionerror(e, url, event, data)
 
-        if err:
-            self.logger.error(err)
+        # except Exception as e:
+        #     err = str(e)
 
-        sleep(0.5)
+        # if err:
+        #     self.logger.error(err)
 
     def badnamespace(self, e: Exception, url: str, event: str, data: dict) -> str:
         """Handle bad namespace error when emitting an event."""
