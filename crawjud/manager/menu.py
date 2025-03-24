@@ -23,10 +23,10 @@ class MenuManager:
             "server_options",
             message="Select an option",
             choices=[
+                "Start Services",
                 "Quart Application",
                 "Celery Worker",
                 "Celery Beat",
-                "Start Services",
                 "Get Executions Logs",
                 "Clear Prompt",
                 "Close Server",
