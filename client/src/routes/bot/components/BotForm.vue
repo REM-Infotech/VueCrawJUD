@@ -108,12 +108,16 @@ const setup_form = async (_e) => {
 
     console.log(response);
 
-    if (
+    const data = response.data;
+
+    // Check if message is "missing csrf token"
+    if (data.msg === "Missing CSRF token") {
+      $("#message").text("CSRF Token inválido.");
+      show_message();
+    } else if (
       response.response.status >= 400 &&
       response.response.status < 500 &&
-      response.response.status != 404 &&
-      response.data.msg != null &&
-      response.data.msg != "Missing CSRF token"
+      response.response.status != 404
     ) {
       $("#message").text("Sessão expirada! Faça login novamente.");
       router.push({ name: "login" });
