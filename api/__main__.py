@@ -2,6 +2,7 @@
 
 import asyncio
 from os import getcwd
+from platform import node
 
 import hypercorn
 import hypercorn.asyncio
@@ -19,7 +20,10 @@ if __name__ == "__main__":
     app = asyncio.run(create_app(DevelopmentConfig))
 
     config = hypercorn.Config()
-    config.bind = ["0.0.0.0:5000"]
+
+    hostname = node()
+
+    config.bind = ["0.0.0.0:5000", f"{hostname}:5000"]
     config.loglevel = "debug"
     config.use_reloader = True
 

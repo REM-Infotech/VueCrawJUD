@@ -9,10 +9,8 @@ RUN add-apt-repository ppa:mozillateam/firefox-next
 RUN apt-get update
 RUN apt-get install -y firefox
 
-# Install python packages
-COPY poetry.lock, pyproject.toml /CrawJUD/
-
-WORKDIR /CrawJUD
+WORKDIR /app
+COPY pyproject.toml .
 
 RUN pip install poetry
 RUN poetry config virtualenvs.create false

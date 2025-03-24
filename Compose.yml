@@ -3,6 +3,7 @@ services:
   api_rest:
     build:
       context: "."
+      dockerfile: "back.Dockerfile"
 
     environment:
       SERVER_DEPLOYED: "True"
@@ -11,15 +12,16 @@ services:
     ports:
       - "5001:5000"
     hostname: "good_computers"
-
-    command: "poetry run python -m crawjud"
+    volumes:
+      - ".:/app"
+    command: "poetry run python -m api"
 
   front_end:
     image: "node:latest"
 
     build:
       context: "."
-      dockerfile: vitepush.Dockerfile
+      dockerfile: "front.Dockerfile"
 
     volumes:
       - ".:/app"
