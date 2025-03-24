@@ -23,11 +23,11 @@ if __name__ == "__main__":
 
     hostname = node()
 
-    config.bind = ["0.0.0.0:5000", f"{hostname}:5000"]
+    config.bind = ["0.0.0.0:5000"]
     config.loglevel = "debug"
     config.use_reloader = True
 
-    log_file = Path(getcwd()).joinpath("server", "logs", "hypercorn_api.log")
+    log_file = Path(getcwd()).joinpath("logs", "hypercorn_api.log")
     cfg, _ = log_cfg(log_file=log_file)
     config.logconfig_dict = cfg
 
