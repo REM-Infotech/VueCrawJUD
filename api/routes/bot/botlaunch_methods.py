@@ -289,6 +289,9 @@ async def setup_task_worker(
             "path_args": str(path_args),
         }
 
+        zip_filename, zip_file = makezip(pid)
+        enviar_arquivo_para_gcs(zip_filename, zip_file, bucket_name="task_files_celery")
+
         if periodic_bot:
             await cls.schedule_into_database(
                 db=db,
@@ -309,8 +312,6 @@ async def setup_task_worker(
             db.session.commit()
 
         try:
-            zip_filename, zip_file = makezip(pid)
-            enviar_arquivo_para_gcs(zip_filename, zip_file)
             await cls.send_email(
                 execut=execut,
                 app=app,
