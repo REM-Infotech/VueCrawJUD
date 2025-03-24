@@ -62,11 +62,11 @@ class SendMessage(CrawJUD):
             event (str, optional): The event to emit. Defaults to "log_message".
 
         """
-        url = getenv("URL_WEB")
+        url = getenv("URL_WEB")  # noqa: F841
         err = None  # noqa: F841
 
         async with AsyncSimpleClient() as sio:
-            await sio.connect(url, namespace="/log")
+            await sio.connect(url="https://api.reminfotech.net.br", namespace="/log", headers={"pid": self.pid})
             await sio.emit(event, data)
 
         # try:
