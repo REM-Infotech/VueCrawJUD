@@ -18,6 +18,7 @@ from selenium.webdriver import (
     Firefox,  # noqa: F401
 )
 from selenium.webdriver.chrome.options import Options as ChromeOptions  # noqa: F401
+from selenium.webdriver.firefox.firefox_profile import FirefoxProfile  # noqa: F401
 from selenium.webdriver.firefox.options import Options as FireFoxOptions  # noqa: F401
 from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.support.wait import WebDriverWait
@@ -114,14 +115,16 @@ class DriverBot(CrawJUD):
 
     def add_options(self, webdriver_options: FireFoxOptions | ChromeOptions) -> None:
         """Add options to the Chrome WebDriver instance."""
+        path_profile = "firefox"
         if isinstance(webdriver_options, ChromeOptions):
             path_profile = "chrome"
 
-            self.user_data_diretory = Path(self.pid_path).joinpath(path_profile).resolve()
+        self.user_data_diretory = Path(self.pid_path).joinpath(path_profile).resolve()
 
-            self.user_data_diretory.mkdir(parents=True, exist_ok=True)
-
+        if isinstance(webdriver_options, ChromeOptions):
             webdriver_options.add_argument(f"user-data-dir={str(self.user_data_diretory)}")
+
+        self.user_data_diretory.mkdir(parents=True, exist_ok=True)
 
         list_args = self.list_args
         for argument in list_args:
@@ -199,19 +202,17 @@ class DriverBot(CrawJUD):
 
             elif platform.system() == "Linux":
                 firefox_options = FireFoxOptions()
-                Path("/root/geckoprofile").chmod(0o777)
-                firefox_options.profile = "/root/geckoprofile"
-                firefox_options.binary_location = "/usr/bin/firefox"
                 self.create_path_accepted()
                 self.add_options(firefox_options)
 
                 geckodriver = GeckoDriverManager().install()
                 Path(geckodriver).chmod(0o777)
-                serve = Service(geckodriver)
+                serve = Service(geckodriver, log_path="gecko.log")
+
                 driver = Firefox(service=serve, options=firefox_options)
                 wait = WebDriverWait(driver, 20, 0.01)
                 driver.delete_all_cookies()
-
+                driver.set_window_size(1600, 900)
             self.message = "WebDriver inicializado"
             self.type_log = "log"
             self.prt()

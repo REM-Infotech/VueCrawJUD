@@ -9,8 +9,9 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import NavBarComponent from "../../components/NavBarComponent.vue";
 import SideBarComponent from "../../components/SideBarComponent.vue";
 const { show: show_message } = useModal("ModalMessage");
-import { $ } from "../../main";
+import { $, api } from "../../main";
 import { useModal } from "bootstrap-vue-next";
+import { onBeforeMount } from "vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -34,6 +35,15 @@ const colors_message = {
 Chart.defaults.font.family =
   '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
 Chart.defaults.color = "#292b2c";
+
+onBeforeMount(() => {
+  api
+    .get("/", { withCredentials: true })
+    .then(() => {})
+    .catch(() => {
+      router.push({ name: "login" });
+    });
+});
 
 onMounted(() => {
   const ctx = (document.getElementById("LogsBotChart") as HTMLCanvasElement)?.getContext("2d");

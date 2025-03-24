@@ -12,6 +12,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Self
 
+from selenium.common.exceptions import UnexpectedAlertPresentException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support import expected_conditions as ec
@@ -282,6 +283,14 @@ class Capa(CrawJUD):
             Exception: If extraction encounters an error.
 
         """
+
+        def alertboxdismiss() -> None:
+            with suppress(Exception):
+                alert = self.driver.switch_to.alert
+                alert.dismiss()
+
+        alertboxdismiss()
+
         try:
             grau = self.bot_data.get("GRAU", 1)
 
@@ -350,8 +359,9 @@ class Capa(CrawJUD):
             self.type_log = "log"
             self.prt()
 
-            btn_infogeral = self.driver.find_element(By.CSS_SELECTOR, self.elements.btn_infogeral)
-            btn_infogeral.click()
+            with suppress(UnexpectedAlertPresentException):
+                btn_infogeral = self.driver.find_element(By.CSS_SELECTOR, self.elements.btn_infogeral)
+                btn_infogeral.click()
 
             includecontent: list[WebElement] = []
 
