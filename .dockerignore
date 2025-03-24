@@ -34,7 +34,6 @@ share/python-wheels/
 MANIFEST
 bot/meta/*
 pybind11/
-/*.json
 MODIFIED.MOD
 result_pre_commit.html
 # PyInstaller

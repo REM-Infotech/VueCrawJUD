@@ -7,6 +7,7 @@ services:
     environment:
       SERVER_DEPLOYED: "True"
       DOCKER_HOSTNAME: "good_computers"
+      API_REST_URL: "https://backend.reminfotech.net.br"
     ports:
       - "5001:5000"
     hostname: "good_computers"
@@ -20,7 +21,8 @@ services:
       context: "."
       dockerfile: vitepush.Dockerfile
 
-    working_dir: "/CrawJUD"
+    volumes:
+      - ".:/app"
 
     ports:
       - "3001:3000"

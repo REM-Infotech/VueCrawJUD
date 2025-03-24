@@ -7,7 +7,6 @@ Classes:
 
 import asyncio
 from os import getenv
-from time import sleep
 from typing import Self
 
 from dotenv_vault import load_dotenv
@@ -68,70 +67,3 @@ class SendMessage(CrawJUD):
         async with AsyncSimpleClient() as sio:
             await sio.connect(url="https://api.reminfotech.net.br", namespace="/log", headers={"pid": self.pid})
             await sio.emit(event, data)
-
-        # try:
-        #     # Verifica se já está conectado antes de tentar se conectar
-        #     if self.connected is False:
-        #         self.connect_socket(url)
-        #     sleep(0.5)
-        #     self.sio.emit(event, data, namespace="/log")
-        #     sleep(0.5)
-        # except socketio.exceptions.BadNamespaceError as e:
-        #     err = self.badnamespace(e, url, event, data)
-
-        # except socketio.exceptions.ConnectionError as e:
-        #     err = self.connectionerror(e, url, event, data)
-
-        # except Exception as e:
-        #     err = str(e)
-
-        # if err:
-        #     self.logger.error(err)
-
-    def badnamespace(self, e: Exception, url: str, event: str, data: dict) -> str:
-        """Handle bad namespace error when emitting an event."""
-        self.connected = False
-        err = str(e)
-        try:
-            self.connected = False
-            self.connect_socket(url)
-            sleep(0.5)
-            self.sio.emit(event, data, namespace="/log")
-            sleep(0.5)
-
-        except Exception as e:
-            if "Client is not in a disconnected state" in str(e):
-                self.sio.disconnect()
-                self.connected = False
-                self.connect_socket(url)
-                self.sio.emit(event, data, namespace="/log")
-            err = str(e)
-
-        return err
-
-    def connectionerror(self, e: Exception, url: str, event: str, data: dict) -> str:
-        """Handle connection error when emitting an event."""
-        err = str(e)
-        try:
-            if "One or more namespaces failed to connect" in str(e):
-                self.connected = False
-                self.connect_socket(url)
-                self.sio.emit(event, data, namespace="/log")
-            elif "Already connected" in str(e):
-                self.sio.emit(event, data, namespace="/log")
-                self.connected = True
-        except Exception as e:
-            err = str(e)
-
-        return err
-
-    def connect_socket(self, url: str) -> None:
-        """Connect to the socket server using the specified URL and headers.
-
-        Includes the process id as a header for identification.
-
-        Args:
-            url (str): The server URL.
-
-        """
-        self.sio.connect("https://api.reminfotech.net.br", namespaces=["/log"], headers={"pid": self.pid})

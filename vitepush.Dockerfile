@@ -1,15 +1,17 @@
 FROM node:latest
 
-COPY . /CrawJUD
-WORKDIR /CrawJUD
-COPY package.json package-lock.json /CrawJUD/
-WORKDIR /CrawJUD
+WORKDIR /app
+
+COPY package.json .
+
 RUN npm install
-RUN npm install -g server
 
+RUN npm i -g serve
 
+COPY . .
 
 RUN npm run build
 
-EXPOSE 3000
-CMD ["server", "build", "-p", "3000"]
+EXPOSE 30000
+
+CMD [ "serve", "-s", "dist" ]

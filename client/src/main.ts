@@ -7,6 +7,7 @@ import "bootstrap/dist/js/bootstrap.min.js";
 import "datatables.net-select";
 import jQuery from "jquery";
 import "jquery/dist/jquery.min.js";
+import { env } from "process";
 import { createApp } from "vue";
 import "../plugins/axios.ts";
 import App from "./App.vue";
@@ -26,9 +27,11 @@ function CreateApp() {
 }
 CreateApp();
 
+const url_api = env.API_REST_URL || "https://api.reminfotech.net.br";
+
 // Create axios instance with improved configuration
 export const api = axios.create({
-  baseURL: "https://api.reminfotech.net.br",
+  baseURL: url_api,
   headers: {
     // Note: Changing the Content-Type may avoid the preflight but could affect your API expectations.
     "Content-Type": "application/x-www-form-urlencoded", // Use a "simple" header if possible
