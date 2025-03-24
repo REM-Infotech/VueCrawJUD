@@ -25,7 +25,7 @@ export default defineConfig({
     port: 8000,
     strictPort: true,
     host: true,
-    origin: "http://0.0.0.0:8000",
+    origin: "https://crawjud.reminfotech.net.br",
 
     // proxy: {
     //   "/acquire_credentials": {
