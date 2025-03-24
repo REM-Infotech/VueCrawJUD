@@ -18,6 +18,8 @@ Classes:
 from __future__ import annotations
 
 import logging
+import shutil
+import zipfile
 
 # from importlib import import_module
 from pathlib import Path
@@ -28,6 +30,7 @@ from celery.result import AsyncResult
 from quart import Quart
 
 from crawjud.bot.class_thead import BotThread
+from crawjud.misc import bucket_gcs, storage_client
 
 logger = logging.getLogger(__name__)
 
@@ -51,6 +54,56 @@ class WorkerBot:
     system: str
     kwargs: dict[str, str]
     __dict__: dict[str, str]
+
+    @classmethod
+    def unzip_file(cls, zip_name: Path) -> None:
+        """Extract a ZIP file into a subfolder with the same name."""
+        path = zip_name.parent.resolve()
+
+        with zipfile.ZipFile(zip_name, "r") as zip_ref:
+            # Extract each file directly into the subfolder
+            for member in zip_ref.namelist():
+                # Get the original file name without any directory structure
+                dir_name = path.name
+                extracted_path = Path(zip_ref.extract(member, dir_name))
+                # base_name = extracted_path.name
+                # If the extracted path has directories, move the file directly into the subfolder
+                # chk = base_name and extracted_path.is_dir()
+                # if chk:
+                #     continue
+
+                shutil.move(extracted_path, path)
+
+    @classmethod
+    def download_file_gcs(cls, path_pid: Path) -> str:
+        """Download a file from Google Cloud Storage (GCS).
+
+        Args:
+            path_pid (Path): Path to the file to download.
+            app (Quart): Quart application instance for configuration access.
+
+        Returns:
+            str: Message indicating download completion.
+
+        """
+        path_pid = Path(path_pid).parent.resolve()
+        path_pid.parent.mkdir(parents=True, exist_ok=True)
+        path_pid.touch()
+
+        pid = path_pid.name.split(path_pid.suffix)[0]
+
+        bucket = bucket_gcs(storage_client(), bucket_name="task_files_celery")
+
+        zipped_args = ""
+
+        blob = list(filter(lambda x: pid in blob.name, bucket.list_blobs()))
+        for file_ in blob:
+            file_.download_to_filename(path_pid.joinpath(file_.name).resolve())
+            zipped_args = path_pid.joinpath(file_.name).resolve()
+
+        cls.unzip_file(zipped_args)
+
+        return f"Arquivo {path_pid} baixado com sucesso!"
 
     @staticmethod
     @shared_task(ignore_result=False)
@@ -79,6 +132,10 @@ class WorkerBot:
 
         """
         from crawjud.bot.scripts import Projudi
+
+        cls = WorkerBot
+
+        cls.download_file_gcs(kwargs.get("path_args"))
 
         bot_class = Projudi
         try:

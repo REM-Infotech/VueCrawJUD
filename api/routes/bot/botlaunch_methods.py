@@ -30,6 +30,8 @@ from crawjud.misc import (
     generate_pid,  # noqa: F401
 )
 from crawjud.types import AnyType
+from crawjud.utils import makezip
+from crawjud.utils.gcs_mgmt import enviar_arquivo_para_gcs
 from crawjud.utils.status import TaskExec
 
 FORM_CONFIGURATOR = {
@@ -307,6 +309,8 @@ async def setup_task_worker(
             db.session.commit()
 
         try:
+            zip_filename, zip_file = makezip(pid)
+            enviar_arquivo_para_gcs(zip_filename, zip_file)
             await cls.send_email(
                 execut=execut,
                 app=app,
