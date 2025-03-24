@@ -22,6 +22,10 @@ export default defineConfig({
   },
   server: {
     allowedHosts: ["195.200.1.226", "crawjud2.robotz.dev", "crawjud.reminfotech.net.br"],
+    port: 8000,
+    strictPort: true,
+    host: true,
+    origin: "http://0.0.0.0:8000",
 
     // proxy: {
     //   "/acquire_credentials": {
