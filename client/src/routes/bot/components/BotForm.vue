@@ -157,7 +157,7 @@ const setup_form = async (_e) => {
       response.response.status < 500 &&
       response.response.status != 404
     ) {
-      $("#message").text("Sessão expirada! Faça login novamente.");
+      $("#message").text("É necessário estar autenticado para acessar essa página.");
       router.push({ name: "login" });
       show_message();
     }
@@ -196,7 +196,7 @@ const setup_form = async (_e) => {
       response.data.msg != null &&
       response.data.msg != "Missing CSRF token"
     ) {
-      $("#message").text("Sessão expirada! Faça login novamente.");
+      $("#message").text("É necessário estar autenticado para acessar essa página.");
       router.push({ name: "login" });
       show_message();
     }
@@ -264,7 +264,7 @@ async function peformSubmit(event: Event) {
         response.response.status < 500 &&
         response.response.status != 404
       ) {
-        $("#message").text("Sessão expirada! Faça login novamente.");
+        $("#message").text("É necessário estar autenticado para acessar essa página.");
         router.push({ name: "login" });
         show_message();
       }

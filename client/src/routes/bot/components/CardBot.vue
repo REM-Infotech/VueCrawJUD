@@ -18,7 +18,7 @@ onBeforeMount(async () => {
     .catch((response) => {
       // check if response.status is 4** error
       if (response.response.status >= 400 && response.response.status < 500) {
-        $("#message").text("Sessão expirada! Faça login novamente.");
+        $("#message").text("É necessário estar autenticado para acessar essa página.");
         router.push({ name: "login" });
         show_message();
       }

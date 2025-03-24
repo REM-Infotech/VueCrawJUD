@@ -87,7 +87,7 @@ const download_file = async (file: string) => {
           response.response.status < 500 &&
           response.response.status !== 404
         ) {
-          $("#message").text("Sessão expirada! Faça login novamente.");
+          $("#message").text("É necessário estar autenticado para acessar essa página.");
           router.push({ name: "login" });
           show_message();
         }
