@@ -117,7 +117,7 @@ class WorkerBot:
 
         remove(zipped_args)
 
-        return f"Arquivo {path_pid} baixado com sucesso!"
+        return "Arquivo de execução baixado com sucesso!"
 
     @staticmethod
     @shared_task(ignore_result=False)
@@ -147,12 +147,9 @@ class WorkerBot:
         """
         from crawjud.bot.scripts import Projudi
 
-        cls = WorkerBot
-
-        cls.download_file_gcs(kwargs.get("path_args"))
-
         bot_class = Projudi
         try:
+            WorkerBot.download_file_gcs(kwargs.get("path_args"))
             display_name = kwargs.get("display_name")
             system = kwargs.get("system")
             typebot = kwargs.get("typebot")
@@ -200,6 +197,7 @@ class WorkerBot:
 
         bot_class = Esaj
         try:
+            WorkerBot.download_file_gcs(kwargs.get("path_args"))
             display_name = kwargs.get("display_name")
             system = kwargs.get("system")
             typebot = kwargs.get("typebot")
@@ -247,6 +245,7 @@ class WorkerBot:
 
         bot_class = PJe
         try:
+            WorkerBot.download_file_gcs(kwargs.get("path_args"))
             display_name = kwargs.get("display_name")
             system = kwargs.get("system")
             typebot = kwargs.get("typebot")
@@ -294,6 +293,7 @@ class WorkerBot:
 
         bot_class = Elaw
         try:
+            WorkerBot.download_file_gcs(kwargs.get("path_args"))
             display_name = kwargs.get("display_name")
             system = kwargs.get("system")
             typebot = kwargs.get("typebot")
@@ -341,6 +341,7 @@ class WorkerBot:
 
         bot_class = Caixa
         try:
+            WorkerBot.download_file_gcs(kwargs.get("path_args"))
             display_name = kwargs.get("display_name")
             system = kwargs.get("system")
             typebot = kwargs.get("typebot")
@@ -388,6 +389,7 @@ class WorkerBot:
 
         bot_class = Calculadoras
         try:
+            WorkerBot.download_file_gcs(kwargs.get("path_args"))
             display_name = kwargs.get("display_name")
             system = kwargs.get("system")
             typebot = kwargs.get("typebot")
