@@ -6,6 +6,7 @@ Classes:
 """
 
 from os import getenv
+from time import sleep
 from typing import Self
 
 import socketio
@@ -67,8 +68,9 @@ class SendMessage(CrawJUD):
             # Verifica se já está conectado antes de tentar se conectar
             if self.connected is False:
                 self.connect_socket(url)
+            sleep(0.5)
             self.sio.emit(event, data, namespace="/log")
-
+            sleep(0.5)
         except socketio.exceptions.BadNamespaceError as e:
             err = self.badnamespace(e, url, event, data)
 
@@ -81,6 +83,8 @@ class SendMessage(CrawJUD):
         if err:
             self.logger.error(err)
 
+        sleep(0.5)
+
     def badnamespace(self, e: Exception, url: str, event: str, data: dict) -> str:
         """Handle bad namespace error when emitting an event."""
         self.connected = False
@@ -88,7 +92,10 @@ class SendMessage(CrawJUD):
         try:
             self.connected = False
             self.connect_socket(url)
+            sleep(0.5)
             self.sio.emit(event, data, namespace="/log")
+            sleep(0.5)
+
         except Exception as e:
             if "Client is not in a disconnected state" in str(e):
                 self.sio.disconnect()
