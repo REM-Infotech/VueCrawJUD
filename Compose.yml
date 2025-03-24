@@ -7,6 +7,7 @@ services:
 
     environment:
       SERVER_DEPLOYED: "True"
+      DOTENV_KEY: "${DOTENV_KEY:-default_value}"
       DOCKER_HOSTNAME: "good_computers"
       API_REST_URL: "https://backend.reminfotech.net.br"
     ports:
