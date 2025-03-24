@@ -6,7 +6,7 @@ import { faFileDownload, faTrash, faCheckSquare } from "@fortawesome/free-solid-
 import { useModal } from "bootstrap-vue-next";
 import FormConfig from "../../../services/FormConfig.ts";
 import DropZone from "./FileDropZone.vue";
-import { onMounted } from "vue";
+import { onBeforeMount, onMounted } from "vue";
 
 import { ref } from "vue";
 
@@ -14,6 +14,19 @@ import { $, api } from "../../../main.ts";
 import { useRouter } from "vue-router";
 
 let dt;
+
+interface item_type {
+  id: number;
+  system: string;
+  state: string;
+  client: string;
+  type: string;
+  display_name: string;
+  form_cfg: string;
+}
+
+let item: item_type;
+
 const { show } = useModal("modal-load");
 const { show: show_message } = useModal("ModalMessage");
 const TitleForm = ref();
@@ -51,6 +64,10 @@ function selectAll() {
   dt.rows().select();
 }
 
+onBeforeMount(() => {
+  item = JSON.parse(sessionStorage.getItem("current_bot") as string);
+});
+
 onMounted(() => {
   dt = table_file.value.dt;
 });
@@ -65,12 +82,33 @@ const reset_form = async (_e) => {
 };
 
 const validate_form = () => {
-  console.log("ok");
+  if (need_files.value === true) {
+    if (FilesListable.value.length === 0) {
+      $("#message").text("Selecione ao menos um arquivo.");
+      show_message();
+      return false;
+    }
+  }
+
+  if (need_options.value === true) {
+    if (selected.value === null || selected2.value === null) {
+      $("#message").text("Selecione as opções necessárias.");
+      show_message();
+      return false;
+    }
+  }
+
+  if ($("#checkbox-1").prop("checked") === false) {
+    $("#message").text("Confirme que os dados inseridos estão corretos.");
+    show_message();
+    return false;
+  }
+
+  return true;
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const setup_form = async (_e) => {
-  const item = JSON.parse(sessionStorage.getItem("current_bot") as string);
   let response_creds;
   let response_state_client;
   TitleForm.value = item.display_name;
@@ -97,8 +135,8 @@ const setup_form = async (_e) => {
         headers: {
           "x-csrf-token": sessionStorage.getItem("x-csrf-token") || "",
         },
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         withXSRFToken(config) {
-          console.log(config);
           return true;
         },
       },
@@ -180,7 +218,6 @@ async function peformSubmit(event: Event) {
   event.preventDefault();
   show();
   validate_form();
-  const item = JSON.parse(sessionStorage.getItem("current_bot") as string);
 
   const formData = new FormData();
   formData.append("creds", selected.value || "");
@@ -228,6 +265,7 @@ async function peformSubmit(event: Event) {
 
 <template>
   <BModal
+    no-footer
     id="ModalFormBot"
     data-bs-theme="dark"
     size="xl"
@@ -332,9 +370,6 @@ async function peformSubmit(event: Event) {
         </div>
       </BForm>
     </div>
-    <template #footer>
-      <div class="d-grid gap-0"></div>
-    </template>
   </BModal>
 </template>
 
