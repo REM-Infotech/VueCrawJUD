@@ -242,7 +242,11 @@ async function peformSubmit(event: Event) {
     .post(`/bot/${item.id}/${system}/${type}`, formData, {
       withXSRFToken: true,
       withCredentials: true,
-      // xsrfCookieName: "csrf_access_token",
+      headers: {
+        // Note: Changing the Content-Type may avoid the preflight but could affect your API expectations.
+        "Content-Type": "application/x-www-form-urlencoded", // Use a "simple" header if possible
+        "x-csrf-token": sessionStorage.getItem("x-csrf-token") || "",
+      },
     })
     .then((response) => {
       if (response.status === 200) {
