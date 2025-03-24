@@ -1,0 +1,27 @@
+name: CrawJUD
+services:
+  api_rest:
+    build:
+      context: "."
+
+    environment:
+      - SERVER_DEPLOYED: "True"
+      - DOCKER_HOSTNAME: "good_computers"
+    volumes: ".:/CrawJUD"
+    ports:
+      - "5001:5000"
+    hostname:
+      - "good_computers"
+
+    command: "poetry run python -m crawjud"
+
+  front_end:
+    image: "node:latest"
+    volumes:
+      - ".:/CrawJUD"
+    ports:
+      - "3000:3000"
+    hostname:
+      - "stardust"
+
+    command: "npm run serve"
