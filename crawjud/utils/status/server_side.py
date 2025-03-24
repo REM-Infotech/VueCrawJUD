@@ -181,14 +181,14 @@ async def format_message_log(
         # Atualizar o dicionário de saída
         data.update(
             {
-                "pid": log_pid["pid"],
-                "pos": log_pid["pos"],
-                "total": log_pid["total"],
-                "remaining": log_pid["remaining"],
-                "success": log_pid["success"],
-                "errors": log_pid["errors"],
-                "status": log_pid["status"],
-                "message": log_pid["message"],
+                "pid": log_pid.get("pid"),
+                "pos": log_pid.get("pos"),
+                "total": log_pid.get("total"),
+                "remaining": log_pid.get("remaining"),
+                "success": log_pid.get("success"),
+                "errors": log_pid.get("errors"),
+                "status": log_pid.get("status"),
+                "message": log_pid.get("message"),
             },
         )
 
