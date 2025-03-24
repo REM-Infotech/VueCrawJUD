@@ -191,4 +191,8 @@ class WorkerCrawJUD(HeadCrawjudManager):
 
 
 instance = WorkerCrawJUD()
-instance.prompt()
+
+if getenv("SERVER_DEPLOYED", "False").lower() == "true":
+    instance.start_quart()
+else:
+    instance.prompt()
