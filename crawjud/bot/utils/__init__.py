@@ -592,6 +592,8 @@ class OtherUtils(CrawJUD):
         execution_time = end_time - self.start_time
         minutes, seconds = divmod(int(execution_time), 60)
 
+        time.sleep(5)
+
         self.prt(status="Finalizado")
 
         flag_path = Path(self.output_dir_path).joinpath(f"{self.pid}.flag")
