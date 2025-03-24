@@ -20,6 +20,7 @@ from __future__ import annotations
 import logging
 import shutil
 import zipfile
+from os import getcwd, remove
 
 # from importlib import import_module
 from pathlib import Path
@@ -27,9 +28,11 @@ from time import sleep
 
 from celery import shared_task
 from celery.result import AsyncResult
+from google.cloud.storage import Blob
 from quart import Quart
 
 from crawjud.bot.class_thead import BotThread
+from crawjud.bot.common.exceptions import StartError
 from crawjud.misc import bucket_gcs, storage_client
 
 logger = logging.getLogger(__name__)
@@ -58,8 +61,8 @@ class WorkerBot:
     @classmethod
     def unzip_file(cls, zip_name: Path) -> None:
         """Extract a ZIP file into a subfolder with the same name."""
-        path = zip_name.parent.resolve()
-
+        path = zip_name.parent.resolve().joinpath(zip_name.name.split(".")[0])
+        unziped_tmp_folder = Path(getcwd()).joinpath(path.name)
         with zipfile.ZipFile(zip_name, "r") as zip_ref:
             # Extract each file directly into the subfolder
             for member in zip_ref.namelist():
@@ -72,7 +75,11 @@ class WorkerBot:
                 # if chk:
                 #     continue
 
-                shutil.move(extracted_path, path)
+                if not Path(path).joinpath(member).exists():
+                    shutil.move(extracted_path, path)
+
+        if unziped_tmp_folder.exists():
+            shutil.rmtree(unziped_tmp_folder)
 
     @classmethod
     def download_file_gcs(cls, path_pid: Path) -> str:
@@ -88,20 +95,27 @@ class WorkerBot:
         """
         path_pid = Path(path_pid).parent.resolve()
         path_pid.parent.mkdir(parents=True, exist_ok=True)
-        path_pid.touch()
 
-        pid = path_pid.name.split(path_pid.suffix)[0]
+        pid = path_pid.name
 
         bucket = bucket_gcs(storage_client(), bucket_name="task_files_celery")
 
         zipped_args = ""
 
-        blob = list(filter(lambda x: pid in blob.name, bucket.list_blobs()))
-        for file_ in blob:
-            file_.download_to_filename(path_pid.joinpath(file_.name).resolve())
-            zipped_args = path_pid.joinpath(file_.name).resolve()
+        # blob: list[Blob] = list(filter(lambda x: pid in blob.name, blobs))
+        for blob in bucket.list_blobs():
+            file_: Blob = blob
 
+            if pid in file_.name:
+                file_.download_to_filename(path_pid.with_suffix(".zip"))
+                zipped_args = path_pid.with_suffix(".zip")
+                break
+
+        if zipped_args == "":
+            raise StartError(message="Arquivo não encontrado no Storage")
         cls.unzip_file(zipped_args)
+
+        remove(zipped_args)
 
         return f"Arquivo {path_pid} baixado com sucesso!"
 
