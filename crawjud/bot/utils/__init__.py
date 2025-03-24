@@ -598,7 +598,7 @@ class OtherUtils(CrawJUD):
         with flag_path.open("w") as f:
             f.write(self.pid)
 
-        time.sleep(2)
+        time.sleep(5)
 
         self.type_log = "success"
         self.message = f"Fim da execução, tempo: {minutes} minutos e {seconds} segundos"
