@@ -27,7 +27,7 @@ interface item_type {
 
 let item: item_type;
 
-const { show } = useModal("modal-load");
+const { show: show_load, hide: hide_load } = useModal("modal-load");
 const { show: show_message } = useModal("ModalMessage");
 const TitleForm = ref();
 const selected = ref(null);
@@ -216,8 +216,13 @@ DataTable.use(DataTablesCore);
 
 async function peformSubmit(event: Event) {
   event.preventDefault();
-  show();
-  validate_form();
+  show_load();
+  if (validate_form() === false) {
+    setTimeout(() => {
+      hide_load();
+    }, 500);
+    return;
+  }
 
   const formData = new FormData();
   formData.append("creds", selected.value || "");
