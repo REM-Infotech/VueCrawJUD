@@ -12,12 +12,12 @@ from celery import Celery
 from flask_mail import Mail
 from flask_sqlalchemy import SQLAlchemy
 from flask_talisman import Talisman
+from hypercorn.middleware.proxy_fix import ProxyFixMiddleware as ProxyHeadersMiddleware
 from quart import Quart
 from quart_cors import cors
 from quart_jwt_extended import JWTManager
 from redis import Redis
 from socketio import ASGIApp, AsyncRedisManager, AsyncServer
-from uvicorn.middleware.proxy_headers import ProxyHeadersMiddleware
 
 app = Quart(__name__)
 mail = Mail()
