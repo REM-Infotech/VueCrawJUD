@@ -303,7 +303,11 @@ async def setup_task_worker(
             )
 
         elif not periodic_bot:
-            task: Task = celery_app.send_task(f"crawjud.bot.{system.lower()}_launcher", kwargs=kwargs_)
+            task: Task = celery_app.send_task(
+                f"crawjud.bot.{system.lower()}_launcher",
+                kwargs=kwargs_,
+                queue="nome_do_worker_especifico",
+            )
             process_id = str(task.id)
 
             # Salva o ID no "banco de dados"
