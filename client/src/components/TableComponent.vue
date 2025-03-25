@@ -51,7 +51,11 @@ onMounted(async function () {
       data_.value = true;
     })
     .catch((error) => {
-      if (error.code) {
+      if (error.code === "ERR_NETWORK") {
+        $("#message").text("Erro de conexão com o servidor, tente novamente mais tarde.");
+        show_message();
+        router.push({ name: "login" });
+      } else if (error.code) {
         if (error.status === 401) {
           // console.log(error);
           sessionStorage.setItem("message", "Sessão expirada, faça login novamente!");
@@ -82,15 +86,17 @@ const download_file = async (file: string) => {
       })
       .catch((response) => {
         // check if response is 4** error and not 404
-        if (
-          response.response.status >= 400 &&
-          response.response.status < 500 &&
-          response.response.status !== 404
-        ) {
-          $("#message").text("É necessário estar autenticado para acessar essa página.");
-          router.push({ name: "login" });
-          show_message();
-        }
+
+        if (response.code === "")
+          if (
+            response.response.status >= 400 &&
+            response.response.status < 500 &&
+            response.response.status !== 404
+          ) {
+            $("#message").text("É necessário estar autenticado para acessar essa página.");
+            router.push({ name: "login" });
+            show_message();
+          }
       });
   }, 1000);
 };

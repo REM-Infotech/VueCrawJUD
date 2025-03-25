@@ -7,6 +7,7 @@ import {
   faRobot,
   faArrowRightFromBracket,
   faUser,
+  faGear,
 } from "@fortawesome/free-solid-svg-icons";
 import { RouterLink } from "vue-router";
 import AuthService from "../services/auth";
@@ -65,14 +66,12 @@ const handleLogoutClick = (e: Event) => {
           </a>
         </li>
         <li class="border-top my-3"></li>
-        <!-- <li class="nav-item mb-1">
-          <a href="#" class="nav-link link-body-emphasis">
-            <svg class="bi pe-none me-2" width="16" height="16">
-              <use xlink:href="#people-circle"></use>
-            </svg>
-            Customers
-          </a>
-        </li> -->
+        <li class="nav-item mb-1">
+          <RouterLink :to="{ name: 'config' }" class="nav-link link-body-emphasis">
+            <FontAwesomeIcon :icon="faGear" class="me-2" />
+            <span class="text">Configurações</span>
+          </RouterLink>
+        </li>
       </ul>
     </div>
     <footer class="offcanvas-footer">
