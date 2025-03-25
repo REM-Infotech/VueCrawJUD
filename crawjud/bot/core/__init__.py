@@ -181,7 +181,6 @@ class CrawJUD(PropertiesCrawJUD):
                 "--ignore-ssl-errors=yes",
                 "--ignore-certificate-errors",
                 "--display=:99",
-                "--window-size=1600,900",
                 "--no-sandbox",
                 "--disable-blink-features=AutomationControlled",
                 "--kiosk-printing",
