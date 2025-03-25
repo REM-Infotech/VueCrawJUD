@@ -1,4 +1,4 @@
-"""Module config project log."""
+"""Logger Configurator for the application."""
 
 import logging
 from os import getenv

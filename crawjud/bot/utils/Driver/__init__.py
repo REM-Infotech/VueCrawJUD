@@ -148,6 +148,13 @@ class DriverBot(CrawJUD):
         if isinstance(webdriver_options, ChromeOptions):
             webdriver_options.add_experimental_option("prefs", chrome_prefs)
 
+        elif isinstance(webdriver_options, FireFoxOptions):
+            # Set Firefox preferences equivalent to the Chrome options.
+            webdriver_options.set_preference("browser.download.folderList", 2)
+            webdriver_options.set_preference("browser.download.dir", str(self.pid_path))
+            webdriver_options.set_preference("browser.helperApps.neverAsk.saveToDisk", "application/pdf")
+            webdriver_options.set_preference("pdfjs.disabled", True)
+
     def driver_launch(self, message: str = "Inicializando WebDriver") -> tuple[WebDriver, WebDriverWait]:
         """
         Launch WebDriver with options and extensions, then return driver and wait to run well.
