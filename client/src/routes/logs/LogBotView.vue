@@ -66,20 +66,18 @@ onMounted(() => {
 });
 
 try {
-  io.on("error", (error) => {
-    console.log(error);
-  });
+  io.on("error", () => {});
 
   io.on("disconnect", () => {
-    console.log("Disconnected from crawjud");
+    // console.log("Disconnected from crawjud");
   });
   io.on("connect", function () {
     io.emit("join", { pid: pid });
-    console.log("Connected to crawjud");
+    // console.log("Connected to crawjud");
   });
 
   io.on("join", () => {
-    console.log("Joinned!");
+    // console.log("Joinned!");
   });
 
   io.on("log_message", function (data) {
@@ -114,7 +112,7 @@ try {
 
       if (typeLog === "info") {
         Pages = Pages + 1;
-        console.log(typeLog);
+        // console.log(typeLog);
       }
 
       if (remaining < 0) {
@@ -187,8 +185,8 @@ try {
       }
     }
   });
-} catch (error) {
-  console.log(error);
+} catch {
+  // console.log(error);
 }
 
 const stop_execut = () => {
@@ -214,7 +212,57 @@ const stop_execut = () => {
     <div>
       <main>
         <BContainer fluid class="px-4">
-          <div class="card">
+          <div class="row">
+            <div class="col-xl-6 col-md-6">
+              <div class="card fixed-height-card border-0" style="height: 35rem">
+                <div class="card-header">
+                  <div class="row justify-content-between align-items-center">
+                    <div class="col-md-5">
+                      <span class="fw-semibold me-3">
+                        <i class="fas fa-chart-pie"></i>
+                        <FontAwesomeIcon :icon="faPieChart" />
+                      </span>
+                      <span class="fw-semibold">Logs </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="card-body bg-black overflow-auto">
+                  <div class="container-fluid">
+                    <ul id="messages" class="list-group list-group-flush over overflow-hidden"></ul>
+                  </div>
+                </div>
+                <div class="card-footer small text-muted fw-semibold">
+                  <span id="status">Status: Em Execução | Total: </span>
+                </div>
+              </div>
+            </div>
+            <div class="col-xl-6 col-md-6">
+              <div class="card mb-4 fixed-height-card" style="height: 35rem">
+                <div class="card-header">
+                  <div class="row justify-content-between align-items-center">
+                    <div class="col-md-5">
+                      <span class="fw-semibold me-3">
+                        <i class="fas fa-chart-pie"></i>
+                        <FontAwesomeIcon :icon="faPieChart" />
+                      </span>
+                      <span class="fw-semibold">Logs </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="card-body bg-secondary bg-opacity-50">
+                  <div class="container-fluid d-grid justify-content-xl-center w-50">
+                    <canvas id="LogsBotChart"></canvas>
+                  </div>
+                </div>
+                <div class="card-footer small text-muted fw-semibold">
+                  <span id="remaining">Restantes: -.- </span> |
+                  <span id="success">Sucessos: -.- </span> |
+                  <span id="errors">Erros: -.- </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- <div class="card">
             <div class="card-header">
               <div class="d-flex gap-3">
                 <div class="justify-content-xxl-end align-middle me-auto text-center">
@@ -234,61 +282,7 @@ const stop_execut = () => {
                 </div>
               </div>
             </div>
-            <div class="card-body bg-warning bg-opacity-75">
-              <div class="row">
-                <div class="col-xl-6 col-md-6">
-                  <div class="card fixed-height-card border-0" style="height: 35rem">
-                    <div class="card-header">
-                      <div class="row justify-content-between align-items-center">
-                        <div class="col-md-5">
-                          <span class="fw-semibold me-3">
-                            <i class="fas fa-chart-pie"></i>
-                            <FontAwesomeIcon :icon="faPieChart" />
-                          </span>
-                          <span class="fw-semibold">Logs </span>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="card-body bg-black overflow-auto">
-                      <div class="container-fluid">
-                        <ul
-                          id="messages"
-                          class="list-group list-group-flush over overflow-hidden"
-                        ></ul>
-                      </div>
-                    </div>
-                    <div class="card-footer small text-muted fw-semibold">
-                      <span id="status">Status: Em Execução | Total: </span>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-xl-6 col-md-6">
-                  <div class="card mb-4 fixed-height-card" style="height: 35rem">
-                    <div class="card-header">
-                      <div class="row justify-content-between align-items-center">
-                        <div class="col-md-5">
-                          <span class="fw-semibold me-3">
-                            <i class="fas fa-chart-pie"></i>
-                            <FontAwesomeIcon :icon="faPieChart" />
-                          </span>
-                          <span class="fw-semibold">Logs </span>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="card-body">
-                      <div class="container-fluid d-grid justify-content-xl-center w-50">
-                        <canvas id="LogsBotChart"></canvas>
-                      </div>
-                    </div>
-                    <div class="card-footer small text-muted fw-semibold">
-                      <span id="remaining">Restantes: -.- </span> |
-                      <span id="success">Sucessos: -.- </span> |
-                      <span id="errors">Erros: -.- </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+
             <div class="card-footer bg-secondary">
               <div class="container-fluid mt-2 mb-2">
                 <div
@@ -308,7 +302,7 @@ const stop_execut = () => {
                 </div>
               </div>
             </div>
-          </div>
+          </div> -->
         </BContainer>
       </main>
     </div>
