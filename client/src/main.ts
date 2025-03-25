@@ -26,9 +26,7 @@ function CreateApp() {
 }
 CreateApp();
 
-console.log(import.meta.env.API_REST_URL);
-
-const url_api = import.meta.env.API_REST_URL || "https://api.reminfotech.net.br";
+const url_api = "https://api.reminfotech.net.br";
 
 // Create axios instance with improved configuration
 export const api = axios.create({

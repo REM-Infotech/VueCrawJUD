@@ -1,7 +1,6 @@
 import { useModal } from "bootstrap-vue-next";
-import jQuery from "jquery";
 import { createRouter, createWebHistory } from "vue-router";
-const $ = jQuery;
+import { $ } from "../main";
 
 const routes = [
   {
@@ -38,11 +37,20 @@ const routes = [
     component: () => import("./logs/LogBotView.vue"),
     meta: { requiresAuth: true },
   },
+  {
+    path: "/configs",
+    name: "config",
+    component: () => import("./admin/ConfigView.vue"),
+  },
 ];
 
 const router = createRouter({
   history: createWebHistory(),
   routes,
+});
+
+router.beforeEach(async (to, _, next) => {
+  next();
 });
 
 // Global afterEach hook para gerenciar a classe do app

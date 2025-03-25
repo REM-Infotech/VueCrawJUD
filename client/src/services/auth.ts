@@ -5,34 +5,40 @@ import { api } from "../main";
 const $ = jQuery;
 
 export default function () {
-  const { show } = useModal("ModalMessage");
+  const { show: show_message } = useModal("ModalMessage");
 
   async function logout(router: Router) {
     api
       .post("/logout")
       .then((response) => {
         if (response.status === 200 || response.status === 401) {
-          sessionStorage.removeItem("token");
           router.push({ name: "login" });
         }
 
-        sessionStorage.removeItem("token");
         router.push({ name: "login" });
 
         $("#message").text("Logout Efetuado com sucesso!");
-        show();
+        show_message();
+        sessionStorage.clear();
+        localStorage.clear();
       })
       .catch((response) => {
-        if (response.status === 200 || response.status === 401) {
-          sessionStorage.removeItem("token");
+        if (response.code === "ERR_NETWORK") {
+          $("#message").text("Erro de conexão com o servidor!");
+          show_message();
+        } else if (response.status === 200 || response.status === 401) {
           router.push({ name: "login" });
         }
 
         $("#message").text(response.data.message);
-        show();
+        show_message();
 
-        sessionStorage.removeItem("token");
+        sessionStorage.clear();
+        localStorage.clear();
+
         router.push({ name: "login" });
+        sessionStorage.clear();
+        localStorage.clear();
       });
   }
 
@@ -62,7 +68,7 @@ export default function () {
           const data: Record<string, string> = response.data as Record<string, string>;
           sessionStorage.setItem("token", data.token);
           sessionStorage.setItem("x-csrf-token", data["x-csrf-token"]);
-          console.log(data["x-csrf-token"]);
+          // console.log(data["x-csrf-token"]);
 
           sessionStorage.setItem("message", "Login Efetuado com sucesso!");
 
@@ -70,10 +76,15 @@ export default function () {
         }
       })
       .catch((error) => {
-        console.log(error);
+        // console.log(error);
+        if (error.code === "ERR_NETWORK") {
+          $("#message").text("Erro de conexão com o servidor!");
+          show_message();
 
+          return;
+        }
         $("#message").text(error.data.message);
-        show();
+        show_message();
       });
   }
 
