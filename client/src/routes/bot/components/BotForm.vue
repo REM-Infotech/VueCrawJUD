@@ -144,8 +144,6 @@ const setup_form = async (_e) => {
   } catch (response) {
     // Check if response.status is 4** error and not 404
 
-    console.log(response);
-
     const data = response.data;
 
     // Check if message is "missing csrf token"
@@ -178,16 +176,13 @@ const setup_form = async (_e) => {
         headers: {
           "x-csrf-token": sessionStorage.getItem("x-csrf-token") || "",
         },
-        withXSRFToken(config) {
-          console.log(config);
+        withXSRFToken() {
           return true;
         },
       },
     );
   } catch (response) {
     // Check if response.status is 4** error and not 404
-
-    console.log(response);
 
     if (
       response.response.status >= 400 &&
