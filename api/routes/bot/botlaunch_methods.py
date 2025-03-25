@@ -254,7 +254,6 @@ async def setup_task_worker(
         data: dict[str, str] = {}
         files: dict[str, FileStorage] = {}
         periodic_bot = False
-        cls = TaskExec
 
         data.update({"pid": pid})
 
@@ -266,14 +265,14 @@ async def setup_task_worker(
             typebot=typebot,
         )
 
-        path_pid = await cls.configure_path(pid=pid, files=files)
-        path_args = await cls.args_tojson(
+        path_pid = await TaskExec.configure_path(pid=pid, files=files)
+        path_args = await TaskExec.args_tojson(
             path_pid=path_pid,
             pid=pid,
             data=data,
             typebot=typebot,
         )
-        execut, display_name = await cls.insert_into_database(
+        execut, display_name = await TaskExec.insert_into_database(
             db=db,
             pid=pid,
             id_=id_,
@@ -293,7 +292,7 @@ async def setup_task_worker(
         enviar_arquivo_para_gcs(zip_filename, zip_file, bucket_name="task_files_celery")
 
         if periodic_bot:
-            await cls.schedule_into_database(
+            await TaskExec.schedule_into_database(
                 db=db,
                 data=data,
                 system=system,
@@ -312,7 +311,7 @@ async def setup_task_worker(
             db.session.commit()
 
         try:
-            await cls.send_email(
+            await TaskExec.send_email(
                 execut=execut,
                 app=app,
                 type_notify="start",
