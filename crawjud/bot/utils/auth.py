@@ -162,27 +162,39 @@ class AuthBot(CrawJUD):
 
             self.driver.refresh()
 
-            if platform.system() == "Windows":
-                username: WebElement = self.wait.until(
-                    ec.presence_of_element_located((By.CSS_SELECTOR, self.elements.campo_username)),
-                )
-                sleep(2)
-                username.click()
-                self.interact.send_key(username, self.username)
+            username: WebElement = self.wait.until(
+                ec.presence_of_element_located((By.CSS_SELECTOR, self.elements.campo_username)),
+            )
+            sleep(2)
+            username.click()
+            self.interact.send_key(username, self.username)
 
-                password = self.driver.find_element(By.CSS_SELECTOR, self.elements.campo_passwd)
-                sleep(2)
-                password.click()
-                self.interact.send_key(password, self.password)
+            password = self.driver.find_element(By.CSS_SELECTOR, self.elements.campo_passwd)
+            sleep(2)
+            password.click()
+            self.interact.send_key(password, self.password)
 
-            elif platform.system() == "Linux":
-                self.driver.execute_script(
-                    f"document.querySelector('{self.elements.campo_username}').value = '{self.username}'"
-                )
+            # if platform.system() == "Windows":
+            #     username: WebElement = self.wait.until(
+            #         ec.presence_of_element_located((By.CSS_SELECTOR, self.elements.campo_username)),
+            #     )
+            #     sleep(2)
+            #     username.click()
+            #     self.interact.send_key(username, self.username)
 
-                self.driver.execute_script(
-                    f"document.querySelector('{self.elements.campo_passwd}').value = '{self.password}'"
-                )
+            #     password = self.driver.find_element(By.CSS_SELECTOR, self.elements.campo_passwd)
+            #     sleep(2)
+            #     password.click()
+            #     self.interact.send_key(password, self.password)
+
+            # elif platform.system() == "Linux":
+            #     self.driver.execute_script(
+            #         f"document.querySelector('{self.elements.campo_username}').value = '{self.username}'"
+            #     )
+
+            #     self.driver.execute_script(
+            #         f"document.querySelector('{self.elements.campo_passwd}').value = '{self.password}'"
+            #     )
 
             entrar = self.driver.find_element(By.CSS_SELECTOR, self.elements.btn_entrar)
             entrar.click()
