@@ -28,6 +28,14 @@ path_template = os.path.join(pathlib.Path(__file__).parent.resolve(), "templates
 admin = Blueprint("admin", __name__, template_folder=path_template)
 
 
+class DeleteError(Exception):
+    """Exception raised when trying to delete the user itself."""
+
+    def __init__(self, message: str) -> None:
+        """Initialize the exception."""
+        self.message = message
+
+
 def cadastro_user(form: dict) -> None:
     """User registration.
 
@@ -58,7 +66,23 @@ def update_user(form: dict) -> None:
     db.session.commit()
 
 
-action = {"INSERT": cadastro_user, "UPDATE": update_user}
+def delete_user(form: dict) -> None:
+    """Delete user.
+
+    Args:
+        form (dict): user info.
+
+    """
+    db: SQLAlchemy = app.extensions["sqlalchemy"]
+
+    usr = db.session.query(Users).filter(Users.id == form["id"]).first()
+
+    if usr.id == get_jwt_identity():
+        raise DeleteError(message="Não é possível deletar seu próprio usuário.")
+    db.session.commit()
+
+
+action = {"INSERT": cadastro_user, "UPDATE": update_user, "DELETE": delete_user}
 
 
 @admin.route("/users", methods=["GET", "POST"])
