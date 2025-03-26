@@ -39,6 +39,10 @@ async def users() -> Response:
     """
     try:
         if request.method == "POST":
+            form = await request.json or await request.data or await request.form
+
+            print(form)  # noqa: T201
+
             return await make_response(jsonify({"message": "Método POST"}, 200))
 
         db: SQLAlchemy = app.extensions["sqlalchemy"]
