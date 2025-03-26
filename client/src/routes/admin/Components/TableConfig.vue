@@ -3,7 +3,7 @@ import UsersComponent from "../pages/UsersComponent.vue";
 </script>
 
 <template>
-  <div class="container-fluid bg-white rounded rounded-4 bg-opacity-50">
+  <div class="container-fluid bg-dark rounded rounded-4 bg-opacity-75">
     <ul class="nav nav-tabs" id="myTab" role="tablist">
       <li class="nav-item" role="presentation">
         <button

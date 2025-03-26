@@ -184,39 +184,6 @@ const download_file = async (file: string) => {
             <tr class="text-center">
               <td colspan="8"><span class="placeholder w-100 rounded">Carregando</span></td>
             </tr>
-            <tr class="text-center">
-              <td colspan="8"><span class="placeholder w-100 rounded">Carregando</span></td>
-            </tr>
-            <tr class="text-center">
-              <td colspan="8"><span class="placeholder w-100 rounded">Carregando</span></td>
-            </tr>
-            <tr class="text-center">
-              <td colspan="8"><span class="placeholder w-100 rounded">Carregando</span></td>
-            </tr>
-            <tr class="text-center">
-              <td colspan="8"><span class="placeholder w-100 rounded">Carregando</span></td>
-            </tr>
-            <tr class="text-center">
-              <td colspan="8"><span class="placeholder w-100 rounded">Carregando</span></td>
-            </tr>
-            <tr class="text-center">
-              <td colspan="8"><span class="placeholder w-100 rounded">Carregando</span></td>
-            </tr>
-            <tr class="text-center">
-              <td colspan="8"><span class="placeholder w-100 rounded">Carregando</span></td>
-            </tr>
-            <tr class="text-center">
-              <td colspan="8"><span class="placeholder w-100 rounded">Carregando</span></td>
-            </tr>
-            <tr class="text-center">
-              <td colspan="8"><span class="placeholder w-100 rounded">Carregando</span></td>
-            </tr>
-            <tr class="text-center">
-              <td colspan="8"><span class="placeholder w-100 rounded">Carregando</span></td>
-            </tr>
-            <tr class="text-center">
-              <td colspan="8"><span class="placeholder w-100 rounded">Carregando</span></td>
-            </tr>
           </tbody>
           <tfoot>
             <tr>

@@ -1,16 +1,16 @@
 <script setup lang="ts">
 import { onBeforeMount, ref } from "vue";
 import { api } from "../../../main";
+import { faPen } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import DataTable from "datatables.net-vue3";
 import DataTablesCore from "datatables.net-bs5";
-
+import { current_action, form } from "../resources/formusr";
 const items = ref();
 DataTable.use(DataTablesCore);
 onBeforeMount(async () => {
   try {
     const response = await api.get("/users");
-
-    console.log(response.data);
 
     items.value = response.data.database.map((item) => {
       return [item.id, item.login, item.nome_usuario, item.email];
@@ -19,6 +19,15 @@ onBeforeMount(async () => {
     console.error(error);
   }
 });
+
+function setupEdit(item) {
+  console.log(item);
+  form.id = item[0];
+  form.name = item[1];
+  form.login = item[2];
+  form.email = item[3];
+  current_action.value = "Editar Usuário";
+}
 </script>
 
 <template>
@@ -29,8 +38,13 @@ onBeforeMount(async () => {
           <h3>Usuários</h3>
         </div>
         <div class="justify-content-xxl-end">
-          <BButton class="btn me-2 fw-bold" v-b-modal.ModalFormUsr variant="outline-success"
-            ><em>Cadastrar Usuário</em></BButton
+          <BButton
+            class="btn me-2 fw-bold"
+            v-b-modal.ModalFormUsr
+            variant="outline-success"
+            @click="current_action = 'Cadastrar Usuário'"
+          >
+            <em>Cadastrar Usuário</em></BButton
           >
           <!-- <button type="button" class="btn btn-outline-warning me-2 fw-bold">
             Encerrar Execução<em>Cadastrar Usuário</em>
@@ -46,14 +60,25 @@ onBeforeMount(async () => {
             <th>Login</th>
             <th>Nome</th>
             <th>E-mail</th>
+            <th data-sortable="false">Ações</th>
           </tr>
         </thead>
+        <template #column-4="props">
+          <BButton
+            size="sm"
+            variant="outline-warning"
+            @click="setupEdit(props.rowData)"
+            v-b-modal.ModalFormUsr
+            ><span> <FontAwesomeIcon :icon="faPen" class="me-2" /></span><em>Editar</em></BButton
+          >
+        </template>
         <tfoot>
           <tr>
             <th>#</th>
             <th>Login</th>
             <th>Nome</th>
             <th>E-mail</th>
+            <th data-sortable="false">Ações</th>
           </tr>
         </tfoot>
       </DataTable>
