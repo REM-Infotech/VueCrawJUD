@@ -52,7 +52,7 @@ class Interact(CrawJUD):
             element.click()
             sleep(0.1)
             for c in str(word):
-                sleep(0.5)
+                sleep(0.02)
                 element.send_keys(c)
 
     def click(self, element: WebElement) -> None:
