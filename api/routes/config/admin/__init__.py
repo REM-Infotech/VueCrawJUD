@@ -5,7 +5,19 @@ import pathlib
 from typing import Dict
 
 from flask_sqlalchemy import SQLAlchemy
-from quart import Blueprint, Response, abort, flash, jsonify, make_response, redirect, render_template, session, url_for
+from quart import (
+    Blueprint,
+    Response,
+    abort,
+    flash,
+    jsonify,
+    make_response,
+    redirect,
+    render_template,
+    request,
+    session,
+    url_for,
+)
 from quart import current_app as app
 from quart_jwt_extended import get_jwt_identity, jwt_required
 
@@ -16,7 +28,7 @@ path_template = os.path.join(pathlib.Path(__file__).parent.resolve(), "templates
 admin = Blueprint("admin", __name__, template_folder=path_template)
 
 
-@admin.route("/users", methods=["GET"])
+@admin.route("/users", methods=["GET", "POST"])
 @jwt_required
 async def users() -> Response:
     """Render the users list template.
@@ -26,6 +38,9 @@ async def users() -> Response:
 
     """
     try:
+        if request.method == "POST":
+            return await make_response(jsonify({"message": "Método POST"}, 200))
+
         db: SQLAlchemy = app.extensions["sqlalchemy"]
 
         data = []
