@@ -4,7 +4,7 @@ import UsersComponent from "../pages/UsersComponent.vue";
 
 <template>
   <div class="container-fluid bg-dark rounded rounded-4 bg-opacity-75">
-    <ul class="nav nav-tabs" id="myTab" role="tablist">
+    <ul class="nav nav-tabs" id="TabConfig" role="tablist">
       <li class="nav-item" role="presentation">
         <button
           class="nav-link active"
@@ -48,7 +48,7 @@ import UsersComponent from "../pages/UsersComponent.vue";
         </button>
       </li>
     </ul>
-    <div class="tab-content" id="myTabContent">
+    <div class="tab-content" id="TabConfigContent">
       <div
         class="tab-pane fade p-4 show active"
         id="home-tab-pane"
