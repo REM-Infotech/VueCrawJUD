@@ -4,15 +4,35 @@ import { faFloppyDisk } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { useModal } from "bootstrap-vue-next";
 import { current_action, form } from "../resources/formusr";
-import { api } from "../../../main";
-import { computed, ref } from "vue";
+import { $, api } from "../../../main";
+import { computed, onBeforeMount, ref } from "vue";
+import router from "../../route";
 const { show: show_load, hide: hide_load } = useModal("modal-load");
-
+const { show: show_message } = useModal("ModalMessage");
 const state_modal = ref(false);
-
 const state_email = computed(() => {
-  const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return re.test(form.email);
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email);
+});
+const state_password = computed(() => {
+  return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{6,}$/.test(form.password);
+});
+
+onBeforeMount(async () => {
+  form.reset();
+
+  api.get("/").catch((error) => {
+    if (error.status === 401) {
+      $("#message").text("É necessário fazer login para acessar esta página");
+      router.push({ name: "Login" });
+
+      setTimeout(() => {
+        show_load();
+      }, 500);
+      show_message();
+    } else {
+      console.error(error);
+    }
+  });
 });
 
 async function submitForm(e: Event) {
@@ -89,10 +109,14 @@ async function submitForm(e: Event) {
           <BFormInput id="floatingLogin" v-model="form.login" placeholder="Login" required />
         </BFormFloatingLabel>
         <BFormFloatingLabel class="mb-4" label-for="floatingPassword" label="Senha:">
+          <BFormInvalidFeedback id="floatingPassword-feedback"
+            >Limite Minimo de 6 caracteres</BFormInvalidFeedback
+          >
           <BFormInput
             type="password"
             id="floatingPassword"
-            v-model="form.password"
+            :state="state_password"
+            v-model.trim="form.password"
             placeholder="Senha"
             required
           />
