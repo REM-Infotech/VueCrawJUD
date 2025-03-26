@@ -80,7 +80,6 @@ FORM_CONFIGURATOR = {
 
 async def license_user(usr: int, db: SQLAlchemy) -> str:
     """Return license token."""
-    license_token = db.session.query(Users).filter
     license_token = (
         db.session.query(LicensesUsers)
         .select_from(Users)

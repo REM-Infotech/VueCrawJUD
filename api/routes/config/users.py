@@ -20,6 +20,18 @@ from api.models import SuperUser as SuperUser
 from . import admin
 
 
+def license_(usr: int) -> LicensesUsers | None:
+    """Get the user's license."""
+    db: SQLAlchemy = app.extensions["sqlalchemy"]
+    return (
+        db.session.query(LicensesUsers)
+        .select_from(Users)
+        .join(Users, LicensesUsers.user)
+        .filter(Users.id == usr)
+        .first()
+    )
+
+
 class DeleteError(Exception):
     """Exception raised when trying to delete the user itself."""
 
@@ -58,6 +70,7 @@ def cadastro_user(form: dict) -> None:
 
         usr = Users(**form)
         usr.senhacrip = password
+        usr.licenseusr = license_(get_jwt_identity())
 
         db.session.add(usr)
         db.session.commit()
@@ -141,13 +154,9 @@ async def users() -> Response:
 
         user_id: int = get_jwt_identity()
 
-        users = db.session.query(Users)
         user = db.session.query(Users).filter(Users.id == user_id).first()
 
-        if not user.supersu:
-            users = users.join(LicensesUsers).filter_by(license_token=user.licenseusr.license_token)
-
-        database = users.all()
+        database = db.session.query(Users).join(LicensesUsers).filter_by(license_token=user.licenseusr.license_token)
 
         for item in database:
             item_data = {
