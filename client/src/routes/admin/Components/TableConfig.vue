@@ -8,15 +8,15 @@ import UsersComponent from "../pages/UsersComponent.vue";
       <li class="nav-item" role="presentation">
         <button
           class="nav-link active"
-          id="home-tab"
+          id="users-tab"
           data-bs-toggle="tab"
-          data-bs-target="#home-tab-pane"
+          data-bs-target="#users-tab-pane"
           type="button"
           role="tab"
-          aria-controls="home-tab-pane"
+          aria-controls="users-tab-pane"
           aria-selected="true"
         >
-          Home
+          Usuários
         </button>
       </li>
       <li class="nav-item" role="presentation">
@@ -51,9 +51,9 @@ import UsersComponent from "../pages/UsersComponent.vue";
     <div class="tab-content" id="TabConfigContent">
       <div
         class="tab-pane fade p-4 show active"
-        id="home-tab-pane"
+        id="users-tab-pane"
         role="tabpanel"
-        aria-labelledby="home-tab"
+        aria-labelledby="users-tab"
         tabindex="0"
       >
         <UsersComponent />
