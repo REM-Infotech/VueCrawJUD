@@ -3,19 +3,46 @@ import { faFloppyDisk } from "@fortawesome/free-solid-svg-icons";
 
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { useModal } from "bootstrap-vue-next";
-import { current_action, form } from "../resources/formusr";
+import {
+  current_action,
+  form,
+  submitForm,
+  state_modal,
+  submited,
+  to_modal_message,
+} from "../resources/formusr";
 import { $, api } from "../../../main";
-import { computed, onBeforeMount, ref } from "vue";
+import { computed, onBeforeMount, watch } from "vue";
 import router from "../../route";
 const { show: show_load, hide: hide_load } = useModal("modal-load");
 const { show: show_message } = useModal("ModalMessage");
 const { hide: hide_form } = useModal("ModalFormUsr");
-const state_modal = ref(false);
+
 const state_email = computed(() => {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email);
 });
 const state_password = computed(() => {
   return /^(?=.*[A-Za-z])(?=.*\d)(?=.*[\W_]).{6,}$/.test(form.password);
+});
+
+watch(submited, (value) => {
+  if (value) {
+    show_load();
+  }
+});
+
+watch(to_modal_message, (value) => {
+  if (value) {
+    hide_load();
+
+    setTimeout(() => {
+      show_message();
+    }, 500);
+
+    hide_form();
+
+    to_modal_message.value = false;
+  }
 });
 
 onBeforeMount(async () => {
@@ -35,57 +62,6 @@ onBeforeMount(async () => {
     }
   });
 });
-
-async function submitForm(e: Event) {
-  show_load();
-  e.preventDefault();
-
-  const formData = new FormData();
-  formData.append("name", form.name);
-  formData.append("login", form.login);
-  formData.append("email", form.email);
-  formData.append("password", form.password);
-
-  if (current_action.value.includes("Editar")) {
-    formData.append("id", form.id.toString());
-    formData.append("method_request", "UPDATE");
-  } else if (current_action.value.includes("Cadastrar")) {
-    formData.append("method_request", "INSERT");
-  }
-
-  api
-    .post("/users", formData, {
-      withXSRFToken: true,
-      withCredentials: true,
-      headers: {
-        // Note: Changing the Content-Type may avoid the preflight but could affect your API expectations.
-        "Content-Type": "application/x-www-form-urlencoded", // Use a "simple" header if possible
-        "x-csrf-token": sessionStorage.getItem("x-csrf-token") || "",
-      },
-    })
-    .then((response) => {
-      if (response.status === 200) {
-        hide_form();
-        $("#message").text(response.data.message);
-        setTimeout(() => {
-          show_message();
-        }, 400);
-      } else {
-        $("#message").text(response.data.message);
-        setTimeout(() => {
-          show_message();
-        }, 400);
-      }
-    })
-    .catch((error) => {
-      console.error(error);
-    });
-
-  setTimeout(() => {
-    hide_load();
-  }, 500);
-  state_modal.value = false;
-}
 </script>
 
 <template>

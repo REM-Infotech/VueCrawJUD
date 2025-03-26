@@ -6,6 +6,7 @@ import {
   faListCheck,
   faRobot,
   faArrowRightFromBracket,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   faUser,
   faGear,
 } from "@fortawesome/free-solid-svg-icons";
@@ -92,7 +93,7 @@ const handleLogoutClick = (e: Event) => {
           <strong>Robotz213</strong>
         </a>
         <ul class="dropdown-menu text-small shadow bg-dark-purple2">
-          <li><a class="dropdown-item" href="#">New project...</a></li>
+          <!-- <li><a class="dropdown-item" href="#">New project...</a></li>
           <li><a class="dropdown-item" href="#">Settings</a></li>
           <li>
             <a class="dropdown-item" href="#">
@@ -100,7 +101,7 @@ const handleLogoutClick = (e: Event) => {
               <span class="text">Profile</span>
             </a>
           </li>
-          <li><hr class="dropdown-divider" /></li>
+          <li><hr class="dropdown-divider" /></li> -->
           <li>
             <a class="dropdown-item" href="#" @click="handleLogoutClick">
               <FontAwesomeIcon :icon="faArrowRightFromBracket" class="me-2" />

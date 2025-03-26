@@ -1,12 +1,19 @@
 <script setup lang="ts">
 import { onBeforeMount, ref } from "vue";
 import { api } from "../../../main";
-import { faPen } from "@fortawesome/free-solid-svg-icons";
+import { faPen, faTrash, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import DataTable from "datatables.net-vue3";
 import DataTablesCore from "datatables.net-bs5";
 import { current_action, form } from "../resources/formusr";
+import { submitForm, delete_call } from "../resources/formusr";
 const items = ref();
+
+const submitDelete = () => {
+  delete_call.value = true;
+  submitForm(new Event("submit"));
+};
+
 DataTable.use(DataTablesCore);
 onBeforeMount(async () => {
   try {
@@ -44,8 +51,11 @@ function setupEdit(item) {
             variant="outline-success"
             @click="current_action = 'Cadastrar Usuário'"
           >
-            <em>Cadastrar Usuário</em></BButton
-          >
+            <span>
+              <FontAwesomeIcon :icon="faPlus" class="me-2" />
+            </span>
+            <em>Cadastrar Usuário</em>
+          </BButton>
           <!-- <button type="button" class="btn btn-outline-warning me-2 fw-bold">
             Encerrar Execução<em>Cadastrar Usuário</em>
           </button> -->
@@ -66,11 +76,28 @@ function setupEdit(item) {
         <template #column-4="props">
           <BButton
             size="sm"
+            class="me-2"
             variant="outline-warning"
             @click="setupEdit(props.rowData)"
             v-b-modal.ModalFormUsr
-            ><span> <FontAwesomeIcon :icon="faPen" class="me-2" /></span><em>Editar</em></BButton
           >
+            <span>
+              <FontAwesomeIcon :icon="faPen" class="me-2" />
+            </span>
+            <em>Editar</em>
+          </BButton>
+          <BButton
+            class="me-2"
+            size="sm"
+            variant="outline-danger"
+            @click="submitDelete"
+            v-b-modal.ModalFormUsr
+          >
+            <span>
+              <FontAwesomeIcon :icon="faTrash" class="me-2" />
+            </span>
+            <em>Deletar</em>
+          </BButton>
         </template>
         <tfoot>
           <tr>
