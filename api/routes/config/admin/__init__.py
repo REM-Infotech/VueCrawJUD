@@ -53,7 +53,7 @@ def update_user(form: dict) -> None:
     usr = db.session.query(Users).filter(Users.id == form["id"]).first()
 
     if password:
-        usr.senhacrip = password
+        usr.senhacrip = str(password)
 
     db.session.commit()
 
