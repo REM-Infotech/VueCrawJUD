@@ -36,6 +36,22 @@ class DeleteError(Exception):
         self.message = message
 
 
+class UpdateError(Exception):
+    """Exception raised when trying to update the user itself."""
+
+    def __init__(self, message: str) -> None:
+        """Initialize the exception."""
+        self.message = message
+
+
+class InsertError(Exception):
+    """Exception raised when trying to insert the user itself."""
+
+    def __init__(self, message: str) -> None:
+        """Initialize the exception."""
+        self.message = message
+
+
 def cadastro_user(form: dict) -> None:
     """User registration.
 
@@ -43,8 +59,19 @@ def cadastro_user(form: dict) -> None:
         form (dict): user info.
 
     """
-    db: SQLAlchemy = app.extensions["sqlalchemy"]
-    db.session.add(form)
+    try:
+        db: SQLAlchemy = app.extensions["sqlalchemy"]
+
+        password = form.pop("password")
+
+        usr = Users(**form)
+        usr.senhacrip = password
+
+        db.session.add(usr)
+        db.session.commit()
+
+    except Exception as e:
+        raise InsertError(message=f"Erro ao inserir usuário: {e!s}") from e
 
 
 def update_user(form: dict) -> None:
@@ -54,16 +81,19 @@ def update_user(form: dict) -> None:
         form (dict): user info.
 
     """
-    db: SQLAlchemy = app.extensions["sqlalchemy"]
+    try:
+        db: SQLAlchemy = app.extensions["sqlalchemy"]
 
-    password: str = form.pop("password")
+        password: str = form.pop("password")
 
-    usr = db.session.query(Users).filter(Users.id == form["id"]).first()
+        usr = db.session.query(Users).filter(Users.id == form["id"]).first()
 
-    if password:
-        usr.senhacrip = str(password)
+        if password:
+            usr.senhacrip = str(password)
 
-    db.session.commit()
+        db.session.commit()
+    except Exception as e:
+        raise UpdateError(message=f"Erro ao atualizar usuário: {e!s}") from e
 
 
 def delete_user(form: dict) -> None:
@@ -96,12 +126,22 @@ async def users() -> Response:
     """
     try:
         if request.method == "POST":
-            form = await request.json or await request.data or await request.form
+            try:
+                form_data = await request.json or await request.data or await request.form
 
-            action.get(form.pop("method_request"))(form)
+                form = {}
+                form.update(form_data)
 
-            return await make_response(jsonify({"message": "Método POST"}, 200))
+                method_request: str = form.pop("method_request")
+                action.get(method_request)(form)
 
+                message = "Salvo com sucesso!"
+                if method_request == "DELETE":
+                    message = "Deletado com sucesso!"
+
+                return await make_response(jsonify(message=message), 200)
+            except (InsertError, UpdateError, DeleteError, Exception) as e:
+                return await make_response(jsonify({"message": str(e)}, 400))
         db: SQLAlchemy = app.extensions["sqlalchemy"]
 
         data = []

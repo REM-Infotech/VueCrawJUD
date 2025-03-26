@@ -9,6 +9,7 @@ import { computed, onBeforeMount, ref } from "vue";
 import router from "../../route";
 const { show: show_load, hide: hide_load } = useModal("modal-load");
 const { show: show_message } = useModal("ModalMessage");
+const { hide: hide_form } = useModal("ModalFormUsr");
 const state_modal = ref(false);
 const state_email = computed(() => {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email);
@@ -56,9 +57,25 @@ async function submitForm(e: Event) {
     .post("/users", formData, {
       withXSRFToken: true,
       withCredentials: true,
+      headers: {
+        // Note: Changing the Content-Type may avoid the preflight but could affect your API expectations.
+        "Content-Type": "application/x-www-form-urlencoded", // Use a "simple" header if possible
+        "x-csrf-token": sessionStorage.getItem("x-csrf-token") || "",
+      },
     })
     .then((response) => {
-      console.log(response);
+      if (response.status === 200) {
+        hide_form();
+        $("#message").text(response.data.message);
+        setTimeout(() => {
+          show_message();
+        }, 400);
+      } else {
+        $("#message").text(response.data.message);
+        setTimeout(() => {
+          show_message();
+        }, 400);
+      }
     })
     .catch((error) => {
       console.error(error);
