@@ -41,6 +41,7 @@ const routes = [
     path: "/configs",
     name: "config",
     component: () => import("./admin/ConfigView.vue"),
+    meta: { requiresAuth: true },
   },
 ];
 

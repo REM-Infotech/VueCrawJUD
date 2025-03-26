@@ -33,9 +33,6 @@ export default function () {
         $("#message").text(response.data.message);
         show_message();
 
-        sessionStorage.clear();
-        localStorage.clear();
-
         router.push({ name: "login" });
         sessionStorage.clear();
         localStorage.clear();
