@@ -10,7 +10,7 @@ import SideBarComponent from "../../components/SideBarComponent.vue";
     <SideBarComponent />
     <div>
       <main>
-        <BContainer fluid class="px-4">
+        <BContainer fluid="md" class="px-4">
           <h1 class="text-2xl font-bold mb-4 text-white">Configuração de Usuários</h1>
           <TableConfig />
         </BContainer>

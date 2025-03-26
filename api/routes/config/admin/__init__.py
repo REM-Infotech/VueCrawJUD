@@ -5,9 +5,9 @@ import pathlib
 from typing import Dict
 
 from flask_sqlalchemy import SQLAlchemy
-from quart import Blueprint, Response, abort, flash, make_response, redirect, render_template, session, url_for
+from quart import Blueprint, Response, abort, flash, jsonify, make_response, redirect, render_template, session, url_for
 from quart import current_app as app
-from quart_jwt_extended import jwt_required
+from quart_jwt_extended import get_jwt_identity, jwt_required
 
 # from crawjud.forms import UserForm, UserFormEdit
 from api.models import LicensesUsers, SuperUser, Users
@@ -28,19 +28,29 @@ async def users() -> Response:
     try:
         db: SQLAlchemy = app.extensions["sqlalchemy"]
 
-        user = db.session.query(Users).filter(Users.login == session["login"]).first()
-        user_id = user.id
+        data = []
 
-        chksupersu = db.session.query(SuperUser).join(Users).filter(Users.id == user_id).first()
+        user_id: int = get_jwt_identity()
 
         users = db.session.query(Users)
-        if not chksupersu:
+        user = db.session.query(Users).filter(Users.id == user_id).first()
+
+        if not user.supersu:
             users = users.join(LicensesUsers).filter_by(license_token=user.licenseusr.license_token)
 
         database = users.all()
 
-        page = "users.html"
-        return await make_response(await render_template("index.html", page=page, database=database))
+        for item in database:
+            item_data = {
+                "id": item.id,
+                "login": item.login,
+                "nome_usuario": item.nome_usuario,
+                "email": item.email,
+            }
+
+            data.append(item_data)
+
+        return await make_response(jsonify(database=data))
 
     except Exception as e:
         abort(500, description=f"Erro interno do servidor: {e!s}")
