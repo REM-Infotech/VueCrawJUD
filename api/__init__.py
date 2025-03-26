@@ -121,13 +121,13 @@ async def register_routes(app: Quart) -> None:
 
     from api.routes.auth import auth
     from api.routes.bot import bot
-    from api.routes.config import admin, supersu, usr
+    from api.routes.config import admin
     from api.routes.credentials import cred
     from api.routes.dashboard import dash
     from api.routes.execution import exe
     from api.routes.logs import logsbot
 
-    listBlueprints = [bot, auth, logsbot, exe, dash, cred, admin, supersu, usr]  # noqa: N806
+    listBlueprints = [bot, auth, logsbot, exe, dash, cred, admin]  # noqa: N806
 
     for bp in listBlueprints:
         app.register_blueprint(bp)

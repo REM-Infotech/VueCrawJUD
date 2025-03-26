@@ -1,10 +1,18 @@
-"""Module for configuration routes.
+"""Config blueprint for admin routes."""
 
-This module aggregates the blueprints for admin, supersu, and user configurations.
-"""
+from importlib import import_module
+from os import path
+from pathlib import Path
 
-from api.routes.config.admin import admin
-from api.routes.config.superSu import supersu
-from api.routes.config.user import usr
+from quart import Blueprint
 
-__all__ = [usr, admin, supersu]
+path_template = path.join(Path(__file__).parent.resolve(), "templates")
+admin = Blueprint("admin", __name__, template_folder=path_template)
+
+
+def import_routes() -> None:
+    """Import routes."""
+    import_module(".users", __package__)
+
+
+import_routes()

@@ -74,30 +74,32 @@ function setupEdit(item) {
           </tr>
         </thead>
         <template #column-4="props">
-          <BButton
-            size="sm"
-            class="me-2"
-            variant="outline-warning"
-            @click="setupEdit(props.rowData)"
-            v-b-modal.ModalFormUsr
-          >
-            <span>
-              <FontAwesomeIcon :icon="faPen" class="me-2" />
-            </span>
-            <em>Editar</em>
-          </BButton>
-          <BButton
-            class="me-2"
-            size="sm"
-            variant="outline-danger"
-            @click="submitDelete"
-            v-b-modal.ModalFormUsr
-          >
-            <span>
-              <FontAwesomeIcon :icon="faTrash" class="me-2" />
-            </span>
-            <em>Deletar</em>
-          </BButton>
+          <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <BButton
+              size="sm"
+              class="me-2"
+              variant="outline-warning"
+              @click="setupEdit(props.rowData)"
+              v-b-modal.ModalFormUsr
+            >
+              <span>
+                <FontAwesomeIcon :icon="faPen" class="me-2" />
+              </span>
+              <em>Editar</em>
+            </BButton>
+            <BButton
+              class="me-2"
+              size="sm"
+              variant="outline-danger"
+              @click="submitDelete"
+              v-b-modal.ModalFormUsr
+            >
+              <span>
+                <FontAwesomeIcon :icon="faTrash" class="me-2" />
+              </span>
+              <em>Deletar</em>
+            </BButton>
+          </div>
         </template>
         <tfoot>
           <tr>
