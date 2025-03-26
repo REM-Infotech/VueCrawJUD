@@ -2,6 +2,7 @@
 import TableConfig from "./Components/TableConfig.vue";
 import NavBarComponent from "../../components/NavBarComponent.vue";
 import SideBarComponent from "../../components/SideBarComponent.vue";
+import ModalCadUsr from "./Components/CadUser.vue";
 </script>
 
 <template>
@@ -15,6 +16,7 @@ import SideBarComponent from "../../components/SideBarComponent.vue";
           <TableConfig />
         </BContainer>
       </main>
+      <ModalCadUsr />
     </div>
   </div>
 </template>

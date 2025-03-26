@@ -168,8 +168,16 @@ async def format_message_log(
                         log_pid["success"] = int(log_pid["success"]) + 1
 
             elif data_type == "error":
-                log_pid.update({"remaining": int(log_pid["remaining"]) - 1})
-                log_pid.update({"errors": int(log_pid["errors"]) + 1})
+                remaining: int = log_pid.get("remaining", 100)
+                if not remaining:
+                    remaining = 100
+
+                errors: int = log_pid.get("errors", 0)
+                if not errors:
+                    errors = 0
+
+                log_pid.update({"remaining": int(remaining) - 1})
+                log_pid.update({"errors": int(errors) + 1})
 
                 if data_pos == 0 or app.testing:
                     log_pid["errors"] = log_pid["total"]
