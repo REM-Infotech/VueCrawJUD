@@ -14,7 +14,7 @@ const state_email = computed(() => {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email);
 });
 const state_password = computed(() => {
-  return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{6,}$/.test(form.password);
+  return /^(?=.*[A-Za-z])(?=.*\d)(?=.*[\W_]).{6,}$/.test(form.password);
 });
 
 onBeforeMount(async () => {

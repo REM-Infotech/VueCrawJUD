@@ -28,6 +28,39 @@ path_template = os.path.join(pathlib.Path(__file__).parent.resolve(), "templates
 admin = Blueprint("admin", __name__, template_folder=path_template)
 
 
+def cadastro_user(form: dict) -> None:
+    """User registration.
+
+    Args:
+        form (dict): user info.
+
+    """
+    db: SQLAlchemy = app.extensions["sqlalchemy"]
+    db.session.add(form)
+
+
+def update_user(form: dict) -> None:
+    """Update user.
+
+    Args:
+        form (dict): user info.
+
+    """
+    db: SQLAlchemy = app.extensions["sqlalchemy"]
+
+    password: str = form.pop("password")
+
+    usr = db.session.query(Users).filter(Users.id == form["id"]).first()
+
+    if password:
+        usr.senhacrip = password
+
+    db.session.commit()
+
+
+action = {"INSERT": cadastro_user, "UPDATE": update_user}
+
+
 @admin.route("/users", methods=["GET", "POST"])
 @jwt_required
 async def users() -> Response:
@@ -41,7 +74,7 @@ async def users() -> Response:
         if request.method == "POST":
             form = await request.json or await request.data or await request.form
 
-            print(form)  # noqa: T201
+            action.get(form.pop("method_request"))(form)
 
             return await make_response(jsonify({"message": "Método POST"}, 200))
 
