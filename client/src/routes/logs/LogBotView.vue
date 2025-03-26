@@ -1,17 +1,16 @@
 <script setup lang="ts">
 import { io as socketio } from "socket.io-client";
-
 import { onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { Chart, ChartType } from "chart.js/auto";
-import { faPieChart } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import ChartProgress from "./components/ChartProgress.vue";
 import NavBarComponent from "../../components/NavBarComponent.vue";
 import SideBarComponent from "../../components/SideBarComponent.vue";
 const { show: show_message } = useModal("ModalMessage");
 import { $, api } from "../../main";
 import { useModal } from "bootstrap-vue-next";
 import { onBeforeMount } from "vue";
+import LogsView from "./components/LogsView.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -211,7 +210,7 @@ const stop_execut = () => {
     <SideBarComponent />
     <div>
       <main>
-        <BContainer fluid="xl" class="px-4">
+        <BContainer fluid class="px-4">
           <div class="card">
             <div class="card-header">
               <div class="d-flex gap-3">
@@ -235,61 +234,10 @@ const stop_execut = () => {
             <div class="card-body bg-warning">
               <div class="row">
                 <div class="col-xl-6 col-md-6">
-                  <div
-                    class="card fixed-height-card border-4 rounded rounded-4 border-black"
-                    style="height: 35rem"
-                  >
-                    <div class="card-header">
-                      <div class="row justify-content-between align-items-center">
-                        <div class="col-md-5">
-                          <span class="fw-semibold me-3">
-                            <i class="fas fa-chart-pie"></i>
-                            <FontAwesomeIcon :icon="faPieChart" />
-                          </span>
-                          <span class="fw-semibold">Logs </span>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="card-body bg-black overflow-auto">
-                      <div class="container-fluid">
-                        <ul
-                          id="messages"
-                          class="list-group list-group-flush over overflow-hidden"
-                        ></ul>
-                      </div>
-                    </div>
-                    <div class="card-footer small text-muted fw-semibold">
-                      <span id="status">Status: Em Execução | Total: </span>
-                    </div>
-                  </div>
+                  <LogsView />
                 </div>
                 <div class="col-xl-6 col-md-6">
-                  <div
-                    class="card mb-4 fixed-height-card border-4 rounded rounded-4 border-black"
-                    style="height: 35rem"
-                  >
-                    <div class="card-header">
-                      <div class="row justify-content-between align-items-center">
-                        <div class="col-md-5">
-                          <span class="fw-semibold me-3">
-                            <i class="fas fa-chart-pie"></i>
-                            <FontAwesomeIcon :icon="faPieChart" />
-                          </span>
-                          <span class="fw-semibold">Logs </span>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="card-body bg-primary bg-opacity-50">
-                      <div class="container-fluid d-grid justify-content-xl-center w-50">
-                        <canvas id="LogsBotChart"></canvas>
-                      </div>
-                    </div>
-                    <div class="card-footer small text-muted fw-semibold">
-                      <span id="remaining">Restantes: -.- </span> |
-                      <span id="success">Sucessos: -.- </span> |
-                      <span id="errors">Erros: -.- </span>
-                    </div>
-                  </div>
+                  <ChartProgress />
                 </div>
               </div>
             </div>

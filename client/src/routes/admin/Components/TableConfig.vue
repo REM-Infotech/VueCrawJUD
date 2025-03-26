@@ -1,16 +1,19 @@
 <script setup>
 import { onBeforeMount, ref } from "vue";
 import { api } from "../../../main";
-
+import DataTable from "datatables.net-vue3";
+import DataTablesCore from "datatables.net-bs5";
 const items = ref();
-
+DataTable.use(DataTablesCore);
 onBeforeMount(async () => {
   try {
     const response = await api.get("/users");
 
     console.log(response.data);
 
-    items.value = response.data.database;
+    items.value = response.data.database.map((item) => {
+      return [item.id, item.login, item.nome_usuario, item.email];
+    });
   } catch (error) {
     console.error(error);
   }
@@ -88,7 +91,45 @@ onBeforeMount(async () => {
             </div>
           </div>
           <div class="card-body table-responsive">
-            <table class="table table-striped table-hover">
+            <DataTable :data="items" class="placeholder-glow table table-striped table-hover">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Login</th>
+                  <th>Nome</th>
+                  <th>E-mail</th>
+                </tr>
+              </thead>
+              <!-- <template #column-7="props">
+                <button
+                  v-if="props.rowData[5].toString().toLowerCase() !== 'em execução'"
+                  class="btn btn-sm btn-success"
+                  data-bs-toggle="tooltip"
+                  data-bs-title="Default tooltip"
+                  @click="download_file(props.cellData)"
+                >
+                  <FontAwesomeIcon :icon="faDownload" />
+                </button>
+
+                <a
+                  v-else-if="props.rowData[5].toString().toLowerCase() === 'em execução'"
+                  :href="`/logs_bot/${props.rowData[0]}`"
+                  class="btn btn-sm btn-primary"
+                  data-bs-toggle="tooltip"
+                  data-bs-title="Default tooltip"
+                  ><FontAwesomeIcon :icon="faEye"
+                /></a>
+              </template> -->
+              <tfoot>
+                <tr>
+                  <th>#</th>
+                  <th>Login</th>
+                  <th>Nome</th>
+                  <th>E-mail</th>
+                </tr>
+              </tfoot>
+            </DataTable>
+            <!-- <table class="table table-striped table-hover">
               <thead>
                 <tr>
                   <th scope="col">#</th>
@@ -105,7 +146,7 @@ onBeforeMount(async () => {
                   <td>{{ item.email }}</td>
                 </tr>
               </tbody>
-            </table>
+            </table> -->
           </div>
         </div>
       </div>
