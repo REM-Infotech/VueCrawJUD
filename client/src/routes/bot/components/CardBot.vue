@@ -17,7 +17,7 @@ onBeforeMount(async () => {
     })
     .catch((response) => {
       // check if response.status is 4** error
-      if (response.response.status >= 400 && response.response.status < 500) {
+      if (response.response.status === 401 || response.response.status === 422) {
         $("#message").text("É necessário estar autenticado para acessar essa página.");
         router.push({ name: "login" });
         show_message();

@@ -150,11 +150,7 @@ const setup_form = async (_e) => {
     if (data.msg === "Missing CSRF token") {
       $("#message").text("CSRF Token inválido.");
       show_message();
-    } else if (
-      response.response.status >= 400 &&
-      response.response.status < 500 &&
-      response.response.status != 404
-    ) {
+    } else if (response.response.status === 401 || response.response.status === 422) {
       $("#message").text("É necessário estar autenticado para acessar essa página.");
       router.push({ name: "login" });
       show_message();
@@ -185,11 +181,10 @@ const setup_form = async (_e) => {
     // Check if response.status is 4** error and not 404
 
     if (
-      response.response.status >= 400 &&
-      response.response.status < 500 &&
-      response.response.status != 404 &&
-      response.data.msg != null &&
-      response.data.msg != "Missing CSRF token"
+      response.response.status === 401 ||
+      (response.response.status === 422 &&
+        response.data.msg != null &&
+        response.data.msg != "Missing CSRF token")
     ) {
       $("#message").text("É necessário estar autenticado para acessar essa página.");
       router.push({ name: "login" });
@@ -254,11 +249,7 @@ async function peformSubmit(event: Event) {
     .catch((response) => {
       // check if response.status is 4** error
 
-      if (
-        response.response.status >= 400 &&
-        response.response.status < 500 &&
-        response.response.status != 404
-      ) {
+      if (response.response.status === 401 || response.response.status === 422) {
         $("#message").text("É necessário estar autenticado para acessar essa página.");
         router.push({ name: "login" });
         show_message();

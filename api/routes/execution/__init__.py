@@ -5,6 +5,7 @@ This module provides endpoints for listing executions and downloading execution 
 
 import os
 import pathlib
+import traceback
 from importlib import import_module
 
 from flask_sqlalchemy import SQLAlchemy
@@ -15,7 +16,6 @@ from quart import (
     jsonify,
     make_response,
     render_template,
-    session,
 )
 from quart import current_app as app
 from quart_jwt_extended import (  # noqa: F401
@@ -59,8 +59,8 @@ async def executions() -> Response:
                 filter(lambda x: str(x.license_usr.license_token) == str(user.licenseusr.license_token), executions)
             )
 
-            if not user.admins:
-                executions = list(filter(lambda x: str(x.user.login) == str(session["login"]), executions))
+            if not user.admin:
+                executions = list(filter(lambda x: x.user.id == current_user, executions))
 
         for item in executions:
             data.append({
@@ -76,7 +76,8 @@ async def executions() -> Response:
 
         return jsonify(data=data)
 
-    except Exception:
+    except Exception as e:
+        app.logger.error("".join(traceback.format_exception(e)))
         abort(500)
 
 

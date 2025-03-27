@@ -131,6 +131,8 @@ async def users() -> Response:
 
     """
     try:
+        db: SQLAlchemy = app.extensions["sqlalchemy"]
+
         if request.method == "POST":
             try:
                 form_data = await request.json or await request.data or await request.form
@@ -148,27 +150,31 @@ async def users() -> Response:
                 return await make_response(jsonify(message=message), 200)
             except (InsertError, UpdateError, DeleteError, Exception) as e:
                 return await make_response(jsonify({"message": str(e)}, 400))
-        db: SQLAlchemy = app.extensions["sqlalchemy"]
 
-        data = []
+        if request.method == "GET":
+            user_id: int = get_jwt_identity()
+            user = db.session.query(Users).filter(Users.id == user_id).first()
 
-        user_id: int = get_jwt_identity()
+            if not user.supersu or not user.admin:
+                abort(403, description="Acesso negado")
 
-        user = db.session.query(Users).filter(Users.id == user_id).first()
+            data = []
 
-        database = db.session.query(Users).join(LicensesUsers).filter_by(license_token=user.licenseusr.license_token)
+            database = (
+                db.session.query(Users).join(LicensesUsers).filter_by(license_token=user.licenseusr.license_token)
+            )
 
-        for item in database:
-            item_data = {
-                "id": item.id,
-                "login": item.login,
-                "nome_usuario": item.nome_usuario,
-                "email": item.email,
-            }
+            for item in database:
+                item_data = {
+                    "id": item.id,
+                    "login": item.login,
+                    "nome_usuario": item.nome_usuario,
+                    "email": item.email,
+                }
 
-            data.append(item_data)
+                data.append(item_data)
 
-        return await make_response(jsonify(database=data))
+            return await make_response(jsonify(database=data))
 
     except Exception as e:
         app.logger.exception("\n".join(traceback.format_exception(e)))
