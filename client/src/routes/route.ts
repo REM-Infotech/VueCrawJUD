@@ -41,7 +41,7 @@ const routes = [
     path: "/configs",
     name: "config",
     component: () => import("./admin/ConfigView.vue"),
-    meta: { requiresAuth: true },
+    meta: { requiresAuth: true, requiresAdmin: true },
   },
 ];
 
@@ -50,24 +50,40 @@ const router = createRouter({
   routes,
 });
 
-router.beforeEach(async (to) => {
-  const { show, hide } = useModal("modal-load");
+router.afterEach((to, from) => {
+  const { show: show_message } = useModal("ModalMessage");
+
+  const { show: show_load, hide: hide_load } = useModal("modal-load");
   if (to.meta.requiresAuth) {
     if ($("#app").hasClass("bg-indigo")) {
       $("#app").removeClass("bg-indigo");
       $("#app").addClass("bg-purple");
     }
 
-    show();
+    if (to.name != from.name) {
+      show_load();
 
-    setTimeout(() => {
-      hide();
-    }, 1000);
+      setTimeout(() => {
+        hide_load();
+      }, 1000);
+    }
   } else {
     if ($("#app").hasClass("bg-purple")) {
       $("#app").removeClass("bg-purple");
     }
     $("#app").addClass("bg-indigo");
+  }
+
+  if (to.meta.requiresAdmin) {
+    if (!localStorage.getItem("admin")) {
+      router.push({ name: "index" });
+
+      $("#message").text("Você não tem permissão para acessar essa página!");
+
+      setTimeout(() => {
+        show_message();
+      }, 1000);
+    }
   }
 });
 

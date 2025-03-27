@@ -33,7 +33,7 @@ async def create_celery_app() -> Celery:
         app: The Quart application instance to configure
 
     Returns:
-        None
+        Celery: The Celery application instance
 
     """
     from crawjud.utils import make_celery

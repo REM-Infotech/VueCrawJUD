@@ -22,8 +22,8 @@ onBeforeMount(async () => {
     items.value = response.data.database.map((item) => {
       return [item.id, item.login, item.nome_usuario, item.email];
     });
-  } catch (error) {
-    console.error(error);
+  } catch {
+    //
   }
 });
 

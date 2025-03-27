@@ -81,12 +81,14 @@ async def login() -> Response:
             refresh_token = create_refresh_token(identity=usr)
 
             # token = decode_token(access_token)
+            isAdmin = True if usr.admin or usr.supersu else False  # noqa: N806
 
             resp = await make_response(
                 jsonify({
                     "token": access_token,
                     "message": "Login efetuado com sucesso!",
                     "x-csrf-token": get_csrf_token(access_token),
+                    "admin": isAdmin,
                 })
             )
 
