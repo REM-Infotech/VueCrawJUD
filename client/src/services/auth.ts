@@ -65,6 +65,7 @@ export default function () {
           const data: Record<string, string> = response.data as Record<string, string>;
           sessionStorage.setItem("token", data.token);
           sessionStorage.setItem("x-csrf-token", data["x-csrf-token"]);
+          localStorage.setItem("admin", data.admin);
           // console.log(data["x-csrf-token"]);
 
           sessionStorage.setItem("message", "Login Efetuado com sucesso!");

@@ -87,12 +87,11 @@ const download_file = async (file: string) => {
       .catch((response) => {
         // check if response is 4** error and not 404
 
-        if (response.code === "")
-          if (response.response.status === 401 || response.response.status === 422) {
-            $("#message").text("É necessário estar autenticado para acessar essa página.");
-            router.push({ name: "login" });
-            show_message();
-          }
+        if (response.response.status === 401 || response.response.status === 422) {
+          $("#message").text("É necessário estar autenticado para acessar essa página.");
+          router.push({ name: "login" });
+          show_message();
+        }
       });
   }, 1000);
 };
