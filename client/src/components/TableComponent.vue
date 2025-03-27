@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import moment from "moment";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { onBeforeMount, onMounted, ref } from "vue";
@@ -7,8 +6,14 @@ import DataTable from "datatables.net-vue3";
 import DataTablesCore from "datatables.net-bs5";
 import { useRouter } from "vue-router";
 import { useModal } from "bootstrap-vue-next";
+import { convertDate } from "../services/convert_date";
 DataTable.use(DataTablesCore);
 
+const options = {
+  language: {
+    url: "//cdn.datatables.net/plug-ins/1.13.4/i18n/pt-BR.json",
+  },
+};
 const { show: show_load, hide: hide_load } = useModal("modal-load");
 const { show: show_message } = useModal("ModalMessage");
 
@@ -34,16 +39,12 @@ onMounted(async function () {
           item.botname,
           item.xlsx,
           () => {
-            return moment(item.start_date, "ddd, DD MMM YYYY HH:mm:ss GMT").format(
-              "DD/MM/YYYY HH:mm",
-            );
+            return convertDate(item.start_date);
           },
           item.status,
 
           () => {
-            return moment(item.stop_date, "ddd, DD MMM YYYY HH:mm:ss GMT").format(
-              "DD/MM/YYYY HH:mm",
-            );
+            return convertDate(item.stop_date);
           },
           item.file_output,
         ];
@@ -87,11 +88,12 @@ const download_file = async (file: string) => {
       .catch((response) => {
         // check if response is 4** error and not 404
 
-        if (response.response.status === 401 || response.response.status === 422) {
-          $("#message").text("É necessário estar autenticado para acessar essa página.");
-          router.push({ name: "login" });
-          show_message();
-        }
+        if (response.code === "")
+          if (response.response.status === 401 || response.response.status === 422) {
+            $("#message").text("É necessário estar autenticado para acessar essa página.");
+            router.push({ name: "login" });
+            show_message();
+          }
       });
   }, 1000);
 };
@@ -105,7 +107,11 @@ const download_file = async (file: string) => {
     </div>
     <div class="card-body">
       <div v-if="data_" class="table-responsive">
-        <DataTable :data="items" class="placeholder-glow table table-striped table-hover">
+        <DataTable
+          :data="items"
+          class="placeholder-glow table table-striped table-hover"
+          :options="options"
+        >
           <thead>
             <tr>
               <th>#</th>

@@ -40,7 +40,7 @@ const current_bot = (item) => {
         <template #img>
           <img src="@/assets/projudi.png" alt="" />
         </template>
-        <BCardBody style="height: 6rem" class="">
+        <BCardBody style="height: 6rem" class="overflow-y-auto">
           <span class="overflow-auto" style="height: 50rem">{{ item.text }} </span>
         </BCardBody>
         <template #footer>
@@ -58,8 +58,8 @@ const current_bot = (item) => {
         <template #header>
           <span class="fw-bold">{{ item.display_name }}</span>
         </template>
-        <BCardBody style="height: 6rem" class="">
-          <span class="overflow-auto" style="height: 50rem">{{ item.text }} </span>
+        <BCardBody style="height: 6rem" class="overflow-y-auto">
+          <span style="height: 50rem">{{ item.text }} </span>
         </BCardBody>
         <template #img>
           <img src="@/assets/crawjud2.svg" alt="" />

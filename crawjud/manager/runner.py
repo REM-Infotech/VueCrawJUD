@@ -131,7 +131,12 @@ class RunnerServices:
         self.event_stop.wait()
         self.event_stop.set()
 
-        asyncio.run(self.app.shutdown())
+        if isinstance(self.app, ASGIApp):
+            app: Quart = self.app.other_asgi_app
+            asyncio.run(app.shutdown())
+        else:
+            asyncio.run(self.app.shutdown())
+
         asyncio.run(self.srv.shutdown())
 
     def start_specific(self, **kwargs: str) -> None:

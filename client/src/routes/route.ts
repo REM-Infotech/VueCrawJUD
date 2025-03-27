@@ -75,7 +75,8 @@ router.afterEach((to, from) => {
   }
 
   if (to.meta.requiresAdmin) {
-    if (!localStorage.getItem("admin")) {
+    const isAdmin = localStorage.getItem("admin");
+    if (isAdmin === null || isAdmin === "false") {
       router.push({ name: "index" });
 
       $("#message").text("Você não tem permissão para acessar essa página!");
