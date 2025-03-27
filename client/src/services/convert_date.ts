@@ -2,14 +2,40 @@ import moment from "moment";
 import "moment/locale/pt-br";
 
 moment.defineLocale("pt-br", {
-  months:
-    "janeiro_fevereiro_março_abril_maio_junho_julho_agosto_setembro_outubro_novembro_dezembro".split(
-      "_",
-    ),
-  monthsShort: "jan_fev_mar_abr_mai_jun_jul_ago_set_out_nov_dez".split("_"),
-  weekdays: "domingo_segunda-feira_terça-feira_quarta-feira_quinta-feira_sexta-feira_sábado".split(
-    "_",
-  ),
+  months: function (m: moment.Moment) {
+    const lista_mes =
+      "janeiro_fevereiro_março_abril_maio_junho_julho_agosto_setembro_outubro_novembro_dezembro".split(
+        "_",
+      );
+
+    for (let i = 0; i < lista_mes.length; i++) {
+      lista_mes[i] = lista_mes[i].charAt(0).toUpperCase() + lista_mes[i].slice(1);
+    }
+
+    return lista_mes[m.month()];
+  },
+
+  monthsShort: function (m: moment.Moment) {
+    const lista_mes = "jan_fev_mar_abr_mai_jun_jul_ago_set_out_nov_dez".split("_");
+
+    for (let i = 0; i < lista_mes.length; i++) {
+      lista_mes[i] = lista_mes[i].charAt(0).toUpperCase() + lista_mes[i].slice(1);
+    }
+
+    return lista_mes[m.month()];
+  },
+
+  weekdays: function (m: moment.Moment) {
+    const lista_dias_semana =
+      "domingo_segunda-feira_terça-feira_quarta-feira_quinta-feira_sexta-feira_sábado".split("_");
+
+    for (let i = 0; i < lista_dias_semana.length; i++) {
+      lista_dias_semana[i] =
+        lista_dias_semana[i].charAt(0).toUpperCase() + lista_dias_semana[i].slice(1);
+    }
+
+    return lista_dias_semana[m.day()];
+  },
   weekdaysShort: "dom_seg_ter_qua_qui_sex_sáb".split("_"),
   weekdaysMin: "do_2ª_3ª_4ª_5ª_6ª_sá".split("_"),
   weekdaysParseExact: true,
