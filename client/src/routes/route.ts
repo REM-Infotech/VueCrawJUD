@@ -50,12 +50,7 @@ const router = createRouter({
   routes,
 });
 
-router.beforeEach(async (to, _, next) => {
-  next();
-});
-
-// Global afterEach hook para gerenciar a classe do app
-router.afterEach((to) => {
+router.beforeEach(async (to) => {
   const { show, hide } = useModal("modal-load");
   if (to.meta.requiresAuth) {
     if ($("#app").hasClass("bg-indigo")) {
