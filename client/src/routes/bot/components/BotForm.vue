@@ -6,8 +6,8 @@ import { faFileDownload, faTrash, faCheckSquare } from "@fortawesome/free-solid-
 import { useModal } from "bootstrap-vue-next";
 import FormConfig from "../../../services/FormConfig.ts";
 import DropZone from "./FileDropZone.vue";
-import { onBeforeMount, onMounted } from "vue";
-
+import { onMounted } from "vue";
+import { current_bot } from "../../../services/FormConfig.ts";
 import { ref } from "vue";
 
 import { $, api } from "../../../main.ts";
@@ -24,8 +24,6 @@ interface item_type {
   display_name: string;
   form_cfg: string;
 }
-
-let item: item_type;
 
 const { show: show_load, hide: hide_load } = useModal("modal-load");
 const { show: show_message } = useModal("ModalMessage");
@@ -63,10 +61,6 @@ function remove() {
 function selectAll() {
   dt.rows().select();
 }
-
-onBeforeMount(() => {
-  item = JSON.parse(sessionStorage.getItem("current_bot") as string);
-});
 
 onMounted(() => {
   dt = table_file.value.dt;
@@ -107,11 +101,11 @@ const validate_form = () => {
   return true;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const setup_form = async (_e) => {
+const setup_form = async (e) => {
   let response_creds;
   let response_state_client;
-  TitleForm.value = item.display_name;
+  const item: item_type = current_bot.value;
+
   if (item.form_cfg === "only_auth") {
     need_files.value = false;
   } else if (item.form_cfg === "only_file") {
@@ -141,13 +135,14 @@ const setup_form = async (_e) => {
         },
       },
     );
-  } catch (response) {
+  } catch (error) {
     // Check if response.status is 4** error and not 404
+    console.log(error);
 
-    const data = response.data;
+    const response = error.response;
 
     // Check if message is "missing csrf token"
-    if (data.msg === "Missing CSRF token") {
+    if (response.data.msg === "Missing CSRF token") {
       $("#message").text("CSRF Token inválido.");
       show_message();
     } else if (response.response.status === 401 || response.response.status === 422) {
@@ -155,6 +150,7 @@ const setup_form = async (_e) => {
       router.push({ name: "login" });
       show_message();
     }
+    e.preventDefault();
     return;
   }
 
@@ -177,8 +173,10 @@ const setup_form = async (_e) => {
         },
       },
     );
-  } catch (response) {
+  } catch (error) {
     // Check if response.status is 4** error and not 404
+
+    const response = error.response;
 
     if (
       response.response.status === 401 ||
@@ -190,9 +188,11 @@ const setup_form = async (_e) => {
       router.push({ name: "login" });
       show_message();
     }
+    e.preventDefault();
     return;
   }
 
+  TitleForm.value = item.display_name;
   const cred_info = response_creds.data.info;
   const state_client_info = response_state_client.data.info;
 
@@ -206,6 +206,7 @@ DataTable.use(DataTablesCore);
 
 async function peformSubmit(event: Event) {
   event.preventDefault();
+  const item: item_type = current_bot.value;
   show_load();
   if (validate_form() === false) {
     setTimeout(() => {
@@ -248,7 +249,7 @@ async function peformSubmit(event: Event) {
     })
     .catch((response) => {
       // check if response.status is 4** error
-
+      console.log(response);
       if (response.response.status === 401 || response.response.status === 422) {
         $("#message").text("É necessário estar autenticado para acessar essa página.");
         router.push({ name: "login" });

@@ -67,9 +67,9 @@ function setupEdit(item) {
         <thead>
           <tr>
             <th>#</th>
-            <th>Login</th>
-            <th>Nome</th>
-            <th>E-mail</th>
+            <th>Nome Credencial</th>
+            <th>Sistema</th>
+            <th>Método Login</th>
             <th data-sortable="false">Ações</th>
           </tr>
         </thead>
@@ -104,9 +104,9 @@ function setupEdit(item) {
         <tfoot>
           <tr>
             <th>#</th>
-            <th>Login</th>
-            <th>Nome</th>
-            <th>E-mail</th>
+            <th>Nome Credencial</th>
+            <th>Sistema</th>
+            <th>Método Login</th>
             <th data-sortable="false">Ações</th>
           </tr>
         </tfoot>

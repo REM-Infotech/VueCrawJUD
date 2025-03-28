@@ -2,6 +2,8 @@ import { useModal } from "bootstrap-vue-next";
 import { ref } from "vue";
 import { $ } from "../main";
 
+export const current_bot = ref();
+
 export default function () {
   // const vars
   const { show } = useModal("ModalMessage");

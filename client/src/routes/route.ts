@@ -43,6 +43,12 @@ const routes = [
     component: () => import("./admin/ConfigView.vue"),
     meta: { requiresAuth: true, requiresAdmin: true },
   },
+  {
+    path: "/credenciais",
+    name: "credentials",
+    component: () => import("./credentials/CredentialsView.vue"),
+    meta: { requiresAuth: true, requiresAdmin: true },
+  },
 ];
 
 const router = createRouter({

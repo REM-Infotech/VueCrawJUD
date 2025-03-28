@@ -6,6 +6,7 @@ import { $ } from "../../../main.ts";
 import { useModal } from "bootstrap-vue-next";
 const router = useRouter();
 const items = ref<{ system: string; id: number; display_name: string; text: string }[]>([]);
+import { current_bot } from "../../../services/FormConfig.ts";
 
 onBeforeMount(async () => {
   const { show: show_message } = useModal("ModalMessage");
@@ -24,10 +25,6 @@ onBeforeMount(async () => {
       }
     });
 });
-
-const current_bot = (item) => {
-  sessionStorage.setItem("current_bot", JSON.stringify(item));
-};
 </script>
 
 <template>
@@ -48,7 +45,7 @@ const current_bot = (item) => {
             class="d-grid gap-2"
             v-b-modal.ModalFormBot
             variant="success"
-            @click="current_bot(item)"
+            @click="current_bot = item"
           >
             <em>Acessar Robô</em>
           </BButton>
@@ -69,7 +66,7 @@ const current_bot = (item) => {
             class="d-grid gap-2"
             v-b-modal.ModalFormBot
             variant="success"
-            @click="current_bot(item)"
+            @click="current_bot = item"
             ><em>Acessar Robô</em></BButton
           >
         </template>

@@ -9,6 +9,7 @@ import {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   faUser,
   faGear,
+  faKey,
 } from "@fortawesome/free-solid-svg-icons";
 import { RouterLink } from "vue-router";
 import AuthService from "../services/auth";
@@ -67,6 +68,12 @@ const handleLogoutClick = (e: Event) => {
           </a>
         </li>
         <li class="border-top my-3"></li>
+        <li class="nav-item mb-1">
+          <RouterLink :to="{ name: 'credentials' }" class="nav-link link-body-emphasis">
+            <FontAwesomeIcon :icon="faKey" class="me-2" />
+            <span class="text">Credenciais</span>
+          </RouterLink>
+        </li>
         <li class="nav-item mb-1">
           <RouterLink :to="{ name: 'config' }" class="nav-link link-body-emphasis">
             <FontAwesomeIcon :icon="faGear" class="me-2" />
