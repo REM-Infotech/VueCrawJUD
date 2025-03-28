@@ -71,17 +71,22 @@ export default function () {
           sessionStorage.setItem("message", "Login Efetuado com sucesso!");
 
           router.push({ name: "index" });
+        } else if (response.data.message === "Usuário ou senha incorretos!") {
+          $("#message").text("Usuário ou senha incorretos!");
+          setTimeout(() => {
+            show_message();
+          }, 200);
         }
       })
       .catch((error) => {
-        // console.log(error);
+        const response = error.response;
         if (error.code === "ERR_NETWORK") {
           $("#message").text("Erro de conexão com o servidor!");
           show_message();
 
           return;
         }
-        $("#message").text(error.data.message);
+        $("#message").text(response.data.message);
         show_message();
       });
   }

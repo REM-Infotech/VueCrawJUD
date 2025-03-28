@@ -9,16 +9,6 @@ import { onMounted } from "vue";
 
 const $ = jQuery;
 
-// onMounted(() => {
-//   const socket = io("https://api.reminfotech.net.br/log");
-//   socket.on("connect", () => {
-//     console.log("Connected to server");
-//   });
-//   socket.on("disconnect", () => {
-//     console.log("Disconnected from crawjud");
-//   });
-// });
-
 onMounted(() => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { show, hide, modal } = useModal("ModalMessage");

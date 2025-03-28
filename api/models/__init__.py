@@ -54,6 +54,8 @@ async def init_database(app: Quart, db: SQLAlchemy) -> str:
     """
     try:
         values = environ
+
+        db.drop_all()
         db.create_all()
         loginsys = values.get("LOGINSYS")
         nomeusr = values.get("NOMEUSR")
