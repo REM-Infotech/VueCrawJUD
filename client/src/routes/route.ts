@@ -67,8 +67,9 @@ router.afterEach((to, from) => {
     }
 
     if (to.name != from.name) {
-      show_load();
-
+      setTimeout(() => {
+        show_load();
+      }, 500);
       setTimeout(() => {
         hide_load();
       }, 1000);

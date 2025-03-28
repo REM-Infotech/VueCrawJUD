@@ -57,7 +57,7 @@ class Credentials(db.Model):
     """
 
     __tablename__ = "credentials"
-    id = db.Column(db.Integer, primary_key=True)
+    id: int = db.Column(db.Integer, primary_key=True)
     nome_credencial: str = db.Column(db.String(length=45), nullable=False)
     system: str = db.Column(db.String(length=45), nullable=False)
     login_method: str = db.Column(db.String(length=45), nullable=False)

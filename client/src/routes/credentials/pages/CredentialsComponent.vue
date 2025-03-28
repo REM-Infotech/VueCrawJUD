@@ -17,10 +17,10 @@ const submitDelete = () => {
 DataTable.use(DataTablesCore);
 onBeforeMount(async () => {
   try {
-    const response = await api.get("/users");
+    const response = await api.get("/credentials");
 
     items.value = response.data.database.map((item) => {
-      return [item.id, item.login, item.nome_usuario, item.email];
+      return [item.id, item.credential, item.system, item.login_method];
     });
   } catch {
     //
@@ -42,7 +42,7 @@ function setupEdit(item) {
     <div class="card-header d-grid gap-3">
       <div class="d-flex gap-3 p-2">
         <div class="justify-content-xxl-end align-middle me-auto text-center">
-          <h3>Usuários</h3>
+          <h3>Credenciais</h3>
         </div>
         <div class="justify-content-xxl-end">
           <BButton
@@ -54,7 +54,7 @@ function setupEdit(item) {
             <span>
               <FontAwesomeIcon :icon="faPlus" class="me-2" />
             </span>
-            <em>Cadastrar Usuário</em>
+            <em>Cadastrar Credencial</em>
           </BButton>
           <!-- <button type="button" class="btn btn-outline-warning me-2 fw-bold">
             Encerrar Execução<em>Cadastrar Usuário</em>

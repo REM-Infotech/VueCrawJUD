@@ -5,6 +5,7 @@ This module defines endpoints for listing, creating, editing, and deleting crede
 
 import os
 import pathlib
+import traceback
 from collections import Counter
 from typing import Any, Callable, Coroutine
 
@@ -16,6 +17,7 @@ from quart import (
     Response,
     current_app,
     flash,
+    jsonify,
     make_response,
     redirect,
     render_template,
@@ -23,49 +25,46 @@ from quart import (
     url_for,
 )
 from quart import current_app as app
-from quart_jwt_extended import jwt_required
+from quart_jwt_extended import (  # noqa: F401
+    get_jwt_identity,
+    jwt_required,
+)
 from werkzeug.utils import secure_filename
 
 from api import db
-
-# from crawjud.forms.credentials import CredentialsForm
-from api.models import BotsCrawJUD, Credentials, LicensesUsers
+from api.models import BotsCrawJUD, Credentials, LicensesUsers, Users
 
 path_template = os.path.join(pathlib.Path(__file__).parent.resolve(), "templates")
 cred = Blueprint("creds", __name__, template_folder=path_template)
 
 
-@cred.route("/credentials/dashboard", methods=["GET"])
+@cred.route("/credentials", methods=["GET", "POST"])
 @jwt_required
 async def credentials() -> Response:
-    """Render the credentials dashboard page.
+    """Display a list of credentials."""
+    try:
+        current_user = get_jwt_identity()
 
-    Returns:
-        Response: A Quart response rendering the credentials page.
+        user = db.session.query(Users).filter(Users.id == current_user).first()
+        database = db.session.query(Credentials).all()
+        if not user.supersu:
+            token = user.licenseusr.license_token
+            database = db.session.query(Credentials).join(LicensesUsers).filter_by(license_token=token).all()
 
-    """
-    if not session.get("license_token"):
-        await flash("Sessão expirada. Faça login novamente.", "error")
-        return await make_response(
-            redirect(
-                url_for(
-                    "auth.login",
-                ),
-            ),
-        )
+        cred_list = []
+        for item in database:
+            cred_list.append({
+                "id": item.id,
+                "credential": item.nome_credencial,
+                "system": item.system,
+                "login_method": item.system,
+            })
 
-    database = db.session.query(Credentials).join(LicensesUsers).filter_by(license_token=session["license_token"]).all()
+        return await make_response(jsonify(database=cred_list), 200)
 
-    title = "Credenciais"
-    page = "credentials.html"
-    return await make_response(
-        await render_template(
-            "index.html",
-            page=page,
-            title=title,
-            database=database,
-        ),
-    )
+    except Exception as e:
+        app.logger.error(traceback.format_exception(e))
+        abort(500)
 
 
 @cred.route("/credentials/cadastro", methods=["GET", "POST"])
