@@ -1,5 +1,5 @@
 <script setup>
-import CredentialsComponent from "../pages/CredentialsComp.vue";
+import CredentialsComponent from "../pages/CredentialsComponent.vue";
 </script>
 
 <template>
