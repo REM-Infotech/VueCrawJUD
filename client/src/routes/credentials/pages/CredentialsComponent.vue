@@ -45,20 +45,32 @@ function setupEdit(item) {
           <h3>Credenciais</h3>
         </div>
         <div class="justify-content-xxl-end">
-          <BButton
-            class="btn me-2 fw-bold"
-            v-b-modal.ModalFormUsr
-            variant="outline-success"
-            @click="current_action = 'Cadastrar Usuário'"
-          >
-            <span>
-              <FontAwesomeIcon :icon="faPlus" class="me-2" />
-            </span>
-            <em>Cadastrar Credencial</em>
-          </BButton>
-          <!-- <button type="button" class="btn btn-outline-warning me-2 fw-bold">
-            Encerrar Execução<em>Cadastrar Usuário</em>
-          </button> -->
+          <div class="dropdown">
+            <BButton
+              class="btn me-2 fw-bold dropdown-toggle"
+              variant="outline-success"
+              @click="current_action = 'Cadastrar Usuário'"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <span>
+                <FontAwesomeIcon :icon="faPlus" class="me-2" />
+              </span>
+              <em>Cadastrar Credencial</em>
+            </BButton>
+            <ul class="dropdown-menu mt-2 ms-5">
+              <li>
+                <a class="dropdown-item" href="#" v-b-modal.ModalFormUsr>
+                  <em>Usuário/Senha</em>
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="#">
+                  <em>Certificado Digital</em>
+                </a>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
