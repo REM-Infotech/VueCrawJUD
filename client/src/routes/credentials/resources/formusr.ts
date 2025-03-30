@@ -2,15 +2,13 @@ import { reactive, ref } from "vue";
 import { $, api } from "../../../main";
 export const form = reactive({
   id: 0,
-  email: "",
-  name: "",
+  name_credential: "",
   login: "",
   password: "",
 
   reset: () => {
     form.id = 0;
-    form.email = "";
-    form.name = "";
+    form.name_credential = "";
     form.login = "";
     form.password = "";
   },
@@ -29,9 +27,8 @@ export async function submitForm(e: Event) {
   e.preventDefault();
 
   const formData = new FormData();
-  formData.append("nome_usuario", form.name);
+  formData.append("nome_usuario", form.name_credential);
   formData.append("login", form.login);
-  formData.append("email", form.email);
   formData.append("password", form.password);
 
   if (current_action.value.includes("Editar")) {
@@ -64,8 +61,6 @@ export async function submitForm(e: Event) {
     })
 
     .catch((response) => {
-      console.log(response);
-
       $("#message").text(response.data.message);
 
       to_modal_message.value = true;

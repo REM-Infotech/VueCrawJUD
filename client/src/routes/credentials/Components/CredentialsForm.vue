@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { faFloppyDisk } from "@fortawesome/free-solid-svg-icons";
-
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { useModal } from "bootstrap-vue-next";
 import {
@@ -11,19 +10,21 @@ import {
   submited,
   to_modal_message,
 } from "../resources/formusr";
+
 import { $, api } from "../../../main";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { computed, onBeforeMount, watch } from "vue";
 import router from "../../route";
 const { show: show_load, hide: hide_load } = useModal("modal-load");
 const { show: show_message } = useModal("ModalMessage");
 const { hide: hide_form } = useModal("ModalFormUsr");
 
-const state_email = computed(() => {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email);
-});
-const state_password = computed(() => {
-  return /^(?=.*[A-Za-z])(?=.*\d)(?=.*[\W_]).{6,}$/.test(form.password);
-});
+// const state_email = computed(() => {
+//   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email);
+// });
+// const state_password = computed(() => {
+//   return /^(?=.*[A-Za-z])(?=.*\d)(?=.*[\W_]).{6,}$/.test(form.password);
+// });
 
 watch(submited, (value) => {
   if (value) {
@@ -77,15 +78,15 @@ onBeforeMount(async () => {
   >
     <div>
       <BForm id="FormUsr" @submit="submitForm" v-model="state_modal" autocomplete="off">
-        <BFormFloatingLabel class="mb-4" label-for="floatingName" label="Nome do Usuário">
+        <BFormFloatingLabel class="mb-4" label-for="floatingName" label="Nome da Credencial">
           <BFormInput
             id="floatingName"
-            v-model="form.name"
-            placeholder="Nome do Usuário"
+            v-model="form.name_credential"
+            placeholder="Nome da Credencial"
             required
           />
         </BFormFloatingLabel>
-        <BFormFloatingLabel class="mb-4" label-for="floatingEmail" label="E-mail">
+        <!-- <BFormFloatingLabel class="mb-4" label-for="floatingEmail" label="E-mail">
           <BFormInvalidFeedback id="input-live-feedback"
             >Insira um email válido</BFormInvalidFeedback
           >
@@ -97,7 +98,7 @@ onBeforeMount(async () => {
             placeholder="E-mail"
             required
           />
-        </BFormFloatingLabel>
+        </BFormFloatingLabel> -->
         <BFormFloatingLabel class="mb-4" label-for="floatingLogin" label="Login">
           <BFormInput id="floatingLogin" v-model="form.login" placeholder="Login" required />
         </BFormFloatingLabel>
@@ -109,7 +110,6 @@ onBeforeMount(async () => {
             autocomplete="off"
             type="password"
             id="floatingPassword"
-            :state="state_password"
             v-model.trim="form.password"
             placeholder="Senha"
             required

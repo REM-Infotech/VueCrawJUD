@@ -41,14 +41,29 @@ onBeforeMount(async () => {
           <span class="overflow-auto" style="height: 50rem">{{ item.text }} </span>
         </BCardBody>
         <template #footer>
-          <BButton
-            class="d-grid gap-2"
-            v-b-modal.ModalFormBot
-            variant="success"
-            @click="current_bot = item"
-          >
-            <em>Acessar Robô</em>
-          </BButton>
+          <div class="dropdown">
+            <BButton
+              class="btn me-2 fw-bold dropdown-toggle"
+              variant="outline-success"
+              @click="current_bot = item"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <em>Acessar Robô</em>
+            </BButton>
+            <ul class="dropdown-menu mt-2">
+              <li>
+                <a class="dropdown-item" href="#" v-b-modal.ModalFormBot>
+                  <em>Execução normal</em>
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="#">
+                  <em>Execução agendada</em>
+                </a>
+              </li>
+            </ul>
+          </div>
         </template>
       </BCard>
       <BCard v-else data-bs-theme="dark" tag="article">
@@ -62,13 +77,29 @@ onBeforeMount(async () => {
           <img src="@/assets/crawjud2.svg" alt="" />
         </template>
         <template #footer>
-          <BButton
-            class="d-grid gap-2"
-            v-b-modal.ModalFormBot
-            variant="success"
-            @click="current_bot = item"
-            ><em>Acessar Robô</em></BButton
-          >
+          <div class="dropdown">
+            <BButton
+              class="btn me-2 fw-bold dropdown-toggle"
+              variant="outline-success"
+              @click="current_bot = item"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <em>Acessar Robô</em>
+            </BButton>
+            <ul class="dropdown-menu mt-2">
+              <li>
+                <a class="dropdown-item" href="#" v-b-modal.ModalFormBot>
+                  <em>Execução normal</em>
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="#">
+                  <em>Execução agendada</em>
+                </a>
+              </li>
+            </ul>
+          </div>
         </template>
       </BCard>
     </div>

@@ -28,7 +28,6 @@ onBeforeMount(async () => {
 });
 
 function setupEdit(item) {
-  console.log(item);
   form.id = item[0];
   form.name = item[1];
   form.login = item[2];

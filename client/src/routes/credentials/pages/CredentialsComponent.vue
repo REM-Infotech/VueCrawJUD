@@ -5,6 +5,7 @@ import { faPen, faTrash, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import DataTable from "datatables.net-vue3";
 import DataTablesCore from "datatables.net-bs5";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { current_action, form } from "../resources/formusr";
 import { submitForm, delete_call } from "../resources/formusr";
 const items = ref();
@@ -29,11 +30,11 @@ onBeforeMount(async () => {
 
 function setupEdit(item) {
   console.log(item);
-  form.id = item[0];
-  form.name = item[1];
-  form.login = item[2];
-  form.email = item[3];
-  current_action.value = "Editar Usuário";
+  // form.id = item[0];
+  // form.name = item[1];
+  // form.login = item[2];
+  // form.email = item[3];
+  // current_action.value = "Editar Usuário";
 }
 </script>
 

@@ -137,7 +137,6 @@ const setup_form = async (e) => {
     );
   } catch (error) {
     // Check if response.status is 4** error and not 404
-    console.log(error);
 
     const response = error.response;
 
