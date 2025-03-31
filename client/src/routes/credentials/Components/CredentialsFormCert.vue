@@ -15,14 +15,10 @@ import { $, api } from "../../../main";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { computed, onBeforeMount, watch } from "vue";
 import router from "../../route";
-import { ref } from "vue";
-
 const { show: show_load, hide: hide_load } = useModal("modal-load");
 const { show: show_message } = useModal("ModalMessage");
 const { hide: hide_form } = useModal("ModalFormUsr");
 
-const selected2 = ref(null);
-const state_client = ref<unknown[]>([{ value: null, text: "Carregando", disabled: true }]);
 // const state_email = computed(() => {
 //   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email);
 // });
@@ -108,8 +104,8 @@ onBeforeMount(async () => {
         </BFormFloatingLabel>
         <BFormFloatingLabel class="mb-4" label-for="floatingPassword" label="Senha:">
           <BFormInvalidFeedback id="floatingPassword-feedback"
-            >Limite Minimo de 6 caracteres
-          </BFormInvalidFeedback>
+            >Limite Minimo de 6 caracteres</BFormInvalidFeedback
+          >
           <BFormInput
             autocomplete="off"
             type="password"
@@ -119,15 +115,12 @@ onBeforeMount(async () => {
             required
           />
         </BFormFloatingLabel>
-        <BFormSelect class="mb-3" v-model="selected2" :options="state_client" />
-        <hr class="mt-4" />
+        <hr />
         <div class="d-grid gap-2 mt-5 mb-2">
           <BButton type="submit" variant="outline-success">
-            <span>
-              <FontAwesomeIcon class="me-2" :icon="faFloppyDisk" />
-            </span>
-            <em class="fw-bold">Salvar</em>
-          </BButton>
+            <span><FontAwesomeIcon class="me-2" :icon="faFloppyDisk" /></span>
+            <em class="fw-bold">Salvar</em></BButton
+          >
         </div>
       </BForm>
     </div>
