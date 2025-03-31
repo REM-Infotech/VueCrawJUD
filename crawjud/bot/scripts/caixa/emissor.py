@@ -8,7 +8,6 @@ import os
 import re
 import shutil
 import time
-import traceback
 from contextlib import suppress
 from time import sleep
 from typing import Self
@@ -137,7 +136,7 @@ class Emissor(CrawJUD):
             self.append_success(data)
 
         except Exception as e:
-            self.logger.exception("".join(traceback.format_exception(e)))
+            self.logger.exception("".join(format_exception(e)))
             raise ExecutionError(e=e) from e
 
     def get_site(self) -> None:

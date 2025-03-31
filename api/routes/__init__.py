@@ -5,8 +5,8 @@ This module defines global routes, context processors, and custom error handling
 
 import os
 import re
-import traceback
 from datetime import datetime
+from traceback import format_exception
 
 import aiofiles
 import aiohttp
@@ -63,8 +63,8 @@ async def serve_img() -> Response:
             ),
         )
 
-    except Exception:
-        err = traceback.format_exc()
+    except Exception as e:
+        err = format_exception(e)
         app.logger.exception(err)
         abort(500, description=f"Erro interno do servidor: {err}")
 

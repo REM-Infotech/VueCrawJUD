@@ -4,10 +4,9 @@ This module defines endpoints for listing, creating, editing, and deleting crede
 """
 
 import os
-import pathlib
-import traceback
 from collections import Counter
-from typing import Any, Callable, Coroutine
+from dataclasses import dataclass
+from traceback import format_exception
 
 import aiofiles
 from flask import abort
@@ -16,26 +15,62 @@ from quart import (
     Blueprint,
     Response,
     current_app,
-    flash,
     jsonify,
     make_response,
-    redirect,
-    render_template,
-    session,
-    url_for,
+    request,
 )
 from quart import current_app as app
-from quart_jwt_extended import (  # noqa: F401
-    get_jwt_identity,
-    jwt_required,
-)
+from quart.datastructures import FileStorage
+from quart_jwt_extended import get_jwt_identity, jwt_required
 from werkzeug.utils import secure_filename
 
 from api import db
 from api.models import BotsCrawJUD, Credentials, LicensesUsers, Users
 
-path_template = os.path.join(pathlib.Path(__file__).parent.resolve(), "templates")
-cred = Blueprint("creds", __name__, template_folder=path_template)
+cred = Blueprint("creds", __name__)
+
+
+@dataclass
+class CredentialsForm:
+    """Classe para formulário de credenciais."""
+
+    nome_cred: str
+    system: str
+    auth_method: str
+    login: str
+    password: str
+    cert: FileStorage
+    key: str
+
+
+async def license_user(usr: int, db: SQLAlchemy) -> str:
+    """Return license token."""
+    license_token = (
+        db.session.query(LicensesUsers)
+        .select_from(Users)
+        .join(Users, LicensesUsers.user)
+        .filter(Users.id == usr)
+        .first()
+        .license_token
+    )
+
+    return license_token
+
+
+@cred.get("/systems")
+@jwt_required
+async def systems() -> Response:
+    """Return array list systems."""
+    list_systems = [{"value": None, "text": "Escolha um sistema", "disabled": True}]
+
+    list_systems.extend([
+        {"value": pos, "text": system}
+        for pos, system in enumerate(Counter([item.system for item in db.session.query(BotsCrawJUD).all()]).keys())
+    ])
+    return await make_response(
+        jsonify(systems=list_systems),
+        200,
+    )
 
 
 @cred.route("/credentials", methods=["GET", "POST"])
@@ -63,11 +98,11 @@ async def credentials() -> Response:
         return await make_response(jsonify(database=cred_list), 200)
 
     except Exception as e:
-        app.logger.error(traceback.format_exception(e))
+        app.logger.error(format_exception(e))
         abort(500)
 
 
-@cred.route("/credentials/cadastro", methods=["GET", "POST"])
+@cred.post("/cadastro_credencial", methods=["POST"])
 @jwt_required
 async def cadastro() -> Response:
     """Handle the creation of new credentials.
@@ -77,184 +112,60 @@ async def cadastro() -> Response:
 
     """
     try:
-        if not session.get("license_token"):
-            await flash("Sessão expirada. Faça login novamente.", "error")
-            return await make_response(
-                redirect(
-                    url_for(
-                        "auth.login",
-                    ),
-                ),
+        request_data = await request.form or await request.data or await request.json
+
+        form = CredentialsForm(**request_data)
+
+        async def pw(form: CredentialsForm) -> None:  # noqa: ANN001
+            passwd = Credentials(
+                nome_credencial=form.nome_cred,
+                system=form.system,
+                login_method=form.auth_method,
+                login=form.login,
+                password=form.password,
             )
+            licenseusr = LicensesUsers.query.filter(
+                LicensesUsers.license_token == license_user(get_jwt_identity(), db)
+            ).first()
 
-        page = "FormCred.html"
+            passwd.license_usr = licenseusr
+            db.session.add(passwd)
+            db.session.commit()
 
-        systems = [bot.system for bot in BotsCrawJUD.query.all()]
-        count_system = Counter(systems).keys()
+        async def cert(form: CredentialsForm) -> None:  # noqa: ANN001
+            temporarypath = current_app.config["TEMP_DIR"]
+            filecert = form.cert
 
-        system = [(syst, syst) for syst in count_system]
+            cer_path = os.path.join(temporarypath, secure_filename(filecert.filename))
+            await filecert.save(cer_path)
 
-        form = await CredentialsForm.setup_form(system=system)  # type: ignore  # noqa: F821, PGH003
-
-        func = "Cadastro"
-        title = "Credenciais"
-
-        action_url = url_for("creds.cadastro")
-
-        if await form.validate_on_submit():
-            if Credentials.query.filter(Credentials.nome_credencial == form.nome_cred.data).first():
-                await flash("Existem credenciais com este nome já cadastrada!", "error")
-                return await make_response(
-                    redirect(
-                        url_for(
-                            "creds.cadastro",
-                        ),
-                    ),
-                )
-
-            async def pw(form) -> None:  # noqa: ANN001
-                passwd = Credentials(
-                    nome_credencial=form.nome_cred.data,
-                    system=form.system.data,
-                    login_method=form.auth_method.data,
-                    login=form.login.data,
-                    password=form.password.data,
-                )
-                licenseusr = LicensesUsers.query.filter(LicensesUsers.license_token == session["license_token"]).first()
-
-                passwd.license_usr = licenseusr
-                db.session.add(passwd)
-                db.session.commit()
-
-            async def cert(form) -> None:  # noqa: ANN001
-                temporarypath = current_app.config["TEMP_DIR"]
-                filecert = form.cert.data
-
-                cer_path = os.path.join(temporarypath, secure_filename(filecert.filename))
-                await filecert.save(cer_path)
-
-                async with aiofiles.open(cer_path, "rb") as f:
-                    certficate_blob = f.read()
+            async with aiofiles.open(cer_path, "rb") as f:
+                certficate_blob = f.read()
 
                 passwd = Credentials(
-                    nome_credencial=form.nome_cred.data,
-                    system=form.system.data,
-                    login_method=form.auth_method.data,
-                    login=form.doc_cert.data,
-                    key=form.key.data,
-                    certficate=filecert.filename,
-                    certficate_blob=certficate_blob,
+                    nome_credencial=form.nome_cred,
+                    system=form.system,
+                    login_method=form.auth_method,
+                    login=form.doc_cert,
+                    key=form.key,
+                    certficate=secure_filename(filecert.filename),
+                    certficate_blob=await certficate_blob,
                 )
-                licenseusr = LicensesUsers.query.filter(LicensesUsers.license_token == session["license_token"]).first()
+                licenseusr = LicensesUsers.query.filter(
+                    LicensesUsers.license_token == license_user(get_jwt_identity(), db)
+                ).first()
 
                 passwd.license_usr = licenseusr
 
                 db.session.add(passwd)
                 db.session.commit()
 
-            local_defs: list[tuple[str, Callable[[], Coroutine[Any, Any, None]]]] = list(locals().items())
-            for name, func in local_defs:
-                if name == form.auth_method.data:
-                    await func(form)
-                    break
+        callables = {"cert": cert, "pw": pw}
 
-            try:
-                await flash("Credencial salva com sucesso!", "success")
-            except Exception as e:
-                app.logger.exception(str(e))
+        await callables[request_data.get("form_type")](form)
 
-            _url_for = url_for("creds.credentials")
-            _redirect = redirect(_url_for)
-            _response = await make_response(_redirect)
-            return _response
+        return await make_response(jsonify(message="Credencial salva com sucesso!"))
 
-        return await make_response(
-            await render_template(
-                "index.html",
-                page=page,
-                form=form,
-                title=title,
-                func=func,
-                action_url=action_url,
-            )
-        )
     except Exception as e:
         app.logger.exception(str(e))
         abort(500)
-
-
-@cred.route("/credentials/editar/<id_>", methods=["GET", "POST"])
-@jwt_required
-async def editar(id_: int = None) -> Response:
-    """Handle editing an existing credential.
-
-    Args:
-        id_ (int, optional): The credential identifier.
-
-    Returns:
-        Response: A Quart response rendering the edit form.
-
-    """
-    page = "FormCred.html"
-
-    systems = [bot.system for bot in BotsCrawJUD.query.all()]
-    count_system = Counter(systems).keys()
-
-    system = [(syst, syst) for syst in count_system]
-
-    form = await CredentialsForm.setup_form(system=system)  # type: ignore  # noqa: F821, PGH003
-
-    func = "Cadastro"
-    title = "Credenciais"
-
-    action_url = url_for("creds.cadastro")
-
-    if await form.validate_on_submit():
-        await flash("Credencial salva com sucesso!", "success")
-        return await make_response(
-            redirect(
-                url_for(
-                    "creds.credentials",
-                ),
-            ),
-        )
-
-    return await make_response(
-        await render_template(
-            "index.html",
-            page=page,
-            form=form,
-            title=title,
-            func=func,
-            action_url=action_url,
-        )
-    )
-
-
-@cred.route("/credentials/deletar/<id_>", methods=["GET", "POST"])
-@jwt_required
-async def deletar(id_: int = None) -> Response:
-    """Delete a credential identified by its id.
-
-    Args:
-        id_ (int, optional): The credential identifier.
-
-    Returns:
-        Response: A Quart response confirming deletion.
-
-    """
-    db: SQLAlchemy = app.extensions["sqlalchemy"]
-    to_delete = db.session.query(Credentials).filter(Credentials.id == id_).first()
-
-    db.session.delete(to_delete)
-    db.session.commit()
-
-    message = "Credencial deletada!"
-
-    template = "include/show.html"
-    return await make_response(
-        await render_template(
-            template,
-            message=message,
-        ),
-    )

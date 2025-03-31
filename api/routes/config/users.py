@@ -1,7 +1,5 @@
 """Module for Admin configuration routes."""
 
-import traceback
-
 from flask_sqlalchemy import SQLAlchemy
 from quart import (
     Response,
@@ -177,5 +175,5 @@ async def users() -> Response:
             return await make_response(jsonify(database=data))
 
     except Exception as e:
-        app.logger.exception("\n".join(traceback.format_exception(e)))
+        app.logger.exception("\n".join(format_exception(e)))
         abort(500, description="Erro interno do servidor")

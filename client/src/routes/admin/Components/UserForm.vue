@@ -58,7 +58,7 @@ onBeforeMount(async () => {
       }, 500);
       show_message();
     } else {
-      console.error(error);
+      // console.error(error);;
     }
   });
 });

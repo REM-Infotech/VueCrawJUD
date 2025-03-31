@@ -2,8 +2,8 @@
 
 import os
 import pathlib
-import traceback
 from dataclasses import dataclass
+from traceback import format_exception
 
 import rich
 from flask_sqlalchemy import SQLAlchemy
@@ -131,7 +131,7 @@ async def logout() -> Response:
         unset_jwt_cookies(response)
 
     except Exception as e:
-        exc = traceback.format_exception(e)
+        exc = format_exception(e)
         current_app.logger.exception("\n".join(exc))
     return response
 

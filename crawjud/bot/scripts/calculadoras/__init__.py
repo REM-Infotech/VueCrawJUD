@@ -5,6 +5,7 @@ This module initializes and manages the Calculadoras bot within the CrawJUD-Bots
 
 import logging
 import traceback
+from traceback import format_exception
 from typing import Callable, Union
 
 from crawjud.bot.common import StartError
@@ -52,7 +53,7 @@ class Calculadoras:
             self.bot_call.initialize(*args, **kwargs).execution()
 
         except Exception as e:
-            self.logger.exception("".join(traceback.format_exception(e)))
+            self.logger.exception("".join(format_exception(e)))
             err = traceback.format_exc()
             logger.exception(err)
             raise StartError(traceback.format_exc()) from e

@@ -15,6 +15,7 @@ import unicodedata
 from datetime import datetime
 from difflib import SequenceMatcher
 from pathlib import Path
+from traceback import format_exception
 from typing import Union
 
 from cryptography import x509

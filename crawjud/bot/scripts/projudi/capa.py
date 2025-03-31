@@ -6,7 +6,6 @@ Extract and manage process details from Projudi by scraping and formatting data.
 import re
 import shutil
 import time
-import traceback
 from contextlib import suppress
 from datetime import datetime
 from pathlib import Path
@@ -131,7 +130,7 @@ class Capa(CrawJUD):
             self.append_success([data], "Informações do processo extraidas com sucesso!")
 
         except Exception as e:
-            self.logger.exception("".join(traceback.format_exception(e)))
+            self.logger.exception("".join(format_exception(e)))
             self.logger.exception(str(e))
             raise ExecutionError(e=e) from e
 
@@ -478,5 +477,5 @@ class Capa(CrawJUD):
             return process_info
 
         except Exception as e:
-            self.logger.exception("".join(traceback.format_exception(e)))
+            self.logger.exception("".join(format_exception(e)))
             raise e

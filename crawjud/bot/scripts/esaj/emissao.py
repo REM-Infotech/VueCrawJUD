@@ -7,7 +7,6 @@ navigating forms, and extracting barcodes following the ESaj requirements.
 import platform
 import re
 import time
-import traceback
 from contextlib import suppress
 from time import sleep
 from typing import Self
@@ -175,7 +174,7 @@ class Emissao(CrawJUD):
             self.append_success(self.get_barcode())
 
         except Exception as e:
-            self.logger.exception("".join(traceback.format_exception(e)))
+            self.logger.exception("".join(format_exception(e)))
             raise ExecutionError(e=e) from e
 
     def custas_iniciais(self) -> None:
@@ -444,5 +443,5 @@ class Emissao(CrawJUD):
             ]
 
         except Exception as e:
-            self.logger.exception("".join(traceback.format_exception(e)))
+            self.logger.exception("".join(format_exception(e)))
             raise ExecutionError(e=e) from e

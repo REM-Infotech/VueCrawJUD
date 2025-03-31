@@ -22,7 +22,7 @@ const { show: show_message } = useModal("ModalMessage");
 const { hide: hide_form } = useModal("ModalFormUsr");
 
 const selected2 = ref(null);
-const state_client = ref<unknown[]>([{ value: null, text: "Carregando", disabled: true }]);
+const systems_list = ref<unknown[]>([{ value: null, text: "Carregando", disabled: true }]);
 // const state_email = computed(() => {
 //   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email);
 // });
@@ -53,19 +53,24 @@ watch(to_modal_message, (value) => {
 onBeforeMount(async () => {
   form.reset();
 
-  api.get("/").catch((error) => {
-    if (error.status === 401) {
-      $("#message").text("É necessário fazer login para acessar esta página");
-      router.push({ name: "Login" });
+  api
+    .get("/systems")
+    .then((response) => {
+      const data: { systems: Array<{ value: unknown; text: string }> } = response.data;
 
-      setTimeout(() => {
-        show_load();
-      }, 500);
-      show_message();
-    } else {
-      console.error(error);
-    }
-  });
+      systems_list.value = data.systems;
+    })
+    .catch((error) => {
+      if (error.status === 401 || error.status === 422) {
+        $("#message").text("É necessário fazer login para acessar esta página");
+        router.push({ name: "login" });
+
+        setTimeout(() => {
+          show_load();
+        }, 500);
+        show_message();
+      }
+    });
 });
 </script>
 
@@ -119,7 +124,7 @@ onBeforeMount(async () => {
             required
           />
         </BFormFloatingLabel>
-        <BFormSelect class="mb-3" v-model="selected2" :options="state_client" />
+        <BFormSelect class="mb-3" v-model="selected2" :options="systems_list" />
         <hr class="mt-4" />
         <div class="d-grid gap-2 mt-5 mb-2">
           <BButton type="submit" variant="outline-success">

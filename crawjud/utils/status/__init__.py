@@ -12,6 +12,7 @@ import unicodedata
 from datetime import date, datetime
 from os import environ, getcwd
 from pathlib import Path
+from traceback import format_exception
 from typing import Literal
 
 import aiofiles

@@ -6,7 +6,6 @@ This module manages protocol operations in the ESaj system using the CrawJUD fra
 import os
 import shutil
 import time
-import traceback
 import unicodedata
 from contextlib import suppress
 from pathlib import Path
@@ -168,7 +167,7 @@ class Protocolo(CrawJUD):
             self.append_success(data, message=data[1])
 
         except Exception as e:
-            self.logger.exception("".join(traceback.format_exception(e)))
+            self.logger.exception("".join(format_exception(e)))
             raise ExecutionError(e=e) from e
 
     def init_protocolo(self) -> None:
@@ -440,5 +439,5 @@ class Protocolo(CrawJUD):
             ]
 
         except Exception as e:
-            self.logger.exception("".join(traceback.format_exception(e)))
+            self.logger.exception("".join(format_exception(e)))
             raise ExecutionError(message="Erro ao confirmar protocolo", e=e) from e

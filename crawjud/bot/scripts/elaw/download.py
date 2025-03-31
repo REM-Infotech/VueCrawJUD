@@ -10,7 +10,6 @@ Classes:
 import os
 import shutil
 import time
-import traceback
 from contextlib import suppress
 from time import sleep
 from typing import Self
@@ -145,7 +144,7 @@ class Download(CrawJUD):
                 self.append_error([self.bot_data.get("NUMERO_PROCESSO"), self.message])
 
         except Exception as e:
-            self.logger.exception("".join(traceback.format_exception(e)))
+            self.logger.exception("".join(format_exception(e)))
             raise ExecutionError(e=e) from e
 
     def buscar_doc(self) -> None:

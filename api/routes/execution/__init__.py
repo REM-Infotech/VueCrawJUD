@@ -7,6 +7,7 @@ import os
 import pathlib
 import traceback
 from importlib import import_module
+from traceback import format_exception
 
 from flask_sqlalchemy import SQLAlchemy
 from quart import (
@@ -77,7 +78,7 @@ async def executions() -> Response:
         return jsonify(data=data)
 
     except Exception as e:
-        app.logger.error("".join(traceback.format_exception(e)))
+        app.logger.error("".join(format_exception(e)))
         abort(500)
 
 

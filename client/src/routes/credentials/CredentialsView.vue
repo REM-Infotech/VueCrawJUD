@@ -32,7 +32,7 @@ onBeforeMount(async () => {
     } else if (error.code === "ERR_NETWORK") {
       toLogin("Erro de conexão com o servidor");
     } else {
-      console.error(error);
+      // console.error(error);;
     }
   });
 });

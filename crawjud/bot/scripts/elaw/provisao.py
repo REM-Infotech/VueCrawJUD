@@ -12,7 +12,6 @@ Attributes:
 """
 
 import time
-import traceback
 from contextlib import suppress
 from datetime import datetime
 from pathlib import Path
@@ -147,7 +146,7 @@ class Provisao(CrawJUD):
                 raise ExecutionError(message="Processo não encontrado!")
 
         except Exception as e:
-            self.logger.exception("".join(traceback.format_exception(e)))
+            self.logger.exception("".join(format_exception(e)))
             raise e
 
     def chk_risk(self) -> None:
@@ -267,7 +266,7 @@ class Provisao(CrawJUD):
             self.interact.sleep_load('div[id="j_id_7t"]')
 
         except Exception as e:
-            self.logger.exception("".join(traceback.format_exception(e)))
+            self.logger.exception("".join(format_exception(e)))
             raise ExecutionError(message="Não foi possivel atualizar provisão", e=e) from e
 
     def edit_valor(self) -> None:
@@ -310,7 +309,7 @@ class Provisao(CrawJUD):
             id_campo_valor_dml = campo_valor_dml.get_attribute("id")
             self.driver.execute_script(f"document.getElementById('{id_campo_valor_dml}').blur()")
         except Exception as e:
-            self.logger.exception("".join(traceback.format_exception(e)))
+            self.logger.exception("".join(format_exception(e)))
             raise e
 
     def set_risk(self) -> None:
@@ -353,7 +352,7 @@ class Provisao(CrawJUD):
             self.interact.sleep_load('div[id="j_id_2z"]')
 
         except Exception as e:
-            self.logger.exception("".join(traceback.format_exception(e)))
+            self.logger.exception("".join(format_exception(e)))
             raise e
 
     def informar_datas(self) -> None:
@@ -400,7 +399,7 @@ class Provisao(CrawJUD):
                 set_data_juros(data_base_juros)
 
         except Exception as e:
-            self.logger.exception("".join(traceback.format_exception(e)))
+            self.logger.exception("".join(format_exception(e)))
             raise e
 
     def informar_motivo(self) -> None:
@@ -429,7 +428,7 @@ class Provisao(CrawJUD):
             self.driver.execute_script(f"document.getElementById('{id_informar_motivo}').blur()")
 
         except Exception as e:
-            self.logger.exception("".join(traceback.format_exception(e)))
+            self.logger.exception("".join(format_exception(e)))
             raise e
 
     def save_changes(self) -> None:

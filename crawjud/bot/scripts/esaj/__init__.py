@@ -6,6 +6,7 @@ Capa, Emissao, Movimentacao, and Protocolo. It sets logging and error handling.
 
 import logging
 import traceback
+from traceback import format_exception
 from typing import Callable, Union
 
 from crawjud.bot.common import StartError
@@ -51,7 +52,7 @@ class Esaj:
             self.bot_call.initialize(*args, **kwargs).execution()
 
         except Exception as e:
-            self.logger.exception("".join(traceback.format_exception(e)))
+            self.logger.exception("".join(format_exception(e)))
             err = traceback.format_exc()
             logger.exception(err)
             raise StartError(traceback.format_exc()) from e

@@ -11,6 +11,7 @@ from concurrent.futures import ThreadPoolExecutor
 from functools import partial
 from os import getcwd, path
 from pathlib import Path
+from traceback import format_exception
 
 import requests
 from selenium.webdriver import (

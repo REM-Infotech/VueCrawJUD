@@ -1,9 +1,8 @@
 """Module for botlaunch route."""
 
-import mimetypes  # noqa: F401
-from datetime import date, datetime, time  # noqa: F401
-from pathlib import Path  # noqa: F401
-from typing import Any  # , AsyncGenerator
+import mimetypes
+from pathlib import Path
+from typing import Any
 
 from celery import Celery, Task
 from flask_sqlalchemy import SQLAlchemy
@@ -16,19 +15,13 @@ from quart import (
     url_for,
 )
 from quart import current_app as app
-from quart.datastructures import FileStorage  # noqa: F401
+from quart.datastructures import FileStorage
 from quart_jwt_extended import get_jwt_identity
-from werkzeug.utils import secure_filename  # noqa: F401
-from wtforms import BooleanField, FieldList, FileField, FormField, MultipleFileField, TimeField  # noqa: F401
+from werkzeug.utils import secure_filename
 
 from api.models import BotsCrawJUD, Credentials, LicensesUsers
 from api.models.bots import ThreadBots
 from api.models.users import Users
-
-# from crawjud.forms import BotForm
-from crawjud.misc import (
-    generate_pid,  # noqa: F401
-)
 from crawjud.types import AnyType
 from crawjud.utils import makezip
 from crawjud.utils.gcs_mgmt import enviar_arquivo_para_gcs

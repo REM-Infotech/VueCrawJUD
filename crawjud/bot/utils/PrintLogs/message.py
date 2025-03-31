@@ -4,7 +4,6 @@ Provides logging and message handling utilities for the CrawJUD project.
 Additional utilities are available to emit, print, and store log messages.
 """
 
-import traceback
 from datetime import datetime
 from pathlib import Path
 from threading import Thread  # noqa: F401
