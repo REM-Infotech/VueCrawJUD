@@ -9,10 +9,10 @@ from __future__ import annotations
 import json
 import logging
 import platform
-import traceback
 from datetime import datetime
 from pathlib import Path
 from time import sleep
+from traceback import format_exception
 
 import pandas as pd
 from openai import OpenAI
@@ -247,7 +247,7 @@ class CrawJUD(PropertiesCrawJUD):
                     raise ExecutionError(message=self.message)
 
         except Exception as e:
-            err = traceback.format_exc()
+            err = "\n".join(format_exception(e))
             logger.exception(err)
             self.row = 0
             self.message = "Erro ao realizar login"

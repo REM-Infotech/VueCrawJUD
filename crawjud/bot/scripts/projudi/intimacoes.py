@@ -7,6 +7,7 @@ import re  # noqa: F401
 import time
 from contextlib import suppress
 from datetime import datetime  # noqa: F401
+from traceback import format_exception
 from typing import Self
 
 from selenium.webdriver.common.by import By
@@ -184,7 +185,7 @@ class Intimacoes(CrawJUD):
                 self.driver.find_element(By.CSS_SELECTOR, 'a[class="arrowNextOn"]').click()
 
         except Exception as e:
-            self.logger.exception("".join(format_exception(e)))
+            self.logger.exception("\n".join(format_exception(e)))
             self.logger.exception(str(e))
             raise ExecutionError(e=e) from e
 

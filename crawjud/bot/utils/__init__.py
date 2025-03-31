@@ -10,7 +10,6 @@ import re
 import ssl
 import subprocess  # nosec: B404
 import time
-import traceback
 import unicodedata
 from datetime import datetime
 from difflib import SequenceMatcher
@@ -620,8 +619,8 @@ class OtherUtils(CrawJUD):
                     subject_name = x509_cert.subject.rfc4514_string()
                     if crt_sbj_nm in subject_name:
                         return True
-                except Exception:
-                    err = traceback.format_exc()
+                except Exception as e:
+                    err = "\n".join(format_exception(e))
                     logger.exception(err)
 
             return False

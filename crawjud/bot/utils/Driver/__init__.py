@@ -5,7 +5,6 @@ from __future__ import annotations
 import json
 import platform
 import shutil
-import traceback
 import zipfile
 from concurrent.futures import ThreadPoolExecutor
 from functools import partial
@@ -107,8 +106,8 @@ class DriverBot(CrawJUD):
                 for root, _, __ in self.path_accepted.walk():
                     try:
                         shutil.copytree(root, self.user_data_diretory)
-                    except Exception:
-                        err = traceback.format_exc()
+                    except Exception as e:
+                        err = "\n".join(format_exception(e))
                         self.logger.exception(err)
 
             elif not path_exist:

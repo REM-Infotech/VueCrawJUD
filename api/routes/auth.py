@@ -131,7 +131,7 @@ async def logout() -> Response:
         unset_jwt_cookies(response)
 
     except Exception as e:
-        exc = format_exception(e)
+        exc = "\n".join(format_exception(e))
         current_app.logger.exception("\n".join(exc))
     return response
 

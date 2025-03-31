@@ -10,6 +10,7 @@ import unicodedata
 from contextlib import suppress
 from pathlib import Path
 from time import sleep
+from traceback import format_exception
 from typing import Self
 
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
@@ -167,7 +168,7 @@ class Protocolo(CrawJUD):
             self.append_success(data, message=data[1])
 
         except Exception as e:
-            self.logger.exception("".join(format_exception(e)))
+            self.logger.exception("\n".join(format_exception(e)))
             raise ExecutionError(e=e) from e
 
     def init_protocolo(self) -> None:
@@ -439,5 +440,5 @@ class Protocolo(CrawJUD):
             ]
 
         except Exception as e:
-            self.logger.exception("".join(format_exception(e)))
+            self.logger.exception("\n".join(format_exception(e)))
             raise ExecutionError(message="Erro ao confirmar protocolo", e=e) from e

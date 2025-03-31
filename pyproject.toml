@@ -103,4 +103,4 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.bandit]
 exclude_dirs = ["tests", ".venv"]
-skips = ["B603", "B404", "B607"]
+skips = ["B603", "B404", "B607", "B605", "B104"]

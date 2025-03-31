@@ -7,6 +7,7 @@ ensuring detailed extraction and logging of information.
 import time
 from contextlib import suppress
 from time import sleep
+from traceback import format_exception
 from typing import Self
 
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
@@ -121,7 +122,7 @@ class Capa(CrawJUD):
             self.append_success(self.get_process_informations())
 
         except Exception as e:
-            self.logger.exception("".join(format_exception(e)))
+            self.logger.exception("\n".join(format_exception(e)))
             raise ExecutionError(e=e) from e
 
     def get_process_informations(self) -> list:

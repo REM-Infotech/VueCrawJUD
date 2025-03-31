@@ -8,6 +8,7 @@ import time
 from contextlib import suppress
 from datetime import datetime
 from time import sleep
+from traceback import format_exception
 from typing import Self
 
 from selenium.webdriver.common.by import By
@@ -171,7 +172,7 @@ class Movimentacao(CrawJUD):
                 self.append_error(data)
 
         except Exception as e:
-            self.logger.exception("".join(format_exception(e)))
+            self.logger.exception("\n".join(format_exception(e)))
             raise ExecutionError(e=e) from e
 
     def setup_config(self) -> None:

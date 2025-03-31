@@ -64,7 +64,7 @@ async def serve_img() -> Response:
         )
 
     except Exception as e:
-        err = format_exception(e)
+        err = "\n".join(format_exception(e))
         app.logger.exception(err)
         abort(500, description=f"Erro interno do servidor: {err}")
 

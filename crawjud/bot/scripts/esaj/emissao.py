@@ -9,6 +9,7 @@ import re
 import time
 from contextlib import suppress
 from time import sleep
+from traceback import format_exception
 from typing import Self
 
 import requests
@@ -174,7 +175,7 @@ class Emissao(CrawJUD):
             self.append_success(self.get_barcode())
 
         except Exception as e:
-            self.logger.exception("".join(format_exception(e)))
+            self.logger.exception("\n".join(format_exception(e)))
             raise ExecutionError(e=e) from e
 
     def custas_iniciais(self) -> None:
@@ -443,5 +444,5 @@ class Emissao(CrawJUD):
             ]
 
         except Exception as e:
-            self.logger.exception("".join(format_exception(e)))
+            self.logger.exception("\n".join(format_exception(e)))
             raise ExecutionError(e=e) from e

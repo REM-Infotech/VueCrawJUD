@@ -98,7 +98,7 @@ async def credentials() -> Response:
         return await make_response(jsonify(database=cred_list), 200)
 
     except Exception as e:
-        app.logger.error(format_exception(e))
+        app.logger.error("\n".join(format_exception(e)))
         abort(500)
 
 

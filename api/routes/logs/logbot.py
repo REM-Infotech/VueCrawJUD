@@ -6,8 +6,7 @@ log message processing, and bot control actions (stop, terminate, join, etc.).
 
 import asyncio
 import logging
-import traceback
-from datetime import datetime  # noqa: F401
+from traceback import format_exception  # noqa: F401
 
 from pytz import timezone  # noqa: F401
 from socketio import AsyncServer  # noqa: F401
@@ -176,8 +175,8 @@ async def log_message(
 
             await io.send("message received!", to=sid, namespace="/log", room=pid)
 
-        except Exception:
-            err = traceback.format_exc()
+        except Exception as e:
+            err = "\n".join(format_exception(e))
             logger.exception(err)
             await io.send("failed to receive message", to=sid, namespace="/log", room=pid)
 

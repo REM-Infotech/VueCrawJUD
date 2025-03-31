@@ -7,7 +7,6 @@ from __future__ import annotations
 
 import json
 import logging
-import traceback
 import unicodedata
 from datetime import date, datetime
 from os import environ, getcwd
@@ -334,8 +333,8 @@ class TaskExec:
                 for adm in license_.admins:
                     admins.append(adm.email)
 
-        except Exception:
-            err = traceback.format_exc()
+        except Exception as e:
+            err = "\n".join(format_exception(e))
             logger.exception(err)
 
         exec_data: dict[str, str | list[str]] = {

@@ -6,6 +6,7 @@ Manage participant processing in the Projudi system by interacting with process 
 import os
 import time
 from contextlib import suppress
+from traceback import format_exception
 from typing import Self
 
 from selenium.common.exceptions import NoSuchElementException, NoSuchWindowException  # noqa: F401
@@ -110,7 +111,7 @@ class ProcParte(CrawJUD):
                         self.auth_bot()
 
         except Exception as e:
-            self.logger.exception("".join(format_exception(e)))
+            self.logger.exception("\n".join(format_exception(e)))
             old_message = None
 
             # check_window = any([isinstance(e, NoSuchWindowException), isinstance(e, MaxRetryError)])
@@ -179,7 +180,7 @@ class ProcParte(CrawJUD):
                     self.auth_bot()
 
         except Exception as e:
-            self.logger.exception("".join(format_exception(e)))
+            self.logger.exception("\n".join(format_exception(e)))
             raise ExecutionError(e=e) from e
 
     def use_list_process(self, list_processos: list[WebElement]) -> None:

@@ -10,6 +10,7 @@ import shutil
 import time
 from contextlib import suppress
 from time import sleep
+from traceback import format_exception
 from typing import Self
 
 from pypdf import PdfReader
@@ -136,7 +137,7 @@ class Emissor(CrawJUD):
             self.append_success(data)
 
         except Exception as e:
-            self.logger.exception("".join(format_exception(e)))
+            self.logger.exception("\n".join(format_exception(e)))
             raise ExecutionError(e=e) from e
 
     def get_site(self) -> None:

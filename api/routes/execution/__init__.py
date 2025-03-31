@@ -5,7 +5,6 @@ This module provides endpoints for listing executions and downloading execution 
 
 import os
 import pathlib
-import traceback
 from importlib import import_module
 from traceback import format_exception
 
@@ -78,7 +77,7 @@ async def executions() -> Response:
         return jsonify(data=data)
 
     except Exception as e:
-        app.logger.error("".join(format_exception(e)))
+        app.logger.error("\n".join(format_exception(e)))
         abort(500)
 
 

@@ -11,6 +11,7 @@ from contextlib import suppress
 from datetime import datetime
 from pathlib import Path
 from time import sleep
+from traceback import format_exception
 from typing import Self
 
 import requests
@@ -157,7 +158,7 @@ class Movimentacao(CrawJUD):
                 self.append_error(data)
 
         except Exception as e:
-            self.logger.exception("".join(format_exception(e)))
+            self.logger.exception("\n".join(format_exception(e)))
             raise ExecutionError(e=e) from e
 
     def set_page_size(self) -> None:

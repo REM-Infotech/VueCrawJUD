@@ -3,9 +3,9 @@
 import json  # noqa: F401
 import os
 import sys  # noqa: F401
-import traceback
 import warnings
 from pathlib import Path
+from traceback import format_exception
 
 from flask_sqlalchemy import SQLAlchemy
 from quart import (
@@ -79,7 +79,7 @@ async def acquire_credentials() -> Response:
         return jsonify(info=cred)
 
     except Exception as e:
-        app.logger.error("\n".join(traceback.format_exception(e)))
+        app.logger.error("\n".join(format_exception(e)))
         return jsonify({}, 500)
 
 
@@ -137,7 +137,7 @@ async def acquire_systemclient() -> Response:
             return jsonify(info=opt, type=type_)
 
     except Exception as e:
-        app.logger.error("\n".join(traceback.format_exception(e)))
+        app.logger.error("\n".join(format_exception(e)))
         return jsonify({}, 500)
 
 
@@ -174,7 +174,7 @@ async def bots_list() -> Response:
         return jsonify(bots_)
 
     except Exception as e:
-        app.logger.error("\n".join(traceback.format_exception(e)))
+        app.logger.error("\n".join(format_exception(e)))
 
 
 @bot.route("/get_model/<id_>/<system>/<typebot>/<filename>", methods=["GET"])
@@ -199,7 +199,7 @@ async def get_model(id_: int, system: str, typebot: str, filename: str) -> Respo
         return response
 
     except Exception as e:
-        app.logger.exception(traceback.format_exc())
+        app.logger.exception("\n".join(format_exception(e)))
         abort(500, description=f"Erro interno. {e!s}")
 
 
@@ -220,7 +220,7 @@ async def dashboard() -> Response:
         return await make_response(await render_template("index.html", page=page, bots=bots, title=title))
 
     except Exception as e:
-        app.logger.exception(traceback.format_exc())
+        app.logger.exception("\n".join(format_exception(e)))
         abort(500, description=f"Erro interno. {e!s}")
 
 
@@ -259,8 +259,8 @@ async def botlaunch(id_: int, system: str, typebot: str) -> Response:
             bot_info=bot_info,
         )
 
-    except Exception:
-        app.logger.exception(traceback.format_exc())
+    except Exception as e:
+        app.logger.exception("\n".join(format_exception(e)))
         abort(500, description="Erro interno.")
 
     finally:
@@ -268,6 +268,6 @@ async def botlaunch(id_: int, system: str, typebot: str) -> Response:
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore", RuntimeWarning)
 
-        except Exception:
-            app.logger.exception(traceback.format_exc())
+        except Exception as e:
+            app.logger.exception("\n".join(format_exception(e)))
             # abort(500, description="Erro interno.")

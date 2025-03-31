@@ -8,6 +8,7 @@ from datetime import datetime
 from pathlib import Path
 from threading import Thread  # noqa: F401
 from time import sleep
+from traceback import format_exception
 from typing import Self
 
 import pytz
@@ -79,8 +80,8 @@ class PrintBot(CrawJUD):
                     if self.pid in mensagem:
                         f.write(f"{mensagem}\n")
 
-        except Exception:
+        except Exception as e:
             # Aguarda 2 segundos
             sleep(2)
-            err = traceback.format_exc()
+            err = "\n".join(format_exception(e))
             self.logger.exception(err)
