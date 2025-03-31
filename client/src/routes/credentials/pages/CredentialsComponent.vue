@@ -42,9 +42,7 @@ function setupEdit(item) {
   <div class="card" data-bs-theme="dark">
     <div class="card-header d-grid gap-3">
       <div class="d-flex gap-3 p-2">
-        <div class="justify-content-xxl-end align-middle me-auto text-center">
-          <h3>Credenciais</h3>
-        </div>
+        <div class="justify-content-xxl-end align-middle me-auto text-center"></div>
         <div class="justify-content-xxl-end">
           <div class="dropdown">
             <BButton

@@ -4,7 +4,7 @@ import CredentialsComponent from "../pages/CredentialsComponent.vue";
 
 <template>
   <div class="container-fluid bg-dark rounded rounded-4 bg-opacity-75">
-    <ul class="nav nav-tabs" id="TabConfig" role="tablist">
+    <!-- <ul class="nav nav-tabs" id="TabConfig" role="tablist">
       <li class="nav-item" role="presentation">
         <button
           class="nav-link active"
@@ -16,10 +16,9 @@ import CredentialsComponent from "../pages/CredentialsComponent.vue";
           aria-controls="users-tab-pane"
           aria-selected="true"
         >
-          Credenciais
         </button>
       </li>
-      <!-- <li class="nav-item" role="presentation">
+      <li class="nav-item" role="presentation">
         <button
           class="nav-link"
           id="profile-tab"
@@ -46,8 +45,8 @@ import CredentialsComponent from "../pages/CredentialsComponent.vue";
         >
           Contact
         </button>
-      </li> -->
-    </ul>
+      </li>
+    </ul> -->
     <div class="tab-content" id="TabConfigContent">
       <div
         class="tab-pane fade p-4 show active"
