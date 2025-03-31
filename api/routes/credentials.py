@@ -102,7 +102,7 @@ async def credentials() -> Response:
         abort(500)
 
 
-@cred.post("/cadastro_credencial", methods=["POST"])
+@cred.post("/cadastro_credencial")
 @jwt_required
 async def cadastro() -> Response:
     """Handle the creation of new credentials.
