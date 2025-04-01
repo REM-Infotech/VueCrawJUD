@@ -1,6 +1,6 @@
 import { AxiosError, AxiosResponse } from "axios";
 import { reactive, ref } from "vue";
-import { api } from "../../../main";
+import { $, api } from "../../../main";
 export const form = reactive({
   id: 0,
   name_credential: "",
@@ -38,7 +38,7 @@ export async function submitForm(e: Event) {
   formData.append("password", form.password);
 
   api
-    .post("/cadastro_credencial", formData, {
+    .post("/peform_credencial", formData, {
       withXSRFToken: true,
       withCredentials: true,
       headers: {

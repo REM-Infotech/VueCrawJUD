@@ -28,7 +28,7 @@ class BotsCrawJUD(db.Model):
     """
 
     __tablename__ = "bots"
-    id = db.Column(db.Integer, primary_key=True)
+    id: int = db.Column(db.Integer, primary_key=True)
     display_name: str = db.Column(db.String(length=45), nullable=False)
     system: str = db.Column(db.String(length=45), nullable=False)
     state: str = db.Column(db.String(length=45), nullable=False)

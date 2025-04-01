@@ -4,8 +4,6 @@ This module defines endpoints for listing, creating, editing, and deleting crede
 """
 
 import os
-from collections import Counter
-from dataclasses import dataclass
 from traceback import format_exception
 
 import aiofiles
@@ -30,9 +28,23 @@ from api.models import BotsCrawJUD, Credentials, LicensesUsers, Users
 cred = Blueprint("creds", __name__)
 
 
-@dataclass
 class CredentialsForm:
-    """Classe para formulário de credenciais."""
+    """
+    CredentialsForm is a data container for managing authentication credentials.
+
+    It stores details such as the credential name, associated system, authentication method, and optional fields like
+    login and certificate information.
+
+    Attributes:
+        nome_cred (str): The unique name or identifier for the credentials.
+        system (str): The specific system with which the credentials are associated.
+        auth_method (str): The method of authentication (e.g., basic, certificate-based).
+        login (Optional[str]): The username for login if applicable; otherwise, None.
+        password (Optional[str]): The password corresponding to the login; otherwise, None.
+        cert (Optional[FileStorage]): The certificate file as a FileStorage instance if required; otherwise, None.
+        key (Optional[str]): The key associated with the certificate if applicable; otherwise, None.
+
+    """
 
     nome_cred: str
     system: str
@@ -41,6 +53,37 @@ class CredentialsForm:
     password: str
     cert: FileStorage
     key: str
+
+    def __init__(
+        self,
+        nome_cred: str,
+        system: str,
+        auth_method: str,
+        login: str = None,
+        password: str = None,
+        cert: FileStorage = None,
+        key: str = None,
+    ) -> None:
+        """
+        Initialize a CredentialsForm instance.
+
+        Args:
+            nome_cred (str): The unique name or identifier for the credentials.
+            system (str): The system associated with the credentials.
+            auth_method (str): The authentication method for the credentials.
+            login (Optional[str]): The login username if applicable.
+            password (Optional[str]): The login password if applicable.
+            cert (Optional[FileStorage]): The certificate file for authentication, if required.
+            key (Optional[str]): The key associated with the certificate, if applicable.
+
+        """
+        self.nome_cred = nome_cred
+        self.system = system
+        self.auth_method = auth_method
+        self.login = login
+        self.password = password
+        self.cert = cert
+        self.key = key
 
 
 async def license_user(usr: int, db: SQLAlchemy) -> str:
@@ -61,12 +104,13 @@ async def license_user(usr: int, db: SQLAlchemy) -> str:
 @jwt_required
 async def systems() -> Response:
     """Return array list systems."""
-    list_systems = [{"value": None, "text": "Escolha um sistema", "disabled": True}]
+    list_systems: list[dict[str, str]] = [{"value": None, "text": "Escolha um sistema", "disabled": True}]
 
-    list_systems.extend([
-        {"value": pos, "text": system}
-        for pos, system in enumerate(Counter([item.system for item in db.session.query(BotsCrawJUD).all()]).keys())
-    ])
+    for item in db.session.query(BotsCrawJUD).all():
+        if item.system not in [i["text"] for i in list_systems]:
+            list_systems.append({"value": item.id, "text": item.system})
+        else:
+            continue
     return await make_response(
         jsonify(systems=list_systems),
         200,
@@ -102,7 +146,7 @@ async def credentials() -> Response:
         abort(500)
 
 
-@cred.post("/cadastro_credencial")
+@cred.route("/peform_credencial", methods=["POST", "DELETE"])
 @jwt_required
 async def cadastro() -> Response:
     """Handle the creation of new credentials.
@@ -112,11 +156,22 @@ async def cadastro() -> Response:
 
     """
     try:
-        request_data = await request.form or await request.data or await request.json
+        request_data: dict[str, str | None] = await request.form or await request.data or await request.json
+
+        action_ = request_data.get("action")
+
+        if action_:
+            if action_.upper() == "DELETE":
+                cred_id = request_data.get("id")
+                db.session.query(Credentials).filter(Credentials.id == cred_id).delete()
+                db.session.commit()
+                return await make_response(jsonify(message="Credencial deletada com sucesso!"), 200)
 
         form = CredentialsForm(**request_data)
 
         async def pw(form: CredentialsForm) -> None:  # noqa: ANN001
+            form.system = db.session.query(BotsCrawJUD).filter(BotsCrawJUD.id == int(form.system)).first().system
+
             passwd = Credentials(
                 nome_credencial=form.nome_cred,
                 system=form.system,
@@ -125,7 +180,7 @@ async def cadastro() -> Response:
                 password=form.password,
             )
             licenseusr = LicensesUsers.query.filter(
-                LicensesUsers.license_token == license_user(get_jwt_identity(), db)
+                LicensesUsers.license_token == await license_user(get_jwt_identity(), db)
             ).first()
 
             passwd.license_usr = licenseusr
@@ -133,6 +188,7 @@ async def cadastro() -> Response:
             db.session.commit()
 
         async def cert(form: CredentialsForm) -> None:  # noqa: ANN001
+            form.system = db.session.query(BotsCrawJUD).filter(BotsCrawJUD.id == form.system).first().system
             temporarypath = current_app.config["TEMP_DIR"]
             filecert = form.cert
 
@@ -152,7 +208,7 @@ async def cadastro() -> Response:
                     certficate_blob=await certficate_blob,
                 )
                 licenseusr = LicensesUsers.query.filter(
-                    LicensesUsers.license_token == license_user(get_jwt_identity(), db)
+                    LicensesUsers.license_token == await license_user(get_jwt_identity(), db)
                 ).first()
 
                 passwd.license_usr = licenseusr
@@ -162,10 +218,10 @@ async def cadastro() -> Response:
 
         callables = {"cert": cert, "pw": pw}
 
-        await callables[request_data.get("form_type")](form)
+        await callables[request_data.get("auth_method")](form)
 
         return await make_response(jsonify(message="Credencial salva com sucesso!"))
 
     except Exception as e:
-        app.logger.exception(str(e))
+        app.logger.error("\n".join(format_exception(e)))
         abort(500)

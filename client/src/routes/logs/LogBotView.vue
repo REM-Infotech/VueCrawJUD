@@ -9,8 +9,10 @@ import SideBarComponent from "../../components/SideBarComponent.vue";
 const { show: show_message } = useModal("ModalMessage");
 import { $, api } from "../../main";
 import { useModal } from "bootstrap-vue-next";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { onBeforeMount } from "vue";
 import LogsView from "./components/LogsView.vue";
+import { AxiosError, AxiosResponse } from "axios";
 
 const route = useRoute();
 const router = useRouter();
@@ -35,15 +37,6 @@ Chart.defaults.font.family =
   '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
 Chart.defaults.color = "#292b2c";
 
-onBeforeMount(() => {
-  api
-    .get("/", { withCredentials: true })
-    .then(() => {})
-    .catch(() => {
-      router.push({ name: "login" });
-    });
-});
-
 onMounted(() => {
   const ctx = (document.getElementById("LogsBotChart") as HTMLCanvasElement)?.getContext("2d");
   if (!ctx) return;
@@ -60,8 +53,38 @@ onMounted(() => {
     },
   });
 
-  $("#message").text(`Execução iniciada! PID: ${pid}`);
-  show_message();
+  api
+    .get(`/get_execution/${pid}`)
+    .then((response: AxiosResponse) => {
+      if (response.status === 200) {
+        const url = response.data.document_url as string;
+        $("#download-button").removeClass("disabled");
+        $("#download-button").removeClass("btn-outline-success");
+        $("#download-button").addClass("btn-success");
+        $("#download-button").attr("href", url);
+      }
+    })
+    .catch((error: AxiosError) => {
+      const response = error.response;
+
+      if (response?.status === 404) {
+        //
+      } else if (response?.status === 401 || response?.status === 422) {
+        $("#message").text("É necessário fazer login para acessar esta página");
+        router.push({ name: "login" });
+
+        setTimeout(() => {
+          show_message();
+        }, 500);
+      } else {
+        // console.log(error);
+      }
+    });
+
+  if (!$("#download-button").hasClass("disabled")) {
+    $("#message").text(`Execução iniciada! PID: ${pid}`);
+    show_message();
+  }
 });
 
 try {
@@ -176,11 +199,20 @@ try {
       }, 500);
 
       if (message.toLowerCase().includes("fim da execução")) {
-        router.push({ name: "executions" });
-        setTimeout(() => {
-          $("#message").text(`Execução finalizada!`);
-          show_message();
-        }, 500);
+        api
+          .get(`/get_execution/${pid}`)
+          .then((response: AxiosResponse) => {
+            if (response.status === 200) {
+              const url = response.data.document_url as string;
+              $("#download-button").removeClass("disabled");
+              $("#download-button").removeClass("btn-outline-success");
+              $("#download-button").addClass("btn-success");
+              $("#download-button").attr("href", url);
+            }
+          })
+          .catch(() => {
+            router.push({ name: "login" });
+          });
       }
     }
   });

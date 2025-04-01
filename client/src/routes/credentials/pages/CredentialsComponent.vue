@@ -1,18 +1,45 @@
 <script setup lang="ts">
 import { onBeforeMount, ref } from "vue";
-import { api } from "../../../main";
+import { $, api } from "../../../main";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { faPen, faTrash, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import DataTable from "datatables.net-vue3";
 import DataTablesCore from "datatables.net-bs5";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { current_action, form } from "../resources/formcred";
-import { submitForm, delete_call } from "../resources/formcred";
+import { delete_call } from "../resources/formcred";
+import { AxiosResponse } from "axios";
+import { useModal } from "bootstrap-vue-next";
 const items = ref();
 
-const submitDelete = () => {
+const { show: show_message } = useModal("ModalMessage");
+
+const submitDelete = (id: number) => {
   delete_call.value = true;
-  submitForm(new Event("submit"));
+
+  const formData = new FormData();
+
+  formData.append("id", id.toString());
+  formData.append("action", "delete");
+
+  api
+    .post("/peform_credencial", formData, {
+      withXSRFToken: true,
+      withCredentials: true,
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        "x-csrf-token": sessionStorage.getItem("x-csrf-token") || "",
+      },
+    })
+    .then((response: AxiosResponse) => {
+      $("#message").text(response.data.message);
+
+      show_message();
+    })
+    .finally(() => {
+      delete_call.value = false;
+    });
 };
 
 DataTable.use(DataTablesCore);
@@ -28,6 +55,7 @@ onBeforeMount(async () => {
   }
 });
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function setupEdit(item) {
   console.log(item);
   // form.id = item[0];
@@ -86,7 +114,7 @@ function setupEdit(item) {
         </thead>
         <template #column-4="props">
           <div class="d-flex justify-content-md-start">
-            <BButton
+            <!-- <BButton
               size="sm"
               class="me-2"
               variant="outline-warning"
@@ -97,13 +125,12 @@ function setupEdit(item) {
                 <FontAwesomeIcon :icon="faPen" class="me-2" />
               </span>
               <em>Editar</em>
-            </BButton>
+            </BButton> -->
             <BButton
               class="me-2"
               size="sm"
               variant="outline-danger"
-              @click="submitDelete"
-              v-b-modal.ModalFormUsr
+              @click="submitDelete(props.rowData[0])"
             >
               <span>
                 <FontAwesomeIcon :icon="faTrash" class="me-2" />

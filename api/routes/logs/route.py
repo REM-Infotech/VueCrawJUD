@@ -23,7 +23,9 @@ from quart import (
     url_for,
 )
 from quart import current_app as app
+from quart_jwt_extended import jwt_required
 
+from api import db
 from api.models import Executions, LicensesUsers, Users
 from crawjud.misc import generate_signed_url
 from crawjud.utils.status import TaskExec
@@ -58,6 +60,7 @@ async def setpid_socket() -> dict[str, str | None]:
 
 
 @logsbot.route("/logs_bot/<pid>")
+@jwt_required
 async def logs_bot(pid: str) -> Response:
     """Render the logs bot page for the specified execution.
 
@@ -193,6 +196,7 @@ async def logs_bot(pid: str) -> Response:
 
 
 @logsbot.route("/stop_bot/<pid>", methods=["GET"])
+@jwt_required
 async def stop_bot(pid: str) -> Response:
     """Stop the bot execution and wait until it has finished.
 
@@ -228,6 +232,7 @@ async def stop_bot(pid: str) -> Response:
 
 
 @logsbot.route("/status/<pid>", methods=["GET"])
+@jwt_required
 async def status(pid: str) -> Response:
     """Check the status of an execution and return its result.
 
@@ -300,6 +305,7 @@ async def status(pid: str) -> Response:
 
 
 @logsbot.route("/url_server/<pid>", methods=["GET"])
+@jwt_required
 async def url_server(pid: str) -> Response:
     """Retrieve the server URL associated with the given execution.
 
@@ -315,3 +321,21 @@ async def url_server(pid: str) -> Response:
             {"url_server": getenv("URL_WEB")},
         ),
     )
+
+
+@logsbot.route("/get_execution/<pid>", methods=["GET"])
+@jwt_required
+async def get_execution(pid: str) -> Response:
+    """Retrieve the execution details for a given process ID."""
+    execution = db.session.query(Executions).filter(Executions.pid == pid).first()
+
+    if execution and execution.status == "Finalizado":
+        signed_url = generate_signed_url(execution.file_output)
+        return await make_response(
+            jsonify(
+                {"message": "OK", "document_url": signed_url},
+            ),
+            200,
+        )
+
+    return await make_response(jsonify({"message": "Execution not found or not finished."}), 404)

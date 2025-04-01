@@ -209,6 +209,9 @@ class CrawJUD(PropertiesCrawJUD):
             self.elements = self.ElementsBot.config().bot_elements
 
         except Exception as e:
+            print(format_exception(e))  # noqa: T201
+            self.logger.error("\n".join(format_exception(e)))
+
             self.row = 0
             self.message = "Falha ao iniciar"
             self.type_log = "error"
