@@ -54,10 +54,6 @@ onBeforeMount(() => {
         <input type="password" name="" id="password" class="form-control" />
         <label for="password">Password</label>
       </div>
-      <div class="form-check">
-        <input type="checkbox" name="remember_me" id="gridCheck" class="form-check-input" />
-        <label for="gridCheck" class="form-check-label text-white">Remember Me</label>
-      </div>
       <hr />
       <BOverlay
         :show="loadingBuzy"

@@ -9,7 +9,7 @@ import {
   state_modal,
   submited,
   to_modal_message,
-} from "../resources/formusr";
+} from "../resources/formcred";
 
 import { $, api } from "../../../main";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
