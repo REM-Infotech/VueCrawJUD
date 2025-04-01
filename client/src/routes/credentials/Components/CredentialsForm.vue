@@ -9,20 +9,17 @@ import {
   state_modal,
   submited,
   to_modal_message,
-} from "../resources/formusr";
+} from "../resources/formcred";
 
 import { $, api } from "../../../main";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { computed, onBeforeMount, watch } from "vue";
 import router from "../../route";
-import { ref } from "vue";
-
+import { selected2, systems_list } from "../resources/formcred";
 const { show: show_load, hide: hide_load } = useModal("modal-load");
 const { show: show_message } = useModal("ModalMessage");
 const { hide: hide_form } = useModal("ModalFormUsr");
 
-const selected2 = ref(null);
-const systems_list = ref<unknown[]>([{ value: null, text: "Carregando", disabled: true }]);
 // const state_email = computed(() => {
 //   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email);
 // });
@@ -95,19 +92,6 @@ onBeforeMount(async () => {
             required
           />
         </BFormFloatingLabel>
-        <!-- <BFormFloatingLabel class="mb-4" label-for="floatingEmail" label="E-mail">
-          <BFormInvalidFeedback id="input-live-feedback"
-            >Insira um email válido</BFormInvalidFeedback
-          >
-          <BFormInput
-            v-model.trim="form.email"
-            :state="state_email"
-            id="floatingEmail"
-            type="email"
-            placeholder="E-mail"
-            required
-          />
-        </BFormFloatingLabel> -->
         <BFormFloatingLabel class="mb-4" label-for="floatingLogin" label="Login">
           <BFormInput id="floatingLogin" v-model="form.login" placeholder="Login" required />
         </BFormFloatingLabel>

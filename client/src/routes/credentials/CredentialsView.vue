@@ -4,7 +4,7 @@ import NavBarComponent from "../../components/NavBarComponent.vue";
 import SideBarComponent from "../../components/SideBarComponent.vue";
 import ModalCadUsr from "./Components/CredentialsForm.vue";
 import { onBeforeMount } from "vue";
-import { form } from "./resources/formusr";
+import { form } from "./resources/formcred";
 import { $, api } from "../../main";
 import { useModal } from "bootstrap-vue-next";
 import { useRouter } from "vue-router";

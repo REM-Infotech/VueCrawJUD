@@ -6,8 +6,8 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import DataTable from "datatables.net-vue3";
 import DataTablesCore from "datatables.net-bs5";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { current_action, form } from "../resources/formusr";
-import { submitForm, delete_call } from "../resources/formusr";
+import { current_action, form } from "../resources/formcred";
+import { submitForm, delete_call } from "../resources/formcred";
 const items = ref();
 
 const submitDelete = () => {
