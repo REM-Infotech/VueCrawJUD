@@ -17,7 +17,7 @@ export default async function () {
       plugins: {
         title: {
           display: true,
-          text: "Chart.js Line Chart - Multi Axis",
+          text: "Grafico de Execuções",
         },
       },
       scales: {

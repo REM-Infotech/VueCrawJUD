@@ -51,8 +51,8 @@ async def line_chart() -> Response:
 
         system_colors = {
             "PROJUDI": {
-                "background_color": "#59236c",
-                "border_color": "#4b1d5b",
+                "background_color": "#67277e",
+                "border_color": "#371442",
             },
             "PJE": {
                 "background_color": "#ca1a9d",
@@ -63,8 +63,8 @@ async def line_chart() -> Response:
                 "border_color": "#4b1d5b",
             },
             "ELAW": {
-                "background_color": "#a606cb",
-                "border_color": "#8d05ac",
+                "background_color": "#b67909",
+                "border_color": "#925607",
             },
         }
 
