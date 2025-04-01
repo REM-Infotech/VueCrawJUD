@@ -4,20 +4,17 @@ This module provides endpoints for rendering the dashboard and for serving
 chart data for executions per month and most executed bots.
 """
 
-import json
-import locale
 import os
 import pathlib
-from collections import Counter
-from datetime import datetime
+from traceback import format_exception
 
-import pandas as pd
 from deep_translator import GoogleTranslator
-from quart import Blueprint, Response, abort, jsonify, make_response, render_template, request, session
-from quart_jwt_extended import jwt_required
+from quart import Blueprint, Response, abort, current_app, jsonify, make_response
 
 from api import db
-from api.models import Executions, LicensesUsers, SuperUser, Users
+from api.models import Executions
+from api.models.bots import BotsCrawJUD
+from crawjud.utils import escurecer_cor, gerar_cor_base, rgb_to_hex
 
 translator = GoogleTranslator(source="en", target="pt")
 
@@ -27,176 +24,86 @@ path_template = os.path.join(pathlib.Path(__file__).parent.resolve(), "templates
 dash = Blueprint("dash", __name__, template_folder=path_template, static_folder=path_static)
 
 
-@dash.route("/dashboard", methods=["GET"])
-@jwt_required
-async def dashboard() -> Response:
-    """Render the dashboard page with execution data.
+@dash.route("/linechart")
+async def line_chart() -> Response:
+    """Render the line chart page."""
+    try:
+        executions = db.session.query(Executions).all()
 
-    Returns:
-        Response: A Quart response rendering the dashboard.
-
-    """
-    title = "Dashboard"
-    page = "dashboard.html"
-
-    user = Users.query.filter(Users.login == session["login"]).first()
-    user_id = user.id
-
-    chksupersu = db.session.query(SuperUser).join(Users).filter(Users.id == user_id).first()
-
-    executions = db.session.query(Executions)
-    if not chksupersu:
-        executions = executions.join(LicensesUsers).filter_by(license_token=user.licenseusr.license_token)
-
-        chk_admin = db.session.query(LicensesUsers).join(LicensesUsers.admins).filter(Users.id == user_id).first()
-
-        if not chk_admin:
-            executions = executions.join(Users).filter(Users.id == user_id)
-
-    database = executions.all()
-
-    return await make_response(
-        await render_template(
-            "index.html",
-            page=page,
-            title=title,
-            database=database,
-        ),
-    )
-
-
-@dash.route("/PerMonth", methods=["GET"])
-@jwt_required
-async def month_chart() -> Response:
-    """Return JSON data representing execution counts per month.
-
-    Returns:
-        Response: A Quart JSON response containing labels and values.
-
-    """
-    if not session.get("license_token"):
-        abort(405, description="Sessão expirada. Faça login novamente.")
-
-    # Define a localidade para português do Brasil
-    locale.setlocale(locale.LC_TIME, "pt_BR.UTF-8")
-
-    chart_data = {"labels": [], "values": []}  # Preenche com 0 se o mês estiver ausente
-
-    admin_cookie = request.cookies.get("roles_admin")
-    supersu_cookie = request.cookies.get("roles_supersu")
-
-    if supersu_cookie and json.loads(supersu_cookie).get("login_id") == session["_id"]:
-        query_result = Executions.query.all()
-
-    elif admin_cookie and json.loads(admin_cookie).get("login_id") == session["_id"]:
-        query_result = (
-            db.session.query(Executions)
-            .join(LicensesUsers)
-            .filter(LicensesUsers.license_token == session["license_token"])
-            .all()
-        )
-
-    elif not supersu_cookie or not admin_cookie:
-        query_result = db.session.query(Executions).join(Users).filter(Users.login == session["login"]).all()
-
-    # Extrai o mês de cada data de execução em português
-    if query_result:
-        meses = []
-        current_year = datetime.now().year
-        for execut in query_result:
-            execution_date = execut.data_execucao
-            if execution_date and execution_date.year == current_year:
-                # Converte para o nome do mês em português
-                mes_nome = execution_date.date().strftime("%B").lower()
-                meses.append(mes_nome)
-
-        # Conta as ocorrências de cada mês
-        execucoes_por_mes = Counter(meses)
-
-        # Lista completa de meses em português para garantir que todos os meses estejam representados
-        all_months = [
-            "janeiro",
-            "fevereiro",
-            "março",
-            "abril",
-            "maio",
-            "junho",
-            "julho",
-            "agosto",
-            "setembro",
-            "outubro",
-            "novembro",
-            "dezembro",
-        ]
-
-        # Garante que todos os meses estejam na contagem, mesmo que com valor 0
-        chart_data = {
-            "labels": all_months,
-            "values": [
-                execucoes_por_mes.get(month, 0) for month in all_months
-            ],  # Preenche com 0 se o mês estiver ausente
+        labels = {
+            "1": "Janeiro",
+            "2": "Fevereiro",
+            "3": "Março",
+            "4": "Abril",
+            "5": "Maio",
+            "6": "Junho",
+            "7": "Julho",
+            "8": "Agosto",
+            "9": "Setembro",
+            "10": "Outubro",
+            "11": "Novembro",
+            "12": "Dezembro",
         }
 
-    # Retorna para o template
-    return await make_response(
-        jsonify(
-            chart_data,
-        ),
-    )
+        contagem_execucoes = []
 
+        for system in ["PROJUDI", "PJE", "ESAJ", "ELAW", "CAIXA", "TJDF", "CAIXA"]:
+            executions_mes = {
+                "Janeiro": 0,
+                "Fevereiro": 0,
+                "Março": 0,
+                "Abril": 0,
+                "Maio": 0,
+                "Junho": 0,
+                "Julho": 0,
+                "Agosto": 0,
+                "Setembro": 0,
+                "Outubro": 0,
+                "Novembro": 0,
+                "Dezembro": 0,
+            }
+            for item in executions:
+                exec_bot: BotsCrawJUD = item.bot
 
-@dash.route("/most_executed", methods=["GET"])
-@jwt_required
-async def most_executed() -> Response:
-    """Return JSON data of the most executed bots.
+                if exec_bot.system.upper() == system:
+                    mes = labels[str(item.data_execucao.month)]
+                    executions_mes[mes] += 1
 
-    Returns:
-        Response: A Quart JSON response with bot names and execution counts.
+            contagem_execucoes.append({system: executions_mes})
 
-    """
-    if not session.get("license_token"):
-        abort(405, description="Sessão expirada. Faça login novamente.")
-
-    # Executa a query para obter todos os registros
-    admin_cookie = request.cookies.get("roles_admin")
-    supersu_cookie = request.cookies.get("roles_supersu")
-
-    chart_data = {"labels": [], "values": []}
-
-    if supersu_cookie and json.loads(supersu_cookie).get("login_id") == session["_id"]:
-        query_result = Executions.query.all()
-
-    elif admin_cookie and json.loads(admin_cookie).get("login_id") == session["_id"]:
-        query_result = (
-            db.session.query(Executions)
-            .join(LicensesUsers)
-            .filter(LicensesUsers.license_token == session["license_token"])
-            .all()
-        )
-
-    elif not supersu_cookie or not admin_cookie:
-        query_result = db.session.query(Executions).join(Users).filter(Users.login == session["login"]).all()
-
-    if query_result:
-        # Converte o query result para uma lista de dicionários
-        data = [{"bot_name": execut.bot.display_name} for execut in query_result]
-
-        # Cria o DataFrame a partir da lista de dicionários
-        df = pd.DataFrame(data)
-
-        # Agrupando pelo nome do bot e contando as execuções totais
-        execucoes_por_bot = df["bot_name"].value_counts().reset_index()
-        execucoes_por_bot.columns = ["bot_name", "count"]
-
-        # Preparando dados para o Chart.js
-        chart_data = {
-            "labels": execucoes_por_bot["bot_name"].tolist(),
-            "values": execucoes_por_bot["count"].tolist(),
+        data: dict[str, dict[str, str] | list[dict[str, str]]] = {
+            "labels": list(labels.values()),
+            "datasets": [],
         }
 
-    # Retorna para o template
-    return await make_response(
-        jsonify(
-            chart_data,
-        ),
-    )
+        for contagem in contagem_execucoes:
+            try:
+                it = contagem.items()
+
+                for key, value in it:
+                    numbers = list(value.values())
+
+                    # Gerar cor base
+                    r, g, b = gerar_cor_base()
+                    background_color = rgb_to_hex(r, g, b)
+
+                    # Gerar cor da borda mais escura
+                    r_borda, g_borda, b_borda = escurecer_cor(r, g, b)
+                    border_color = rgb_to_hex(r_borda, g_borda, b_borda)
+
+                    setup_dataset = {
+                        "label": key,
+                        "data": numbers,
+                        "borderColor": border_color,
+                        "backgroundColor": background_color,
+                        "yAxisID": "y",
+                    }
+
+                    data["datasets"].append(setup_dataset)
+            except Exception as e:
+                current_app.logger.error("\n".join(format_exception(e)))
+
+        return await make_response(jsonify(dataset=data))
+    except Exception as e:
+        current_app.logger.error("\n".join(format_exception(e)))
+        abort(500, "Erro ao gerar o gráfico de linha.")

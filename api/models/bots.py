@@ -5,8 +5,10 @@ Provides structures for bot configurations, credentials, and execution logging.
 
 from collections.abc import Buffer
 from datetime import datetime
+from typing import ClassVar
 
 import pytz
+from sqlalchemy.orm.relationships import RelationshipProperty
 
 from api import db
 
@@ -102,7 +104,9 @@ class Executions(db.Model):
     arquivo_xlsx: str = db.Column(db.String(length=64))
 
     bot_id: int = db.Column(db.Integer, db.ForeignKey("bots.id"))
-    bot = db.relationship("BotsCrawJUD", backref=db.backref("executions", lazy=True))
+    bot: ClassVar[RelationshipProperty[BotsCrawJUD]] = db.relationship(
+        BotsCrawJUD, backref=db.backref("executions", lazy=True)
+    )
 
     user_id: int = db.Column(db.Integer, db.ForeignKey("users.id"))
     user = db.relationship("Users", backref=db.backref("executions", lazy=True))

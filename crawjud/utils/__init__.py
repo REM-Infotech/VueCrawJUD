@@ -1,5 +1,6 @@
 """Miscellaneous utilities and helpers for the CrawJUD-Bots application."""
 
+import secrets
 import subprocess
 
 from dotenv_vault import load_dotenv
@@ -17,6 +18,21 @@ from .status import (
     load_cache,
     makezip,
 )
+
+
+def gerar_cor_base() -> tuple[int, int, int]:
+    r = secrets.randbelow(256)
+    g = secrets.randbelow(256)
+    b = secrets.randbelow(256)
+    return r, g, b
+
+
+def rgb_to_hex(r: int, g: int, b: int) -> str:
+    return "#{:02x}{:02x}{:02x}".format(r, g, b)
+
+
+def escurecer_cor(r: int, g: int, b: int, fator: int = 0.85) -> tuple[int, int, int]:
+    return int(r * fator), int(g * fator), int(b * fator)
 
 
 def get_hostname() -> str:
