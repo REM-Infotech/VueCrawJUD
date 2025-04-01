@@ -399,7 +399,7 @@ class TaskExec:
 
             robot = f"Robot Notifications <{sendermail}>"
             assunto = f"Bot {display_name} - {type_notify.capitalize()} Notification"
-            url_web = environ.get("URL_WEB")
+            url_web = ""
             destinatario = destinatario
             msg = Message(
                 assunto,  # subject
