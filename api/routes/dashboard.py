@@ -10,6 +10,7 @@ from traceback import format_exception
 
 from deep_translator import GoogleTranslator
 from quart import Blueprint, Response, abort, current_app, jsonify, make_response
+from quart_jwt_extended import jwt_required
 
 from api import db
 from api.models import Executions
@@ -25,6 +26,7 @@ dash = Blueprint("dash", __name__, template_folder=path_template, static_folder=
 
 
 @dash.route("/linechart")
+@jwt_required
 async def line_chart() -> Response:
     """Render the line chart page."""
     try:
@@ -46,6 +48,25 @@ async def line_chart() -> Response:
         }
 
         contagem_execucoes = []
+
+        system_colors = {
+            "PROJUDI": {
+                "background_color": "#59236c",
+                "border_color": "#4b1d5b",
+            },
+            "PJE": {
+                "background_color": "#ca1a9d",
+                "border_color": "#ab1685",
+            },
+            "ESAJ": {
+                "background_color": "#59236c",
+                "border_color": "#4b1d5b",
+            },
+            "ELAW": {
+                "background_color": "#a606cb",
+                "border_color": "#8d05ac",
+            },
+        }
 
         for system in ["PROJUDI", "PJE", "ESAJ", "ELAW", "CAIXA", "TJDF", "CAIXA"]:
             executions_mes = {
@@ -83,13 +104,17 @@ async def line_chart() -> Response:
                 for key, value in it:
                     numbers = list(value.values())
 
-                    # Gerar cor base
-                    r, g, b = gerar_cor_base()
-                    background_color = rgb_to_hex(r, g, b)
+                    background_color = system_colors.get(key.upper(), {}).get("background_color", "#000000")
+                    border_color = system_colors.get(key.upper(), {}).get("border_color", "#000000")
+                    # Se não houver cor definida, gerar nova cor
+                    if not system_colors.get(key):
+                        # Gerar cor base
+                        r, g, b = gerar_cor_base()
+                        background_color = rgb_to_hex(r, g, b)
 
-                    # Gerar cor da borda mais escura
-                    r_borda, g_borda, b_borda = escurecer_cor(r, g, b)
-                    border_color = rgb_to_hex(r_borda, g_borda, b_borda)
+                        # Gerar cor da borda mais escura
+                        r_borda, g_borda, b_borda = escurecer_cor(r, g, b)
+                        border_color = rgb_to_hex(r_borda, g_borda, b_borda)
 
                     setup_dataset = {
                         "label": key,
