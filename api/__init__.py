@@ -27,17 +27,21 @@ db = SQLAlchemy()
 tlsm = Talisman()
 
 
-async def create_celery_app() -> Celery:
+async def create_celery_app(config: object = "api.config.DevelopmentConfig") -> Celery:
     """Load configuration settings into the Quart application.
 
     Args:
-        app: The Quart application instance to configure
+        config (object): The configuration object to load settings from.
+            Defaults to "api.config.DevelopmentConfig".
 
     Returns:
         Celery: The Celery application instance
 
     """
     from crawjud.utils import make_celery
+
+    if not app.config.get("CELERY"):
+        app.config.from_object(config)
 
     async with app.app_context():
         celery = None
