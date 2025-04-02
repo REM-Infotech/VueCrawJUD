@@ -40,8 +40,7 @@ async def create_celery_app(config: object = "api.config.DevelopmentConfig") -> 
     """
     from crawjud.utils import make_celery
 
-    if not app.config.get("CELERY"):
-        app.config.from_object(config)
+    app.config.from_object(config)
 
     async with app.app_context():
         celery = None

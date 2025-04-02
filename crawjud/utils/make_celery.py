@@ -67,7 +67,7 @@ async def make_celery(app: Quart) -> Celery:
 
     """
     celery = Celery(app.import_name)
-    celery.conf.update(app.config["CELERY"])
+    celery.conf.update(app.config.get("CELERY"))
 
     class ContextTask(celery.Task):
         def __call__(
