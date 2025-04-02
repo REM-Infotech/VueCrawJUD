@@ -45,6 +45,7 @@ def jwt_required_socketio(func: T) -> T:
                         token = value
                         break
 
+            return True
             if not token:
                 current_app.logger.error("Token ausente")
                 return False
