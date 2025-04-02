@@ -56,16 +56,19 @@ def config_loggers(
         logger.addHandler(handler)
 
 
-async def make_celery(app: Quart) -> Celery:
+async def make_celery(app: Quart, config: object = "api.config.DevelopmentConfig") -> Celery:
     """Create and configure a Celery instance with Quart application context.
 
     Args:
         app (Quart): The Quart application instance.
+        config (object): The configuration object to load settings from.
+            Defaults to "api.config.DevelopmentConfig".
 
     Returns:
         Celery: Configured Celery instance.
 
     """
+    app.config.from_object(config)
     celery = Celery(app.import_name)
     celery.conf.update(app.config.get("CELERY"))
 

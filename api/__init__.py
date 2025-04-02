@@ -44,7 +44,7 @@ async def create_celery_app(config: object = "api.config.DevelopmentConfig") -> 
 
     async with app.app_context():
         celery = None
-        celery = await make_celery(app)
+        celery = await make_celery(app, config=config)
         celery.set_default()
         app.extensions["celery"] = celery
         celery.autodiscover_tasks(["crawjud.bot", "crawjud.utils"])
