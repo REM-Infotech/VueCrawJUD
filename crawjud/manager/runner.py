@@ -42,7 +42,7 @@ def start_worker() -> None:
     celery = asyncio.run(create_celery_app())
     environ.update({"APPLICATION_APP": "worker"})
 
-    queues: list[str] = json.loads(environ.get("CELERY_QUEUES", '["default"]'))
+    queues: list[str] = json.loads(environ.get("CELERY_QUEUES", '["default", "projudi_queue"]'))
 
     async def start_worker() -> None:
         async with app.app_context():
