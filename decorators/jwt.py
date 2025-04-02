@@ -60,4 +60,6 @@ def jwt_required_socketio(func: T) -> T:
                 current_app.logger.error("Token inválido.")
                 return False
 
+        return True
+
     return wrapper
