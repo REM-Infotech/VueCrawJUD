@@ -30,7 +30,7 @@ class WorkerCrawJUD(HeadCrawjudManager):
 
     def boot_app(self) -> None:
         """Boot Beat and the application."""
-        clear()
+        # clear()
         self.event_stop = Event()
         env_ambient = getenv("AMBIENT_CONFIG")
         ambient = objects_config[env_ambient]
@@ -79,7 +79,7 @@ class WorkerCrawJUD(HeadCrawjudManager):
             tqdm.write(colored(f"[{type_message}] {message}", colour, attrs=["blink", "bold"]))
             sleep(5)
             self.returns_message_ = ""
-            clear()
+            # clear()
 
         menu = {
             "Quart Application": self.quart_application,
@@ -109,7 +109,8 @@ class WorkerCrawJUD(HeadCrawjudManager):
                 func = self.functions.get(translated_arg)
 
             if choice == "Show Prompt":
-                clear()
+                ...
+                # clear()
 
             elif choice in options:
                 call_obj = options.get(choice)
@@ -129,7 +130,7 @@ class WorkerCrawJUD(HeadCrawjudManager):
         """Close the server."""
         config_exit = inquirer.prompt([inquirer.Confirm("exit", message="Do you want to exit?")])
         if config_exit.get("exit") is True:
-            clear()
+            # clear()
             self.loop_app = False
 
             running_servers_ = running_servers.items()
@@ -175,12 +176,12 @@ class WorkerCrawJUD(HeadCrawjudManager):
             monitor_log(file_path=file_path)
             tqdm.write(colored("[INFO] Log file closed.", "yellow", attrs=["bold"]))
             sleep(2)
-            clear()
+            # clear()
             return
 
         tqdm.write(colored(f"[ERROR] File '{text_choice}' does not exist.", "red", attrs=["bold"]))
         sleep(2)
-        clear()
+        # clear()
 
     def return_main_menu(self) -> None:
         """Return to the main menu."""

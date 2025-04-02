@@ -13,6 +13,7 @@ from flask_mail import Mail
 from flask_sqlalchemy import SQLAlchemy
 from flask_talisman import Talisman
 from hypercorn.middleware.proxy_fix import ProxyFixMiddleware as ProxyHeadersMiddleware
+from kombu import Queue
 from quart import Quart
 from quart_cors import cors
 from quart_jwt_extended import JWTManager
@@ -44,6 +45,24 @@ async def create_celery_app() -> Celery:
         celery.set_default()
         app.extensions["celery"] = celery
         celery.autodiscover_tasks(["crawjud.bot", "crawjud.utils"])
+
+    CELERY_QUEUES = (  # noqa: N806
+        Queue("default"),
+        Queue("caixa_queue", routing_key="crawjud.bot.caixa_launcher"),
+        Queue("projudi_queue", routing_key="crawjud.bot.projudi_launcher"),
+    )
+    CELERY_ROUTES = {  # noqa: N806
+        "crawjud.bot.caixa_launcher": {"queue": "caixa_queue"},
+        "crawjud.bot.projudi_launcher": {"queue": "projudi_queue"},
+    }
+
+    celery.conf.update(
+        task_queues=CELERY_QUEUES,
+        task_routes=CELERY_ROUTES,
+        task_default_queue="default",
+        task_default_exchange="default",
+        task_default_routing_key="default",
+    )
 
     return celery
 
