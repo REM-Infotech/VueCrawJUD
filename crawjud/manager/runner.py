@@ -44,6 +44,8 @@ def start_worker() -> None:
 
     queues: list[str] = json.loads(environ.get("CELERY_QUEUES", '["default", "projudi_queue"]'))
 
+    print(environ)  # noqa: T201
+
     async def start_worker() -> None:
         async with app.app_context():
             worker_name = f"{worker_name_generator()}@{node()}"
