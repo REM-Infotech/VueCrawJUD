@@ -15,7 +15,7 @@
 
 CrawJUD is a suite of automation robots designed to streamline and enhance judicial processes. Built with Quart and Celery, CrawJUD provides a robust async-first architecture for automating routine tasks across multiple Brazilian judicial systems including Projudi, PJe, eSaj, Elaw, and Caixa.
 
-_Total lines: `14551`_
+_Total lines: `17392`_
 _Last count: `22/02/2025 11:00 (América\São Paulo)`_
 
 ## Table of Contents

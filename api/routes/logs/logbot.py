@@ -14,6 +14,7 @@ from socketio import AsyncServer  # noqa: F401
 from api import app
 from crawjud.utils import format_message_log, load_cache  # noqa: F401
 from crawjud.utils.status import TaskExec
+from decorators import jwt_required_socketio
 
 logger = logging.getLogger(__name__)
 
@@ -22,6 +23,7 @@ io = app.extensions["socketio"]  # type: AsyncServer
 
 
 @io.on("connect", namespace="/log")
+@jwt_required_socketio
 async def connect(
     sid: str = None,
     data: dict = None,
@@ -45,6 +47,7 @@ async def connect(
 
 
 @io.on("disconnect", namespace="/log")
+@jwt_required_socketio
 async def disconnect(
     sid: str = None,
     event: any = None,
@@ -65,6 +68,7 @@ async def disconnect(
 
 
 @io.on("leave", namespace="/log")
+@jwt_required_socketio
 async def leave(
     sid: str,
     data: dict,
@@ -86,6 +90,7 @@ async def leave(
 
 
 @io.on("stop_bot", namespace="/log")
+@jwt_required_socketio
 async def stop_bot(
     sid: str,
     data: dict[str, str],
@@ -113,6 +118,7 @@ async def stop_bot(
 
 
 @io.on("terminate_bot", namespace="/log")
+@jwt_required_socketio
 async def terminate_bot(
     sid: str,
     data: dict[str, str],
@@ -150,6 +156,7 @@ async def terminate_bot(
 
 
 @io.on("log_message", namespace="/log")
+@jwt_required_socketio
 async def log_message(
     sid: str,
     data: dict[str, str] = None,
@@ -182,6 +189,7 @@ async def log_message(
 
 
 @io.on("statusbot", namespace="/log")
+@jwt_required_socketio
 async def statusbot(
     sid: str,
     data: dict = None,
@@ -204,6 +212,7 @@ async def statusbot(
 
 
 @io.on("join", namespace="/log")
+@jwt_required_socketio
 async def join(
     sid: str = None,
     data: dict[str, str] = None,
