@@ -15,6 +15,7 @@ from billiard.context import Process  # noqa: F401
 from celery import Celery
 from celery.apps.beat import Beat  # noqa: F401
 from celery.apps.worker import Worker
+from clear import clear
 from pynput._util import AbstractListener  # noqa: F401
 from quart import Quart
 from rich.console import Console  # noqa: F401
@@ -41,9 +42,7 @@ def start_worker() -> None:
     celery = asyncio.run(create_celery_app())
     environ.update({"APPLICATION_APP": "worker"})
 
-    queues: list[str] = json.loads(environ.get("CELERY_QUEUES", "[]"))
-    if len(queues) == 0:
-        queues = ["default"]
+    queues: list[str] = json.loads(environ.get("CELERY_QUEUES", '["default"]'))
 
     async def start_worker() -> None:
         async with app.app_context():
@@ -191,7 +190,7 @@ class RunnerServices:
         This method creates threads for the worker, Quart server, and Celery beat.
         It listens for a keyboard interrupt and then signals all threads to stop.
         """
-        # clear()
+        clear()
         to_start = {
             "Quart": StoreService(
                 process_name="Quart",
@@ -223,17 +222,17 @@ class RunnerServices:
 
                 store.start()
 
-        # clear()
+        clear()
         printf(Text("✅ All Application server started successfully", style="bold green"))
         sleep(2)
-        # clear()
+        clear()
 
     def status(self, app_name: app_name) -> None:
         """Log the status of the server."""
         if not running_servers.get(app_name.capitalize()):
             return ["Server not running.", "ERROR", "red"]
 
-        # clear()
+        clear()
 
         log_file = running_servers[app_name.capitalize()].process_log_file
         printf("[bold yellow]Type 'ESC' to exit.")
