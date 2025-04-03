@@ -1,29 +1,13 @@
 <script setup lang="ts">
 import { onBeforeMount, ref } from "vue";
 import { api } from "../../../main.ts";
-import { useRouter } from "vue-router";
-import { $ } from "../../../main.ts";
-import { useModal } from "bootstrap-vue-next";
-const router = useRouter();
 const items = ref<{ system: string; id: number; display_name: string; text: string }[]>([]);
 import { current_bot } from "../../../services/FormConfig.ts";
 
 onBeforeMount(async () => {
-  const { show: show_message } = useModal("ModalMessage");
-
-  api
-    .get("/bots_list")
-    .then((resp) => {
-      items.value = resp.data;
-    })
-    .catch((response) => {
-      // check if response.status is 4** error
-      if (response.response.status === 401 || response.response.status === 422) {
-        $("#message").text("É necessário estar autenticado para acessar essa página.");
-        router.push({ name: "login" });
-        show_message();
-      }
-    });
+  api.get("/bots_list").then((resp) => {
+    items.value = resp.data;
+  });
 });
 </script>
 

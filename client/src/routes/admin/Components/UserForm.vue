@@ -11,9 +11,7 @@ import {
   submited,
   to_modal_message,
 } from "../resources/formusr";
-import { $, api } from "../../../main";
 import { computed, onBeforeMount, watch } from "vue";
-import router from "../../route";
 const { show: show_load, hide: hide_load } = useModal("modal-load");
 const { show: show_message } = useModal("ModalMessage");
 const { hide: hide_form } = useModal("ModalFormUsr");
@@ -47,20 +45,6 @@ watch(to_modal_message, (value) => {
 
 onBeforeMount(async () => {
   form.reset();
-
-  api.get("/").catch((error) => {
-    if (error.status === 401) {
-      $("#message").text("É necessário fazer login para acessar esta página");
-      router.push({ name: "Login" });
-
-      setTimeout(() => {
-        show_load();
-      }, 500);
-      show_message();
-    } else {
-      // console.error(error);;
-    }
-  });
 });
 </script>
 

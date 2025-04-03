@@ -5,36 +5,9 @@ import SideBarComponent from "../../components/SideBarComponent.vue";
 import ModalCadUsr from "./Components/CredentialsForm.vue";
 import { onBeforeMount } from "vue";
 import { form } from "./resources/formcred";
-import { $, api } from "../../main";
-import { useModal } from "bootstrap-vue-next";
-import { useRouter } from "vue-router";
-const { show: show_load } = useModal("modal-load");
-const { show: show_message } = useModal("ModalMessage");
-
-const router = useRouter();
 
 onBeforeMount(async () => {
-  function toLogin(messsage: string = "É necessário fazer login para acessar esta página") {
-    $("#message").text(messsage);
-    router.push({ name: "login" });
-
-    setTimeout(() => {
-      show_load();
-    }, 500);
-    show_message();
-  }
-
   form.reset();
-
-  api.get("/").catch((error) => {
-    if (error.status === 401) {
-      toLogin();
-    } else if (error.code === "ERR_NETWORK") {
-      toLogin("Erro de conexão com o servidor");
-    } else {
-      // console.error(error);;
-    }
-  });
 });
 </script>
 

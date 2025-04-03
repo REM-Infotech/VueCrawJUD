@@ -69,15 +69,6 @@ onMounted(() => {
 
       if (response?.status === 404) {
         //
-      } else if (response?.status === 401 || response?.status === 422) {
-        $("#message").text("É necessário fazer login para acessar esta página");
-        router.push({ name: "login" });
-
-        setTimeout(() => {
-          show_message();
-        }, 500);
-      } else {
-        // console.log(error);
       }
     });
 

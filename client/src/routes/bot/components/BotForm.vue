@@ -144,10 +144,6 @@ const setup_form = async (e) => {
     if (response.data.msg === "Missing CSRF token") {
       $("#message").text("CSRF Token inválido.");
       show_message();
-    } else if (response.response.status === 401 || response.response.status === 422) {
-      $("#message").text("É necessário estar autenticado para acessar essa página.");
-      router.push({ name: "login" });
-      show_message();
     }
     e.preventDefault();
     return;
@@ -172,21 +168,7 @@ const setup_form = async (e) => {
         },
       },
     );
-  } catch (error) {
-    // Check if response.status is 4** error and not 404
-
-    const response = error.response;
-
-    if (
-      response.response.status === 401 ||
-      (response.response.status === 422 &&
-        response.data.msg != null &&
-        response.data.msg != "Missing CSRF token")
-    ) {
-      $("#message").text("É necessário estar autenticado para acessar essa página.");
-      router.push({ name: "login" });
-      show_message();
-    }
+  } catch {
     e.preventDefault();
     return;
   }
@@ -244,15 +226,6 @@ async function peformSubmit(event: Event) {
         router.push({ name: "logs_bot", params: { pid: pid } });
 
         $("#message").text(`Execução iniciada! PID: ${pid}`);
-      }
-    })
-    .catch((response) => {
-      // check if response.status is 4** error
-      console.log(response);
-      if (response.response.status === 401 || response.response.status === 422) {
-        $("#message").text("É necessário estar autenticado para acessar essa página.");
-        router.push({ name: "login" });
-        show_message();
       }
     });
 }

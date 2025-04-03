@@ -41,11 +41,17 @@ export const api = axios.create({
 });
 
 // Add request interceptor for debugging
-api.interceptors.request.use(
-  (config) => {
-    return config;
-  },
+api.interceptors.request.use((config) => {
+  return config;
+});
+
+api.interceptors.response.use(
+  (response) => response,
   (error) => {
+    if (error.response?.status === 401) {
+      router.push({ name: "login" });
+      // ou exibir uma modal de sessão expirada
+    }
     return Promise.reject(error);
   },
 );

@@ -4,7 +4,6 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { onBeforeMount, onMounted, ref } from "vue";
 import DataTable from "datatables.net-vue3";
 import DataTablesCore from "datatables.net-bs5";
-import { useRouter } from "vue-router";
 import { useModal } from "bootstrap-vue-next";
 import { convertDate } from "../services/convert_date";
 DataTable.use(DataTablesCore);
@@ -22,7 +21,6 @@ import { $, api } from "../main";
 import { faDownload, faEye } from "@fortawesome/free-solid-svg-icons";
 
 const data_ = ref(false);
-const router = useRouter();
 onMounted(async function () {
   api
     .get("/executions", {
@@ -50,20 +48,6 @@ onMounted(async function () {
         ];
       });
       data_.value = true;
-    })
-    .catch((error) => {
-      if (error.code === "ERR_NETWORK") {
-        $("#message").text("Erro de conexão com o servidor, tente novamente mais tarde.");
-        show_message();
-        router.push({ name: "login" });
-      } else if (error.code) {
-        if (error.status === 401) {
-          // console.log(error);
-          sessionStorage.setItem("message", "Sessão expirada, faça login novamente!");
-          router.push({ name: "login" });
-        }
-        // console.log(error);
-      }
     });
 });
 
@@ -71,29 +55,18 @@ const download_file = async (file: string) => {
   show_load();
 
   setTimeout(async () => {
-    api
-      .get(`/executions/download/${file}`)
-      .then((response) => {
-        const data = response.data;
-        const url: string = data.url;
-        window.open(url, "_blank");
+    api.get(`/executions/download/${file}`).then((response) => {
+      const data = response.data;
+      const url: string = data.url;
+      window.open(url, "_blank");
 
-        setTimeout(() => {
-          hide_load();
-        }, 500);
+      setTimeout(() => {
+        hide_load();
+      }, 500);
 
-        $("#message").text(`Download do arquivo "${file}" iniciado!`);
-        show_message();
-      })
-      .catch((response) => {
-        // check if response is 4** error and not 404
-
-        if (response.response.status === 401 || response.response.status === 422) {
-          $("#message").text("É necessário estar autenticado para acessar essa página.");
-          router.push({ name: "login" });
-          show_message();
-        }
-      });
+      $("#message").text(`Download do arquivo "${file}" iniciado!`);
+      show_message();
+    });
   }, 1000);
 };
 </script>

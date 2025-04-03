@@ -1,24 +1,14 @@
 <script setup lang="ts">
 import { Chart, ChartConfiguration } from "chart.js/auto";
-import jQuery from "jquery";
 import { onMounted } from "vue";
-
-const $ = jQuery;
 import ConfigChart from "../resources/configchart";
-import { AxiosResponse, isAxiosError } from "axios";
-import { useRouter } from "vue-router";
-import { useModal } from "bootstrap-vue-next";
 
 // Set new default font family and font color to mimic Bootstrap's default styling
 Chart.defaults.font.family =
   '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
 Chart.defaults.color = "#292b2c";
 
-const router = useRouter();
-
 onMounted(async () => {
-  const { show: show_message } = useModal("ModalMessage");
-
   var ctx1 = (document.getElementById("myAreaChart") as HTMLCanvasElement)?.getContext("2d");
 
   if (!ctx1) return;
@@ -28,19 +18,7 @@ onMounted(async () => {
 
   try {
     ({ config_system, config_bot } = await ConfigChart());
-  } catch (error) {
-    if (isAxiosError(error)) {
-      if ("response" in error) {
-        const response: AxiosResponse = error.response as AxiosResponse;
-
-        if (response.status === 401 || response.status === 422) {
-          $("#message").text("É necessário estar autenticado para acessar essa página.");
-          router.push({ name: "login" });
-          show_message();
-        }
-      }
-    }
-
+  } catch {
     return;
   }
 

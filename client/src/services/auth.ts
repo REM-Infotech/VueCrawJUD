@@ -8,35 +8,13 @@ export default function () {
   const { show: show_message } = useModal("ModalMessage");
 
   async function logout(router: Router) {
-    api
-      .post("/logout")
-      .then((response) => {
-        if (response.status === 200 || response.status === 401) {
-          router.push({ name: "login" });
-        }
-
-        router.push({ name: "login" });
-
-        $("#message").text("Logout Efetuado com sucesso!");
-        show_message();
-        sessionStorage.clear();
-        localStorage.clear();
-      })
-      .catch((response) => {
-        if (response.code === "ERR_NETWORK") {
-          $("#message").text("Erro de conexão com o servidor!");
-          show_message();
-        } else if (response.status === 200 || response.status === 401) {
-          router.push({ name: "login" });
-        }
-
-        $("#message").text(response.data.message);
-        show_message();
-
-        router.push({ name: "login" });
-        sessionStorage.clear();
-        localStorage.clear();
-      });
+    api.post("/logout").then(() => {
+      router.push({ name: "login" });
+      $("#message").text("Logout Efetuado com sucesso!");
+      show_message();
+      sessionStorage.clear();
+      localStorage.clear();
+    });
   }
 
   async function authenticate(router: Router) {
@@ -77,17 +55,6 @@ export default function () {
             show_message();
           }, 200);
         }
-      })
-      .catch((error) => {
-        const response = error.response;
-        if (error.code === "ERR_NETWORK") {
-          $("#message").text("Erro de conexão com o servidor!");
-          show_message();
-
-          return;
-        }
-        $("#message").text(response.data.message);
-        show_message();
       });
   }
 

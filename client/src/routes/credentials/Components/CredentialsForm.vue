@@ -11,10 +11,9 @@ import {
   to_modal_message,
 } from "../resources/formcred";
 
-import { $, api } from "../../../main";
+import { api } from "../../../main";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { computed, onBeforeMount, watch } from "vue";
-import router from "../../route";
 import { selected2, systems_list } from "../resources/formcred";
 const { show: show_load, hide: hide_load } = useModal("modal-load");
 const { show: show_message } = useModal("ModalMessage");
@@ -50,24 +49,11 @@ watch(to_modal_message, (value) => {
 onBeforeMount(async () => {
   form.reset();
 
-  api
-    .get("/systems")
-    .then((response) => {
-      const data: { systems: Array<{ value: unknown; text: string }> } = response.data;
+  api.get("/systems").then((response) => {
+    const data: { systems: Array<{ value: unknown; text: string }> } = response.data;
 
-      systems_list.value = data.systems;
-    })
-    .catch((error) => {
-      if (error.status === 401 || error.status === 422) {
-        $("#message").text("É necessário fazer login para acessar esta página");
-        router.push({ name: "login" });
-
-        setTimeout(() => {
-          show_load();
-        }, 500);
-        show_message();
-      }
-    });
+    systems_list.value = data.systems;
+  });
 });
 </script>
 
