@@ -4,13 +4,13 @@ import json
 import random
 import string
 from os import environ
-from typing import Any
+from typing import Any  # noqa: F401
 
 from dotenv_vault import load_dotenv
 from google.cloud.storage import Bucket, Client
 from google.oauth2.service_account import Credentials
-from itsdangerous import URLSafeTimedSerializer
-from quart import current_app as app
+from itsdangerous import URLSafeTimedSerializer  # noqa: F401
+from quart import current_app as app  # noqa: F401
 
 from .MakeTemplate import MakeModels
 
@@ -21,36 +21,36 @@ __all__ = [MakeModels]
 
 
 # Função para criptografar os dados do cookie
-def encrypt_cookie(data: Any) -> str:
-    """Encrypt data for use in cookies.
+# def encrypt_cookie(data: Any) -> str:
+#     """Encrypt data for use in cookies.
 
-    Args:
-        data: The data to encrypt.
+#     Args:
+#         data: The data to encrypt.
 
-    Returns:
-        str: The encrypted data as a string.
+#     Returns:
+#         str: The encrypted data as a string.
 
-    """
-    serializer = URLSafeTimedSerializer(app.secret_key)
-    return serializer.dumps(data)
+#     """
+#     serializer = URLSafeTimedSerializer(app.secret_key)
+#     return serializer.dumps(data)
 
 
 # Função para descriptografar os dados do cookie
-def decrypt_cookie(encrypted_data: str) -> Any | None:
-    """Decrypt cookie data.
+# def decrypt_cookie(encrypted_data: str) -> Any | None:
+#     """Decrypt cookie data.
 
-    Args:
-        encrypted_data: The encrypted cookie string.
+#     Args:
+#         encrypted_data: The encrypted cookie string.
 
-    Returns:
-        The original data if decryption is successful; otherwise, None.
+#     Returns:
+#         The original data if decryption is successful; otherwise, None.
 
-    """
-    serializer = URLSafeTimedSerializer(app.secret_key)
-    try:
-        return serializer.loads(encrypted_data)
-    except Exception:
-        return None  # Em caso de falha na descriptografia ou expiração
+#     """
+#     serializer = URLSafeTimedSerializer(app.secret_key)
+#     try:
+#         return serializer.loads(encrypted_data)
+#     except Exception:
+#         return None  # Em caso de falha na descriptografia ou expiração
 
 
 def generate_pid() -> str:

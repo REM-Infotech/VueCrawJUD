@@ -1,7 +1,6 @@
 """Miscellaneous utilities and helpers for the CrawJUD-Bots application."""
 
 import secrets
-import subprocess
 
 from dotenv_vault import load_dotenv
 
@@ -35,22 +34,21 @@ def escurecer_cor(r: int, g: int, b: int, fator: int = 0.85) -> tuple[int, int, 
     return int(r * fator), int(g * fator), int(b * fator)
 
 
-def get_hostname() -> str:
-    """Get the hostname of the current machine."""
-    return subprocess.run(
-        [
-            "powershell",
-            "hostname",
-        ],
-        capture_output=True,
-        text=True,
-        check=False,
-    ).stdout.strip()
+# def get_hostname() -> str:
+#     """Get the hostname of the current machine."""
+#     return subprocess.run(
+#         [
+#             "powershell",
+#             "hostname",
+#         ],
+#         capture_output=True,
+#         text=True,
+#         check=False,
+#     ).stdout.strip()
 
 
 signed_url_lifetime = 300
 __all__ = [
-    get_hostname,
     worker_name_generator,
     DatabaseScheduler,
     GeoLoc,
