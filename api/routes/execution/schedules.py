@@ -1,5 +1,7 @@
 """Module for schedule executions page."""
 
+from traceback import format_exception
+
 from flask_sqlalchemy import SQLAlchemy
 from quart import Response, abort, make_response, render_template, session
 from quart import current_app as app
@@ -64,7 +66,7 @@ async def schedules() -> Response:
         )
 
     except Exception as e:
-        app.logger.exception(str(e))
+        app.logger.error("\n".join(format_exception(e)))
         abort(500)
 
 

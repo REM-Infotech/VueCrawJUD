@@ -117,7 +117,7 @@ async def clear_executions() -> Response:
         db.session.commit()
 
     except Exception as e:
-        app.logger.exception(str(e))
+        app.logger.error("\n".join(format_exception(e)))
         abort(500)
 
     message = "Execuções removidas com sucesso!"
