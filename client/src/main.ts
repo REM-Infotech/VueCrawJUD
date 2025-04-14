@@ -1,5 +1,5 @@
 import "@popperjs/core";
-import axios from "axios";
+import axios, { isAxiosError } from "axios";
 import { createBootstrap, useModal } from "bootstrap-vue-next";
 import "bootstrap-vue-next/dist/bootstrap-vue-next.css";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -49,13 +49,15 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     console.log(error);
-    if ("response" in error && error.response?.status === 401) {
-      $("#message").text("Sessão expirada, faça login novamente");
-      const { show: show_message } = useModal("ModalMessage");
-      setTimeout(show_message, 1000);
+    if (isAxiosError(error)) {
+      if ("response" in error && error.response?.status === 401) {
+        $("#message").text("Sessão expirada, faça login novamente");
+        const { show: show_message } = useModal("ModalMessage");
+        setTimeout(show_message, 1000);
 
-      router.push({ name: "login" });
-      // ou exibir uma modal de sessão expirada
+        router.push({ name: "login" });
+        // ou exibir uma modal de sessão expirada
+      }
     }
     return Promise.reject(error);
   },
