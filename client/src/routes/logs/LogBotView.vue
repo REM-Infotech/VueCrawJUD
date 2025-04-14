@@ -12,7 +12,7 @@ import { useModal } from "bootstrap-vue-next";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { onBeforeMount } from "vue";
 import LogsView from "./components/LogsView.vue";
-import { AxiosError, AxiosResponse } from "axios";
+import { AxiosResponse } from "axios";
 
 const route = useRoute();
 const router = useRouter();
@@ -53,24 +53,15 @@ onMounted(() => {
     },
   });
 
-  api
-    .get(`/get_execution/${pid}`)
-    .then((response: AxiosResponse) => {
-      if (response.status === 200) {
-        const url = response.data.document_url as string;
-        $("#download-button").removeClass("disabled");
-        $("#download-button").removeClass("btn-outline-success");
-        $("#download-button").addClass("btn-success");
-        $("#download-button").attr("href", url);
-      }
-    })
-    .catch((error: AxiosError) => {
-      const response = error.response;
-
-      if (response?.status === 404) {
-        //
-      }
-    });
+  api.get(`/get_execution/${pid}`).then((response: AxiosResponse) => {
+    if (response.status === 200) {
+      const url = response.data.document_url as string;
+      $("#download-button").removeClass("disabled");
+      $("#download-button").removeClass("btn-outline-success");
+      $("#download-button").addClass("btn-success");
+      $("#download-button").attr("href", url);
+    }
+  });
 
   if (!$("#download-button").hasClass("disabled")) {
     $("#message").text(`Execução iniciada! PID: ${pid}`);

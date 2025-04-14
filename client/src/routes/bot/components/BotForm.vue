@@ -246,22 +246,16 @@ async function peformSubmit(event: Event) {
     <div>
       <BForm id="FormBot" @submit="peformSubmit">
         <div class="row g-3 p-2 m-1">
-          <div class="col-12 card" v-if="need_options">
-            <div class="p-3">
-              <div class="card-body">
-                <BFormSelect class="mb-3" v-model="selected" :options="credentials" />
-                <BFormSelect class="mb-3" v-model="selected2" :options="state_client" />
-                <div class="mb-3">
-                  <div class="form-floating" v-if="bot_protocolo">
-                    <input type="password" class="form-control" id="token" placeholder="Password" />
-                    <label for="token">Senha Token</label>
-                  </div>
-                </div>
-                <div class="col-12 p-3"></div>
+          <div class="col-12" v-if="need_options">
+            <BFormSelect class="mb-3" v-model="selected" :options="credentials" />
+            <BFormSelect class="mb-3" v-model="selected2" :options="state_client" />
+            <div class="mb-3">
+              <div class="form-floating" v-if="bot_protocolo">
+                <input type="password" class="form-control" id="token" placeholder="Password" />
+                <label for="token">Senha Token</label>
               </div>
             </div>
           </div>
-          <hr />
           <div v-if="need_files" class="col-lg-12 mb-3">
             <div class="card">
               <div class="card-header">
