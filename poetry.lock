@@ -224,21 +224,6 @@ tests = ["cloudpickle ; platform_python_implementation == \"CPython\"", "hypothe
 tests-mypy = ["mypy (>=1.11.1) ; platform_python_implementation == \"CPython\" and python_version >= \"3.10\"", "pytest-mypy-plugins ; platform_python_implementation == \"CPython\" and python_version >= \"3.10\""]
 
 [[package]]
-name = "babel"
-version = "2.17.0"
-description = "Internationalization utilities"
-optional = false
-python-versions = ">=3.8"
-groups = ["main"]
-files = [
-    {file = "babel-2.17.0-py3-none-any.whl", hash = "sha256:4d0b53093fdfb4b21c92b5213dba5a1b23885afa8383709427046b21c366e5f2"},
-    {file = "babel-2.17.0.tar.gz", hash = "sha256:0c54cffb19f690cdcc52a3b50bcbf71e07a808d1c80d549f2459b9d2cf0afb9d"},
-]
-
-[package.extras]
-dev = ["backports.zoneinfo ; python_version < \"3.9\"", "freezegun (>=1.0,<2.0)", "jinja2 (>=3.0)", "pytest (>=6.0)", "pytest-cov", "pytz", "setuptools", "tzdata ; sys_platform == \"win32\""]
-
-[[package]]
 name = "bcrypt"
 version = "4.3.0"
 description = "Modern password hashing for your software and your servers"
@@ -4155,4 +4140,4 @@ propcache = ">=0.2.0"
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.13,<3.14"
-content-hash = "29817f492643cf4f51eeb1517ecd72b34fb2e142d889eec77663352e3c834dfa"
+content-hash = "3084ac67648b465f370b89e27c057064aba002c882e96b2cf322f1983bba92a4"
