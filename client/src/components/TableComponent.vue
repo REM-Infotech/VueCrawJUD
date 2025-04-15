@@ -48,6 +48,9 @@ onMounted(async function () {
         ];
       });
       data_.value = true;
+    })
+    .catch(() => {
+      //
     });
 });
 
@@ -78,11 +81,12 @@ const download_file = async (file: string) => {
       Execuções
     </div>
     <div class="card-body">
-      <div v-if="data_" class="table-responsive">
+      <div class="table-responsive">
         <DataTable
           :data="items"
           class="placeholder-glow table table-striped table-hover"
           :options="options"
+          v-model="data_"
         >
           <thead>
             <tr>
@@ -129,48 +133,6 @@ const download_file = async (file: string) => {
             </tr>
           </tfoot>
         </DataTable>
-      </div>
-      <div v-if="!data_" class="table-responsive">
-        <table class="placeholder-glow table table-striped table-hover">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Usuário</th>
-              <th>Nome do Robô</th>
-              <th>Arquivo de Execução</th>
-              <th>Data da Execução</th>
-              <th>Status</th>
-              <th>Data finalização</th>
-              <th data-sortable="false">Arquivo de saida</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr class="text-center">
-              <td colspan="8"><span class="placeholder w-100 rounded">Carregando</span></td>
-            </tr>
-            <tr class="text-center">
-              <td colspan="8"><span class="placeholder w-100 rounded">Carregando</span></td>
-            </tr>
-            <tr class="text-center">
-              <td colspan="8"><span class="placeholder w-100 rounded">Carregando</span></td>
-            </tr>
-            <tr class="text-center">
-              <td colspan="8"><span class="placeholder w-100 rounded">Carregando</span></td>
-            </tr>
-          </tbody>
-          <tfoot>
-            <tr>
-              <th>#</th>
-              <th>Usuário</th>
-              <th>Nome do Robô</th>
-              <th>Arquivo de Execução</th>
-              <th>Data da Execução</th>
-              <th>Status</th>
-              <th>Data finalização</th>
-              <th data-sortable="false">Arquivo de saida</th>
-            </tr>
-          </tfoot>
-        </table>
       </div>
     </div>
   </div>

@@ -48,7 +48,6 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    console.log(error);
     if (isAxiosError(error)) {
       if ("response" in error && error.response?.status === 401) {
         $("#message").text("Sessão expirada, faça login novamente");
@@ -57,8 +56,19 @@ api.interceptors.response.use(
 
         router.push({ name: "login" });
         // ou exibir uma modal de sessão expirada
+      } else if (error?.code === "ERR_NETWORK") {
+        $("#message").text("Erro de conexão com o servidor");
+
+        router.push({ name: "login" });
       }
     }
     return Promise.reject(error);
   },
 );
+
+router.afterEach((to) => {
+  if ($("#message").text() !== "" && to.name === "login") {
+    const { show: show_message } = useModal("ModalMessage");
+    setTimeout(show_message, 500);
+  }
+});

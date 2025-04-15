@@ -55,6 +55,9 @@ export default function () {
             show_message();
           }, 200);
         }
+      })
+      .catch(() => {
+        //
       });
   }
 

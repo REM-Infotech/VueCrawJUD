@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
+import { $ } from "../main";
 const modal = ref(false);
 </script>
 
@@ -11,6 +12,11 @@ const modal = ref(false);
     ok-title="Fechar"
     title="Mensagem"
     id="ModalMessage"
+    @close="
+      () => {
+        $('#message').text('');
+      }
+    "
   >
     <p id="message"></p>
   </BModal>
