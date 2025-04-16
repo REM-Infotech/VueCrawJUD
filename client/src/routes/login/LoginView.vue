@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { onBeforeMount } from "vue";
-import { useRouter } from "vue-router";
 import { useModal } from "bootstrap-vue-next";
-import { onMounted } from "vue";
 import jQuery from "jquery";
+import { onBeforeMount, onMounted } from "vue";
+import { useRouter } from "vue-router";
+import NavLogin from "../../components/NavLogin.vue";
 import { loadingBuzy, onBuzyHidden, setBuzyClick } from "../../services/animations";
-const router = useRouter();
 import AuthService from "../../services/auth";
+const router = useRouter();
 
 const { authenticate } = AuthService();
 
@@ -38,6 +38,7 @@ onBeforeMount(() => {
 </script>
 
 <template>
+  <NavLogin />
   <main
     class="form-signin w-100 m-auto position-absolute top-50 start-50 translate-middle"
     data-bs-theme="light"

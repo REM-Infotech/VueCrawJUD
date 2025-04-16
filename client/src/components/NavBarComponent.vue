@@ -2,17 +2,35 @@
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 import {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  faMinus,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  faMaximize,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  faClose,
-  faSun,
-  faMoon,
   faCircleHalfStroke,
+  faClose,
+  faMaximize,
+  faMinus,
+  faMoon,
+  faSun,
 } from "@fortawesome/free-solid-svg-icons";
+
+const MinimizeWindow = () => {
+  window.electronAPI?.minimize?.();
+};
+const MaximizeWindow = () => {
+  window.electronAPI?.maximize?.();
+};
+
+const closewindow = () => {
+  window.electronAPI?.close?.();
+};
 </script>
+
+<style lang="scss">
+button {
+  app-region: no-drag;
+}
+
+.titlebar {
+  app-region: drag;
+}
+</style>
 
 <template>
   <nav class="navbar navbar-expand-xl navbar-indigo" aria-label="Sixth navbar example">
@@ -42,23 +60,6 @@ import {
 
       <div class="collapse navbar-collapse" id="navbarsExample06">
         <ul class="navbar-nav me-auto mb-2 mb-xl-0"></ul>
-        <!-- <ul class="navbar-nav me-auto mb-2 mb-xl-0">
-          <li class="nav-item">
-            <a class="nav-link rounded" href="#">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link rounded" href="#">Link</a>
-          </li>
-        </ul> -->
-        <!-- <button class="btn btn-secondary m-1" onclick="window.close()">
-          <FontAwesomeIcon :icon="faMinus" />
-        </button>
-        <button class="btn btn-warning m-1">
-          <FontAwesomeIcon :icon="faMaximize" />
-        </button>
-        <button class="btn btn-danger m-1">
-          <FontAwesomeIcon :icon="faClose" />
-        </button> -->
         <div class="dropdown ms-3 me-2" data-bs-theme="dark">
           <button
             class="btn btn-secondary dropdown-toggle"
@@ -104,6 +105,23 @@ import {
             </li>
           </ul>
         </div>
+        <BNavbarNav class="ms-auto">
+          <BButton size="sm" variant="outline-primary" @click="MinimizeWindow" class="me-2">
+            <span>
+              <FontAwesomeIcon :icon="faMinus" />
+            </span>
+          </BButton>
+          <BButton size="sm" variant="outline-warning" @click="MaximizeWindow" class="me-2">
+            <span>
+              <FontAwesomeIcon :icon="faMaximize" />
+            </span>
+          </BButton>
+          <BButton size="sm" variant="outline-danger" @click="closewindow">
+            <span>
+              <FontAwesomeIcon :icon="faClose" />
+            </span>
+          </BButton>
+        </BNavbarNav>
       </div>
     </div>
   </nav>
