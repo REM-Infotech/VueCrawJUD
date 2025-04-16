@@ -12,10 +12,7 @@
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "[jsonc][typescript][javascript][vue]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.codeActionsOnSave": {
-      "source.organizeImports": "explicit"
-    }
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "css.lint.unknownProperties": "ignore",
   "debug.javascript.terminalOptions": {
