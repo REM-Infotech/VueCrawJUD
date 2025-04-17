@@ -1,14 +1,20 @@
+
 import "@/plugins/handlers";
 import { modeLoadWindow, titleBarStyle } from "@/services/ElectronConfig";
 import { initialize } from "@electron/remote/main/index";
+import { config as DotEnvConfig } from 'dotenv';
 import { app, BrowserWindow, screen, Tray } from "electron";
 import isDev from "electron-is-dev";
 import { join } from "path";
 import process from "process";
 import "./util";
+DotEnvConfig()
 
+const icon = join(process.cwd(), "src", "assets", "img", "icon.ico")
 export let traywindow: Tray;
 export let mainWindow: BrowserWindow;
+
+console.log(process.env.DATABASE_CONNECTOR)
 
 const createWindow = async () => {
 
@@ -32,7 +38,7 @@ const createWindow = async () => {
   }
   console.log(!isDev)
   mainWindow = new BrowserWindow({
-    icon: join("./src", "assets", "img", "icon.ico"),
+    icon: icon,
     minWidth: minWidth,
     minHeight: minHeight,
     width: minWidth,
@@ -45,7 +51,7 @@ const createWindow = async () => {
   });
 
   await modeLoadWindow[isDev ? "true" : "false"](mainWindow);
-  traywindow = new Tray(join(process.cwd(), "src", "assets", "img", "icon.ico"));
+  traywindow = new Tray(icon);
 };
 
 

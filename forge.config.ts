@@ -10,7 +10,7 @@ import { FuseV1Options, FuseVersion } from "@electron/fuses";
 import { join } from 'path';
 
 const config: ForgeConfig = {
-  outDir: './build/forge_',
+  outDir: './build/forge',
   makers: [
     new MakerSquirrel({
       authors: 'Electron contributors',
@@ -27,6 +27,7 @@ const config: ForgeConfig = {
           {
             entry: "src/main/main.ts",
             config: "vite.config.main.js",
+
           },
           {
             entry: "src/main/preload.js",

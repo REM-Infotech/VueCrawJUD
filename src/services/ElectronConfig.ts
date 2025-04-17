@@ -1,9 +1,9 @@
+import type { LoadWindow, TtitleBarStyle } from "@/types/service";
 import type { BrowserWindow } from "electron";
-import isDev from "electron-is-dev";
 import { dirname, join } from "path";
 import { fileURLToPath } from "url";
 
-export const modeLoadWindow = {
+export const modeLoadWindow: LoadWindow = {
   "true":
     async (mainWindow: BrowserWindow) => {
       mainWindow.webContents.openDevTools();
@@ -18,11 +18,11 @@ export const modeLoadWindow = {
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-export const titleBarStyle = () => {
+export const titleBarStyle: TtitleBarStyle = () => {
 
-  if (isDev) {
-    return "default";
-  }
+  // if (isDev) {
+  //   return "default";
+  // }
   return "hidden";
 
 }
