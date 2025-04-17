@@ -1,11 +1,9 @@
+import { $ } from "@/plugins/globals";
 import { router } from "@/routes/route";
 import axios, { isAxiosError } from "axios";
 import { useModal } from "bootstrap-vue-next";
-import { $ } from "./globals";
 
-const url_api = "https://api.reminfotech.net.br";
-
-
+const url_api = "http://localhost:5000";
 export const api = axios.create({
   baseURL: url_api,
   headers: {

@@ -80,7 +80,7 @@ class Config:
     LOG_LEVEL = logging.INFO
     DEBUG: type[bool] = False
     TESTING: type[bool] = False
-    JWT_SECRET_KEY: type[str] = secrets.token_hex()
+    # JWT_SECRET_KEY: type[str] = secrets.token_hex()
     SECRET_KEY: type[str] = secrets.token_hex()
     TEMPLATES_AUTO_RELOAD: type[bool] = False
 
@@ -113,9 +113,9 @@ class Config:
     SQLALCHEMY_TRACK_MODIFICATIONS: type[bool] = False
 
     # FLASK CONFIG
-    PREFERRED_URL_SCHEME: type[str] = "https"
-    SESSION_COOKIE_HTTPONLY: type[bool] = True
-    SESSION_COOKIE_SECURE: type[bool] = True
+    # PREFERRED_URL_SCHEME: type[str] = "https"
+    # SESSION_COOKIE_HTTPONLY: type[bool] = True
+    # SESSION_COOKIE_SECURE: type[bool] = True
     PERMANENT_SESSION_LIFETIME: type[int] = timedelta(days=31).max.seconds
 
     TEMP_PATH: Path = workdir.joinpath("bot", "temp").resolve()
@@ -145,14 +145,14 @@ class Config:
     Path(ARCHIVES_PATH).mkdir(exist_ok=True)
 
     JWT_TOKEN_LOCATION = ["cookies", "headers"]
-    # JWT_ACCESS_TOKEN_EXPIRES = timedelta(minutes=15)  # Token expira em 15 minutos
+    JWT_ACCESS_TOKEN_EXPIRES = timedelta(minutes=15)  # Token expira em 15 minutos
     JWT_REFRESH_TOKEN_EXPIRES = timedelta(days=7)  # Refresh Token expira em 7 dias
 
     JWT_ACCESS_COOKIE_NAME: type[str] = "access_token_cookie"
     JWT_REFRESH_COOKIE_NAME: type[str] = "refresh_token_cookie"
 
-    JWT_COOKIE_SECURE: type[bool] = True
-    JWT_COOKIE_CSRF_PROTECT = True
+    # JWT_COOKIE_SECURE: type[bool] = True
+    # JWT_COOKIE_CSRF_PROTECT = True
     JWT_CSRF_IN_COOKIES = True
 
     for paths in [

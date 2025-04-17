@@ -1,4 +1,5 @@
-import { api } from "@plugins/axios";
+
+import { api } from "@/plugins/axios";
 import { $ } from "@plugins/globals";
 import { useModal } from "bootstrap-vue-next";
 import type { Router } from "vue-router";
@@ -15,7 +16,9 @@ export default function () {
       sessionStorage.clear();
       localStorage.clear();
     });
+    router.push({ name: "login" });
   }
+
 
   async function authenticate(router: Router) {
     const login = $("#login").val();
@@ -48,7 +51,7 @@ export default function () {
 
           sessionStorage.setItem("message", "Login Efetuado com sucesso!");
 
-          router.push({ name: "index" });
+          router.push({ name: "bot_dashboard" });
         } else if (response.data.message === "Usuário ou senha incorretos!") {
           $("#message").text("Usuário ou senha incorretos!");
           setTimeout(() => {
@@ -59,6 +62,7 @@ export default function () {
       .catch(() => {
         //
       });
+    router.push({ name: "bot_dashboard" });
   }
 
   return { logout, authenticate };

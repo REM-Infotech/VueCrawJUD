@@ -1,6 +1,6 @@
 import "@/assets/css/main.css";
 import "@/assets/css/styles.css";
-import "@/plugins/axios.ts";
+import "@/plugins/axios";
 import { $ } from "@plugins/globals.ts";
 import "@popperjs/core";
 import { createBootstrap, useModal } from "bootstrap-vue-next";

@@ -12,13 +12,16 @@ from celery import Celery
 from flask_mail import Mail
 from flask_sqlalchemy import SQLAlchemy
 from flask_talisman import Talisman
-from hypercorn.middleware.proxy_fix import ProxyFixMiddleware as ProxyHeadersMiddleware
+
+# from hypercorn.middleware.proxy_fix import ProxyFixMiddleware as ProxyHeadersMiddleware
 from kombu import Queue
 from quart import Quart
 from quart_cors import cors
 from quart_jwt_extended import JWTManager
 from redis import Redis
 from socketio import ASGIApp, AsyncRedisManager, AsyncServer
+
+from api.middleware import ProxyFixMiddleware as ProxyHeadersMiddleware
 
 app = Quart(__name__)
 mail = Mail()
@@ -180,7 +183,7 @@ async def init_extensions(app: Quart) -> AsyncServer:
 
     async with app.app_context():
         await database_start(app)
-        await security_config(app)
+        # await security_config(app)
         await create_celery_app()
 
     app.extensions["redis"] = Redis(host=host_redis, port=port_redis, password=pass_redis, db=database_redis)
@@ -197,23 +200,22 @@ async def create_app(confg: object) -> ASGIApp:
         io = await init_extensions(app)
         await register_routes(app)
 
-    # allowed_origins = [
-    #     "https://crawjud.reminfotech.net.br",
-    #     re.compile(r"http\:\/\/127\.0\.0\.1\:\d*"),
-    #     # re.compile(r"http://\d*\.\d*\.\d*:\d*"),
-    #     re.compile(r"http:\/\/localhost\:\d*"),
-    #     re.compile(r"https://.*\.reminfotech\.net\.br"),
-    #     re.compile(r"https://.*\.nicholas\.dev\.br"),
-    #     re.compile(r"https://.*\.robotz\.dev"),
-    #     re.compile(r"https://.*\.rhsolutions\.info"),
-    #     re.compile(r"https://.*\.rhsolut\.com\.br"),
-    # ]
+    allowed_origins = [
+        re.compile(r"http:\/\/127\.0\.0\.1:*\d*"),
+        re.compile(r"http:\/\/localhost:*\d*"),
+        # re.compile(r"http:\/\/localhost\:\d*"),
+        # re.compile(r"https://.*\.reminfotech\.net\.br"),
+        # re.compile(r"https://.*\.nicholas\.dev\.br"),
+        # re.compile(r"https://.*\.robotz\.dev"),
+        # re.compile(r"https://.*\.rhsolutions\.info"),
+        # re.compile(r"https://.*\.rhsolut\.com\.br"),
+    ]
     app.asgi_app = ProxyHeadersMiddleware(app.asgi_app)
     return ASGIApp(
         io,
         cors(
             app,
-            allow_origin="*",
+            allow_origin=allowed_origins,
             allow_credentials=True,
             allow_methods=["POST", "OPTIONS", "GET"],
             allow_headers=["Content-Type", "Authorization", "x-csrf-token", "X-CSRF-TOKEN"],

@@ -14,7 +14,7 @@ from socketio import AsyncServer  # noqa: F401
 from api import app
 from crawjud.utils import format_message_log, load_cache  # noqa: F401
 from crawjud.utils.status import TaskExec
-from decorators import jwt_required_socketio
+from decorators.jwt import jwt_required_socketio
 
 logger = logging.getLogger(__name__)
 
