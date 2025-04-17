@@ -199,9 +199,9 @@ async def create_app(confg: object) -> ASGIApp:
 
     allowed_origins = [
         "https://crawjud.reminfotech.net.br",
-        re.compile(r"http://127\.0\.0\.1:\d*"),
-        re.compile(r"http://\d*\.\d*\.\d*:\d*"),
-        re.compile(r"http://localhost:\d*"),
+        re.compile(r"http\:\/\/127\.0\.0\.1\:\d*"),
+        re.compile(r"http\:\/\/\d*\.\d*\.\d*\:\d*"),
+        re.compile(r"http\:\/\/localhost\:\d*"),
         re.compile(r"https://.*\.reminfotech\.net\.br"),
         re.compile(r"https://.*\.nicholas\.dev\.br"),
         re.compile(r"https://.*\.robotz\.dev"),
