@@ -58,7 +58,12 @@
   font-weight: normal;
 } */
 
+.no_overflow {
+  overflow: hidden;
+}
+
 body {
+
   min-height: 100vh;
   color: var(--color-text);
   background: var(--color-background);

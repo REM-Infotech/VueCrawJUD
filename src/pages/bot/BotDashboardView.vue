@@ -21,8 +21,8 @@ onMounted(() => {
   <NavBarComponent />
   <div id="content" class="mt-4 mb-4">
     <SideBarComponent />
-    <main>
-      <BContainer fluid="lg" class="px-4">
+    <main class="overflow-y-auto">
+      <BContainer fluid="lg" class="px-4 overflow-auto overflow-auto">
         <CardBot />
       </BContainer>
     </main>

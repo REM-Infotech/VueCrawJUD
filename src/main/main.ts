@@ -14,7 +14,6 @@ const icon = join(process.cwd(), "src", "assets", "img", "icon.ico")
 export let traywindow: Tray;
 export let mainWindow: BrowserWindow;
 
-console.log(process.env.DATABASE_CONNECTOR)
 
 const createWindow = async () => {
 
@@ -36,7 +35,6 @@ const createWindow = async () => {
       break;
     }
   }
-  console.log(!isDev)
   mainWindow = new BrowserWindow({
     icon: icon,
     minWidth: minWidth,

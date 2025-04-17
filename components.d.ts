@@ -9,9 +9,14 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     BButton: typeof import('bootstrap-vue-next/components/BButton')['BButton']
+    BCard: typeof import('bootstrap-vue-next/components/BCard')['BCard']
+    BCardBody: typeof import('bootstrap-vue-next/components/BCard')['BCardBody']
+    BContainer: typeof import('bootstrap-vue-next/components/BContainer')['BContainer']
+    BForm: typeof import('bootstrap-vue-next/components/BForm')['BForm']
     BFormCheckbox: typeof import('bootstrap-vue-next/components/BFormCheckbox')['BFormCheckbox']
     BFormFloatingLabel: typeof import('bootstrap-vue-next/components/BForm')['BFormFloatingLabel']
     BFormInput: typeof import('bootstrap-vue-next/components/BFormInput')['BFormInput']
+    BFormSelect: typeof import('bootstrap-vue-next/components/BFormSelect')['BFormSelect']
     BModal: typeof import('bootstrap-vue-next/components/BModal')['BModal']
     BNavbar: typeof import('bootstrap-vue-next/components/BNavbar')['BNavbar']
     BNavbarBrand: typeof import('bootstrap-vue-next/components/BNavbar')['BNavbarBrand']
@@ -27,5 +32,6 @@ declare module 'vue' {
   }
   export interface ComponentCustomProperties {
     vBColorMode: typeof import('bootstrap-vue-next/directives/BColorMode')['vBColorMode']
+    vBModal: typeof import('bootstrap-vue-next/directives/BModal')['vBModal']
   }
 }

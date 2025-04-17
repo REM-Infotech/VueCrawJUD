@@ -16,7 +16,7 @@ onBeforeMount(async () => {
 </script>
 
 <template>
-  <div class="row">
+  <div class="row overflow-y-auto">
     <div class="col-md-3 p-4 end-0" v-for="item in items" :key="item.id">
       <BCard v-if="item.system.toLowerCase() === 'projudi'" data-bs-theme="dark" tag="article">
         <template #header>

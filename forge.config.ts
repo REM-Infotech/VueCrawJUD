@@ -61,7 +61,7 @@ const config: ForgeConfig = {
     asar: true,
     windowsSign: {
       certificateFile: "C:\\Users\\nicholas.silva\\Desktop\\assinarcodigo.pfx",
-      certificatePassword: "$4mus4ran",
+      certificatePassword: "5550123",
       description: "CrawJUD Automatização de Processos Judiciais",
       website: "https://reminfotech.net.br",
       debug: true,
