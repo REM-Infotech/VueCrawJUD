@@ -12,7 +12,7 @@ const clearTimer = () => {
   }
 };
 
-const setTimer = (callback) => {
+const setTimer = (callback: CallableFunction) => {
   clearTimer();
   timeout = setTimeout(() => {
     clearTimer();

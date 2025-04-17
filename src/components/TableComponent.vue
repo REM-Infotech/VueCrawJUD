@@ -6,15 +6,16 @@ import { $ } from "@plugins/globals";
 import type { AxiosResponse } from "axios";
 import { useModal } from "bootstrap-vue-next";
 import DataTablesCore from "datatables.net-bs5";
+import type { Config } from "datatables.net-dt";
 import DataTable from "datatables.net-vue3";
 import { onMounted, ref } from "vue";
 import { convertDate } from "../services/convert_date";
 
 DataTable.use(DataTablesCore);
 
-const options = {
+const options: Config = {
   language: {
-    url: "//cdn.datatables.net/plug-ins/1.13.4/i18n/pt-BR.json",
+    url: "@/assets/locales/pt-br.json",
   },
 };
 const { show: show_load, hide: hide_load } = useModal("modal-load");

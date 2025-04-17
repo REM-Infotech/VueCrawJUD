@@ -27,10 +27,7 @@
 
 <script setup lang="ts">
 import { Chart } from "chart.js/auto";
-import jQuery from "jquery";
 import { onMounted } from "vue";
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const $ = jQuery;
 
 // Set new default font family and font color to mimic Bootstrap's default styling
 Chart.defaults.font.family =

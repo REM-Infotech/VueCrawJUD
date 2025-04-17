@@ -12,52 +12,7 @@ import process from "process";
 import { dirname, join } from "path";
 import { fileURLToPath } from "url";
 
-const options =
 
-  (opt: string, formdata: formType, filepath: string): Array<string> => {
-
-    const opts: Record<string, Array<string>> = {
-      InformaSentencas: [
-        "/c", "py", "-3.13", "-m",
-        "interface_robo",
-        "--bot",
-        "InformaSentencas",
-        "--username",
-        formdata.username,
-        "--password",
-        formdata.password,
-        "--xlsx",
-        filepath,
-      ],
-      ExtractIntimacoes: [
-        "/c", "py", "-3.13", "-m",
-        "interface_robo",
-        "--bot",
-        "ExtractIntimacoes",
-        "--pastas",
-        formdata.pastas,
-        "--email",
-        formdata.email,
-      ],
-      AnaliseApagao: [
-        "/c", "py", "-3.13", "-m",
-        "interface_robo",
-        "--bot",
-        "AnaliseApagao",
-        "--api_key",
-        formdata.api_key,
-        "--xlsx",
-        filepath,
-      ],
-    };
-
-    let options_exec = opts[opt];
-    if (isDev) {
-      options_exec = ["/c", "poetry", "run", ...options_exec.slice(4)];
-    }
-
-    return options_exec;
-  };
 
 const modeLoadWindow = {
   "true":
@@ -95,7 +50,7 @@ const createWindow = async () => {
   }
 
   const mainWindow = new BrowserWindow({
-    icon: join(process.cwd(), "client ", "src", "assets", "img", "icon.ico"),
+    icon: join(process.cwd(), "src", "assets", "img", "icon.ico"),
     minWidth: minWidth,
     minHeight: minHeight,
     width: minWidth,
@@ -160,8 +115,54 @@ const createWindow = async () => {
 
   await modeLoadWindow[isDev ? "true" : "false"](mainWindow);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const traywindow = new Tray(join(process.cwd(), "src", "renderer", "assets", "img", "icon.png"));
+  const traywindow = new Tray(join(process.cwd(), "src", "assets", "img", "icon.ico"));
 };
 
 initialize();
 app.whenReady().then(createWindow);
+const options =
+
+  (opt: string, formdata: formType, filepath: string): Array<string> => {
+
+    const opts: Record<string, Array<string>> = {
+      InformaSentencas: [
+        "/c", "py", "-3.13", "-m",
+        "interface_robo",
+        "--bot",
+        "InformaSentencas",
+        "--username",
+        formdata.username,
+        "--password",
+        formdata.password,
+        "--xlsx",
+        filepath,
+      ],
+      ExtractIntimacoes: [
+        "/c", "py", "-3.13", "-m",
+        "interface_robo",
+        "--bot",
+        "ExtractIntimacoes",
+        "--pastas",
+        formdata.pastas,
+        "--email",
+        formdata.email,
+      ],
+      AnaliseApagao: [
+        "/c", "py", "-3.13", "-m",
+        "interface_robo",
+        "--bot",
+        "AnaliseApagao",
+        "--api_key",
+        formdata.api_key,
+        "--xlsx",
+        filepath,
+      ],
+    };
+
+    let options_exec = opts[opt];
+    if (isDev) {
+      options_exec = ["/c", "poetry", "run", ...options_exec.slice(4)];
+    }
+
+    return options_exec;
+  };

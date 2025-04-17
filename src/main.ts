@@ -1,3 +1,7 @@
+import "@/assets/css/main.css";
+import "@/assets/css/styles.css";
+import "@/plugins/axios.ts";
+import { $ } from "@plugins/globals.ts";
 import "@popperjs/core";
 import { createBootstrap, useModal } from "bootstrap-vue-next";
 import "bootstrap-vue-next/dist/bootstrap-vue-next.css";
@@ -7,10 +11,6 @@ import "datatables.net-select";
 import "jquery/dist/jquery.min.js";
 import { createApp } from "vue";
 import App from "./App.vue";
-import "@/assets/css/main.css";
-import "@/assets/css/styles.css";
-import "@/plugins/axios.ts";
-import { $ } from "@plugins/globals.ts";
 import router from "./routes/route.ts";
 
 function CreateApp() {

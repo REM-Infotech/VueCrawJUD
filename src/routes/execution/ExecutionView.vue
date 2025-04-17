@@ -1,13 +1,11 @@
 <script setup lang="ts">
 // import { io } from "socket.io-client";
+import { $ } from "@plugins/globals";
 import { useModal } from "bootstrap-vue-next";
-import jQuery from "jquery";
 import { onMounted } from "vue";
 import NavBarComponent from "../../components/NavBarComponent.vue";
 import SideBarComponent from "../../components/SideBarComponent.vue";
 import TableComponent from "../../components/TableComponent.vue";
-
-const $ = jQuery;
 
 onMounted(() => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

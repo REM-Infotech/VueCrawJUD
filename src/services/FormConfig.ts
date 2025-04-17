@@ -1,6 +1,6 @@
+import { $ } from "@plugins/globals";
 import { useModal } from "bootstrap-vue-next";
 import { ref } from "vue";
-import { $ } from "@plugins/globals";
 
 export const current_bot = ref();
 

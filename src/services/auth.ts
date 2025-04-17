@@ -1,8 +1,8 @@
-import { api } from "@/plugins/axios";
+import { api } from "@plugins/axios";
+import { $ } from "@plugins/globals";
 import { useModal } from "bootstrap-vue-next";
-import jQuery from "jquery";
 import type { Router } from "vue-router";
-const $ = jQuery;
+
 
 export default function () {
   const { show: show_message } = useModal("ModalMessage");

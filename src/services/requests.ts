@@ -1,6 +1,6 @@
-import { useModal } from "bootstrap-vue-next";
 import { api } from "@plugins/axios";
 import { $ } from "@plugins/globals";
+import { useModal } from "bootstrap-vue-next";
 
 export async function getExecutions() {
   const { show: show_message } = useModal("ModalMessage");

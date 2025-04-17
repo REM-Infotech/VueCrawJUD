@@ -1,30 +1,31 @@
 <script setup lang="ts">
+import { api } from "@plugins/axios";
+import { $ } from "@plugins/globals";
+import { useModal } from "bootstrap-vue-next";
+import { Chart, type ChartType } from "chart.js/auto";
 import { io as socketio } from "socket.io-client";
 import { onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { Chart, ChartType } from "chart.js/auto";
-import ChartProgress from "./components/ChartProgress.vue";
 import NavBarComponent from "../../components/NavBarComponent.vue";
 import SideBarComponent from "../../components/SideBarComponent.vue";
+import ChartProgress from "./components/ChartProgress.vue";
 const { show: show_message } = useModal("ModalMessage");
-import { $, api } from "../../main";
-import { useModal } from "bootstrap-vue-next";
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { onBeforeMount } from "vue";
-import LogsView from "./components/LogsView.vue";
-import { AxiosResponse } from "axios";
 
+import { type AxiosResponse } from "axios";
+import LogsView from "./components/LogsView.vue";
+
+let Pages: number;
+let LogsBotChart: Chart | null = null;
 const route = useRoute();
 const router = useRouter();
 const pid = route.params.pid as string;
-let Pages;
 const percent_progress = document.getElementById("progress_info");
 const io = socketio("https://api.reminfotech.net.br/log", {
   extraHeaders: {
     pid: pid,
   },
 });
-let LogsBotChart: Chart | null = null;
+
 const colors_message = {
   info: "orange",
   error: "RED",
@@ -84,10 +85,10 @@ try {
     // console.log("Joinned!");
   });
 
-  io.on("log_message", function (data) {
+  io.on("log_message", function (data: Record<string, string>) {
     var messagePid = data.pid;
 
-    function updateElements(data) {
+    function updateElements(data: Record<string, string>) {
       var typeLog = String(data.type);
       var total = parseInt(data.total);
       var remaining = parseInt(data.remaining);
@@ -166,13 +167,11 @@ try {
 
     if (messagePid == pid) {
       const randomId = `id_${Math.random().toString(36).substring(2, 9)}`;
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const pos: number = parseInt(data.pos);
       const message: string = data.message;
       var typeLog: string = data.type;
       const ul_messages = $("#messages");
       ul_messages.append(
-        `<li id="${randomId}" class="fw-bold" style="color: ${colors_message[typeLog]}">${message}</li>`,
+        `<li id="${randomId}" class="fw-bold" style="color: ${colors_message[typeLog as keyof typeof colors_message]}">${message}</li>`,
       );
 
       setTimeout(() => {
