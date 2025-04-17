@@ -4,7 +4,6 @@ import ModalMessage from "./components/ModalMessage.vue";
 
 <template>
   <ModalMessage />
-
   <RouterView />
   <BModal
     centered

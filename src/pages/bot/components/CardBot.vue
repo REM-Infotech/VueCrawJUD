@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { current_bot } from "@/plugins/FormConfig";
+import { current_bot } from "@/services/FormConfig";
 import { api } from "@plugins/axios";
 import { onBeforeMount, ref } from "vue";
 

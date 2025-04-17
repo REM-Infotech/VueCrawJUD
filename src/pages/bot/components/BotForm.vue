@@ -5,7 +5,7 @@ import { type Api as Dt } from "datatables.net";
 import DataTablesCore from "datatables.net-bs5";
 import DataTable from "datatables.net-vue3";
 import { onMounted, ref } from "vue";
-import FormConfig, { current_bot } from "../../../plugins/FormConfig.ts";
+import FormConfig, { current_bot } from "../../../services/FormConfig.ts";
 import DropZone from "./FileDropZone.vue";
 
 import { api } from "@plugins/axios";
