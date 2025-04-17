@@ -219,7 +219,8 @@ class DriverBot(CrawJUD):
                 driver = Firefox(service=serve, options=firefox_options)
                 wait = WebDriverWait(driver, 20, 0.01)
                 driver.delete_all_cookies()
-                driver.set_window_size(1600, 900)
+
+            driver.set_window_size(1600, 900)
             self.message = "WebDriver inicializado"
             self.type_log = "log"
             self.prt()
