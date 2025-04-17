@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import NavBarComponent from "../../components/NavBarComponent.vue";
-import SideBarComponent from "../../components/SideBarComponent.vue";
+import NavBarComponent from "@/components/NavBarComponent.vue";
+import SideBarComponent from "@/components/SideBarComponent.vue";
 import TableConfig from "./Components/TableConfig.vue";
 import ModalCadUsr from "./Components/UserForm.vue";
 </script>
