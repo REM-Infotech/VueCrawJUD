@@ -10,7 +10,7 @@ import { FuseV1Options, FuseVersion } from "@electron/fuses";
 import { join } from 'path';
 
 const config: ForgeConfig = {
-  outDir: './build/forge',
+  outDir: './build/forge_',
   makers: [
     new MakerSquirrel({
       authors: 'Electron contributors',
@@ -35,7 +35,7 @@ const config: ForgeConfig = {
         ],
         renderer: [
           {
-            name: "renderer",
+            name: "crawjud_renderer",
             config: "vite.config.renderer.js",
           },
         ],
@@ -55,7 +55,7 @@ const config: ForgeConfig = {
 
   packagerConfig: {
     icon: join(process.cwd(), "client ", "src", "assets", "img", "icon.ico"),
-    name: "CrawJUD",
+    name: "CrawJUD_Desktop",
     osxSign: {},
     asar: true,
     windowsSign: {
