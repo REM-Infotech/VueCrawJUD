@@ -122,7 +122,7 @@ class Capa(CrawJUD):
             self.append_success(self.get_process_informations())
 
         except Exception as e:
-            self.logger.exception("\n".join(format_exception(e)))
+            self.logger.error("\n".join(format_exception(e)))
             raise ExecutionError(e=e) from e
 
     def get_process_informations(self) -> list:

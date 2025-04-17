@@ -51,7 +51,7 @@ class Esaj:
             self.bot_call.initialize(*args, **kwargs).execution()
 
         except Exception as e:
-            self.logger.exception("\n".join(format_exception(e)))
+            self.logger.error("\n".join(format_exception(e)))
             err = "\n".join(format_exception(e))
             logger.exception(err)
             raise StartError("\n".join(format_exception(e))) from e

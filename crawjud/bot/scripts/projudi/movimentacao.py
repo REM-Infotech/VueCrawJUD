@@ -158,7 +158,7 @@ class Movimentacao(CrawJUD):
                 self.append_error(data)
 
         except Exception as e:
-            self.logger.exception("\n".join(format_exception(e)))
+            self.logger.error("\n".join(format_exception(e)))
             raise ExecutionError(e=e) from e
 
     def set_page_size(self) -> None:

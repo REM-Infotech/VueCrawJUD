@@ -100,6 +100,9 @@ class ProcParte(CrawJUD):
 
         """
         try:
+            if not self.varas:
+                return
+
             for vara in self.varas:
                 self.vara: str = vara
                 search = self.search_bot()
@@ -111,17 +114,8 @@ class ProcParte(CrawJUD):
                         self.auth_bot()
 
         except Exception as e:
-            self.logger.exception("\n".join(format_exception(e)))
+            self.logger.error("\n".join(format_exception(e)))
             old_message = None
-
-            # check_window = any([isinstance(e, NoSuchWindowException), isinstance(e, MaxRetryError)])
-            # if check_window:
-            #     with suppress(Exception):
-            #         self.driver_launch(message="Webdriver encerrado inesperadamente, reinicializando...")
-
-            #         old_message = self.message
-
-            #         self.auth_bot()
 
             if old_message is None:
                 old_message = self.message
@@ -180,7 +174,7 @@ class ProcParte(CrawJUD):
                     self.auth_bot()
 
         except Exception as e:
-            self.logger.exception("\n".join(format_exception(e)))
+            self.logger.error("\n".join(format_exception(e)))
             raise ExecutionError(e=e) from e
 
     def use_list_process(self, list_processos: list[WebElement]) -> None:

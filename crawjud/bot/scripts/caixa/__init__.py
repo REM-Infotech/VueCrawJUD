@@ -50,7 +50,7 @@ class Caixa:
 
         except Exception as e:
             err = "\n".join(format_exception(e))
-            self.logger.exception(err)
+            self.logger.error(err)
 
             logger.exception(err)
             raise StartError(message=err) from e

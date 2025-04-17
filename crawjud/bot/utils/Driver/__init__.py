@@ -108,7 +108,7 @@ class DriverBot(CrawJUD):
                         shutil.copytree(root, self.user_data_diretory)
                     except Exception as e:
                         err = "\n".join(format_exception(e))
-                        self.logger.exception(err)
+                        self.logger.error(err)
 
             elif not path_exist:
                 self.path_accepted.mkdir(parents=True, exist_ok=True)
