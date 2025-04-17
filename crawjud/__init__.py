@@ -2,7 +2,7 @@
 
 import platform
 import warnings
-from os import environ
+from os import environ, getenv
 from pathlib import Path
 
 import quart_flask_patch  # noqa: F401
@@ -12,10 +12,14 @@ from api import create_app
 from crawjud.utils import make_celery
 
 warnings.filterwarnings("ignore", category=RuntimeWarning, module="google_crc32c")
-
-
 values = environ.get
 is_init = Path("is_init.txt").resolve()
+
+objects_config = {
+    "development": "api.config.DevelopmentConfig",
+    "production": "api.config.ProductionConfig",
+    "testing": "api.config.TestingConfig",
+}
 
 
 async def create_celery_app() -> Celery:
@@ -31,7 +35,9 @@ async def create_celery_app() -> Celery:
     app = None
 
     if platform.system() == "Windows":
-        await create_app()
+        env_ambient = getenv("AMBIENT_CONFIG")
+        ambient = objects_config[env_ambient]
+        await create_app(ambient)
         from api import app
 
     else:
