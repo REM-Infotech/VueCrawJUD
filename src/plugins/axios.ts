@@ -1,19 +1,15 @@
-
-import { $ } from "./globals";
+import router from "@routes/route";
 import axios, { isAxiosError } from "axios";
 import { useModal } from "bootstrap-vue-next";
-import { useRouter } from "vue-router";
-
-const router = useRouter();
+import { $ } from "./globals";
 
 const url_api = "https://api.reminfotech.net.br";
 
-// Create axios instance with improved configuration
+
 export const api = axios.create({
   baseURL: url_api,
   headers: {
-    // Note: Changing the Content-Type may avoid the preflight but could affect your API expectations.
-    "Content-Type": "application/x-www-form-urlencoded", // Use a "simple" header if possible
+    "Content-Type": "application/x-www-form-urlencoded",
     "x-csrf-token": sessionStorage.getItem("x-csrf-token") || "",
   },
   withCredentials: true,
@@ -28,7 +24,9 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (response) => response,
   (error) => {
+
     if (isAxiosError(error)) {
+
       if ("response" in error && error.response?.status === 401) {
         $("#message").text("Sessão expirada, faça login novamente");
         const { show: show_message } = useModal("ModalMessage");

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref } from "vue";
 import { $ } from "@plugins/globals";
+import { ref } from "vue";
 const modal = ref(false);
 </script>
 

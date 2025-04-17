@@ -5,14 +5,13 @@ import { useModal } from "bootstrap-vue-next";
 import {
   current_action,
   form,
-  submitForm,
   state_modal,
   submited,
+  submitForm,
   to_modal_message,
 } from "../resources/formcred";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { computed, onBeforeMount, watch } from "vue";
+import { onBeforeMount, watch } from "vue";
 const { show: show_load, hide: hide_load } = useModal("modal-load");
 const { show: show_message } = useModal("ModalMessage");
 const { hide: hide_form } = useModal("ModalFormUsr");

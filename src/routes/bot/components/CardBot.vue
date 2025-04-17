@@ -1,8 +1,8 @@
 <script setup lang="ts">
+import { current_bot } from "@/services/FormConfig.ts";
+import { api } from "@plugins/axios";
 import { onBeforeMount, ref } from "vue";
-import { api } from "@/plugins/axios.ts";
 const items = ref<{ system: string; id: number; display_name: string; text: string }[]>([]);
-import { current_bot } from "../../../services/FormConfig.ts";
 
 onBeforeMount(async () => {
   api.get("/bots_list").then((resp) => {

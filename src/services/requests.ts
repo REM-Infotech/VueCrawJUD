@@ -1,5 +1,6 @@
 import { useModal } from "bootstrap-vue-next";
-import { $, api } from "../main";
+import { api } from "@plugins/axios";
+import { $ } from "@plugins/globals";
 
 export async function getExecutions() {
   const { show: show_message } = useModal("ModalMessage");
@@ -14,7 +15,7 @@ export async function getExecutions() {
     })
     .then((response) => {
       const data = response.data.data;
-      const items = data.map((item) => {
+      const items = data.map((item: Record<string, string>) => {
         const status: string = item.status;
         let link_file = item.file_output;
         const link_log = item.pid;

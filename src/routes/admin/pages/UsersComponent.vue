@@ -1,14 +1,13 @@
 <script setup lang="ts">
 /* global formType */
 
+import { faPen, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import DataTablesCore from "datatables.net-bs5";
+import DataTable from "datatables.net-vue3";
 import { onBeforeMount, ref } from "vue";
 import { api } from "../../../plugins/axios";
-import { faPen, faTrash, faPlus } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import DataTable from "datatables.net-vue3";
-import DataTablesCore from "datatables.net-bs5";
-import { current_action, form } from "../resources/formusr";
-import { submitForm, delete_call } from "../resources/formusr";
+import { current_action, delete_call, form, submitForm } from "../resources/formusr";
 const items = ref();
 const submitDelete = () => {
   delete_call.value = true;

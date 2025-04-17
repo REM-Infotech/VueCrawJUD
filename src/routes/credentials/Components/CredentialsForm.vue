@@ -13,8 +13,7 @@ import {
 
 import { api } from "@/plugins/axios";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { computed, onBeforeMount, watch } from "vue";
+import { onBeforeMount, watch } from "vue";
 import { selected2, systems_list } from "../resources/formcred";
 const { show: show_load, hide: hide_load } = useModal("modal-load");
 const { show: show_message } = useModal("ModalMessage");

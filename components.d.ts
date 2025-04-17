@@ -11,7 +11,10 @@ declare module 'vue' {
     BButton: typeof import('bootstrap-vue-next/components/BButton')['BButton']
     BContainer: typeof import('bootstrap-vue-next/components/BContainer')['BContainer']
     BModal: typeof import('bootstrap-vue-next/components/BModal')['BModal']
+    BNavbar: typeof import('bootstrap-vue-next/components/BNavbar')['BNavbar']
+    BNavbarBrand: typeof import('bootstrap-vue-next/components/BNavbar')['BNavbarBrand']
     BNavbarNav: typeof import('bootstrap-vue-next/components/BNavbar')['BNavbarNav']
+    BOverlay: typeof import('bootstrap-vue-next/components/BOverlay')['BOverlay']
     ModalMessage: typeof import('./src/components/ModalMessage.vue')['default']
     NavBarComponent: typeof import('./src/components/NavBarComponent.vue')['default']
     NavLogin: typeof import('./src/components/NavLogin.vue')['default']
@@ -19,5 +22,8 @@ declare module 'vue' {
     RouterView: typeof import('vue-router')['RouterView']
     SideBarComponent: typeof import('./src/components/SideBarComponent.vue')['default']
     TableComponent: typeof import('./src/components/TableComponent.vue')['default']
+  }
+  export interface ComponentCustomProperties {
+    vBColorMode: typeof import('bootstrap-vue-next/directives/BColorMode')['vBColorMode']
   }
 }

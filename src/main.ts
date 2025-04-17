@@ -10,6 +10,7 @@ import App from "./App.vue";
 import "@/assets/css/main.css";
 import "@/assets/css/styles.css";
 import "@/plugins/axios.ts";
+import { $ } from "@plugins/globals.ts";
 import router from "./routes/route.ts";
 
 function CreateApp() {

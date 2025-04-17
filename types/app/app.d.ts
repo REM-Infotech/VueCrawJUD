@@ -1,6 +1,11 @@
 import type { CreateOptions as AsarOptions } from "@electron/asar";
 
 declare global {
+
+  interface RouteMeta {
+    requiresAuth: boolean;
+  }
+
   interface formType {
     id: string | number;
     login: string;
@@ -42,4 +47,10 @@ declare global {
     extraResource?: string | string[];
   }
 
+}
+
+declare module 'vue-router' {
+  interface RouteMeta {
+    requiresAuth?: boolean
+  }
 }

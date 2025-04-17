@@ -1,19 +1,19 @@
 <script setup lang="ts">
-import DataTable from "datatables.net-vue3";
-import DataTablesCore from "datatables.net-bs5";
+import { faCheckSquare, faFileDownload, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import { faFileDownload, faTrash, faCheckSquare } from "@fortawesome/free-solid-svg-icons";
-import { useModal } from "bootstrap-vue-next";
-import FormConfig from "../../../services/FormConfig.ts";
+import { type Api as Dt } from "datatables.net";
+import DataTablesCore from "datatables.net-bs5";
+import DataTable from "datatables.net-vue3";
+import { onMounted, ref } from "vue";
+import FormConfig, { current_bot } from "../../../services/FormConfig.ts";
 import DropZone from "./FileDropZone.vue";
-import { onMounted } from "vue";
-import { current_bot } from "../../../services/FormConfig.ts";
-import { ref } from "vue";
 
-import { $, api } from "../../../main.ts";
+import { api } from "@plugins/axios";
+import { $ } from "@plugins/globals";
+import { isAxiosError } from "axios";
+import { BvTriggerableEvent, useModal } from "bootstrap-vue-next";
 import { useRouter } from "vue-router";
-
-let dt;
+let dt: Dt;
 
 interface item_type {
   id: number;
@@ -67,7 +67,7 @@ onMounted(() => {
 });
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const reset_form = async (_e) => {
+const reset_form = async (_e: unknown) => {
   credentials.value = [{ value: null, text: "Carregando" }];
   state_client.value = [{ value: null, text: "Carregando" }];
   need_files.value = true;
@@ -101,7 +101,7 @@ const validate_form = () => {
   return true;
 };
 
-const setup_form = async (e) => {
+const setup_form = async (e: BvTriggerableEvent) => {
   let response_creds;
   let response_state_client;
   const item: item_type = current_bot.value;
@@ -135,15 +135,17 @@ const setup_form = async (e) => {
         },
       },
     );
-  } catch (error) {
+  } catch (error: unknown) {
     // Check if response.status is 4** error and not 404
 
-    const response = error.response;
+    if (isAxiosError(error) && error.response?.status !== 404) {
+      const response = error.response;
 
-    // Check if message is "missing csrf token"
-    if (response.data.msg === "Missing CSRF token") {
-      $("#message").text("CSRF Token inválido.");
-      show_message();
+      // Check if message is "missing csrf token"
+      if (response?.data.msg === "Missing CSRF token") {
+        $("#message").text("CSRF Token inválido.");
+        show_message();
+      }
     }
     e.preventDefault();
     return;

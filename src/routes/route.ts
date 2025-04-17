@@ -1,6 +1,6 @@
 import { useModal } from "bootstrap-vue-next";
 import { createRouter, createWebHistory } from "vue-router";
-import { $ } from "@/plugins/globals";
+import { $ } from "@plugins/globals";
 
 const routes = [
   {
@@ -51,7 +51,7 @@ const routes = [
   },
 ];
 
-const router = createRouter({
+export const router = createRouter({
   history: createWebHistory(),
   routes,
 });

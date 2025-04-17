@@ -17,8 +17,14 @@
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
     "paths": {
       "@/*": [
-        "./src/renderer/*"
-      ]
+        "./src/*"
+      ],
+      "@plugins/*": [
+        "./src/plugins/*"
+      ],
+      "@routes/*": [
+        "./src/routes/*"
+      ],
     },
     "types": [
       "node",

@@ -1,16 +1,14 @@
 <script setup lang="ts">
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import {
+  faArrowRightFromBracket,
+  faGear,
   faHome,
-  faTable,
+  faKey,
   faListCheck,
   faRobot,
-  faArrowRightFromBracket,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  faUser,
-  faGear,
-  faKey,
+  faTable,
 } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { RouterLink } from "vue-router";
 import AuthService from "../services/auth";
 

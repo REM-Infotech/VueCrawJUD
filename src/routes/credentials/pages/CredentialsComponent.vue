@@ -1,16 +1,14 @@
 <script setup lang="ts">
-import { onBeforeMount, ref } from "vue";
-import { $, api } from "../../../main";
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { faPen, faTrash, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import DataTable from "datatables.net-vue3";
-import DataTablesCore from "datatables.net-bs5";
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { current_action, form } from "../resources/formcred";
-import { delete_call } from "../resources/formcred";
-import { AxiosResponse } from "axios";
+import { api } from "@plugins/axios";
+import { $ } from "@plugins/globals";
+import { type AxiosResponse } from "axios";
 import { useModal } from "bootstrap-vue-next";
+import DataTablesCore from "datatables.net-bs5";
+import DataTable from "datatables.net-vue3";
+import { onBeforeMount, ref } from "vue";
+import { current_action, delete_call } from "../resources/formcred";
 const items = ref();
 
 const { show: show_message } = useModal("ModalMessage");
@@ -47,7 +45,7 @@ onBeforeMount(async () => {
   try {
     const response = await api.get("/credentials");
 
-    items.value = response.data.database.map((item) => {
+    items.value = response.data.database.map((item: Record<string, string>) => {
       return [item.id, item.credential, item.system, item.login_method];
     });
   } catch {
@@ -56,8 +54,7 @@ onBeforeMount(async () => {
 });
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-function setupEdit(item) {
-  console.log(item);
+function setupEdit() {
   // form.id = item[0];
   // form.name = item[1];
   // form.login = item[2];

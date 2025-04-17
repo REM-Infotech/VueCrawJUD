@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import { faDownload, faEye } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { api } from "@plugins/axios";
+import { $ } from "@plugins/globals";
+import type { AxiosResponse } from "axios";
 import { useModal } from "bootstrap-vue-next";
 import DataTablesCore from "datatables.net-bs5";
 import DataTable from "datatables.net-vue3";
 import { onMounted, ref } from "vue";
-import { $, api } from "../main";
 import { convertDate } from "../services/convert_date";
 
 DataTable.use(DataTablesCore);
@@ -18,7 +20,7 @@ const options = {
 const { show: show_load, hide: hide_load } = useModal("modal-load");
 const { show: show_message } = useModal("ModalMessage");
 
-let items[] = [];
+let items: [] = [];
 
 const data_ = ref(false);
 onMounted(async function () {
@@ -29,8 +31,8 @@ onMounted(async function () {
       xsrfCookieName: "access_token_cookie",
       xsrfHeaderName: "X-CSRF-TOKEN",
     })
-    .then(async (response) => {
-      items = response.data.data.map((item) => {
+    .then(async (response: AxiosResponse) => {
+      items = response.data.data.map((item: Record<string, string>) => {
         return [
           item.pid,
           item.user,
@@ -58,7 +60,7 @@ const download_file = async (file: string) => {
   show_load();
 
   setTimeout(async () => {
-    api.get(`/executions/download/${file}`).then((response) => {
+    api.get(`/executions/download/${file}`).then((response: AxiosResponse) => {
       const data = response.data;
       const url: string = data.url;
       window.open(url, "_blank");

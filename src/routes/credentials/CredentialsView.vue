@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import TableConfig from "./Components/TableConfig.vue";
+import { onBeforeMount } from "vue";
 import NavBarComponent from "../../components/NavBarComponent.vue";
 import SideBarComponent from "../../components/SideBarComponent.vue";
 import ModalCadUsr from "./Components/CredentialsForm.vue";
-import { onBeforeMount } from "vue";
+import TableConfig from "./Components/TableConfig.vue";
 import { form } from "./resources/formcred";
 
 onBeforeMount(async () => {

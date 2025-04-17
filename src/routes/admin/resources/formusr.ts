@@ -1,5 +1,6 @@
+import { api } from "@plugins/axios";
+import { $ } from "@plugins/globals";
 import { reactive, ref } from "vue";
-import { $, api } from "../../../main";
 export const form = reactive({
   id: 0,
   email: "",

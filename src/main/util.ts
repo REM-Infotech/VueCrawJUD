@@ -1,13 +1,11 @@
 import { app } from "electron";
 
-import { dirname, resolve } from "path";
-import { fileURLToPath } from "url";
+import path, { dirname, resolve } from "path";
+import { fileURLToPath, URL } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const __parent = resolve(__dirname, "..");
-import { URL } from "url";
-import path from "path";
 
 export function resolveHtmlPath(htmlFileName: string) {
 

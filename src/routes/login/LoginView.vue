@@ -43,7 +43,7 @@ onBeforeMount(() => {
     class="form-signin w-100 m-auto position-absolute top-50 start-50 translate-middle"
     data-bs-theme="light"
   >
-    <img class="mb-4" src="@/assets/crawjud.png" alt="" width="80" height="80" />
+    <img class="mb-4" src="@/assets/img/crawjud.png" alt="" width="80" height="80" />
     <h1 class="h3 mb-3 text-white fw-normal">CrawJUD v0.1.0</h1>
     <hr />
     <form method="post" @submit="handleSubmit">
