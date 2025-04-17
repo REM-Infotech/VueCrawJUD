@@ -29,13 +29,13 @@ const routes = [
     path: "/bots",
     name: "bot_dashboard",
     component: () => import("@/pages/bot/BotDashboardView.vue"),
-    // meta: { requiresAuth: true },
+    meta: { requiresAuth: true },
   },
   {
     path: "/logs_bot/:pid",
     name: "logs_bot",
     component: () => import("@/pages/logs/LogBotView.vue"),
-    // meta: { requiresAuth: true },
+    meta: { requiresAuth: true },
   },
   {
     path: "/configs",
@@ -48,6 +48,7 @@ const routes = [
     name: "credentials",
     component: () => import("@/pages/credentials/CredentialsView.vue"),
     meta: { requiresAuth: true, requiresAdmin: true },
+
   },
 ];
 
