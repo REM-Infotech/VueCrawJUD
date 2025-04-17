@@ -40,8 +40,6 @@ const createWindow = async () => {
     autoHideMenuBar: false,
     titleBarStyle: titleBarStyle(),
     webPreferences: {
-      nodeIntegration: true,
-      sandbox: !isDev,
       preload: join(__dirname, "preload.js"),
     },
   });

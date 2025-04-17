@@ -201,8 +201,8 @@ async def create_app(confg: object) -> ASGIApp:
         await register_routes(app)
 
     allowed_origins = [
-        re.compile(r"http:\/\/127\.0\.0\.1:*\d*"),
-        re.compile(r"http:\/\/localhost:*\d*"),
+        re.compile(r"http\:\/\/127\.0\.0\.1:*\d*"),
+        re.compile(r"http\:\/\/localhost:*\d*"),
     ]
     app.asgi_app = ProxyHeadersMiddleware(app.asgi_app)
     return ASGIApp(

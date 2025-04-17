@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { api } from "@/plugins/axios";
+import { $ } from "@/plugins/globals";
 import {
   faArrowRightFromBracket,
   faGear,
@@ -9,16 +11,18 @@ import {
   faTable,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { useModal } from "bootstrap-vue-next";
 import { RouterLink } from "vue-router";
-import AuthService from "../plugins/auth";
-
-import { useRouter } from "vue-router";
-const { logout } = AuthService();
-const router = useRouter();
 
 const handleLogoutClick = (e: Event) => {
   e.preventDefault();
-  logout(router);
+  api.post("/logout").then(() => {
+    const { show: show_message } = useModal("ModalMessage");
+    $("#message").text("Logout Efetuado com sucesso!");
+    show_message();
+    sessionStorage.clear();
+    localStorage.clear();
+  });
 };
 </script>
 

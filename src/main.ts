@@ -18,8 +18,8 @@ function CreateApp() {
 
   app.use(createBootstrap()); // Important
   app.use(router);
-
   app.mount("#app");
+
 }
 CreateApp();
 

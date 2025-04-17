@@ -1,7 +1,7 @@
-import { fileURLToPath, URL } from "url";
 import vue from "@vitejs/plugin-vue";
 import { BootstrapVueNextResolver } from "bootstrap-vue-next";
 import Components from "unplugin-vue-components/vite";
+import { fileURLToPath, URL } from "url";
 import { defineConfig } from "vite";
 import vueDevTools from "vite-plugin-vue-devtools";
 
@@ -9,7 +9,9 @@ import vueDevTools from "vite-plugin-vue-devtools";
 export default defineConfig({
   base: "./",
   server: {
+    host: "localhost",
     port: 3000,
+
   },
   plugins: [
     vue(),

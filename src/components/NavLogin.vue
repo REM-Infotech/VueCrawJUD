@@ -1,7 +1,7 @@
 <template>
   <BNavbar v-b-color-mode="'dark'" toggleable="lg" variant="dark" class="titlebar">
-    <BNavbarBrand href="#">
-      <img src="../assets/img/icon.ico" alt="logo" width="20%" class="ms-2" />
+    <BNavbarBrand>
+      <img src="../assets/img/icon.ico" alt="logo" width="20%" />
     </BNavbarBrand>
     <BNavbarNav class="ms-auto">
       <BButton size="sm" variant="outline-primary" @click="MinimizeWindow" class="me-2">

@@ -13,12 +13,6 @@ export const api = axios.create({
   withCredentials: true,
   withXSRFToken: true,
 });
-
-// Add request interceptor for debugging
-api.interceptors.request.use((config) => {
-  return config;
-});
-
 api.interceptors.response.use(
   (response) => response,
   (error) => {

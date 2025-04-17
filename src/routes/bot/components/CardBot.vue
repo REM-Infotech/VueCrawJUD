@@ -2,6 +2,10 @@
 import { current_bot } from "@/plugins/FormConfig";
 import { api } from "@plugins/axios";
 import { onBeforeMount, ref } from "vue";
+
+import projudiicon from "@/assets/img/projudi.png";
+import iconbot from "@/assets/svg/crawjud2.svg";
+
 const items = ref<{ system: string; id: number; display_name: string; text: string }[]>([]);
 
 onBeforeMount(async () => {
@@ -19,7 +23,7 @@ onBeforeMount(async () => {
           <span class="fw-bold">{{ item.display_name }}</span>
         </template>
         <template #img>
-          <img src="" alt="" />
+          <img :src="projudiicon" alt="" />
         </template>
         <BCardBody style="height: 6rem" class="overflow-y-auto">
           <span class="overflow-auto" style="height: 50rem">{{ item.text }} </span>
@@ -58,7 +62,7 @@ onBeforeMount(async () => {
           <span style="height: 50rem">{{ item.text }} </span>
         </BCardBody>
         <template #img>
-          <img src="" alt="" />
+          <img :src="iconbot" alt="" />
         </template>
         <template #footer>
           <div class="dropdown">

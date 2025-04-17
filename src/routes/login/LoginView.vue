@@ -1,16 +1,16 @@
 <script setup lang="ts">
 import NavLogin from "@/components/NavLogin.vue";
+import { loadingBuzy, onBuzyHidden, setBuzyClick } from "@/plugins/animations";
+import { api } from "@/plugins/axios";
+import { $ } from "@/plugins/globals";
 import { useModal } from "bootstrap-vue-next";
-import jQuery from "jquery";
-import { onBeforeMount, onMounted } from "vue";
+import { onBeforeMount, onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
-import { loadingBuzy, onBuzyHidden, setBuzyClick } from "../../plugins/animations";
-import AuthService from "../../plugins/auth";
 const router = useRouter();
 
-const { authenticate } = AuthService();
-
-const $ = jQuery;
+const login = ref("");
+const password = ref("");
+const remember_me = ref(false);
 
 onMounted(() => {
   const { hide } = useModal("modal-load");
@@ -26,7 +26,45 @@ onMounted(() => {
 
 const handleSubmit = (e: Event) => {
   e.preventDefault();
-  authenticate(router);
+  api
+    .post(
+      "/login",
+      {
+        login: login.value,
+        password: password.value,
+        remember_me: remember_me.value,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+        withXSRFToken: true,
+        xsrfCookieName: "access_token_cookie",
+      },
+    )
+    .then((response) => {
+      const { show: show_message } = useModal("ModalMessage");
+      if (response.status === 200) {
+        console.log(response);
+        const data: Record<string, string> = response.data as Record<string, string>;
+
+        sessionStorage.setItem("token", data.token);
+        sessionStorage.setItem("x-csrf-token", data["x-csrf-token"]);
+        localStorage.setItem("admin", data.admin);
+        sessionStorage.setItem("message", "Login Efetuado com sucesso!");
+
+        router.push({ name: "bot_dashboard" });
+      } else if (response.data.message === "Usuário ou senha incorretos!") {
+        $("#message").text("Usuário ou senha incorretos!");
+        setTimeout(() => {
+          show_message();
+        }, 200);
+      }
+    })
+    .catch(() => {
+      //
+    });
 };
 
 onBeforeMount(() => {
@@ -46,15 +84,17 @@ onBeforeMount(() => {
     <img class="mb-4" src="@/assets/img/crawjud.png" alt="" width="80" height="80" />
     <h1 class="h3 mb-3 text-white fw-normal">CrawJUD v0.1.0</h1>
     <hr />
+
     <form method="post" @submit="handleSubmit">
-      <div class="form-floating mb-3">
-        <input type="text" name="" id="login" class="form-control" />
-        <label for="login">Login</label>
-      </div>
-      <div class="form-floating mb-3">
-        <input type="password" name="" id="password" class="form-control" />
-        <label for="password">Password</label>
-      </div>
+      <BFormFloatingLabel label="Login" label-for="login" class="my-2 mb-3">
+        <BFormInput id="login" type="text" placeholder="Login" v-model="login" />
+      </BFormFloatingLabel>
+      <BFormFloatingLabel label="Senha" label-for="password" class="my-2 mb-3">
+        <BFormInput id="password" type="password" placeholder="Senha" v-model="password" />
+      </BFormFloatingLabel>
+      <BFormCheckbox class="text-white fw-bold" v-model="remember_me" :unchecked-value="true"
+        >Salvar Credenciais</BFormCheckbox
+      >
       <hr />
       <BOverlay
         :show="loadingBuzy"

@@ -11,4 +11,4 @@ interface ImportMeta {
 
 declare module "*.vue" { }
 
-declare module "./src" { }
+declare module "*.js" { }
