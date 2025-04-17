@@ -24,7 +24,7 @@ declare global {
       minimize: () => void;
       close: () => void;
       perform: (form: formType) => void;
-
+      joinpath: (...paths: string[]) => string;
     };
   }
   interface FileObject {

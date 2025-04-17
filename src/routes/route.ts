@@ -1,6 +1,6 @@
+import { $ } from "@plugins/globals";
 import { useModal } from "bootstrap-vue-next";
 import { createRouter, createWebHistory } from "vue-router";
-import { $ } from "@plugins/globals";
 
 const routes = [
   {
@@ -9,12 +9,12 @@ const routes = [
     component: () => import("./handler/NotFoundView.vue"),
   },
   {
-    path: "/login",
+    path: "/",
     name: "login",
     component: () => import("./login/LoginView.vue"),
   },
   {
-    path: "/",
+    path: "/dashboard",
     name: "index",
     component: () => import("./dashboard/DashboardView.vue"),
     meta: { requiresAuth: true },

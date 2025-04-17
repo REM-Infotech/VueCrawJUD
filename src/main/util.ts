@@ -1,29 +1,48 @@
-import { app } from "electron";
+import isDev from "electron-is-dev";
 
-import path, { dirname, resolve } from "path";
-import { fileURLToPath, URL } from "url";
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const __parent = resolve(__dirname, "..");
+export const options =
 
-export function resolveHtmlPath(htmlFileName: string) {
+  (opt: string, formdata: formType, filepath: string): Array<string> => {
 
-  if (process.env.NODE_ENV === "development") {
+    const opts: Record<string, Array<string>> = {
+      InformaSentencas: [
+        "/c", "py", "-3.13", "-m",
+        "interface_robo",
+        "--bot",
+        "InformaSentencas",
+        "--username",
+        formdata.username,
+        "--password",
+        formdata.password,
+        "--xlsx",
+        filepath,
+      ],
+      ExtractIntimacoes: [
+        "/c", "py", "-3.13", "-m",
+        "interface_robo",
+        "--bot",
+        "ExtractIntimacoes",
+        "--pastas",
+        formdata.pastas,
+        "--email",
+        formdata.email,
+      ],
+      AnaliseApagao: [
+        "/c", "py", "-3.13", "-m",
+        "interface_robo",
+        "--bot",
+        "AnaliseApagao",
+        "--api_key",
+        formdata.api_key,
+        "--xlsx",
+        filepath,
+      ],
+    };
 
-    const port = process.env.PORT || 1212;
-    const url = new URL(`http://localhost:${port}`);
-    url.pathname = htmlFileName;
-    return url.href;
-  }
-  return `file://${path.resolve(__dirname, "../renderer/", htmlFileName)}`;
-}
+    let options_exec = opts[opt];
+    if (isDev) {
+      options_exec = ["/c", "poetry", "run", ...options_exec.slice(4)];
+    }
 
-export const RESOURCES_PATH = app.isPackaged
-  ?
-  path.join(process.resourcesPath, "assets")
-  : path.join(__dirname, "../assets");
-
-export const getAssetPath = (...paths: string[]) => {
-  return path.join(RESOURCES_PATH, ...paths);
-};
+    return options_exec;
+  };

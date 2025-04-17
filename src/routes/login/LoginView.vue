@@ -1,11 +1,11 @@
 <script setup lang="ts">
+import NavLogin from "@/components/NavLogin.vue";
 import { useModal } from "bootstrap-vue-next";
 import jQuery from "jquery";
 import { onBeforeMount, onMounted } from "vue";
 import { useRouter } from "vue-router";
-import NavLogin from "../../components/NavLogin.vue";
-import { loadingBuzy, onBuzyHidden, setBuzyClick } from "../../services/animations";
-import AuthService from "../../services/auth";
+import { loadingBuzy, onBuzyHidden, setBuzyClick } from "../../plugins/animations";
+import AuthService from "../../plugins/auth";
 const router = useRouter();
 
 const { authenticate } = AuthService();

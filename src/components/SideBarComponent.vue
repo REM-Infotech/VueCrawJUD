@@ -10,7 +10,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { RouterLink } from "vue-router";
-import AuthService from "../services/auth";
+import AuthService from "../plugins/auth";
 
 import { useRouter } from "vue-router";
 const { logout } = AuthService();

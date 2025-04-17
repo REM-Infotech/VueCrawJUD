@@ -1,36 +1,18 @@
-/* import()*/
+import { modeLoadWindow, titleBarStyle } from "@/plugins/electron";
+import "@/plugins/handlers";
 import { initialize } from "@electron/remote/main/index";
-import { app, BrowserWindow, ipcMain, nativeTheme, screen, Tray } from "electron";
+import { app, BrowserWindow, screen, Tray } from "electron";
 import isDev from "electron-is-dev";
-
-import { Buffer } from "buffer";
-import { spawn } from "child_process";
-import fs from "fs/promises";
-import { tmpdir } from "os";
+import { join } from "path";
 import process from "process";
+import "./util";
 
-import { dirname, join } from "path";
-import { fileURLToPath } from "url";
-
-
-
-const modeLoadWindow = {
-  "true":
-    async (mainWindow: BrowserWindow) => {
-      mainWindow.webContents.openDevTools();
-
-      await mainWindow.loadURL("http://localhost:3000");
-    },
-  "false":
-    async (mainWindow: BrowserWindow) => {
-      await mainWindow.loadFile(join(__dirname, "../renderer/index.html"));
-    },
-};
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+export let traywindow: Tray;
+export let mainWindow: BrowserWindow;
 
 const createWindow = async () => {
+
+  initialize();
   let minWidth = 800;
   let minHeight = 600;
 
@@ -48,121 +30,26 @@ const createWindow = async () => {
       break;
     }
   }
-
-  const mainWindow = new BrowserWindow({
+  console.log(!isDev)
+  mainWindow = new BrowserWindow({
     icon: join(process.cwd(), "src", "assets", "img", "icon.ico"),
     minWidth: minWidth,
     minHeight: minHeight,
     width: minWidth,
     height: minHeight,
-    autoHideMenuBar: true,
-    titleBarStyle: "hidden",
+    autoHideMenuBar: false,
+    titleBarStyle: titleBarStyle(),
     webPreferences: {
       nodeIntegration: true,
-      contextIsolation: true,
       sandbox: !isDev,
       preload: join(__dirname, "preload.js"),
     },
   });
-  ipcMain.on("minimize", () => {
-    mainWindow.minimize();
-  });
-
-  ipcMain.on("maximize", () => {
-    if (mainWindow.isMaximized()) {
-      mainWindow.unmaximize();
-    } else {
-      mainWindow.maximize();
-    }
-  });
-
-  ipcMain.on("close", () => {
-    mainWindow.close();
-  });
-
-  ipcMain.on(
-    "peform",
-    async (_: import("electron").IpcMainEvent, formdata: formType) => {
-      const filename = formdata.xlsx.filename;
-      const filebuffer = Buffer.from(formdata.xlsx?.arrayFile);
-      const filepath = join(tmpdir(), filename);
-
-      fs.writeFile(filepath, filebuffer).catch(() => {
-        throw new Error("Error writing file");
-      });
-
-      const options_start = options(formdata.bot, formdata, filepath);
-      const child = spawn("cmd.exe", options_start, {
-        detached: true,
-        stdio: "ignore",
-      });
-      child.unref();
-    },
-  );
-
-  ipcMain.handle("dark-mode:toggle", () => {
-    if (nativeTheme.shouldUseDarkColors) {
-      nativeTheme.themeSource = "light";
-    } else {
-      nativeTheme.themeSource = "dark";
-    }
-    return nativeTheme.shouldUseDarkColors;
-  });
-
-  ipcMain.handle("dark-mode:system", () => {
-    nativeTheme.themeSource = "system";
-  });
 
   await modeLoadWindow[isDev ? "true" : "false"](mainWindow);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const traywindow = new Tray(join(process.cwd(), "src", "assets", "img", "icon.ico"));
+  traywindow = new Tray(join(process.cwd(), "src", "assets", "img", "icon.ico"));
 };
 
-initialize();
+
 app.whenReady().then(createWindow);
-const options =
 
-  (opt: string, formdata: formType, filepath: string): Array<string> => {
-
-    const opts: Record<string, Array<string>> = {
-      InformaSentencas: [
-        "/c", "py", "-3.13", "-m",
-        "interface_robo",
-        "--bot",
-        "InformaSentencas",
-        "--username",
-        formdata.username,
-        "--password",
-        formdata.password,
-        "--xlsx",
-        filepath,
-      ],
-      ExtractIntimacoes: [
-        "/c", "py", "-3.13", "-m",
-        "interface_robo",
-        "--bot",
-        "ExtractIntimacoes",
-        "--pastas",
-        formdata.pastas,
-        "--email",
-        formdata.email,
-      ],
-      AnaliseApagao: [
-        "/c", "py", "-3.13", "-m",
-        "interface_robo",
-        "--bot",
-        "AnaliseApagao",
-        "--api_key",
-        formdata.api_key,
-        "--xlsx",
-        filepath,
-      ],
-    };
-
-    let options_exec = opts[opt];
-    if (isDev) {
-      options_exec = ["/c", "poetry", "run", ...options_exec.slice(4)];
-    }
-
-    return options_exec;
-  };

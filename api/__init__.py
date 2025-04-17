@@ -1,6 +1,6 @@
 """Quart application package."""
 
-import re
+import re  # noqa: F401
 from datetime import timedelta
 from importlib import import_module
 from os import getenv
@@ -197,23 +197,23 @@ async def create_app(confg: object) -> ASGIApp:
         io = await init_extensions(app)
         await register_routes(app)
 
-    allowed_origins = [
-        "https://crawjud.reminfotech.net.br",
-        re.compile(r"http\:\/\/127\.0\.0\.1\:\d*"),
-        # re.compile(r"http://\d*\.\d*\.\d*:\d*"),
-        re.compile(r"http:\/\/localhost\:\d*"),
-        re.compile(r"https://.*\.reminfotech\.net\.br"),
-        re.compile(r"https://.*\.nicholas\.dev\.br"),
-        re.compile(r"https://.*\.robotz\.dev"),
-        re.compile(r"https://.*\.rhsolutions\.info"),
-        re.compile(r"https://.*\.rhsolut\.com\.br"),
-    ]
+    # allowed_origins = [
+    #     "https://crawjud.reminfotech.net.br",
+    #     re.compile(r"http\:\/\/127\.0\.0\.1\:\d*"),
+    #     # re.compile(r"http://\d*\.\d*\.\d*:\d*"),
+    #     re.compile(r"http:\/\/localhost\:\d*"),
+    #     re.compile(r"https://.*\.reminfotech\.net\.br"),
+    #     re.compile(r"https://.*\.nicholas\.dev\.br"),
+    #     re.compile(r"https://.*\.robotz\.dev"),
+    #     re.compile(r"https://.*\.rhsolutions\.info"),
+    #     re.compile(r"https://.*\.rhsolut\.com\.br"),
+    # ]
     app.asgi_app = ProxyHeadersMiddleware(app.asgi_app)
     return ASGIApp(
         io,
         cors(
             app,
-            allow_origin=allowed_origins,
+            allow_origin="*",
             allow_credentials=True,
             allow_methods=["POST", "OPTIONS", "GET"],
             allow_headers=["Content-Type", "Authorization", "x-csrf-token", "X-CSRF-TOKEN"],

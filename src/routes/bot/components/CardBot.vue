@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { current_bot } from "@/services/FormConfig.ts";
+import { current_bot } from "@/plugins/FormConfig";
 import { api } from "@plugins/axios";
 import { onBeforeMount, ref } from "vue";
 const items = ref<{ system: string; id: number; display_name: string; text: string }[]>([]);
@@ -19,7 +19,7 @@ onBeforeMount(async () => {
           <span class="fw-bold">{{ item.display_name }}</span>
         </template>
         <template #img>
-          <img src="@/assets/projudi.png" alt="" />
+          <img src="" alt="" />
         </template>
         <BCardBody style="height: 6rem" class="overflow-y-auto">
           <span class="overflow-auto" style="height: 50rem">{{ item.text }} </span>
@@ -58,7 +58,7 @@ onBeforeMount(async () => {
           <span style="height: 50rem">{{ item.text }} </span>
         </BCardBody>
         <template #img>
-          <img src="@/assets/crawjud2.svg" alt="" />
+          <img src="" alt="" />
         </template>
         <template #footer>
           <div class="dropdown">
