@@ -1,5 +1,6 @@
 """CrawJUD Robots Process Automation Application."""
 
+import platform
 import warnings
 from os import environ
 from pathlib import Path
@@ -7,7 +8,7 @@ from pathlib import Path
 import quart_flask_patch  # noqa: F401
 from celery import Celery
 
-from api import app
+from api import create_app
 from crawjud.utils import make_celery
 
 warnings.filterwarnings("ignore", category=RuntimeWarning, module="google_crc32c")
@@ -27,6 +28,15 @@ async def create_celery_app() -> Celery:
         None
 
     """
+    app = None
+
+    if platform.system() == "Windows":
+        await create_app()
+        from api import app
+
+    else:
+        from api import app
+
     async with app.app_context():
         celery = None
         celery = await make_celery(app)
