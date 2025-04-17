@@ -11,7 +11,7 @@ export const modeLoadWindow = {
     },
   "false":
     async (mainWindow: BrowserWindow) => {
-      await mainWindow.loadFile(join(__dirname, "../renderer/index.html"));
+      await mainWindow.loadFile(join(__dirname, "./index.html"));
     },
 };
 

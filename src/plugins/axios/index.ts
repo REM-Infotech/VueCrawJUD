@@ -30,7 +30,7 @@ api.interceptors.response.use(
         const { show: show_message } = useModal("ModalMessage");
         setTimeout(show_message, 1000);
 
-        router.push({ name: "login" });
+        // router.push({ name: "login" });
         // ou exibir uma modal de sessão expirada
       } else if (error?.code === "ERR_NETWORK") {
         $("#message").text("Erro de conexão com o servidor");

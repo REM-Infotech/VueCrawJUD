@@ -32,7 +32,7 @@ const createWindow = async () => {
   }
   console.log(!isDev)
   mainWindow = new BrowserWindow({
-    icon: join(process.cwd(), "src", "assets", "img", "icon.ico"),
+    icon: join("./src", "assets", "img", "icon.ico"),
     minWidth: minWidth,
     minHeight: minHeight,
     width: minWidth,

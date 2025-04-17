@@ -298,7 +298,7 @@ dist
 
 # vitepress build output
 **/.vitepress/dist
-
+.vite/*
 # vitepress cache directory
 **/.vitepress/cache
 

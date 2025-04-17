@@ -19,12 +19,12 @@ class ProxyFixMiddleware:  # noqa: D101
 
     async def __call__(self, scope: Scope, receive: Callable, send: Callable) -> None:  # noqa: D102
         # Keep the `or` instead of `in {'http' …}` to allow type narrowing
+        host: Optional[str] = None
         if scope["type"] == "http" or scope["type"] == "websocket":
             scope = deepcopy(scope)
             headers = scope["headers"]
             client: Optional[str] = None
             scheme: Optional[str] = None
-            host: Optional[str] = None
 
             if (
                 self.mode == "modern"
@@ -54,6 +54,7 @@ class ProxyFixMiddleware:  # noqa: D101
                 headers.append((b"host", host.encode()))
                 scope["headers"] = headers
 
+        print(f"ProxyFixMiddleware: {scope.get('client')}, {scope.get('scheme')}, {host}")  # noqa: T201
         await self.app(scope, receive, send)
 
 
