@@ -101,7 +101,7 @@ class SearchBot(CrawJUD):
                         ec.presence_of_element_located((
                             By.ID,
                             "dtProcessoResults_data",
-                        ))
+                        )),
                     ).find_element(
                         By.ID,
                         "dtProcessoResults:0:btnProcesso",
@@ -331,7 +331,7 @@ class SearchBot(CrawJUD):
 
         if type(data_inicio_xls) is str:
             data_inicio_xls = datetime.strptime(data_inicio_xls, "%Y-%m-%d").replace(
-                tzinfo=pytz.timezone("America/Manaus")
+                tzinfo=pytz.timezone("America/Manaus"),
             )
             data_inicio_xls = data_inicio_xls.strftime("%d/%m/%Y")
 

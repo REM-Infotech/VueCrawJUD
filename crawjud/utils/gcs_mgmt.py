@@ -48,7 +48,7 @@ def bucket_gcs(storage_client: Client, bucket: str = None) -> Bucket:
         Bucket: The GCS bucket.
 
     """
-    bucket = bucket if bucket else environ.get("BUCKET_NAME")
+    bucket = bucket or environ.get("BUCKET_NAME")
 
     bucket_obj = storage_client.bucket(bucket)
     return bucket_obj

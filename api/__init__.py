@@ -1,6 +1,6 @@
 """Quart application package."""
 
-import re  # noqa: F401
+import re
 from datetime import timedelta
 from importlib import import_module
 from os import getenv
@@ -98,9 +98,6 @@ async def database_start(app: Quart) -> None:
     Args:
         app (Quart): The Quart application instance
 
-    Returns:
-        None
-
     Note:
         This function requires the following environment variables:
         - NAMESERVER: The name of the server
@@ -131,9 +128,6 @@ async def register_routes(app: Quart) -> None:
     Args:
         app (Quart): The Quart application instance to configure
 
-    Returns:
-        None
-
     Note:
         Currently registers 'bot' and 'webhook' blueprints, and imports
         logs routes automatically.
@@ -159,7 +153,15 @@ async def register_routes(app: Quart) -> None:
 
 
 async def init_extensions(app: Quart) -> AsyncServer:
-    """Initialize and configure the application extensions."""
+    """Initialize and configure the application extensions.
+
+    Args:
+        app (Quart): The Quart application instance
+
+    Returns:
+        AsyncServer: The SocketIO server instance
+
+    """
     from crawjud.utils import check_allowed_origin
 
     host_redis = getenv("REDIS_HOST")
@@ -193,7 +195,15 @@ async def init_extensions(app: Quart) -> AsyncServer:
 
 
 async def create_app(confg: object) -> ASGIApp:
-    """Create and configure the Quart application instance."""
+    """Create and configure the Quart application instance.
+
+    Args:
+        confg (object): The configuration object to load settings from.
+
+    Returns:
+        ASGIApp: The ASGI application instance with CORS and middleware applied.
+
+    """
     app.config.from_object(confg)
 
     async with app.app_context():

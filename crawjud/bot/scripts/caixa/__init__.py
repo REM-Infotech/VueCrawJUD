@@ -5,8 +5,9 @@ configure logging. This file follows Google/PEP 257 docstring guidelines.
 """
 
 import logging
+from collections.abc import Callable
 from traceback import format_exception
-from typing import Callable, Union
+from typing import Union
 
 from crawjud.bot.common import StartError
 from crawjud.bot.scripts.caixa.emissor import Emissor
@@ -50,7 +51,7 @@ class Caixa:
 
         except Exception as e:
             err = "\n".join(format_exception(e))
-            self.logger.exception(err)
+            self.logger.error(err)
 
             logger.exception(err)
             raise StartError(message=err) from e

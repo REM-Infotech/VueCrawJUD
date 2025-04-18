@@ -60,7 +60,8 @@ async def login() -> Response:
             response.headers["Access-Control-Allow-Origin"] = request.headers.get("Origin", "*")
             response.headers["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
             response.headers["Access-Control-Allow-Headers"] = request.headers.get(
-                "Access-Control-Request-Headers", "Content-Type, Authorization"
+                "Access-Control-Request-Headers",
+                "Content-Type, Authorization",
             )
             return response
 
@@ -89,7 +90,7 @@ async def login() -> Response:
                     "message": "Login efetuado com sucesso!",
                     "x-csrf-token": get_csrf_token(access_token),
                     "admin": isAdmin,
-                })
+                }),
             )
 
             # Set the JWT cookies in the response

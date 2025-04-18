@@ -91,7 +91,7 @@ class Emissor(CrawJUD):
             try:
                 self.queue()
 
-            except Exception as e:
+            except ExecutionError as e:
                 old_message = None
                 windows = self.driver.window_handles
 
@@ -137,7 +137,7 @@ class Emissor(CrawJUD):
             self.append_success(data)
 
         except Exception as e:
-            self.logger.exception("\n".join(format_exception(e)))
+            self.logger.error("\n".join(format_exception(e)))
             raise ExecutionError(e=e) from e
 
     def get_site(self) -> None:

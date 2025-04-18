@@ -1,5 +1,4 @@
-"""
-Module for the head_gpt function.
+"""Module for the head_gpt function.
 
 Provides legal instructions for analyzing different types of judicial documents
 and extracting relevant information from each.

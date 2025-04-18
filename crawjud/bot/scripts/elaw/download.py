@@ -38,8 +38,7 @@ class Download(CrawJUD):
         *args: str | int,
         **kwargs: str | int,
     ) -> Self:
-        """
-        Initialize bot instance.
+        """Initialize bot instance.
 
         Args:
             *args (tuple[str | int]): Variable length argument list.
@@ -90,7 +89,7 @@ class Download(CrawJUD):
             try:
                 self.queue()
 
-            except Exception as e:
+            except ExecutionError as e:
                 old_message = None
                 windows = self.driver.window_handles
 
@@ -145,7 +144,7 @@ class Download(CrawJUD):
                 self.append_error([self.bot_data.get("NUMERO_PROCESSO"), self.message])
 
         except Exception as e:
-            self.logger.exception("\n".join(format_exception(e)))
+            self.logger.error("\n".join(format_exception(e)))
             raise ExecutionError(e=e) from e
 
     def buscar_doc(self) -> None:

@@ -6,8 +6,9 @@ Manage initialization and execution of various Projudi bot types within CrawJUD-
 from __future__ import annotations
 
 import logging
+from collections.abc import Callable
 from traceback import format_exception
-from typing import Callable, Union
+from typing import Union
 
 from crawjud.bot.common.exceptions import StartError
 from crawjud.bot.scripts.projudi.capa import Capa
@@ -46,7 +47,7 @@ class Projudi:
             self.bot_call.initialize(*args, **kwargs).execution()
 
         except Exception as e:
-            self.logger.exception("\n".join(format_exception(e)))
+            self.logger.error("\n".join(format_exception(e)))
             err = "\n".join(format_exception(e))
             logger.exception(err)
             raise StartError("\n".join(format_exception(e))) from e

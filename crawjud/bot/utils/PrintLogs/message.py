@@ -84,4 +84,4 @@ class PrintBot(CrawJUD):
             # Aguarda 2 segundos
             sleep(2)
             err = "\n".join(format_exception(e))
-            self.logger.exception(err)
+            self.logger.error(err)

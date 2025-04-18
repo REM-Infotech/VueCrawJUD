@@ -10,17 +10,19 @@ Classes:
 import time
 from contextlib import suppress
 from time import sleep
-from traceback import format_exception
-from typing import Self
+from typing import TYPE_CHECKING, Self
 
+from selenium.common.exceptions import TimeoutException
 from selenium.webdriver import Keys
 from selenium.webdriver.common.by import By
-from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.wait import WebDriverWait
 
 from crawjud.bot.common import ExecutionError
 from crawjud.bot.core import CrawJUD
+
+if TYPE_CHECKING:
+    from selenium.webdriver.remote.webelement import WebElement
 
 
 class Andamentos(CrawJUD):
@@ -32,12 +34,14 @@ class Andamentos(CrawJUD):
         *args: str | int,
         **kwargs: str | int,
     ) -> Self:
-        """
-        Initialize bot instance.
+        """Initialize bot instance.
 
         Args:
             *args (tuple[str | int]): Variable length argument list.
             **kwargs (dict[str, str | int]): Arbitrary keyword arguments.
+
+        Returns:
+            Self: Instance of the Andamentos class.
 
         """
         return cls(*args, **kwargs)
@@ -84,7 +88,7 @@ class Andamentos(CrawJUD):
             try:
                 self.queue()
 
-            except Exception as e:
+            except ExecutionError as e:
                 old_message = None
                 windows = self.driver.window_handles
 
@@ -143,7 +147,6 @@ class Andamentos(CrawJUD):
                 self.append_error([self.bot_data.get("NUMERO_PROCESSO"), self.message])
 
         except Exception as e:
-            self.logger.exception("\n".join(format_exception(e)))
             raise ExecutionError(e=e) from e
 
     def info_data(self) -> None:
@@ -171,7 +174,6 @@ class Andamentos(CrawJUD):
             self.interact.sleep_load('div[id="j_id_34"]')
 
         except Exception as e:
-            self.logger.exception("\n".join(format_exception(e)))
             raise ExecutionError(e=e) from e
 
     def info_ocorrencia(self) -> None:
@@ -194,7 +196,6 @@ class Andamentos(CrawJUD):
             self.interact.send_key(ocorrencia, text_andamento)
 
         except Exception as e:
-            self.logger.exception("\n".join(format_exception(e)))
             raise ExecutionError(e=e) from e
 
     def info_observacao(self) -> None:
@@ -217,7 +218,6 @@ class Andamentos(CrawJUD):
             self.interact.send_key(observacao, text_andamento)
 
         except Exception as e:
-            self.logger.exception("\n".join(format_exception(e)))
             raise ExecutionError(e=e) from e
 
     def add_anexo(self) -> None:
@@ -249,7 +249,6 @@ class Andamentos(CrawJUD):
             save_button.click()
 
         except Exception as e:
-            self.logger.exception("\n".join(format_exception(e)))
             raise ExecutionError(message="Não foi possivel salvar andamento", e=e) from e
 
         try:
@@ -261,5 +260,5 @@ class Andamentos(CrawJUD):
 
                 self.append_success([self.numproc, "Andamento salvo com sucesso!", ""], "Andamento salvo com sucesso!")
 
-        except Exception:
-            raise ExecutionError(message="Aviso: não foi possivel validar salvamento de andamento") from None
+        except (TimeoutException, Exception) as e:
+            raise ExecutionError(message="Aviso: não foi possivel validar salvamento de andamento") from e

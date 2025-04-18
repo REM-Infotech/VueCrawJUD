@@ -33,7 +33,7 @@ from crawjud.utils.gen_seed import generate_pid
 from .botlaunch_methods import (
     get_bot_info,
     license_user,
-    setup_task_worker,  # noqa: F401
+    setup_task_worker,
 )
 from .botlaunch_methods import get_form_data as get_form_data
 
@@ -122,7 +122,7 @@ async def acquire_systemclient() -> Response:
             ])
             return jsonify(info=opt, type=type_)
 
-        elif client == "EVERYONE":
+        if client == "EVERYONE":
             opt = [{"value": None, "text": "Selecione um Estado", "disabled": True}]
             type_ = "state"
             opt.extend([
@@ -230,7 +230,7 @@ async def botlaunch(id_: int, system: str, typebot: str) -> Response:
     """Launch the specified bot process."""
     form = {}
     data = await request.form
-    files = await request.files  # noqa: F841
+    files = await request.files
     pid = generate_pid()
     try:
         form.update(data)
@@ -247,9 +247,9 @@ async def botlaunch(id_: int, system: str, typebot: str) -> Response:
         title = display_name  # noqa: F841
 
         if not form:
-            return await make_response(jsonify(response="ok"), 403)  # noqa: F841
+            return await make_response(jsonify(response="ok"), 403)
 
-        return await setup_task_worker(  # noqa: B012
+        return await setup_task_worker(
             id_=id_,
             pid=pid,
             form=form,

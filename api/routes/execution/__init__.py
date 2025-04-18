@@ -56,7 +56,7 @@ async def executions() -> Response:
 
         if not user.supersu:
             executions = list(
-                filter(lambda x: str(x.license_usr.license_token) == str(user.licenseusr.license_token), executions)
+                filter(lambda x: str(x.license_usr.license_token) == str(user.licenseusr.license_token), executions),
             )
 
             if not user.admin:

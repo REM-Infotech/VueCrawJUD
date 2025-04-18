@@ -27,7 +27,7 @@ def gerar_cor_base() -> tuple[int, int, int]:
 
 
 def rgb_to_hex(r: int, g: int, b: int) -> str:
-    return "#{:02x}{:02x}{:02x}".format(r, g, b)
+    return f"#{r:02x}{g:02x}{b:02x}"
 
 
 def escurecer_cor(r: int, g: int, b: int, fator: int = 0.85) -> tuple[int, int, int]:

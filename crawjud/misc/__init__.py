@@ -96,7 +96,7 @@ def credentials_gcs() -> Credentials:
     """
     credentials_dict = json.loads(environ.get("CREDENTIALS_DICT"))
     return Credentials.from_service_account_info(credentials_dict).with_scopes([
-        "https://www.googleapis.com/auth/cloud-platform"
+        "https://www.googleapis.com/auth/cloud-platform",
     ])
 
     # Configure a autenticação para a conta de serviço do GCS

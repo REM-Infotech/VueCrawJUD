@@ -90,7 +90,7 @@ class Capa(CrawJUD):
                 self.queue()
 
             except Exception as e:
-                self.logger.exception(str(e))
+                self.logger.error(str(e))
                 old_message = None
 
                 if old_message is None:
@@ -131,8 +131,8 @@ class Capa(CrawJUD):
             self.append_success([data], "Informações do processo extraidas com sucesso!")
 
         except Exception as e:
-            self.logger.exception("\n".join(format_exception(e)))
-            self.logger.exception(str(e))
+            self.logger.error("\n".join(format_exception(e)))
+            self.logger.error(str(e))
             raise ExecutionError(e=e) from e
 
     def copia_pdf(self, data: dict[str, str | int | datetime]) -> dict[str, str | int | datetime]:
@@ -143,7 +143,7 @@ class Capa(CrawJUD):
             ec.presence_of_element_located((
                 By.CSS_SELECTOR,
                 'input[id="btnMenuExportar"]',
-            ))
+            )),
         )
         time.sleep(0.5)
         btn_exportar.click()
@@ -151,7 +151,7 @@ class Capa(CrawJUD):
         btn_exportar_processo = self.wait.until(
             ec.presence_of_element_located(
                 (By.CSS_SELECTOR, 'input[id="exportarProcessoButton"]'),
-            )
+            ),
         )
         time.sleep(0.5)
         btn_exportar_processo.click()
@@ -162,7 +162,7 @@ class Capa(CrawJUD):
                 ec.presence_of_element_located((
                     By.CSS_SELECTOR,
                     'input[name="gerarMovimentacoes"][value="false"]',
-                ))
+                )),
             ).click()
 
         def unmark_add_validate_tag() -> None:
@@ -171,7 +171,7 @@ class Capa(CrawJUD):
                 ec.presence_of_element_located((
                     By.CSS_SELECTOR,
                     'input[name="adicionarTarjaValidacao"][value="false"]',
-                ))
+                )),
             ).click()
 
         def export() -> None:
@@ -224,7 +224,7 @@ class Capa(CrawJUD):
             #     response = requests.post(url=self.driver.current_url, data=form_values, cookies=cookies, timeout=60)
 
             # except Exception as e:
-            #   self.logger.exception(
+            #   self.logger.error(
             #     "".join(
             #         traceback.format_exception(
             #             e
@@ -478,5 +478,5 @@ class Capa(CrawJUD):
             return process_info
 
         except Exception as e:
-            self.logger.exception("\n".join(format_exception(e)))
+            self.logger.error("\n".join(format_exception(e)))
             raise e

@@ -148,7 +148,7 @@ class WorkerCrawJUD(HeadCrawjudManager):
     def get_log_bot(self) -> None:
         """Get the bot logs."""
         answer_logger: Dict[str, str | None] | None = inquirer.prompt([
-            inquirer.Text("log", message="Enter the log file name")
+            inquirer.Text("log", message="Enter the log file name"),
         ])
 
         text_choice = answer_logger.get("log")

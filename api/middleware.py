@@ -1,7 +1,8 @@
 from __future__ import annotations  # noqa: D100
 
+from collections.abc import Iterable
 from copy import deepcopy
-from typing import Callable, Iterable, Literal, Optional, Tuple
+from typing import Callable, Literal, Optional, Tuple
 
 from hypercorn.typing import ASGIFramework, Scope
 

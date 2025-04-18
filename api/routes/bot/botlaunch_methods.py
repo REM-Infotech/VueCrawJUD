@@ -148,7 +148,10 @@ async def get_bot_info(db: SQLAlchemy, id_: int) -> BotsCrawJUD | None:
 
 
 async def get_form_data(
-    db: SQLAlchemy, system: str, typebot: str, bot_info: BotsCrawJUD
+    db: SQLAlchemy,
+    system: str,
+    typebot: str,
+    bot_info: BotsCrawJUD,
 ) -> tuple[list[tuple], list[tuple], list[tuple[Any, Any]], list]:
     """Retrieve form data including states, clients, credentials, and form configuration."""
     states = [
@@ -216,7 +219,7 @@ async def perform_submited_form(
             await handle_credentials(value, data, system, files)
             continue
 
-        elif isinstance(value, FileStorage):
+        if isinstance(value, FileStorage):
             files.update({secure_filename(value.filename): value})
             if value.content_type == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
                 data.update({"xlsx": secure_filename(value.filename)})
@@ -330,6 +333,6 @@ async def setup_task_worker(
         await flash(message=f"Execução iniciada com sucesso! PID: {pid}")
         return await make_response(jsonify(pid=pid), 200)
 
-    elif is_started != 200:
+    if is_started != 200:
         await flash("Erro ao iniciar a execução!", "error")
         return await make_response(jsonify(pid=pid), 200)

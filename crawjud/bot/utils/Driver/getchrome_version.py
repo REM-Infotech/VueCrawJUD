@@ -20,8 +20,7 @@ class AnotherChromeVersion:
     """Represent a utility for retrieving the installed Google Chrome version."""
 
     def get_version(self) -> str:
-        """
-        Return installed Google Chrome version by executing PowerShell command and parse output.
+        """Return installed Google Chrome version by executing PowerShell command and parse output.
 
         Args:
             None.
@@ -53,8 +52,7 @@ class ChromeVersion:
     """Represent a utility for retrieving the installed Google Chrome version."""
 
     def get_chrome_version(self) -> str | None:
-        """
-        Return Chrome version string by detecting OS and executing appropriate version lookup.
+        """Return Chrome version string by detecting OS and executing appropriate version lookup.
 
         Args:
             None.
@@ -85,8 +83,7 @@ class ChromeVersion:
         return result
 
     def traverse_registry_tree(self, keypath: str) -> dict[str, str]:
-        """
-        Traverse Windows registry tree to retrieve key-value pairs from given key path promptly.
+        """Traverse Windows registry tree to retrieve key-value pairs from given key path promptly.
 
         Args:
             keypath (str): The registry key path to traverse.

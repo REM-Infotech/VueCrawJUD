@@ -47,8 +47,7 @@ class Cadastro(CrawJUD):
         *args: str | int,
         **kwargs: str | int,
     ) -> Self:
-        """
-        Initialize bot instance.
+        """Initialize bot instance.
 
         Args:
             *args (tuple[str | int]): Variable length argument list.
@@ -103,7 +102,7 @@ class Cadastro(CrawJUD):
             try:
                 self.queue()
 
-            except Exception as e:
+            except ExecutionError as e:
                 old_message = None
                 windows = self.driver.window_handles
 
@@ -196,7 +195,7 @@ class Cadastro(CrawJUD):
                     self.print_comprovante()
 
         except Exception as e:
-            self.logger.exception("\n".join(format_exception(e)))
+            self.logger.error("\n".join(format_exception(e)))
             raise ExecutionError(e=e) from e
 
     def area_direito(self) -> None:
@@ -539,7 +538,7 @@ class Cadastro(CrawJUD):
                 self.interact.sleep_load('div[id="j_id_3x"]')
 
             except Exception as e:
-                self.logger.exception("\n".join(format_exception(e)))
+                self.logger.error("\n".join(format_exception(e)))
                 raise ExecutionError(message="Não foi possível cadastrar parte", e=e) from e
 
         self.messsage = "Parte adicionada!"
@@ -930,7 +929,7 @@ class Cadastro(CrawJUD):
             self.interact.sleep_load('div[id="j_id_3x"]')
 
         except Exception as e:
-            self.logger.exception("\n".join(format_exception(e)))
+            self.logger.error("\n".join(format_exception(e)))
             raise ExecutionError(message="Não foi possível cadastrar advogado", e=e) from e
 
     def cad_parte(self) -> None:
@@ -1042,7 +1041,7 @@ class Cadastro(CrawJUD):
             self.prt()
 
         except Exception as e:
-            self.logger.exception("\n".join(format_exception(e)))
+            self.logger.error("\n".join(format_exception(e)))
             raise ExecutionError(e=e) from e
 
     def salvar_tudo(self) -> None:

@@ -105,7 +105,8 @@ class Executions(db.Model):
 
     bot_id: int = db.Column(db.Integer, db.ForeignKey("bots.id"))
     bot: ClassVar[RelationshipProperty[BotsCrawJUD]] = db.relationship(
-        BotsCrawJUD, backref=db.backref("executions", lazy=True)
+        BotsCrawJUD,
+        backref=db.backref("executions", lazy=True),
     )
 
     user_id: int = db.Column(db.Integer, db.ForeignKey("users.id"))

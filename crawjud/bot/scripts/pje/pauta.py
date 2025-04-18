@@ -96,7 +96,7 @@ class Pauta(CrawJUD):
                 break
 
             if varas:
-                vara_name = varas.get(vara)  # noqa: F841
+                vara_name = varas.get(vara)
 
             with suppress(Exception):
                 if self.driver.title.lower() == "a sessao expirou":
@@ -106,7 +106,7 @@ class Pauta(CrawJUD):
                 self.queue(vara=vara)
 
             except Exception as e:
-                self.logger.exception("\n".join(format_exception(e)))
+                self.logger.error("\n".join(format_exception(e)))
                 old_message = None
                 windows = self.driver.window_handles
 
@@ -177,7 +177,7 @@ class Pauta(CrawJUD):
                 self.prt()
 
         except Exception as e:
-            self.logger.exception("\n".join(format_exception(e)))
+            self.logger.error("\n".join(format_exception(e)))
             raise ExecutionError(e=e) from e
 
     def get_pautas(self, current_date: type[datetime], vara: str) -> None:
@@ -200,7 +200,7 @@ class Pauta(CrawJUD):
                     ec.presence_of_element_located((
                         By.CSS_SELECTOR,
                         'pje-data-table[id="tabelaResultado"]',
-                    ))
+                    )),
                 ),
                 (
                     ec.visibility_of_element_located((
@@ -258,7 +258,7 @@ class Pauta(CrawJUD):
                         self.get_pautas(current_date, vara)
 
                 except Exception as e:
-                    self.logger.exception("\n".join(format_exception(e)))
+                    self.logger.error("\n".join(format_exception(e)))
                     raise ExecutionError(e) from e
 
             elif not itens_pautas:
@@ -267,5 +267,5 @@ class Pauta(CrawJUD):
             sleep(times)
 
         except Exception as e:
-            self.logger.exception("\n".join(format_exception(e)))
+            self.logger.error("\n".join(format_exception(e)))
             raise ExecutionError(e=e) from e

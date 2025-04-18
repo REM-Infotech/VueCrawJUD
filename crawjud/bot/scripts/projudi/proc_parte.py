@@ -111,7 +111,7 @@ class ProcParte(CrawJUD):
                         self.auth_bot()
 
         except Exception as e:
-            self.logger.exception("\n".join(format_exception(e)))
+            self.logger.error("\n".join(format_exception(e)))
             old_message = None
 
             # check_window = any([isinstance(e, NoSuchWindowException), isinstance(e, MaxRetryError)])
@@ -180,7 +180,7 @@ class ProcParte(CrawJUD):
                     self.auth_bot()
 
         except Exception as e:
-            self.logger.exception("\n".join(format_exception(e)))
+            self.logger.error("\n".join(format_exception(e)))
             raise ExecutionError(e=e) from e
 
     def use_list_process(self, list_processos: list[WebElement]) -> None:

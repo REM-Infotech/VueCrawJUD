@@ -26,9 +26,10 @@ from __future__ import annotations
 import asyncio
 import os
 import ssl
+from collections.abc import Callable
 from configparser import RawConfigParser
 from threading import Thread
-from typing import IO, Any, Callable, Self
+from typing import IO, Any, Self
 
 import uvicorn
 from socketio import ASGIApp
@@ -99,7 +100,7 @@ class CustomThread(Thread):
             self.application = self._target
             target = self._target.run_app
             target(*self._args, **self._kwargs)
-        except BaseException as e:
+        except BaseException as e:  # noqa: BLE001
             self.exc_bot = e
 
     def terminate(self) -> None:
@@ -152,7 +153,7 @@ class ASGIServer(uvicorn.Server):
             "handlers": {
                 "null": {
                     "class": "logging.NullHandler",
-                }
+                },
             },
             "root": {
                 "level": "INFO",

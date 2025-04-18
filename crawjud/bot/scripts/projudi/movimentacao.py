@@ -83,7 +83,7 @@ class Movimentacao(CrawJUD):
             try:
                 self.queue()
 
-            except Exception as e:
+            except ExecutionError as e:
                 old_message = None
                 # windows = self.driver.window_handles
 
@@ -158,7 +158,7 @@ class Movimentacao(CrawJUD):
                 self.append_error(data)
 
         except Exception as e:
-            self.logger.exception("\n".join(format_exception(e)))
+            self.logger.error("\n".join(format_exception(e)))
             raise ExecutionError(e=e) from e
 
     def set_page_size(self) -> None:
@@ -566,7 +566,7 @@ class Movimentacao(CrawJUD):
             doc = docs.find_elements(By.TAG_NAME, "td")[4]
             link_doc = doc.find_element(By.TAG_NAME, "a")
             name_pdf = self.format_string(str(link_doc.text))
-            old_pdf = Path(os.path.join(self.output_dir_path), name_pdf)  # noqa: F841
+            old_pdf = Path(os.path.join(self.output_dir_path), name_pdf)
             url = link_doc.get_attribute("href")
 
             # Get cookies from ChromeDriver session

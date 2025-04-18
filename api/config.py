@@ -21,7 +21,7 @@ from dotenv_vault import load_dotenv
 load_dotenv()
 
 workdir = Path(getcwd()).joinpath("crawjud")
-running_servers: dict["str", StoreService] = {}
+running_servers: dict[str, StoreService] = {}
 
 
 class StoreService:

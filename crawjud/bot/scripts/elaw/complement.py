@@ -13,11 +13,12 @@ Attributes:
 """
 
 import time
+from collections.abc import Callable
 from contextlib import suppress
 from pathlib import Path
 from time import sleep
 from traceback import format_exception
-from typing import Callable, Self
+from typing import Self
 
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver import Keys
@@ -64,8 +65,7 @@ class Complement(CrawJUD):
         *args: str | int,
         **kwargs: str | int,
     ) -> Self:
-        """
-        Initialize bot instance.
+        """Initialize bot instance.
 
         Args:
             *args (tuple[str | int]): Variable length argument list.
@@ -128,7 +128,7 @@ class Complement(CrawJUD):
             try:
                 self.queue()
 
-            except Exception as e:
+            except ExecutionError as e:
                 old_message = None
                 windows = self.driver.window_handles
 
@@ -244,7 +244,7 @@ class Complement(CrawJUD):
                 raise ExecutionError(message="Processo não encontrado!")
 
         except Exception as e:
-            self.logger.exception("\n".join(format_exception(e)))
+            self.logger.error("\n".join(format_exception(e)))
             raise ExecutionError(e=e) from e
 
     def save_all(self) -> None:
@@ -295,7 +295,7 @@ class Complement(CrawJUD):
                 validar.update({campo.upper(): element})
 
             except Exception as e:
-                self.logger.exception("\n".join(format_exception(e)))
+                self.logger.error("\n".join(format_exception(e)))
                 try:
                     message = e.message
 

@@ -1,14 +1,14 @@
 """Celery configuration for Quart application."""
 
-import logging  # noqa: F401
-from os import getcwd, getenv  # noqa: F401
-from pathlib import Path  # noqa: F401
+import logging
+from os import getcwd, getenv
+from pathlib import Path
 
 from celery import Celery
-from celery.signals import after_setup_logger  # noqa: F401
+from celery.signals import after_setup_logger
 from quart import Quart
 
-from crawjud.types import AnyType  # noqa: F401
+from crawjud.types import AnyType
 
 
 @after_setup_logger.connect

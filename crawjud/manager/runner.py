@@ -11,15 +11,15 @@ from threading import Condition, Event, Thread, current_thread  # noqa: F401
 from time import sleep
 from typing import Any, TypeVar  # noqa: F401
 
-from billiard.context import Process  # noqa: F401
+from billiard.context import Process
 from celery import Celery
-from celery.apps.beat import Beat  # noqa: F401
+from celery.apps.beat import Beat
 from celery.apps.worker import Worker
 from pynput._util import AbstractListener  # noqa: F401
 from quart import Quart
-from rich.console import Console  # noqa: F401
+from rich.console import Console
 from rich.live import Live  # noqa: F401
-from rich.text import Text  # noqa: F401
+from rich.text import Text
 from socketio import ASGIApp
 from uvicorn.config import Config
 from uvicorn.server import Server
@@ -252,7 +252,7 @@ class RunnerServices:
                     process_status="Running",
                     process_object=Thread(target=self.start_quart, daemon=True),
                     process_log_file="hypercorn_api.log",
-                )
+                ),
             }
 
         elif app_ == "Worker":
@@ -286,11 +286,7 @@ class RunnerServices:
             self.event_stop.set()
             sleep(2)
             running_servers.pop(app_)
-        elif app_ == "Worker":
-            celery_app = running_servers.pop(app_)
-            celery_app.process_object.terminate()
-
-        elif app_ == "Beat":
+        elif app_ == "Worker" or app_ == "Beat":
             celery_app = running_servers.pop(app_)
             celery_app.process_object.terminate()
 

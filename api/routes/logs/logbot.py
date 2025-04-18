@@ -6,7 +6,7 @@ log message processing, and bot control actions (stop, terminate, join, etc.).
 
 import asyncio
 import logging
-from traceback import format_exception  # noqa: F401
+from traceback import format_exception
 
 from pytz import timezone  # noqa: F401
 from socketio import AsyncServer  # noqa: F401

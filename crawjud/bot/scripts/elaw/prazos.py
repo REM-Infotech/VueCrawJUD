@@ -38,8 +38,7 @@ class Prazos(CrawJUD):
         *args: str | int,
         **kwargs: str | int,
     ) -> Self:
-        """
-        Initialize bot instance.
+        """Initialize bot instance.
 
         Args:
             *args (tuple[str | int]): Variable length argument list.
@@ -85,7 +84,7 @@ class Prazos(CrawJUD):
             try:
                 self.queue()
 
-            except Exception as e:
+            except ExecutionError as e:
                 old_message = None
                 windows = self.driver.window_handles
 
@@ -153,7 +152,7 @@ class Prazos(CrawJUD):
             self.append_success([comprovante], self.message)
 
         except Exception as e:
-            self.logger.exception("\n".join(format_exception(e)))
+            self.logger.error("\n".join(format_exception(e)))
             raise ExecutionError(e=e) from e
 
     def TablePautas(self) -> None:  # noqa: N802
@@ -173,7 +172,7 @@ class Prazos(CrawJUD):
             self.prt()
 
         except Exception as e:
-            self.logger.exception("\n".join(format_exception(e)))
+            self.logger.error("\n".join(format_exception(e)))
             raise ExecutionError(e=e) from e
 
     def NovaPauta(self) -> None:  # noqa: N802
@@ -231,7 +230,7 @@ class Prazos(CrawJUD):
             DataAudiencia.send_keys(self.data_Concat)
 
         except Exception as e:
-            self.logger.exception("\n".join(format_exception(e)))
+            self.logger.error("\n".join(format_exception(e)))
             raise ExecutionError(e=e) from e
 
     def save_Prazo(self) -> None:  # noqa: N802
@@ -251,7 +250,7 @@ class Prazos(CrawJUD):
             btn_salvar.click()
 
         except Exception as e:
-            self.logger.exception("\n".join(format_exception(e)))
+            self.logger.error("\n".join(format_exception(e)))
             raise ExecutionError(e=e) from e
 
     def CheckLancamento(self) -> dict[str, str] | None:  # noqa: N802
@@ -301,5 +300,5 @@ class Prazos(CrawJUD):
             return data
 
         except Exception as e:
-            self.logger.exception("\n".join(format_exception(e)))
+            self.logger.error("\n".join(format_exception(e)))
             raise ExecutionError(e=e) from e

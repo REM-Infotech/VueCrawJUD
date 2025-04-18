@@ -118,7 +118,7 @@ class Protocolo(CrawJUD):
             try:
                 self.queue()
 
-            except Exception as e:
+            except ExecutionError as e:
                 old_message = None
                 windows = self.driver.window_handles
 
@@ -168,7 +168,6 @@ class Protocolo(CrawJUD):
             self.append_success(data, message=data[1])
 
         except Exception as e:
-            self.logger.exception("\n".join(format_exception(e)))
             raise ExecutionError(e=e) from e
 
     def init_protocolo(self) -> None:
@@ -192,7 +191,7 @@ class Protocolo(CrawJUD):
                 self.driver.execute_script(f"return window.location.href = '{link}';")
                 sleep(5)
 
-            except Exception:
+            except (Exception, TimeoutException):
                 button_enterproc: WebElement = WebDriverWait(self.driver, 5).until(
                     ec.presence_of_element_located((By.CSS_SELECTOR, "#processoSelecionado")),
                 )
@@ -208,7 +207,7 @@ class Protocolo(CrawJUD):
                 link = button_peticionamento.get_attribute("onclick").split("'")[1]
                 self.driver.execute_script(f"return window.location.href = '{link}';")
 
-        except Exception:
+        except (Exception, TimeoutException):
             raise ExecutionError(message="Erro ao inicializar peticionamento") from None
 
     def set_tipo_protocolo(self) -> None:
@@ -243,7 +242,7 @@ class Protocolo(CrawJUD):
             sleep(1.5)
             self.interact.send_key(input_tipo_peticao, Keys.ENTER)
 
-        except Exception:
+        except (Exception, TimeoutException):
             raise ExecutionError(message="Erro ao informar tipo de protocolo") from None
 
     def set_subtipo_protocolo(self) -> None:
@@ -276,7 +275,7 @@ class Protocolo(CrawJUD):
             input_categoria_peticao_option.click()
             sleep(1)
 
-        except Exception:
+        except (Exception, TimeoutException):
             raise ExecutionError(message="Erro ao informar subtipo de protocolo") from None
 
     def set_petition_file(self) -> None:
@@ -298,7 +297,7 @@ class Protocolo(CrawJUD):
             sleep(2)
 
             path_file = Path(self.path_args).parent.resolve().__str__()
-            file = os.path.join(path_file, self.bot_data.get("PETICAO_PRINCIPAL"))
+            file = Path(path_file).joinpath(self.bot_data.get("PETICAO_PRINCIPAL")).__str__()
 
             file = file.replace(" ", "")
             if "_" in file:
@@ -316,7 +315,7 @@ class Protocolo(CrawJUD):
                 )
 
             if file_uploaded == "":
-                raise ExecutionError(message="Erro ao enviar petição")
+                raise ExecutionError(message="Erro ao enviar petição")  # noqa: TRY301
 
             self.prt.print_log("log", "Petição do processo anexada com sucesso")
 
@@ -440,5 +439,5 @@ class Protocolo(CrawJUD):
             ]
 
         except Exception as e:
-            self.logger.exception("\n".join(format_exception(e)))
+            self.logger.error("\n".join(format_exception(e)))
             raise ExecutionError(message="Erro ao confirmar protocolo", e=e) from e

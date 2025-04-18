@@ -14,15 +14,15 @@ from traceback import format_exception
 
 import requests
 from selenium.webdriver import (
-    Chrome,  # noqa: F401
-    Firefox,  # noqa: F401
+    Chrome,
+    Firefox,
 )
-from selenium.webdriver.chrome.options import Options as ChromeOptions  # noqa: F401
+from selenium.webdriver.chrome.options import Options as ChromeOptions
 from selenium.webdriver.firefox.firefox_profile import FirefoxProfile  # noqa: F401
-from selenium.webdriver.firefox.options import Options as FireFoxOptions  # noqa: F401
+from selenium.webdriver.firefox.options import Options as FireFoxOptions
 from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.support.wait import WebDriverWait
-from webdriver_manager.firefox import GeckoDriverManager  # noqa: F401
+from webdriver_manager.firefox import GeckoDriverManager
 
 from crawjud.bot.core import (
     BarColumn,
@@ -43,15 +43,14 @@ from crawjud.bot.core import (
 if __name__ == "__main__":
     from getchrome_version import another_chrome_ver, chrome_ver
 else:
-    from crawjud.bot.utils.Driver.getchrome_version import another_chrome_ver, chrome_ver  # noqa: F401
+    from crawjud.bot.utils.Driver.getchrome_version import another_chrome_ver, chrome_ver
 
 
 class DriverBot(CrawJUD):
     """Bot for handling WebDriver operations within CrawJUD framework."""
 
     def __init__(self) -> None:
-        """
-        Initialize DriverBot with default settings for WebDriver operations in CrawJUD promptly.
+        """Initialize DriverBot with default settings for WebDriver operations in CrawJUD promptly.
 
         Args:
             None.
@@ -108,7 +107,7 @@ class DriverBot(CrawJUD):
                         shutil.copytree(root, self.user_data_diretory)
                     except Exception as e:
                         err = "\n".join(format_exception(e))
-                        self.logger.exception(err)
+                        self.logger.error(err)
 
             elif not path_exist:
                 self.path_accepted.mkdir(parents=True, exist_ok=True)
@@ -122,7 +121,7 @@ class DriverBot(CrawJUD):
         self.user_data_diretory = Path(self.pid_path).joinpath(path_profile).resolve()
 
         if isinstance(webdriver_options, ChromeOptions):
-            webdriver_options.add_argument(f"user-data-dir={str(self.user_data_diretory)}")
+            webdriver_options.add_argument(f"user-data-dir={self.user_data_diretory!s}")
 
         self.user_data_diretory.mkdir(parents=True, exist_ok=True)
 
@@ -156,8 +155,7 @@ class DriverBot(CrawJUD):
             webdriver_options.set_preference("pdfjs.disabled", True)
 
     def driver_launch(self, message: str = "Inicializando WebDriver") -> tuple[WebDriver, WebDriverWait]:
-        """
-        Launch WebDriver with options and extensions, then return driver and wait to run well.
+        """Launch WebDriver with options and extensions, then return driver and wait to run well.
 
         Args:
             message (str, optional): Initialization message.
@@ -309,8 +307,7 @@ class SetupDriver:
     progress_group = Group(painel)
 
     def __init__(self, destination: Path = None, **kwargs: dict[str, any]) -> None:
-        """
-        Initialize SetupDriver to download and configure the appropriate WebDriver binary aptly.
+        """Initialize SetupDriver to download and configure the appropriate WebDriver binary aptly.
 
         Args:
             destination (Path, optional): Destination directory for WebDriver.
@@ -341,8 +338,7 @@ class SetupDriver:
         self.destination = destination
 
     def __call__(self) -> str:
-        """
-        Execute driver setup process, download and extract WebDriver, then copy to destination.
+        """Execute driver setup process, download and extract WebDriver, then copy to destination.
 
         Args:
             None.
@@ -359,8 +355,7 @@ class SetupDriver:
         return self.destination.name
 
     def configure_bar(self, pool: ThreadPoolExecutor) -> None:
-        """
-        Configure download progress bar for obtaining the WebDriver with ThreadPoolExecutor.
+        """Configure download progress bar for obtaining the WebDriver with ThreadPoolExecutor.
 
         Args:
             pool (ThreadPoolExecutor): Executor for handling parallel downloads.
@@ -386,8 +381,7 @@ class SetupDriver:
                 shutil.copy(self.file_path, self.destination)
 
     def get_url(self) -> str:
-        """
-        Construct download URL for WebDriver based on Chrome version and system architecture.
+        """Construct download URL for WebDriver based on Chrome version and system architecture.
 
         Args:
             None.
@@ -427,8 +421,7 @@ class SetupDriver:
         return url_driver
 
     def copy_url(self, task_id: TaskID, path: Path) -> None:
-        """
-        Download, extract, and move WebDriver from URL zip file to specified path ready now.
+        """Download, extract, and move WebDriver from URL zip file to specified path ready now.
 
         Args:
             task_id (TaskID): ID for progress tracking.

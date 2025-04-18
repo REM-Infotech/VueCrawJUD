@@ -29,8 +29,7 @@ cred = Blueprint("creds", __name__)
 
 
 class CredentialsForm:
-    """
-    CredentialsForm is a data container for managing authentication credentials.
+    """CredentialsForm is a data container for managing authentication credentials.
 
     It stores details such as the credential name, associated system, authentication method, and optional fields like
     login and certificate information.
@@ -64,8 +63,7 @@ class CredentialsForm:
         cert: FileStorage = None,
         key: str = None,
     ) -> None:
-        """
-        Initialize a CredentialsForm instance.
+        """Initialize a CredentialsForm instance.
 
         Args:
             nome_cred (str): The unique name or identifier for the credentials.
@@ -169,7 +167,7 @@ async def cadastro() -> Response:
 
         form = CredentialsForm(**request_data)
 
-        async def pw(form: CredentialsForm) -> None:  # noqa: ANN001
+        async def pw(form: CredentialsForm) -> None:
             form.system = db.session.query(BotsCrawJUD).filter(BotsCrawJUD.id == int(form.system)).first().system
 
             passwd = Credentials(
@@ -180,14 +178,14 @@ async def cadastro() -> Response:
                 password=form.password,
             )
             licenseusr = LicensesUsers.query.filter(
-                LicensesUsers.license_token == await license_user(get_jwt_identity(), db)
+                LicensesUsers.license_token == await license_user(get_jwt_identity(), db),
             ).first()
 
             passwd.license_usr = licenseusr
             db.session.add(passwd)
             db.session.commit()
 
-        async def cert(form: CredentialsForm) -> None:  # noqa: ANN001
+        async def cert(form: CredentialsForm) -> None:
             form.system = db.session.query(BotsCrawJUD).filter(BotsCrawJUD.id == form.system).first().system
             temporarypath = current_app.config["TEMP_DIR"]
             filecert = form.cert
@@ -208,7 +206,7 @@ async def cadastro() -> Response:
                     certficate_blob=await certficate_blob,
                 )
                 licenseusr = LicensesUsers.query.filter(
-                    LicensesUsers.license_token == await license_user(get_jwt_identity(), db)
+                    LicensesUsers.license_token == await license_user(get_jwt_identity(), db),
                 ).first()
 
                 passwd.license_usr = licenseusr

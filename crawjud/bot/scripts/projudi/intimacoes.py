@@ -90,7 +90,7 @@ class Intimacoes(CrawJUD):
                 self.queue()
 
             except Exception as e:
-                self.logger.exception(str(e))
+                self.logger.error(str(e))
                 old_message = None
                 # windows = self.driver.window_handles
 
@@ -139,7 +139,7 @@ class Intimacoes(CrawJUD):
             self.wait.until(
                 ec.presence_of_element_located(
                     (By.CSS_SELECTOR, self.elements.select_page_size_intimacoes),
-                )
+                ),
             ),
         )
         select.select_by_value("100")
@@ -185,8 +185,8 @@ class Intimacoes(CrawJUD):
                 self.driver.find_element(By.CSS_SELECTOR, 'a[class="arrowNextOn"]').click()
 
         except Exception as e:
-            self.logger.exception("\n".join(format_exception(e)))
-            self.logger.exception(str(e))
+            self.logger.error("\n".join(format_exception(e)))
+            self.logger.error(str(e))
             raise ExecutionError(e=e) from e
 
     def get_intimacao_information(self, name_colunas: list[WebElement], intimacoes: list[WebElement]) -> dict:
