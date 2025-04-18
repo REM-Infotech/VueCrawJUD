@@ -4,6 +4,8 @@ This module interfaces with external IP geolocation services to fetch geographic
 for given IP addresses. It includes error handling and data validation.
 """
 
+from __future__ import annotations
+
 from os import environ
 
 import FindMyIP as Ip

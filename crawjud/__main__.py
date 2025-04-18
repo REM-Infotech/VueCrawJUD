@@ -65,12 +65,11 @@ class WorkerCrawJUD(HeadCrawjudManager):
     def prompt(self) -> None:
         """Prompt the user for server options."""
         if self.current_menu_name == "Main Menu":
-            if running_servers:
-                tqdm.write("=============================================================")
-                tqdm.write("Running servers:")
-                for server in running_servers.keys():
-                    tqdm.write(f" {colored('[ x ]', color='green')} {server}")
-                tqdm.write("=============================================================")
+            tqdm.write("=============================================================")
+            tqdm.write("Running servers:")
+            for server in running_servers:
+                tqdm.write(f" {colored('[ x ]', color='green')} {server}")
+            tqdm.write("=============================================================")
 
         if self.returns_message:
             message = self.returns_message[0]

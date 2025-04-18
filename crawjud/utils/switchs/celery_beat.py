@@ -1,4 +1,4 @@
-"""Blueprint for the Celery Beat server."""
+"""Celery Beat Scheduler Management."""
 
 import asyncio
 from threading import Thread

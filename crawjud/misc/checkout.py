@@ -24,7 +24,7 @@ def checkout_release_tag() -> str:
     github = Github(GITHUB_API_TOKEN)
     repo = github.get_repo(REPO_NAME)
     releases = repo.get_releases()
-    latest_release = sorted(releases, key=lambda release: release.created_at, reverse=True)[0]
+    latest_release = max(releases, key=lambda release: release.created_at)
 
     return latest_release.tag_name
 

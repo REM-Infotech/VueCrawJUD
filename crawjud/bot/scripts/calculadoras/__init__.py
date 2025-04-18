@@ -3,6 +3,8 @@
 This module initializes and manages the Calculadoras bot within the CrawJUD-Bots application.
 """
 
+from __future__ import annotations
+
 import logging
 from collections.abc import Callable
 from traceback import format_exception

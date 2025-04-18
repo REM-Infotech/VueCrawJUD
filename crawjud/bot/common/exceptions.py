@@ -1,5 +1,7 @@
 """Module defining custom exceptions for CrawJUD bot."""
 
+from __future__ import annotations
+
 from crawjud.bot.common.selenium_excepts import exceptionsBot, webdriver_exepts
 
 
@@ -64,8 +66,7 @@ class BaseCrawJUDError(Exception):
             bool: True if the instance is a recognized exception, False otherwise.
 
         """
-        check_except = instance in webdriver_exepts()
-        return check_except
+        return instance in webdriver_exepts()
 
 
 class NotFoundError(BaseCrawJUDError):

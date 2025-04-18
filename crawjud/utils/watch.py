@@ -20,7 +20,7 @@ def watch_input(stop_event: Event) -> None:
     def on_press(key: Any) -> None:
         if key == Key.esc:
             stop_event.set()
-            return False  # Para o listener
+            return
 
     with Listener(on_press=on_press) as listener:
         listener.join()

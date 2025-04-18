@@ -74,7 +74,7 @@ class OtherUtils(CrawJUD):
             list[str]: A list containing all the required column labels.
 
         """
-        all_fields = [
+        return [
             "NOME_PARTE",
             "PORTAL",
             "FORO",
@@ -186,7 +186,6 @@ class OtherUtils(CrawJUD):
             "DESC_PAGAMENTO",
             "DESC_OBJETO",
         ]
-        return all_fields
 
     @property
     def elaw_data(self) -> dict[str, str]:

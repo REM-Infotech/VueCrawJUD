@@ -3,6 +3,8 @@
 This module manages protocol operations in the ESaj system using the CrawJUD framework.
 """
 
+from __future__ import annotations
+
 import os
 import shutil
 import time

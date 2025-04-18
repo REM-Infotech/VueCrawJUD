@@ -1,5 +1,7 @@
 """Module for Admin configuration routes."""
 
+from __future__ import annotations
+
 from traceback import format_exception
 
 from flask_sqlalchemy import SQLAlchemy

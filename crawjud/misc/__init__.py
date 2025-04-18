@@ -20,39 +20,6 @@ signed_url_lifetime = 300
 __all__ = [MakeModels]
 
 
-# Função para criptografar os dados do cookie
-# def encrypt_cookie(data: Any) -> str:
-#     """Encrypt data for use in cookies.
-
-#     Args:
-#         data: The data to encrypt.
-
-#     Returns:
-#         str: The encrypted data as a string.
-
-#     """
-#     serializer = URLSafeTimedSerializer(app.secret_key)
-#     return serializer.dumps(data)
-
-
-# Função para descriptografar os dados do cookie
-# def decrypt_cookie(encrypted_data: str) -> Any | None:
-#     """Decrypt cookie data.
-
-#     Args:
-#         encrypted_data: The encrypted cookie string.
-
-#     Returns:
-#         The original data if decryption is successful; otherwise, None.
-
-#     """
-#     serializer = URLSafeTimedSerializer(app.secret_key)
-#     try:
-#         return serializer.loads(encrypted_data)
-#     except Exception:
-#         return None  # Em caso de falha na descriptografia ou expiração
-
-
 def generate_pid() -> str:
     """Generate a unique PID string.
 
@@ -116,8 +83,7 @@ def bucket_gcs(storage_client: Client, bucket_name: str = None) -> Bucket:
     if not bucket_name:
         bucket_name = environ.get("BUCKET_NAME")
 
-    bucket_obj = storage_client.bucket(bucket_name)
-    return bucket_obj
+    return storage_client.bucket(bucket_name)
 
 
 def generate_signed_url(blob_name: str) -> str:
@@ -131,10 +97,9 @@ def generate_signed_url(blob_name: str) -> str:
 
     """
     blob = bucket_gcs(storage_client()).blob(blob_name)
-    url = blob.generate_signed_url(
+    return blob.generate_signed_url(
         expiration=signed_url_lifetime,
         method="GET",
         version="v4",
         credentials=credentials_gcs(),
     )
-    return url

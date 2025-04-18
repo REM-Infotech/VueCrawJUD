@@ -4,6 +4,8 @@ Provide a class interface to run the Emissor bot, handle exceptions, and
 configure logging. This file follows Google/PEP 257 docstring guidelines.
 """
 
+from __future__ import annotations
+
 import logging
 from collections.abc import Callable
 from traceback import format_exception

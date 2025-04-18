@@ -7,6 +7,8 @@ Classes:
     DatabaseScheduler: A Celery scheduler that manages task schedules from database records.
 """
 
+from __future__ import annotations
+
 import json
 import re
 from typing import Any, Union

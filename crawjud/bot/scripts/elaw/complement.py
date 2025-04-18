@@ -12,6 +12,8 @@ Attributes:
 
 """
 
+from __future__ import annotations
+
 import time
 from collections.abc import Callable
 from contextlib import suppress
@@ -435,6 +437,7 @@ class Complement(CrawJUD):
                 ErroElaw = "Cadastro do processo nao finalizado, verificar manualmente"  # noqa: N806
 
             raise ExecutionError(ErroElaw)
+        return None
 
     def print_comprovante(self) -> str:
         """Print the comprovante (receipt) of the registration.

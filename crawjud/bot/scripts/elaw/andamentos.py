@@ -7,6 +7,8 @@ Classes:
     Andamentos: Manages process progress by extending the CrawJUD base class
 """
 
+from __future__ import annotations
+
 import time
 from contextlib import suppress
 from time import sleep

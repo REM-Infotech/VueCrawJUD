@@ -1,5 +1,7 @@
 """Module for botlaunch route."""
 
+from __future__ import annotations
+
 import mimetypes
 from pathlib import Path
 from typing import Any
@@ -73,7 +75,7 @@ FORM_CONFIGURATOR = {
 
 async def license_user(usr: int, db: SQLAlchemy) -> str:
     """Return license token."""
-    license_token = (
+    return (
         db.session.query(LicensesUsers)
         .select_from(Users)
         .join(Users, LicensesUsers.user)
@@ -81,8 +83,6 @@ async def license_user(usr: int, db: SQLAlchemy) -> str:
         .first()
         .license_token
     )
-
-    return license_token
 
 
 async def handle_credentials(value: str, data: dict, system: str, files: dict) -> None:
@@ -142,9 +142,7 @@ async def get_bot_info(db: SQLAlchemy, id_: int) -> BotsCrawJUD | None:
     #     .first()
     # )
 
-    result = db.session.query(BotsCrawJUD).filter(BotsCrawJUD.id == id_).first()
-
-    return result
+    return db.session.query(BotsCrawJUD).filter(BotsCrawJUD.id == id_).first()
 
 
 async def get_form_data(
@@ -336,3 +334,4 @@ async def setup_task_worker(
     if is_started != 200:
         await flash("Erro ao iniciar a execução!", "error")
         return await make_response(jsonify(pid=pid), 200)
+    return None

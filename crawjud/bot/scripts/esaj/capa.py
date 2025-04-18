@@ -4,6 +4,8 @@ This module executes the workflow to search and process process details,
 ensuring detailed extraction and logging of information.
 """
 
+from __future__ import annotations
+
 import time
 from contextlib import suppress
 from time import sleep
@@ -230,6 +232,7 @@ class Capa(CrawJUD):
                 if "R$" not in valor_causa:
                     valor_causa = float(valor_causa.replace("$", "").replace("R", "").replace(" ", "").replace(",", ""))
                     return f"{valor_causa:.2f}".replace(".", ",")
+                return None
 
             valorDaCausa = valor  # noqa: N806
             if valor != "":

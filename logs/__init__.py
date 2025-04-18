@@ -1,5 +1,7 @@
 """Logger Configurator for the application."""
 
+from __future__ import annotations
+
 import logging
 from os import getenv
 from pathlib import Path

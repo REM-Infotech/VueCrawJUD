@@ -3,6 +3,8 @@
 Handle movement-related operations in the Projudi system with data scraping and reporting.
 """
 
+from __future__ import annotations
+
 import os
 import re
 import shutil
@@ -292,7 +294,7 @@ class Movimentacao(CrawJUD):
                 bool: True if any of the conditions are met, False otherwise.
 
             """
-            check_palavra = any(
+            return any(
                 chk is True
                 for chk in [
                     keyword == "*",
@@ -302,8 +304,6 @@ class Movimentacao(CrawJUD):
                     self.similaridade(keyword.lower(), text_mov.split("\n")[0].lower()) > 0.8,
                 ]
             )
-
-            return check_palavra
 
         def check_intimado() -> bool:
             """Check if the bot is intimated based on the bot data.
@@ -326,9 +326,7 @@ class Movimentacao(CrawJUD):
 
             return intimado_chk
 
-        resultados = all([data_check(data_mov), text_check(text_mov), check_intimado()])
-
-        return resultados
+        return all([data_check(data_mov), text_check(text_mov), check_intimado()])
 
     def scrap_moves(self, keyword: str) -> None:
         """Scrape movements that contain the specified keyword.
@@ -362,7 +360,7 @@ class Movimentacao(CrawJUD):
 
         args = list(self.bot_data.items())
         pos = 0
-        for _, row in enumerate(args):
+        for row in args:
             key, value = row
 
             _add_msg = f"   - {key}: {value} "

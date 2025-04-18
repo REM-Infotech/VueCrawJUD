@@ -4,6 +4,8 @@ This module executes the emission workflow by generating PDF documents,
 navigating forms, and extracting barcodes following the ESaj requirements.
 """
 
+from __future__ import annotations
+
 import platform
 import re
 import time
@@ -183,12 +185,7 @@ class Emissao(CrawJUD):
 
         Fills necessary fields for calculating initial costs using data from the bot.
         """
-        url_custas_ini = "".join(
-            (
-                "https://consultasaj.tjam.jus.br/ccpweb/iniciarCalculoDeCustas.do?",
-                "cdTipoCusta=7&flTipoCusta=0&&cdServicoCalculoCusta=690003",
-            ),
-        )
+        url_custas_ini = "https://consultasaj.tjam.jus.br/ccpweb/iniciarCalculoDeCustas.do?cdTipoCusta=7&flTipoCusta=0&&cdServicoCalculoCusta=690003"
 
         self.driver.get(url_custas_ini)
 
@@ -354,6 +351,7 @@ class Emissao(CrawJUD):
 
         if not check:
             return f"https://consultasaj.tjam.jus.br{url}"
+        return None
 
     def downloadpdf(self, link_pdf: str) -> None:
         """Download and store the PDF file from the provided URL to a local directory.

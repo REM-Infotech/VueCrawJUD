@@ -3,6 +3,8 @@
 This module fetches and processes court hearing schedules (pautas) for automated judicial tasks.
 """
 
+from __future__ import annotations
+
 import os
 import time
 from contextlib import suppress

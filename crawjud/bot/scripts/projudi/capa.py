@@ -3,6 +3,8 @@
 Extract and manage process details from Projudi by scraping and formatting data.
 """
 
+from __future__ import annotations
+
 import re
 import shutil
 import time
@@ -372,8 +374,10 @@ class Capa(CrawJUD):
                 element_content = self.elements.segunda_instform
                 element_content2 = element_content
 
-            includecontent.append(self.driver.find_element(By.CSS_SELECTOR, element_content))
-            includecontent.append(self.driver.find_element(By.CSS_SELECTOR, element_content2))
+            includecontent.extend((
+                self.driver.find_element(By.CSS_SELECTOR, element_content),
+                self.driver.find_element(By.CSS_SELECTOR, element_content2),
+            ))
 
             for incl in includecontent:
                 itens = list(
@@ -401,7 +405,7 @@ class Capa(CrawJUD):
                         ),
                     )
 
-                    for _, label in enumerate(labels):
+                    for label in labels:
                         if len(labels) != len(values):
                             continue
 

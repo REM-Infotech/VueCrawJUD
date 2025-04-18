@@ -754,8 +754,7 @@ class PropertiesCrawJUD:
     @property
     def isStoped(self) -> bool:  # noqa: N802
         """Check if the process is stopped."""
-        stopped = Path(self.output_dir_path).joinpath(f"{self.pid}.flag").exists()
-        return stopped
+        return Path(self.output_dir_path).joinpath(f"{self.pid}.flag").exists()
 
     @property
     def elawFormats(self) -> Callable[..., dict[str, str]]:  # noqa: N802

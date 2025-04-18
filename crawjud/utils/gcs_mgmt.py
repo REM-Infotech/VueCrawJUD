@@ -50,8 +50,7 @@ def bucket_gcs(storage_client: Client, bucket: str = None) -> Bucket:
     """
     bucket = bucket or environ.get("BUCKET_NAME")
 
-    bucket_obj = storage_client.bucket(bucket)
-    return bucket_obj
+    return storage_client.bucket(bucket)
 
 
 def get_file(pid: str) -> str:

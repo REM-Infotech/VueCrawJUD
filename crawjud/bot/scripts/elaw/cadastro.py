@@ -11,6 +11,8 @@ Attributes:
 
 """
 
+from __future__ import annotations
+
 import time
 from contextlib import suppress
 from pathlib import Path
@@ -1150,3 +1152,4 @@ class Cadastro(CrawJUD):
                 ErroElaw = "Cadastro do processo nao finalizado, verificar manualmente"  # noqa: N806
 
             raise ExecutionError(ErroElaw)
+        return None

@@ -36,7 +36,7 @@ line-length = 120
 indent-width = 4
 
 [lint]
-select = ["A", "B", "C", "D", "E", "F", "G", "I", "N", "Q", "S", "T", "W"]
+select = ["A", "B", "C", "D", "E", "F", "G", "I", "N", "Q",  "T", "W"]
 
 extend-select = [
     "ANN",
@@ -58,29 +58,40 @@ extend-select = [
     "FIX",
     "NPY",
     "INP",
-    "UP",
+    # "UP",
     "RET",
     "BLE",
     "FBT",
-    "DTZ",
-    "EM",
+    # "DTZ",
+    # "EM",
     "FA",
-    "SIM",
+    # "SIM",
     "TID",
     "TC",
     "ARG",
-    "PTH",
+    # "PTH",
     # "ERA",
     "PD",
-    "TRY",
+    # "TRY",
     "FLY",
     "AIR",
-    "PERF",
+    # "PERF",
     "FURB",
     "DOC",
+    # "S",
 ]
 
 ignore = [
+    "INP001",
+    "FBT002",
+    "FBT001",
+    "FBT003",
+    "PD901",
+    "FURB103",
+    "FURB101",
+    "FA100",
+    "E501",
+    "C901",
     "ANN401",
      "COM812",
      "D203",

@@ -86,7 +86,7 @@ class CredentialsForm:
 
 async def license_user(usr: int, db: SQLAlchemy) -> str:
     """Return license token."""
-    license_token = (
+    return (
         db.session.query(LicensesUsers)
         .select_from(Users)
         .join(Users, LicensesUsers.user)
@@ -94,8 +94,6 @@ async def license_user(usr: int, db: SQLAlchemy) -> str:
         .first()
         .license_token
     )
-
-    return license_token
 
 
 @cred.get("/systems")

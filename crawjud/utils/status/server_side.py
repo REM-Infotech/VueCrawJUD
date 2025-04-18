@@ -1,5 +1,7 @@
 """Handle server-side operations for bot status tracking and caching with Redis integration."""
 
+from __future__ import annotations
+
 from flask_sqlalchemy import SQLAlchemy
 from quart import Quart
 from redis_flask import Redis

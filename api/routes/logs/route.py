@@ -3,6 +3,8 @@
 This module defines endpoints for managing logs and controlling bot executions.
 """
 
+from __future__ import annotations
+
 import asyncio
 import json
 

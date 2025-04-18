@@ -3,6 +3,8 @@
 Extract and manage process intimation information from the Projudi system.
 """
 
+from __future__ import annotations
+
 import re  # noqa: F401
 import time
 from contextlib import suppress

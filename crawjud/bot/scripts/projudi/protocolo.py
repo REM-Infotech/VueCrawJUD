@@ -4,6 +4,8 @@ Handles protocol-related functionalities in the Projudi system. Extend CrawJUD t
 protocol operations such as adding moves, uploading files, signing documents, and capturing screenshots.
 """
 
+from __future__ import annotations
+
 import os
 import time
 from contextlib import suppress

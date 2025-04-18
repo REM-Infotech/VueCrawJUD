@@ -16,11 +16,10 @@ def generate_signed_url(blob_name: str) -> str:
 
     """
     blob = bucket_gcs(storage_client()).blob(blob_name)
-    url = blob.generate_signed_url(
+    return blob.generate_signed_url(
         expiration=timedelta(days=7),
         # expiration=signed_url_lifetime,
         method="GET",
         version="v4",
         credentials=credentials_gcs(),
     )
-    return url

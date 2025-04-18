@@ -11,6 +11,8 @@ Attributes:
 
 """
 
+from __future__ import annotations
+
 import time
 from contextlib import suppress
 from datetime import datetime
@@ -189,22 +191,15 @@ class Provisao(CrawJUD):
         edit_button.click()
 
         if get_valores == "Nenhum registro encontrado!":
-            calls.append(self.add_new_valor)
-            calls.append(self.edit_valor)
-            calls.append(self.chk_risk)
-            calls.append(self.set_valores)
-            calls.append(self.informar_datas)
+            calls.extend((self.add_new_valor, self.edit_valor, self.chk_risk, self.set_valores, self.informar_datas))
 
         elif get_valores == "Contém valores" or get_valores == "-":
-            calls.append(self.edit_valor)
-            calls.append(self.chk_risk)
-            calls.append(self.set_valores)
+            calls.extend((self.edit_valor, self.chk_risk, self.set_valores))
 
             if provisao == "provável" or provisao == "possível":
                 calls.append(self.informar_datas)
 
-        calls.append(self.set_risk)
-        calls.append(self.informar_motivo)
+        calls.extend((self.set_risk, self.informar_motivo))
 
         return calls
 

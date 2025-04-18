@@ -3,6 +3,8 @@
 Includes scheduled jobs and their corresponding crontab configurations.
 """
 
+from __future__ import annotations
+
 from datetime import datetime
 
 from api import db

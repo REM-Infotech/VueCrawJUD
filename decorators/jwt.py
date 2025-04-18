@@ -1,5 +1,7 @@
 """Decorators for JWT authentication in Quart-SocketIO."""
 
+from __future__ import annotations
+
 from functools import wraps
 from typing import Any, Literal, TypeVar
 

@@ -4,6 +4,8 @@ Provide a set of methods to handle site navigation, form filling, document creat
 and PDF processing in compliance with Google/PEP 257 docstring standards.
 """
 
+from __future__ import annotations
+
 import os
 import re
 import shutil
