@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import ModalMessage from "./components/ModalMessage.vue";
+import ModalMessage from "@components/ModalMessage.vue";
 </script>
 
 <template>

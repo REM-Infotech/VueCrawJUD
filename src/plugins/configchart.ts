@@ -1,5 +1,5 @@
+import { api } from "@plugins/axios";
 import type { AxiosResponse } from "axios";
-import { api } from "@/plugins/axios";
 
 export default async function () {
   async function getConfigSystem(): Promise<unknown> {

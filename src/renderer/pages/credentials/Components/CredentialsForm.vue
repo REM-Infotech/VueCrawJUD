@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { faFloppyDisk } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import { useModal } from "bootstrap-vue-next";
 import {
   current_action,
   form,
@@ -9,12 +8,13 @@ import {
   submited,
   submitForm,
   to_modal_message,
-} from "../resources/formcred";
+} from "@plugins/formcred";
+import { useModal } from "bootstrap-vue-next";
 
-import { api } from "@/plugins/axios";
+import { api } from "@plugins/axios";
 
+import { selected2, systems_list } from "@plugins/formcred";
 import { onBeforeMount, watch } from "vue";
-import { selected2, systems_list } from "../resources/formcred";
 const { show: show_load, hide: hide_load } = useModal("modal-load");
 const { show: show_message } = useModal("ModalMessage");
 const { hide: hide_form } = useModal("ModalFormUsr");

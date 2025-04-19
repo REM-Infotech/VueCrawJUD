@@ -4,6 +4,8 @@
     "src/@types/env.d.ts",
     "src/**/*",
     "src/**/*.vue",
+    "src/renderer/**/*.vue",
+    "src/renderer/**/*",
     "src/@types"
   ],
   "exclude": [
@@ -23,6 +25,18 @@
         "./src/plugins/*"
       ],
       "@routes/*": [
+        "./src/renderer/pages/*"
+      ],
+      "@renderer": [
+        "./src/renderer/*"
+      ],
+      "@assets/*": [
+        "./src/renderer/assets/*"
+      ],
+      "@components/*": [
+        "./src/renderer/components/*"
+      ],
+      "@pages/*": [
         "./src/renderer/pages/*"
       ],
     },

@@ -1,6 +1,6 @@
-import "@/assets/css/main.css";
-import "@/assets/css/styles.css";
-import "@/plugins/axios";
+import "@assets/css/main.css";
+import "@assets/css/styles.css";
+import "@plugins/axios";
 import { $ } from "@plugins/globals";
 import "@popperjs/core";
 import { createBootstrap, useModal } from "bootstrap-vue-next";
@@ -12,7 +12,7 @@ import "jquery/dist/jquery.min.js";
 import { createPinia } from "pinia";
 import { createApp } from "vue";
 import App from "./App.vue";
-import router from "./renderer/routes";
+import router from "./routes";
 
 function CreateApp() {
   const pinia = createPinia()

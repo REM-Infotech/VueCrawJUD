@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import NavBarComponent from "@components/NavBarComponent.vue";
+import SideBarComponent from "@components/SideBarComponent.vue";
 import { api } from "@plugins/axios";
 import { $ } from "@plugins/globals";
 import { useModal } from "bootstrap-vue-next";
@@ -6,8 +8,6 @@ import { Chart, type ChartType } from "chart.js/auto";
 import { io as socketio } from "socket.io-client";
 import { onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import NavBarComponent from "../../components/NavBarComponent.vue";
-import SideBarComponent from "../../components/SideBarComponent.vue";
 import ChartProgress from "./components/ChartProgress.vue";
 const { show: show_message } = useModal("ModalMessage");
 

@@ -1,7 +1,7 @@
 <script setup lang="ts">
+import ConfigChart from "@plugins/configchart";
 import { Chart, type ChartConfiguration } from "chart.js/auto";
 import { onMounted } from "vue";
-import ConfigChart from "../resources/configchart";
 
 // Set new default font family and font color to mimic Bootstrap's default styling
 Chart.defaults.font.family =

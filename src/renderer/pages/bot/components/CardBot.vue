@@ -3,8 +3,8 @@ import { current_bot } from "@/services/FormConfig";
 import { api } from "@plugins/axios";
 import { onBeforeMount, ref } from "vue";
 
-import projudiicon from "@/assets/img/projudi.png";
-import iconbot from "@/assets/svg/crawjud2.svg";
+import projudiicon from "@renderer/assets/img/projudi.png";
+import iconbot from "@renderer/assets/svg/crawjud2.svg";
 
 const items = ref<{ system: string; id: number; display_name: string; text: string }[]>([]);
 

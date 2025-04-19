@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import UsersComponent from "../pages/UsersComponent.vue";
 </script>
 
