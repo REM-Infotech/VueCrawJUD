@@ -2,6 +2,7 @@
 import { modeLoadWindow, titleBarStyle } from "@/services/ElectronConfig";
 import { initialize } from "@electron/remote/main/index";
 import "@plugins/handlers";
+import "@plugins/useSequelize";
 import { config as DotEnvConfig } from 'dotenv';
 import { app, BrowserWindow, screen, Tray } from "electron";
 import isDev from "electron-is-dev";
