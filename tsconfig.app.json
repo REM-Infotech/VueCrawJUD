@@ -23,7 +23,7 @@
         "./src/plugins/*"
       ],
       "@routes/*": [
-        "./src/pages/*"
+        "./src/renderer/pages/*"
       ],
     },
     "types": [

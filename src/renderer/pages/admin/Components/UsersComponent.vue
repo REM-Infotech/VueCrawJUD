@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import DataTablesCore from "datatables.net-bs5";
 import DataTable from "datatables.net-vue3";
 import { onBeforeMount, ref } from "vue";
-import { api } from "../../../plugins/axios";
+import { api } from "../../../../plugins/axios";
 import { current_action, delete_call, form, submitForm } from "../resources/formusr";
 const items = ref();
 const submitDelete = () => {
