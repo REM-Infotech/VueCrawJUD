@@ -1,4 +1,4 @@
-import type { LoadWindow, TtitleBarStyle } from "@/types/service";
+import type { LoadWindow, TtitleBarStyle } from "@/@types/service";
 import type { BrowserWindow } from "electron";
 import { dirname, join } from "path";
 import { fileURLToPath } from "url";
