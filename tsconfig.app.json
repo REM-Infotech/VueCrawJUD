@@ -39,6 +39,9 @@
       "@pages/*": [
         "./src/renderer/pages/*"
       ],
+      "@models/*": [
+        "./src/models/*"
+      ],
     },
     "types": [
       "node",

@@ -8,16 +8,45 @@ export const User = sequelize.define<Model<IUser, IUser> & UserModel>('User', {
     autoIncrement: true,
     primaryKey: true
   },
-  username: DataTypes.STRING,
-  birthday: DataTypes.DATE,
+  username: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  createdAt: {
+    type: DataTypes.DATE,
+    allowNull: false,
+    defaultValue: DataTypes.NOW
+  },
+  updatedAt: {
+    type: DataTypes.DATE,
+    allowNull: false,
+    defaultValue: DataTypes.NOW
+  }
+}, {
+  timestamps: true,
+  tableName: 'Users'
 });
+
+// Example usage
+async function createUser() {
+  try {
+    const user = await User.create({
+      username: 'John Doe'
+    });
+    console.log(user.get({ plain: true }));
+  } catch (error) {
+    console.error('Error creating user:', error);
+  }
+}
+
+await createUser()
 
 User.findAll().then((users) => {
 
   users.forEach((user) => {
 
     user.get({ plain: true });
-    console.log(user.username, user.birthday);
+    console.log(user.username);
 
   })
 

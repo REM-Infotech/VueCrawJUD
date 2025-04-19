@@ -1,8 +1,8 @@
 
 import { modeLoadWindow, titleBarStyle } from "@/services/ElectronConfig";
 import { initialize } from "@electron/remote/main/index";
+import "@models/userModel";
 import "@plugins/handlers";
-import "@plugins/useSequelize";
 import { config as DotEnvConfig } from 'dotenv';
 import { app, BrowserWindow, screen, Tray } from "electron";
 import isDev from "electron-is-dev";
@@ -11,7 +11,7 @@ import process from "process";
 import "./util";
 DotEnvConfig()
 
-const icon = join(process.cwd(), "src", "assets", "img", "icon.ico")
+const icon = join(process.cwd(), "src", "renderer", "assets", "img", "icon.ico")
 export let traywindow: Tray;
 export let mainWindow: BrowserWindow;
 

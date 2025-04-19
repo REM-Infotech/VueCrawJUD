@@ -30,6 +30,7 @@ export default defineConfig({
       "@assets": fileURLToPath(new URL("./src/renderer/assets", import.meta.url)),
       "@components": fileURLToPath(new URL("./src/renderer/components", import.meta.url)),
       "@pages": fileURLToPath(new URL("./src/renderer/pages", import.meta.url)),
+      "@models": fileURLToPath(new URL("./src/models", import.meta.url)),
     },
   },
   build: {

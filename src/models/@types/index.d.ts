@@ -1,7 +1,6 @@
 export interface IUser {
   id?: number;
   username: string;
-  birthday: Date;
   createdAt?: Date;
   updatedAt?: Date;
 }
