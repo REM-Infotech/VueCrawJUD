@@ -144,4 +144,6 @@ async def refresh() -> Response:
     """Refresh the access token."""
     current_user = get_jwt_identity()
     new_access_token = create_access_token(identity=current_user)
-    return await make_response(jsonify(access_token=new_access_token), 200)
+    new_refresh_token = create_refresh_token(identity=current_user)
+
+    return await make_response(jsonify(access_token=new_access_token, refresh_token=new_refresh_token), 200)
