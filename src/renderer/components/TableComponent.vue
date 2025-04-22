@@ -1,15 +1,15 @@
 <script setup lang="ts">
 import { faDownload, faEye } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import { api } from "@plugins/axios";
-import { $ } from "@plugins/globals";
+import { api } from "@shared/axios";
+import { $ } from "@shared/index";
 import type { AxiosResponse } from "axios";
 import { useModal } from "bootstrap-vue-next";
 import DataTablesCore from "datatables.net-bs5";
 
+import { convertDate } from "@shared/convert_date";
 import DataTable from "datatables.net-vue3";
 import { onMounted, ref } from "vue";
-import { convertDate } from "../plugins/convert_date";
 DataTable.use(DataTablesCore);
 
 const options = {

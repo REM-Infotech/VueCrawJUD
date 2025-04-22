@@ -1,19 +1,18 @@
 <script setup lang="ts">
 import NavBarComponent from "@components/NavBarComponent.vue";
 import SideBarComponent from "@components/SideBarComponent.vue";
-import { api } from "@plugins/axios";
-import { $ } from "@plugins/globals";
+import { api } from "@shared/axios";
+import { $ } from "@shared/index";
+import { type AxiosResponse } from "axios";
 import { useModal } from "bootstrap-vue-next";
 import { Chart, type ChartType } from "chart.js/auto";
 import { io as socketio } from "socket.io-client";
 import { onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import ChartProgress from "./components/ChartProgress.vue";
-const { show: show_message } = useModal("ModalMessage");
-
-import { type AxiosResponse } from "axios";
 import LogsView from "./components/LogsView.vue";
 
+const { show: show_message } = useModal("ModalMessage");
 let Pages: number;
 let LogsBotChart: Chart | null = null;
 const route = useRoute();

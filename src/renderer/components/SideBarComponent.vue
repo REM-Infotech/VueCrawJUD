@@ -9,8 +9,8 @@ import {
   faTable,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import { api } from "@plugins/axios";
-import { $ } from "@plugins/globals";
+import { api } from "@shared/axios";
+import { $ } from "@shared/index";
 import { useModal } from "bootstrap-vue-next";
 import { RouterLink } from "vue-router";
 

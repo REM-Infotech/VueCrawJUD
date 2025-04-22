@@ -1,4 +1,4 @@
-import { api } from "@plugins/axios";
+import { api } from "@shared/axios";
 import type { AxiosResponse } from "axios";
 
 export default async function () {

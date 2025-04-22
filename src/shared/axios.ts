@@ -1,5 +1,5 @@
 import { router } from "@/renderer/router";
-import { $ } from "@plugins/globals";
+import { $ } from "@shared/index";
 import axios, { isAxiosError } from "axios";
 import { useModal } from "bootstrap-vue-next";
 

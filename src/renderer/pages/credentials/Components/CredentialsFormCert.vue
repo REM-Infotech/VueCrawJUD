@@ -9,7 +9,7 @@ import {
   submited,
   submitForm,
   to_modal_message,
-} from "../../../../plugins/formcred";
+} from "../../../../shared/formcred";
 
 import { onBeforeMount, watch } from "vue";
 const { show: show_load, hide: hide_load } = useModal("modal-load");

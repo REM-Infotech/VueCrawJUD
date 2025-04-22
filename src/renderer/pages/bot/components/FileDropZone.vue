@@ -1,25 +1,3 @@
-<template>
-  <div
-    :data-active="active"
-    @click="openFileDialog"
-    @dragenter.prevent="setActive"
-    @dragover.prevent="setActive"
-    @dragleave.prevent="setInactive"
-    @drop.prevent="onDrop"
-  >
-    <slot :dropZoneActive="active" aria-required="true"></slot>
-    <!-- Input de arquivo oculto -->
-    <input
-      ref="fileInput"
-      type="file"
-      multiple
-      style="display: none"
-      @change="onFileChange"
-      aria-required="true"
-    />
-  </div>
-</template>
-
 <script setup>
 import { onMounted, onUnmounted, ref } from "vue";
 const emit = defineEmits(["files-dropped"]);
@@ -76,3 +54,24 @@ function onFileChange(event) {
   event.target.value = "";
 }
 </script>
+<template>
+  <div
+    :data-active="active"
+    @click="openFileDialog"
+    @dragenter.prevent="setActive"
+    @dragover.prevent="setActive"
+    @dragleave.prevent="setInactive"
+    @drop.prevent="onDrop"
+  >
+    <slot :dropZoneActive="active" aria-required="true"></slot>
+    <!-- Input de arquivo oculto -->
+    <input
+      ref="fileInput"
+      type="file"
+      multiple
+      style="display: none"
+      @change="onFileChange"
+      aria-required="true"
+    />
+  </div>
+</template>

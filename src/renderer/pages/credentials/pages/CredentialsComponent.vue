@@ -1,14 +1,13 @@
 <script setup lang="ts">
 import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import { api } from "@plugins/axios";
-import { $ } from "@plugins/globals";
+import { api } from "@shared/axios";
+import { $, current_action, delete_call } from "@shared/index";
 import { type AxiosResponse } from "axios";
 import { useModal } from "bootstrap-vue-next";
 import DataTablesCore from "datatables.net-bs5";
 import DataTable from "datatables.net-vue3";
 import { onBeforeMount, ref } from "vue";
-import { current_action, delete_call } from "../../../../plugins/formcred";
 const items = ref();
 
 const { show: show_message } = useModal("ModalMessage");

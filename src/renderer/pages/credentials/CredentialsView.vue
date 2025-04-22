@@ -2,7 +2,7 @@
 import NavBarComponent from "@components/NavBarComponent.vue";
 import SideBarComponent from "@components/SideBarComponent.vue";
 import { onBeforeMount } from "vue";
-import { form } from "../../../plugins/formcred";
+import { form } from "../../../shared/formcred";
 import ModalCadUsr from "./Components/CredentialsForm.vue";
 import TableConfig from "./Components/TableConfig.vue";
 

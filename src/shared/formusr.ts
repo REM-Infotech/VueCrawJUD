@@ -1,23 +1,21 @@
-import { api } from "@plugins/axios";
-import { $ } from "@plugins/globals";
-import { AxiosError, type AxiosResponse } from "axios";
+import { api } from "@shared/axios";
+import { $ } from "@shared/index";
 import { reactive, ref } from "vue";
 export const form = reactive({
   id: 0,
-  name_credential: "",
+  email: "",
+  name: "",
   login: "",
   password: "",
 
   reset: () => {
     form.id = 0;
-    form.name_credential = "";
+    form.email = "";
+    form.name = "";
     form.login = "";
     form.password = "";
   },
 });
-
-export const selected2 = ref(null);
-export const systems_list = ref<unknown[]>([{ value: null, text: "Carregando", disabled: true }]);
 
 export const delete_call = ref(false);
 export const current_action = ref("");
@@ -28,18 +26,27 @@ export const to_modal_message = ref(false);
 
 export async function submitForm(e: Event) {
   submited.value = true;
+
   e.preventDefault();
 
-  const systembot = selected2.value as unknown as string;
   const formData = new FormData();
-  formData.append("nome_cred", form.name_credential);
-  formData.append("system", systembot);
-  formData.append("auth_method", "pw");
+  formData.append("nome_usuario", form.name);
   formData.append("login", form.login);
+  formData.append("email", form.email);
   formData.append("password", form.password);
 
+  if (current_action.value.includes("Editar")) {
+    formData.append("id", form.id.toString());
+    formData.append("method_request", "UPDATE");
+  } else if (current_action.value.includes("Cadastrar")) {
+    formData.append("method_request", "INSERT");
+  } else if (delete_call.value === true) {
+    formData.append("id", form.id.toString());
+    formData.append("method_request", "DELETE");
+  }
+
   api
-    .post("/peform_credencial", formData, {
+    .post("/users", formData, {
       withXSRFToken: true,
       withCredentials: true,
       headers: {
@@ -48,17 +55,19 @@ export async function submitForm(e: Event) {
         "x-csrf-token": sessionStorage.getItem("x-csrf-token") || "",
       },
     })
-    .then((response: AxiosResponse) => {
+    .then((response) => {
       if (response.status === 200) {
+        $("#message").text(response.data.message);
+      } else {
         $("#message").text(response.data.message);
       }
       to_modal_message.value = true;
     })
-    .catch((error: AxiosError) => {
-      const response = error.response as AxiosResponse;
-      const message = response.data.message as string;
 
-      $("#message").text(message);
+    .catch((response) => {
+      console.log(response);
+
+      $("#message").text(response.data.message);
 
       to_modal_message.value = true;
     });

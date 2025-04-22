@@ -1,15 +1,15 @@
 <script setup lang="ts">
 import { faCheckSquare, faFileDownload, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import FormConfig, { current_bot } from "@shared/FormConfig";
 import { type Api as Dt } from "datatables.net";
 import DataTablesCore from "datatables.net-bs5";
 import DataTable from "datatables.net-vue3";
 import { onMounted, ref } from "vue";
-import FormConfig, { current_bot } from "../../../../services/FormConfig.ts";
 import DropZone from "./FileDropZone.vue";
 
-import { api } from "@plugins/axios";
-import { $ } from "@plugins/globals";
+import { api } from "@shared/axios";
+import { $ } from "@shared/index";
 import { isAxiosError } from "axios";
 import { BvTriggerableEvent, useModal } from "bootstrap-vue-next";
 import { useRouter } from "vue-router";

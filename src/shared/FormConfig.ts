@@ -1,4 +1,4 @@
-import { $ } from "@plugins/globals";
+import { $ } from "@shared/index";
 import { useModal } from "bootstrap-vue-next";
 import { ref } from "vue";
 

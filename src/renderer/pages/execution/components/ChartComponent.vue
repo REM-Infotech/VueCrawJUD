@@ -1,30 +1,3 @@
-<template>
-  <div class="row">
-    <div class="col-xl-6">
-      <div class="card mb-4">
-        <div class="card-header">
-          <i class="fas fa-chart-bar me-1"></i>
-          Bar Chart Example
-        </div>
-        <div class="card-body">
-          <canvas id="myBarChart" width="100%" height="40"></canvas>
-        </div>
-      </div>
-    </div>
-    <div class="col-xl-6">
-      <div class="card mb-4">
-        <div class="card-header">
-          <i class="fas fa-chart-area me-1"></i>
-          Area Chart Example
-        </div>
-        <div class="card-body">
-          <canvas id="myAreaChart" width="100%" height="40"></canvas>
-        </div>
-      </div>
-    </div>
-  </div>
-</template>
-
 <script setup lang="ts">
 import { Chart } from "chart.js/auto";
 import { onMounted } from "vue";
@@ -146,33 +119,31 @@ onMounted(() => {
       },
     },
   });
-
-  // $.ajax({
-  //   url: "/most_executed",
-  //   type: "GET",
-  //   success: function (data) {
-  //     most_executed.data.labels = data.labels;
-  //     most_executed.data.datasets[0].data = data.values;
-  //     most_executed.update();
-  //   },
-  // });
-  // $.ajax({
-  //   url: "/PerMonth",
-  //   type: "GET",
-  //   success: function (data) {
-  //     month_chart.data?.labels?.forEach((item, pos) => {
-  //       for (const label of data.labels) {
-  //         if (
-  //           month_chart.data.labels &&
-  //           month_chart.data.labels[pos].toLowerCase() === label.toLowerCase()
-  //         ) {
-  //           month_chart.data.datasets[0].data[pos] = data.values[pos];
-  //           break;
-  //         }
-  //       }
-  //     });
-  //     month_chart.update();
-  //   },
-  // });
 });
 </script>
+<template>
+  <div class="row">
+    <div class="col-xl-6">
+      <div class="card mb-4">
+        <div class="card-header">
+          <i class="fas fa-chart-bar me-1"></i>
+          Bar Chart Example
+        </div>
+        <div class="card-body">
+          <canvas id="myBarChart" width="100%" height="40"></canvas>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-6">
+      <div class="card mb-4">
+        <div class="card-header">
+          <i class="fas fa-chart-area me-1"></i>
+          Area Chart Example
+        </div>
+        <div class="card-body">
+          <canvas id="myAreaChart" width="100%" height="40"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>

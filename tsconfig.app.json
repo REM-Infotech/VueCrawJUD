@@ -21,8 +21,8 @@
       "@/*": [
         "./src/*"
       ],
-      "@plugins/*": [
-        "./src/plugins/*"
+      "@shared/*": [
+        "./src/shared/*"
       ],
       "@routes/*": [
         "./src/renderer/pages/*"

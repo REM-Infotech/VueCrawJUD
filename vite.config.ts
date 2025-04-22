@@ -25,7 +25,7 @@ export default defineConfig({
     alias: {
       "@": fileURLToPath(new URL("./src", import.meta.url)),
       "@renderer": fileURLToPath(new URL("./src/renderer", import.meta.url)),
-      "@plugins": fileURLToPath(new URL("./src/plugins", import.meta.url)),
+      "@shared": fileURLToPath(new URL("./src/shared", import.meta.url)),
       "@routes": fileURLToPath(new URL("./src/routes", import.meta.url)),
       "@assets": fileURLToPath(new URL("./src/renderer/assets", import.meta.url)),
       "@components": fileURLToPath(new URL("./src/renderer/components", import.meta.url)),

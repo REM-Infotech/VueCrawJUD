@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { current_bot } from "@/services/FormConfig";
-import { api } from "@plugins/axios";
+import { current_bot } from "@shared/FormConfig";
+import { api } from "@shared/axios";
 import { onBeforeMount, ref } from "vue";
 
 import projudiicon from "@renderer/assets/img/projudi.png";

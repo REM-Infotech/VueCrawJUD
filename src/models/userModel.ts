@@ -1,4 +1,4 @@
-import { sequelize } from '@plugins/useSequelize';
+import { sequelize } from '@shared/useSequelize';
 import { DataTypes, Model } from 'sequelize';
 import type { IUser, UserModel } from './@types';
 

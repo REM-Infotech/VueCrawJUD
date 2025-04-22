@@ -1,19 +1,12 @@
 <script setup lang="ts">
 import { faFloppyDisk } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import {
-  current_action,
-  form,
-  state_modal,
-  submited,
-  submitForm,
-  to_modal_message,
-} from "@plugins/formcred";
+import { api } from "@shared/axios";
+import { form, submitForm } from "@shared/formcred";
+import { current_action, state_modal, submited, to_modal_message } from "@shared/index";
 import { useModal } from "bootstrap-vue-next";
 
-import { api } from "@plugins/axios";
-
-import { selected2, systems_list } from "@plugins/formcred";
+import { selected2, systems_list } from "@shared/index";
 import { onBeforeMount, watch } from "vue";
 const { show: show_load, hide: hide_load } = useModal("modal-load");
 const { show: show_message } = useModal("ModalMessage");

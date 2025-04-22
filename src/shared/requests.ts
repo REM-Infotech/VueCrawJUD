@@ -1,5 +1,5 @@
-import { api } from "@plugins/axios";
-import { $ } from "@plugins/globals";
+import { api } from "@shared/axios";
+import { $ } from "@shared/index";
 import { useModal } from "bootstrap-vue-next";
 
 export async function getExecutions() {

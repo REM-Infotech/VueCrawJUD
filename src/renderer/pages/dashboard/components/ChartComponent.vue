@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import ConfigChart from "@plugins/configchart";
+import ConfigChart from "@shared/configchart";
 import { Chart, type ChartConfiguration } from "chart.js/auto";
 import { onMounted } from "vue";
 

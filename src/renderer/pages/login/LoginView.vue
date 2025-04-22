@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import NavLogin from "@components/NavLogin.vue";
-import { loadingBuzy, onBuzyHidden, setBuzyClick } from "@plugins/animations";
-import { api } from "@plugins/axios";
-import { $ } from "@plugins/globals";
+import { loadingBuzy, onBuzyHidden, setBuzyClick } from "@shared/animations";
+import { api } from "@shared/axios";
+import { $ } from "@shared/index";
 import { useModal } from "bootstrap-vue-next";
 import { onBeforeMount, onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
