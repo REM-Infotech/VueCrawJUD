@@ -1,13 +1,5 @@
 <script setup lang="ts">
-import {
-  faArrowRightFromBracket,
-  faGear,
-  faHome,
-  faKey,
-  faListCheck,
-  faRobot,
-  faTable,
-} from "@fortawesome/free-solid-svg-icons";
+import { faArrowRightFromBracket } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { api } from "@shared/axios";
 import { RouterLink, useRouter } from "vue-router";
@@ -40,7 +32,7 @@ const handleLogoutClick = (e: Event) => {
         <span class="fs-4 fw-bold align-middle">CrawJUD <span class="fs-6 text">v0.1.0</span></span>
       </RouterLink>
       <hr />
-      <ul class="nav nav-pills flex-column mb-auto">
+      <!-- <ul class="nav nav-pills flex-column mb-auto">
         <li class="nav-item mb-1">
           <RouterLink :to="{ name: 'index' }" class="nav-link link-body-emphasis">
             <FontAwesomeIcon :icon="faHome" class="me-2" />
@@ -78,7 +70,7 @@ const handleLogoutClick = (e: Event) => {
             <span class="text">Configurações</span>
           </RouterLink>
         </li>
-      </ul>
+      </ul> -->
     </div>
     <footer class="offcanvas-footer">
       <div class="dropdown">
