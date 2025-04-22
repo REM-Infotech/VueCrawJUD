@@ -98,7 +98,7 @@ class DriverBot(CrawJUD):
         if platform.system() == "Windows" and self.login_method == "cert":
             state = str(self.state)
             self.path_accepted = Path(
-                path.join(Path(getcwd()).resolve(), "Browser", state, self.username, "chrome"),
+                path.join(Path(__file__).cwd().resolve(), "Browser", state, self.username, "chrome"),
             )
             path_exist = self.path_accepted.exists()
             if path_exist:
@@ -177,7 +177,7 @@ class DriverBot(CrawJUD):
             if platform.system() == "Windows":
                 webdriver_options = ChromeOptions()
 
-                # webdriver_options.binary_location = str(Path(getcwd()).joinpath("chrome-win64", "chrome.exe"))
+                # webdriver_options.binary_location = str(Path(__file__).cwd().joinpath("chrome-win64", "chrome.exe"))
 
                 self.create_path_accepted()
                 self.add_options(webdriver_options)

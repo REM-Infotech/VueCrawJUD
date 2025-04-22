@@ -6,7 +6,7 @@ import logging
 import platform
 import secrets
 from datetime import timedelta
-from os import environ, getcwd
+from os import environ
 from pathlib import Path
 from threading import Thread
 
@@ -20,7 +20,7 @@ from dotenv_vault import load_dotenv
 
 load_dotenv()
 
-workdir = Path(getcwd()).joinpath("crawjud")
+workdir = Path(__file__).cwd().joinpath("crawjud")
 running_servers: dict[str, StoreService] = {}
 
 

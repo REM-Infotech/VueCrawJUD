@@ -125,7 +125,8 @@ class TaskExec:
 
         """
         path_pid = (
-            Path(getcwd())
+            Path(__file__)
+            .cwd()
             .joinpath(
                 "crawjud",
                 "bot",

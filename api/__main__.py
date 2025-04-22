@@ -1,7 +1,6 @@
 """Entrypoint for the server application."""
 
 import asyncio
-from os import getcwd
 from platform import node
 
 import hypercorn
@@ -27,7 +26,7 @@ if __name__ == "__main__":
     config.loglevel = "debug"
     config.use_reloader = True
 
-    log_file = Path(getcwd()).joinpath("logs", "hypercorn_api.log")
+    log_file = Path(__file__).cwd().joinpath("logs", "hypercorn_api.log")
     cfg, _ = log_cfg(log_file=log_file)
     config.logconfig_dict = cfg
 

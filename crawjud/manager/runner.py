@@ -3,7 +3,7 @@
 import asyncio
 import json
 import logging
-from os import environ, getcwd, getenv
+from os import environ, getenv
 from pathlib import Path
 from platform import node
 from queue import Queue  # noqa: F401
@@ -83,7 +83,7 @@ def start_beat() -> None:
                 scheduler="crawjud.utils.scheduler:DatabaseScheduler",
                 max_interval=5,
                 loglevel="INFO",
-                logfile=Path(getcwd()).joinpath("logs", "beat_celery.log"),
+                logfile=Path(__file__).cwd().joinpath("logs", "beat_celery.log"),
                 no_color=False,
             )
             beat.run()
@@ -111,7 +111,7 @@ class RunnerServices:
             stop_event (Event): Event to signal the thread to stop.
 
         """
-        log_file = Path(getcwd()).joinpath("logs", "uvicorn_api.log")
+        log_file = Path(__file__).cwd().joinpath("logs", "uvicorn_api.log")
         cfg, _ = log_cfg(log_file=log_file)
         port = getenv("SERVER_PORT", 5000)
         hostname = "0.0.0.0"  # noqa: S104

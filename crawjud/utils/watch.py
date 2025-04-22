@@ -4,7 +4,6 @@ This module sets up a Socket.IO client that listens to logging events from
 various services (web, worker, beat) and prints them using tqdm.
 """
 
-from os import getcwd
 from pathlib import Path
 from threading import Event, Thread
 from typing import Any
@@ -31,7 +30,7 @@ def monitor_log(file_name: str = None, file_path: Path = None) -> None:
     stop_event = Event()
 
     if not file_path:
-        file_path = Path(getcwd()).joinpath("logs", file_name)
+        file_path = Path(__file__).cwd().joinpath("logs", file_name)
 
     if not isinstance(file_path, Path):
         raise ValueError("file_path must be a pathlib.Path object.")

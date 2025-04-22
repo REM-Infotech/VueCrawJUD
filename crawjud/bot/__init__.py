@@ -62,7 +62,7 @@ class WorkerBot:
     def unzip_file(cls, zip_name: Path) -> None:
         """Extract a ZIP file into a subfolder with the same name."""
         path = zip_name.parent.resolve().joinpath(zip_name.name.split(".")[0])
-        unziped_tmp_folder = Path(getcwd()).joinpath(path.name)
+        unziped_tmp_folder = Path(__file__).cwd().joinpath(path.name)
         with zipfile.ZipFile(zip_name, "r") as zip_ref:
             # Extract each file directly into the subfolder
             for member in zip_ref.namelist():
