@@ -65,7 +65,6 @@ export async function submitForm(e: Event) {
     })
 
     .catch((response) => {
-      console.log(response);
 
       $("#message").text(response.data.message);
 

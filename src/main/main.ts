@@ -2,15 +2,13 @@
 import { initialize } from "@electron/remote/main/index";
 import "@models/userModel";
 import { modeLoadWindow, titleBarStyle } from "@shared/ElectronConfig";
-import "@shared/ipc";
 import { config as DotEnvConfig } from 'dotenv';
 import { app, BrowserWindow, screen, Tray } from "electron";
 import isDev from "electron-is-dev";
 import { join } from "path";
-import process from "process";
 DotEnvConfig()
 
-const icon = join(process.cwd(), "src", "renderer", "assets", "img", "icon.png")
+
 export let traywindow: Tray;
 export let mainWindow: BrowserWindow;
 
@@ -36,7 +34,7 @@ const createWindow = async () => {
     }
   }
   mainWindow = new BrowserWindow({
-    icon: icon,
+    icon: join(process.cwd(), "src", "renderer", "assets", "img", "icon.png"),
     minWidth: minWidth,
     minHeight: minHeight,
     width: minWidth,
@@ -49,9 +47,24 @@ const createWindow = async () => {
   });
 
   await modeLoadWindow[isDev ? "true" : "false"](mainWindow);
-  traywindow = new Tray(icon);
+  await import("@/ipc/FileBhavior")
+  await import("@/ipc/WinBehavior")
+  await import("@/ipc/ThemeBehavior")
+  await import("./components")
 };
 
 
 app.whenReady().then(createWindow);
 
+
+app.on('window-all-closed', () => {
+  if (process.platform !== 'darwin') {
+    app.quit()
+  }
+})
+
+app.on('activate', () => {
+  if (BrowserWindow.getAllWindows().length === 0) {
+    createWindow()
+  }
+})

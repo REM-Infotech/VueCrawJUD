@@ -25,6 +25,8 @@ declare global {
       close: () => void;
       perform: (form: formType) => void;
       file_save: (file: string, csrf_token: string, api_key: string) => Promise<void>;
+      save_credentials: (username: string, password: string) => Promise<void>;
+      get_credentials: () => Promise<{ success: boolean, username: string; password: string }>;
     };
   }
   interface FileObject {

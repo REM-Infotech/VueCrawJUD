@@ -30,24 +30,6 @@ onMounted(async function () {
 const download_file = (file: string) => {
   window.electronAPI.file_save(file, authStore["x-csrf-token"], authStore.token);
 };
-// const download_file = async (file: string) => {
-//   show_load();
-
-//   setTimeout(async () => {
-//     api.get(`/executions/download/${file}`).then((response: AxiosResponse) => {
-//       const data = response.data;
-//       const url: string = data.url;
-//       window.open(url, "_blank");
-
-//       setTimeout(() => {
-//         hide_load();
-//       }, 500);
-
-//       $("#message").text(`Download do arquivo "${file}" iniciado!`);
-//       show_message();
-//     });
-//   }, 1000);
-// };
 </script>
 
 <template>

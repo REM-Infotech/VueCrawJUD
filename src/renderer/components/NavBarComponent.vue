@@ -1,8 +1,26 @@
 <template>
   <BNavbar v-b-color-mode="'dark'" toggleable="lg" variant="dark" class="titlebar">
-    <BNavbarBrand>
-      <img src="../assets/img/icon.ico" alt="logo" width="20%" />
+    <BNavbarBrand
+      href="#"
+      data-bs-toggle="offcanvas"
+      data-bs-target="#offcanvasWithBothOptions"
+      aria-controls="offcanvasWithBothOptions"
+      class="rounded rounded-2"
+    >
+      <img src="../assets/img/icon.ico" alt="logo" width="35px" />
+      <button
+        class="navbar-toggler rounded"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarsExample06"
+        aria-controls="navbarsExample06"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
     </BNavbarBrand>
+    <BNavbarBrand> </BNavbarBrand>
     <BNavbarNav class="ms-auto">
       <BButton size="sm" variant="outline-primary" @click="MinimizeWindow" class="me-2">
         <span>

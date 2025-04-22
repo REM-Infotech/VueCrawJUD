@@ -8,3 +8,5 @@ import TableComponent from "@components/TableComponent.vue";
     <TableComponent />
   </BContainer>
 </template>
+
+<style></style>

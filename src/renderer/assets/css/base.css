@@ -50,21 +50,15 @@
   }
 }
 
-/* *,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-  font-weight: normal;
-} */
-
 .no_overflow {
   overflow: hidden;
 }
 
+
+
 body {
 
-  min-height: 100vh;
+  max-height: 10vh;
   color: var(--color-text);
   background: var(--color-background);
   transition:
@@ -88,4 +82,8 @@ body {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+#dashboard_container {
+  overflow-y: visible;
 }

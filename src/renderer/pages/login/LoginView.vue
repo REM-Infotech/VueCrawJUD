@@ -18,8 +18,8 @@ const FormLogin = reactive({
 
 const authStore = tokenStore();
 
-async function handleSubmit(e: Event) {
-  e.preventDefault();
+async function handleSubmit(e?: Event) {
+  if (e) e.preventDefault();
 
   let response: LoginResponse;
 
@@ -39,6 +39,10 @@ async function handleSubmit(e: Event) {
     );
 
     if (response.status === 200) {
+      if (FormLogin.remember_me) {
+        await window.electronAPI.save_credentials(FormLogin.login, FormLogin.password);
+      }
+
       authStore.save(response);
       router.push({ name: "dashboard" });
     } else if (response.data.message === "Usuário ou senha incorretos!") {
@@ -52,7 +56,16 @@ async function handleSubmit(e: Event) {
   }
 }
 
-onBeforeMount(() => {
+onBeforeMount(async () => {
+  const creds = await window.electronAPI.get_credentials();
+
+  if (creds.success) {
+    FormLogin.login = creds.username;
+    FormLogin.password = creds.password;
+    FormLogin.remember_me = true;
+    handleSubmit();
+  }
+
   if (authStore.isLogged()) {
     router.push({ name: "dashboard" });
   }

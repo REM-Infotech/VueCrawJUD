@@ -1,4 +1,6 @@
-interface ResponseApi {
+import type { AxiosResponse } from "axios";
+
+interface ResponseApi extends AxiosResponse {
 
   status: number;
   data: {
@@ -7,11 +9,14 @@ interface ResponseApi {
 
 }
 
-interface ResponseGoogleStorage {
+interface ResponseGoogleStorage extends AxiosResponse {
 
   status: number;
-  data: {
-    file: File
+  data: ArrayBuffer
+  headers: {
+    "Content-Type": string;
+    "Content-Disposition": string;
+    "Content-Length": string;
   }
 
 }

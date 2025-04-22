@@ -11,6 +11,9 @@ contextBridge.exposeInMainWorld("electronAPI", {
    * @returns
    */
   file_save: (file, csrf, api_token) => ipcRenderer.send("file_save", file, csrf, api_token),
+  // save_credentials: (username, password) =>
+  //   ipcRenderer.invoke("save_credentials", username, password),
+  // get_credentials: (service) => ipcRenderer.invoke("get_credentials", service),
 });
 
 contextBridge.exposeInMainWorld("darkMode", {
