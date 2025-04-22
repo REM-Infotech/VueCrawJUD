@@ -52,7 +52,7 @@ const createWindow = async () => {
 
 app.whenReady().then(createWindow);
 
-app.on("window-all-closed", () => {
+app.on("window-all-closed", async () => {
   if (process.platform !== "darwin") {
     app.quit();
   }

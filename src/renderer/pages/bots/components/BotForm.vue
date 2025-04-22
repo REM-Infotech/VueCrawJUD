@@ -5,49 +5,30 @@ import FormConfig, { current_bot } from "@shared/FormConfig";
 import { type Api as Dt } from "datatables.net";
 import DataTablesCore from "datatables.net-bs5";
 import DataTable from "datatables.net-vue3";
-import { onMounted, reactive, ref } from "vue";
+import { onMounted } from "vue";
 import DropZone from "./FileDropZone.vue";
 
-import type { TFormBot } from "@/@types/FormBot";
-import { tokenStore } from "@/store/tokenAuthStore";
+import type { TSelectInput } from "@/@types/FormBot";
+import { loadCredentials, loadStateClient } from "@/shared/LoadDataBot";
 import { api } from "@shared/axios";
 import { $ } from "@shared/index";
-import { isAxiosError } from "axios";
-import { BvTriggerableEvent, useModal } from "bootstrap-vue-next";
 import { watch } from "vue";
-import { useRouter } from "vue-router";
+import FormSetup from "./constants";
+
+const {
+  bot_protocolo,
+  FormBot,
+  hide_load,
+  router,
+  selected,
+  selected2,
+  show_form,
+  show_load,
+  show_message,
+  TitleForm,
+} = FormSetup();
+
 let dt: Dt;
-
-interface item_type {
-  id: number;
-  system: string;
-  state: string;
-  client: string;
-  type: string;
-  display_name: string;
-  form_cfg: string;
-}
-
-const { show: show_load, hide: hide_load } = useModal("modal-load");
-const { show: show_message } = useModal("ModalMessage");
-const TitleForm = ref("Carregando");
-const selected = ref(null);
-const need_files = ref(true);
-const need_options = ref(true);
-const bot_protocolo = ref(false);
-
-const state_client_type = ref("");
-
-const selected2 = ref(null);
-const router = useRouter();
-
-const FormBot = reactive<TFormBot>({
-  system: "",
-  state_client: [{ value: null, text: "Carregando" }],
-  credentials: [{ value: null, text: "Carregando" }],
-  type: "",
-  files: [],
-});
 
 watch(FormBot.files, () => {
   FormBot.files = files.value;
@@ -72,7 +53,7 @@ onMounted(() => {
 });
 
 const validate_form = () => {
-  if (need_files.value === true) {
+  if (FormBot.need_files === true) {
     if (FilesListable.value.length === 0) {
       $("#message").text("Selecione ao menos um arquivo.");
       show_message();
@@ -80,7 +61,7 @@ const validate_form = () => {
     }
   }
 
-  if (need_options.value === true) {
+  if (FormBot.need_options === true) {
     if (selected.value === null || selected2.value === null) {
       $("#message").text("Selecione as opções necessárias.");
       show_message();
@@ -97,92 +78,44 @@ const validate_form = () => {
   return true;
 };
 
-const setup_form = async (e: BvTriggerableEvent) => {
-  let response_creds;
-  let response_state_client;
-  const item: item_type = current_bot.value;
+const setup_form = async () => {
+  const item = current_bot.value;
 
   if (item.form_cfg === "only_auth") {
-    need_files.value = false;
+    FormBot.need_files = false;
   } else if (item.form_cfg === "only_file") {
-    need_options.value = false;
+    FormBot.need_options = false;
   }
 
   if (item.type == "PROTOCOLO") {
     bot_protocolo.value = true;
   }
 
+  let credentials: TSelectInput[];
   try {
-    response_creds = await api.post(
-      `/acquire_credentials`,
-      {
-        system: item.system,
-        state: item.state,
-        client: item.client,
-        form_cfg: item.form_cfg,
-      },
-      {
-        headers: {
-          "X-CSRF-TOKEN": tokenStore()["x-csrf-token"],
-        },
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        withXSRFToken(config) {
-          return true;
-        },
-      },
-    );
-  } catch (error: unknown) {
-    // Check if response.status is 4** error and not 404
+    credentials = await loadCredentials(item);
+    const { state_client, isStateOrClient } = await loadStateClient(item);
 
-    if (isAxiosError(error) && error.response?.status !== 404) {
-      const response = error.response;
+    TitleForm.value = item.display_name;
 
-      // Check if message is "missing csrf token"
-      if (response?.data.msg === "Missing CSRF token") {
-        $("#message").text("CSRF Token inválido.");
-        show_message();
-      }
-    }
-    e.preventDefault();
+    FormBot.credentials.items = credentials;
+    FormBot.state_client.items = state_client;
+
+    FormBot.state_client_type = isStateOrClient;
+
+    show_form();
+  } catch (error) {
+    console.log(error);
     return;
   }
-
-  try {
-    response_state_client = await api.post(
-      `/acquire_systemclient`,
-      {
-        system: item.system,
-        state: item.state,
-        client: item.client,
-        form_cfg: item.form_cfg,
-        type: item.type,
-      },
-      {
-        headers: {
-          "X-CSRF-TOKEN": tokenStore()["x-csrf-token"],
-        },
-      },
-    );
-  } catch {
-    e.preventDefault();
-    return;
-  }
-
-  TitleForm.value = item.display_name;
-  const cred_info = response_creds.data.info;
-  const state_client_info = response_state_client.data.info;
-
-  FormBot.credentials = cred_info;
-  FormBot.state_client = state_client_info;
-
-  state_client_type.value = response_state_client.data.type;
 };
 
 DataTable.use(DataTablesCore);
 
 async function peformSubmit(event: Event) {
   event.preventDefault();
-  const item: item_type = current_bot.value;
+  const item = current_bot.value;
+
   show_load();
   if (validate_form() === false) {
     setTimeout(() => {
@@ -192,11 +125,11 @@ async function peformSubmit(event: Event) {
   }
 
   const formData = new FormData();
-  formData.append("creds", selected.value || "");
-  formData.append(state_client_type.value, selected2.value || "");
-
-  // console.log(FilesListable.value);
-
+  formData.append("creds", FormBot.credentials.selected || "");
+  formData.append(FormBot.state_client_type, selected2.value || "");
+  FormBot.files.forEach((fileItem) => {
+    formData.append(fileItem?.name, fileItem?.file);
+  });
   const system: string = item.system.toLowerCase();
   const type: string = item.type.toLowerCase();
 
@@ -235,9 +168,17 @@ async function peformSubmit(event: Event) {
     <div>
       <BForm id="FormBot" @submit="peformSubmit">
         <div class="row g-3 p-2 m-1">
-          <div class="col-12" v-if="need_options">
-            <BFormSelect class="mb-3" :options="FormBot.credentials" />
-            <BFormSelect class="mb-3" :options="FormBot.state_client" />
+          <div class="col-12" v-if="FormBot.need_options">
+            <BFormSelect
+              class="mb-3"
+              v-model="FormBot.credentials.selected"
+              :options="FormBot.credentials.items"
+            />
+            <BFormSelect
+              class="mb-3"
+              v-model="FormBot.state_client.selected"
+              :options="FormBot.state_client.items"
+            />
             <div class="mb-3">
               <div class="form-floating" v-if="bot_protocolo">
                 <input type="password" class="form-control" id="token" placeholder="Password" />
@@ -245,7 +186,7 @@ async function peformSubmit(event: Event) {
               </div>
             </div>
           </div>
-          <div v-if="need_files" class="col-lg-12 mb-3">
+          <div v-if="FormBot.need_files" class="col-lg-12 mb-3">
             <div class="card">
               <div class="card-header">
                 <h4>Arquivos</h4>

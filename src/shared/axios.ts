@@ -1,5 +1,4 @@
 import { router } from "@/renderer/router";
-import { $ } from "@shared/index";
 import axios, { isAxiosError } from "axios";
 import type { ResponseError } from "ResponseError";
 
@@ -11,18 +10,11 @@ export const api = axios.create({
 });
 api.interceptors.response.use(
   (response) => response,
-  (error: ResponseError) => {
+  async (error: ResponseError) => {
     if (isAxiosError(error)) {
       if ("response" in error && error.response?.status === 401) {
-        $("#message").text("Sessão expirada, faça login novamente");
-        // const { show: show_message } = useModal("ModalMessage");
-        // setTimeout(show_message, 1000);
-
         router.push({ name: "login" });
-        // ou exibir uma modal de sessão expirada
       } else if (error?.code === "ERR_NETWORK") {
-        $("#message").text("Erro de conexão com o servidor");
-
         router.push({ name: "login" });
       }
     }

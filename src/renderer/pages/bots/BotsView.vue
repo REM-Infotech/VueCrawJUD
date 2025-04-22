@@ -16,8 +16,9 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="p-3">
+  <BContainer fluid="lg" class="px-4">
     <CardBot />
-  </div>
+  </BContainer>
+
   <BotForm />
 </template>

@@ -30,3 +30,5 @@ ipcMain.handle(
     );
   },
 );
+
+store.clear();

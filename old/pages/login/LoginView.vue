@@ -4,6 +4,7 @@ import { loadingBuzy, onBuzyHidden, setBuzyClick } from "@shared/animations";
 import { api } from "@shared/axios";
 import { $ } from "@shared/index";
 import { useModal } from "bootstrap-vue-next";
+import { type TResponseLogin } from "ResponsesAPI";
 import { onBeforeMount, onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 const router = useRouter();
@@ -43,7 +44,7 @@ const handleSubmit = (e: Event) => {
         xsrfCookieName: "access_token_cookie",
       },
     )
-    .then((response) => {
+    .then((response: TResponseLogin) => {
       const { show: show_message } = useModal("ModalMessage");
       if (response.status === 200) {
         console.log(response);
