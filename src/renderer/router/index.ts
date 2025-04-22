@@ -10,8 +10,12 @@ const routes = [
     path: "/dashboard",
     name: "dashboard",
     component: () => import("@pages/dashboard/DashboardView.vue"),
-  }
-
+  },
+  {
+    path: "/bots",
+    name: "bots",
+    component: () => import("@pages/bots/BotsView.vue"),
+  },
 ];
 
 export const router = createRouter({

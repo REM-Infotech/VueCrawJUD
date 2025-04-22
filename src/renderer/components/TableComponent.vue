@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { data_, execStore, items } from "@/renderer/store/executionStore";
 import { faDownload, faEye } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { data_, execStore, items } from "@store/executionStore";
 import { tokenStore } from "@store/tokenAuthStore";
 import DataTablesCore from "datatables.net-bs5";
 import DataTable from "datatables.net-vue3";

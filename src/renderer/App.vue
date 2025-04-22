@@ -8,7 +8,7 @@ import SideBarComponent from "./components/SideBarComponent.vue";
 <template>
   <ModalMessage />
   <NavBarComponent />
-  <main class="overflow-auto" id="app_content">
+  <main class="overflow-y-auto overflow-x-hidden" id="app_content">
     <SideBarComponent />
     <div class="mt-4 mb-4">
       <RouterView />

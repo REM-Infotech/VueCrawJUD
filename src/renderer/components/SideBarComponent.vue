@@ -1,5 +1,10 @@
 <script setup lang="ts">
-import { faArrowRightFromBracket } from "@fortawesome/free-solid-svg-icons";
+import {
+  faArrowRightFromBracket,
+  faHome,
+  faListCheck,
+  faRobot,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { api } from "@shared/axios";
 import { useRouter } from "vue-router";
@@ -34,33 +39,35 @@ const handleLogoutClick = async (e: Event) => {
     aria-labelledby="offcanvasWithBothOptionsLabel"
   >
     <div class="offcanvas-body">
-      <!-- <RouterLink
-        :to="{ name: 'index' }"
+      <RouterLink
+        :to="{ name: 'dashboard' }"
         class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none rounded p"
       >
         <img class="bi pe-none me-2" src="@renderer/assets/img/crawjud.png" alt="" width="40" />
-        <span class="fs-4 fw-bold align-middle">CrawJUD <span class="fs-6 text">v0.1.0</span></span>
-      </RouterLink> -->
+        <span class="fs-4 fw-bold align-middle"
+          >CrawJUD <span class="fs-6 text">v0.1.0</span>
+        </span>
+      </RouterLink>
       <hr />
-      <!-- <ul class="nav nav-pills flex-column mb-auto">
+      <ul class="nav nav-pills flex-column mb-auto">
         <li class="nav-item mb-1">
-          <RouterLink :to="{ name: 'index' }" class="nav-link link-body-emphasis">
+          <RouterLink :to="{ name: 'dashboard' }" class="nav-link link-body-emphasis">
             <FontAwesomeIcon :icon="faHome" class="me-2" />
             <span class="text">Home</span>
           </RouterLink>
         </li>
         <li class="nav-item mb-1">
-          <RouterLink :to="{ name: 'bot_dashboard' }" class="nav-link link-body-emphasis">
+          <RouterLink :to="{ name: 'bots' }" class="nav-link link-body-emphasis">
             <FontAwesomeIcon :icon="faRobot" class="me-2" />
             <span class="text">Robôs</span>
           </RouterLink>
         </li>
-        <li class="nav-item mb-1">
+        <!-- <li class="nav-item mb-1">
           <RouterLink :to="{ name: 'executions' }" class="nav-link link-body-emphasis">
             <FontAwesomeIcon :icon="faTable" class="me-2" />
             <span class="text">Execuções</span>
           </RouterLink>
-        </li>
+        </li> -->
         <li class="nav-item mb-1">
           <a href="#" class="nav-link link-body-emphasis">
             <FontAwesomeIcon :icon="faListCheck" class="me-2" />
@@ -68,7 +75,7 @@ const handleLogoutClick = async (e: Event) => {
           </a>
         </li>
         <li class="border-top my-3"></li>
-        <li class="nav-item mb-1">
+        <!-- <li class="nav-item mb-1">
           <RouterLink :to="{ name: 'credentials' }" class="nav-link link-body-emphasis">
             <FontAwesomeIcon :icon="faKey" class="me-2" />
             <span class="text">Credenciais</span>
@@ -79,8 +86,8 @@ const handleLogoutClick = async (e: Event) => {
             <FontAwesomeIcon :icon="faGear" class="me-2" />
             <span class="text">Configurações</span>
           </RouterLink>
-        </li>
-      </ul> -->
+        </li> -->
+      </ul>
     </div>
     <footer class="offcanvas-footer">
       <div class="dropdown">
