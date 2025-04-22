@@ -10,19 +10,15 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { api } from "@shared/axios";
-import { $ } from "@shared/index";
-import { useModal } from "bootstrap-vue-next";
-import { RouterLink } from "vue-router";
+import { RouterLink, useRouter } from "vue-router";
+
+const router = useRouter();
 
 const handleLogoutClick = (e: Event) => {
   e.preventDefault();
-  api.post("/logout").then(() => {
-    const { show: show_message } = useModal("ModalMessage");
-    $("#message").text("Logout Efetuado com sucesso!");
-    show_message();
-    sessionStorage.clear();
-    localStorage.clear();
-  });
+  api.post("/logout").then(() => {});
+
+  router.push({ name: "login" });
 };
 </script>
 

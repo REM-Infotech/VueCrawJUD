@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { data_, execStore, items } from "@/renderer/store/executionStore";
 import { faDownload, faEye } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { api } from "@shared/axios";
@@ -6,55 +7,30 @@ import { $ } from "@shared/index";
 import type { AxiosResponse } from "axios";
 import { useModal } from "bootstrap-vue-next";
 import DataTablesCore from "datatables.net-bs5";
-
-import { convertDate } from "@shared/convert_date";
 import DataTable from "datatables.net-vue3";
-import { onMounted, ref } from "vue";
+import { onMounted } from "vue";
 DataTable.use(DataTablesCore);
 
 const options = {
   language: {
-    url: "./src/assets/locales/pt-br.json",
+    url: "./src/renderer/assets/locales/pt-br.json",
   },
 };
 
 const { show: show_load, hide: hide_load } = useModal("modal-load");
 const { show: show_message } = useModal("ModalMessage");
 
-let items: [] = [];
-
-const data_ = ref(false);
 onMounted(async function () {
-  api
-    .get("/executions", {
-      withXSRFToken: true,
-      withCredentials: true,
-      xsrfCookieName: "access_token_cookie",
-      xsrfHeaderName: "X-CSRF-TOKEN",
-    })
-    .then(async (response: AxiosResponse) => {
-      items = response.data.data.map((item: Record<string, string>) => {
-        return [
-          item.pid,
-          item.user,
-          item.botname,
-          item.xlsx,
-          () => {
-            return convertDate(item.start_date);
-          },
-          item.status,
+  const exec_Store = execStore().$state;
 
-          () => {
-            return convertDate(item.stop_date);
-          },
-          item.file_output,
-        ];
-      });
-      data_.value = true;
-    })
-    .catch(() => {
-      //
-    });
+  console.log(exec_Store);
+
+  data_.value = exec_Store.items.length === 0;
+  if (data_.value) {
+    await execStore().load();
+  }
+
+  items.value = execStore().$state.items;
 });
 
 const download_file = async (file: string) => {

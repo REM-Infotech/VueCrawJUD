@@ -1,17 +1,18 @@
 <script setup lang="ts">
 import { current_bot } from "@shared/FormConfig";
-import { api } from "@shared/axios";
 import { onBeforeMount, ref } from "vue";
 
+import { botStore } from "@/renderer/store/botsStore";
 import projudiicon from "@renderer/assets/img/projudi.png";
 import iconbot from "@renderer/assets/svg/crawjud2.svg";
-
 const items = ref<{ system: string; id: number; display_name: string; text: string }[]>([]);
 
 onBeforeMount(async () => {
-  api.get("/bots_list").then((resp) => {
-    items.value = resp.data;
-  });
+  const storebot = botStore();
+  if (storebot.bots.length === 0) {
+    await storebot.load();
+  }
+  items.value = storebot.bots;
 });
 </script>
 

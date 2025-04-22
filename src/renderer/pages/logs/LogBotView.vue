@@ -19,7 +19,7 @@ const route = useRoute();
 const router = useRouter();
 const pid = route.params.pid as string;
 const percent_progress = document.getElementById("progress_info");
-const io = socketio("https://api.reminfotech.net.br/log", {
+const io = socketio("http://localhost:5000/log", {
   extraHeaders: {
     pid: pid,
   },

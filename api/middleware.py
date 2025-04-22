@@ -55,7 +55,7 @@ class ProxyFixMiddleware:  # noqa: D101
                 headers.append((b"host", host.encode()))
                 scope["headers"] = headers
 
-        print(f"ProxyFixMiddleware: {scope.get('client')}, {scope.get('scheme')}, {host}")  # noqa: T201
+        # print(f"ProxyFixMiddleware: {scope.get('client')}, {scope.get('scheme')}, {host}")  # noqa: T201
         await self.app(scope, receive, send)
 
 
