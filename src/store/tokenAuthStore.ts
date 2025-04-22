@@ -10,6 +10,9 @@ export const tokenStore = defineStore('bearerStore', {
       this.token = resp.data.token;
       this['x-csrf-token'] = resp.data['x-csrf-token'];
     },
+    isLogged() {
+      return this.token !== "" && this['x-csrf-token'] !== "";
+    }
   },
 })
 

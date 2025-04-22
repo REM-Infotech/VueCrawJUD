@@ -2,7 +2,7 @@
 import { faArrowRightFromBracket } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { api } from "@shared/axios";
-import { RouterLink, useRouter } from "vue-router";
+import { useRouter } from "vue-router";
 
 const router = useRouter();
 
@@ -24,13 +24,13 @@ const handleLogoutClick = (e: Event) => {
     aria-labelledby="offcanvasWithBothOptionsLabel"
   >
     <div class="offcanvas-body">
-      <RouterLink
+      <!-- <RouterLink
         :to="{ name: 'index' }"
         class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none rounded p"
       >
         <img class="bi pe-none me-2" src="@renderer/assets/img/crawjud.png" alt="" width="40" />
         <span class="fs-4 fw-bold align-middle">CrawJUD <span class="fs-6 text">v0.1.0</span></span>
-      </RouterLink>
+      </RouterLink> -->
       <hr />
       <!-- <ul class="nav nav-pills flex-column mb-auto">
         <li class="nav-item mb-1">

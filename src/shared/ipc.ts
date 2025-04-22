@@ -1,7 +1,9 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import type { ResponseApi, ResponseGoogleStorage } from "ResponseFile";
-import { ipcMain, nativeTheme } from "electron";
 
+import type { ResponseApi, ResponseGoogleStorage } from "ResponseFile";
+import axios from "axios";
+import { dialog, ipcMain, nativeTheme, Notification } from "electron";
+
+import fs from "fs/promises";
 const MainWindow = async () => {
 
   const { mainWindow } = await import("../main/main");
@@ -29,7 +31,7 @@ ipcMain.on("close", async () => {
   mainWindow.close();
 });
 
-ipcMain.on("filesave", async (_, file: string) => {
+ipcMain.on("file_save", async (_, file: string, csrf_token: string, api_key: string) => {
 
   let icon = ""
   try {
@@ -45,36 +47,54 @@ ipcMain.on("filesave", async (_, file: string) => {
   let response1: ResponseApi
   let response2: ResponseGoogleStorage
 
-  // try {
+  try {
+    const url_api = "http://localhost:5000";
+    const api = axios.create({
+      baseURL: url_api,
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        "x-csrf-token": csrf_token,
+        Authorization: `Bearer ${api_key}`,
+      },
+      withCredentials: true,
+      withXSRFToken: true,
+    });
+    response1 = await api.get(`/executions/download/${file}`)
+    const data = response1.data;
+    const url: string = data.url;
 
-  //   response1 = await api.get(`/executions/download/${file}`)
-  //   const data = response1.data;
-  //   const url: string = data.url;
+    response2 = await axios.get(url)
 
-  //   response2 = await axios.get(url)
-  //   const fileBlob = new Blob([response2.data.file], { type: "application/octet-stream" });
 
-  //   const path = await dialog.showSaveDialog(mainWindow, {
-  //     title: "Salvar arquivo de execução",
-  //     defaultPath: file,
-  //     filters: [
-  //       { name: "Arquivo Zip", extensions: ["zip"] },
-  //     ]
-  //   })
-  //   console.log(path)
+    const path = await dialog.showSaveDialog(mainWindow, {
+      title: "Salvar arquivo de execução",
+      defaultPath: file,
+      filters: [
+        { name: "Arquivo Zip", extensions: ["zip"] },
+      ]
+    })
 
-  //   const notify = new Notification({
-  //     title: "Sucesso!",
-  //     body: "Arquivo salvo com sucesso em " + path.filePath,
-  //     icon: icon,
-  //   });
+    const fileBlob = new Blob([response2.data.file], { type: "application/octet-stream" });
 
-  //   notify.show();
+    const buffer = Buffer.from(await fileBlob.arrayBuffer());
 
-  // } catch {
+    await fs.writeFile(path.filePath, buffer);
 
-  //   //
-  // }
+    const notify = new Notification({
+      title: "Sucesso!",
+      body: "Arquivo salvo com sucesso em " + path.filePath,
+      icon: icon,
+      actions: [{
+        text: "Abrir pasta",
+        type: "button",
+      }]
+    });
+    notify.show();
+
+  } catch (error) {
+    console.log(error)
+    //
+  }
 
 
 })

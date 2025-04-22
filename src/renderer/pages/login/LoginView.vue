@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { tokenStore } from "@/store/tokenAuthStore";
-import NavBar from "@components/NavBarComponent.vue";
 import { loadingBuzy, onBuzyHidden, setBuzyClick } from "@shared/animations";
 import { api } from "@shared/axios";
 import { $ } from "@shared/index";
@@ -54,6 +53,10 @@ async function handleSubmit(e: Event) {
 }
 
 onBeforeMount(() => {
+  if (authStore.isLogged()) {
+    router.push({ name: "dashboard" });
+  }
+
   if ($("#app").hasClass("bg-purple")) {
     $("#app").removeClass("bg-purple");
     $("#app").addClass("bg-indigo");
@@ -62,7 +65,6 @@ onBeforeMount(() => {
 </script>
 
 <template>
-  <NavBar />
   <main
     class="form-signin w-100 m-auto position-absolute top-50 start-50 translate-middle"
     data-bs-theme="light"

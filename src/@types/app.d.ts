@@ -24,6 +24,7 @@ declare global {
       minimize: () => void;
       close: () => void;
       perform: (form: formType) => void;
+      file_save: (file: string, csrf_token: string, api_key: string) => Promise<void>;
     };
   }
   interface FileObject {

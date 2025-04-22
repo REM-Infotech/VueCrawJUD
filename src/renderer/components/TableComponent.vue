@@ -2,23 +2,17 @@
 import { data_, execStore, items } from "@/renderer/store/executionStore";
 import { faDownload, faEye } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import { api } from "@shared/axios";
-import { $ } from "@shared/index";
-import type { AxiosResponse } from "axios";
-import { useModal } from "bootstrap-vue-next";
+import { tokenStore } from "@store/tokenAuthStore";
 import DataTablesCore from "datatables.net-bs5";
 import DataTable from "datatables.net-vue3";
 import { onMounted } from "vue";
 DataTable.use(DataTablesCore);
-
+const authStore = tokenStore();
 const options = {
   language: {
     url: "./src/renderer/assets/locales/pt-br.json",
   },
 };
-
-const { show: show_load, hide: hide_load } = useModal("modal-load");
-const { show: show_message } = useModal("ModalMessage");
 
 onMounted(async function () {
   const exec_Store = execStore().$state;
@@ -33,24 +27,27 @@ onMounted(async function () {
   items.value = execStore().$state.items;
 });
 
-const download_file = async (file: string) => {
-  show_load();
-
-  setTimeout(async () => {
-    api.get(`/executions/download/${file}`).then((response: AxiosResponse) => {
-      const data = response.data;
-      const url: string = data.url;
-      window.open(url, "_blank");
-
-      setTimeout(() => {
-        hide_load();
-      }, 500);
-
-      $("#message").text(`Download do arquivo "${file}" iniciado!`);
-      show_message();
-    });
-  }, 1000);
+const download_file = (file: string) => {
+  window.electronAPI.file_save(file, authStore["x-csrf-token"], authStore.token);
 };
+// const download_file = async (file: string) => {
+//   show_load();
+
+//   setTimeout(async () => {
+//     api.get(`/executions/download/${file}`).then((response: AxiosResponse) => {
+//       const data = response.data;
+//       const url: string = data.url;
+//       window.open(url, "_blank");
+
+//       setTimeout(() => {
+//         hide_load();
+//       }, 500);
+
+//       $("#message").text(`Download do arquivo "${file}" iniciado!`);
+//       show_message();
+//     });
+//   }, 1000);
+// };
 </script>
 
 <template>

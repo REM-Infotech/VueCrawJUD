@@ -42,6 +42,12 @@
       "@models/*": [
         "./src/models/*"
       ],
+      "@types/*": [
+        "./src/@types/*"
+      ],
+      "@store/*": [
+        "./src/store/*"
+      ],
     },
     "types": [
       "node",
