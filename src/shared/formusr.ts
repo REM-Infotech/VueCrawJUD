@@ -1,5 +1,6 @@
 import { api } from "@shared/axios";
 import { $ } from "@shared/index";
+import { tokenStore } from "@store/tokenAuthStore";
 import { reactive, ref } from "vue";
 export const form = reactive({
   id: 0,
@@ -52,7 +53,7 @@ export async function submitForm(e: Event) {
       headers: {
         // Note: Changing the Content-Type may avoid the preflight but could affect your API expectations.
         "Content-Type": "application/x-www-form-urlencoded", // Use a "simple" header if possible
-        "x-csrf-token": sessionStorage.getItem("x-csrf-token") || "",
+        "x-csrf-token": tokenStore()["x-csrf-token"],
       },
     })
     .then((response) => {
@@ -65,7 +66,6 @@ export async function submitForm(e: Event) {
     })
 
     .catch((response) => {
-
       $("#message").text(response.data.message);
 
       to_modal_message.value = true;

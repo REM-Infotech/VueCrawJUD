@@ -23,5 +23,8 @@
       "**/node_modules/.vite-temp/**"
     ]
   },
-  "cmake.ignoreCMakeListsMissing": true
+  "cmake.ignoreCMakeListsMissing": true,
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
 }

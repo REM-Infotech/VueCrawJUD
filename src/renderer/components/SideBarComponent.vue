@@ -6,11 +6,21 @@ import { useRouter } from "vue-router";
 
 const router = useRouter();
 
-const handleLogoutClick = (e: Event) => {
+const handleLogoutClick = async (e: Event) => {
   e.preventDefault();
-  api.post("/logout").then(() => {});
+  api
+    .post("/logout")
+    .then(() => {})
+    .catch(() => {});
 
   router.push({ name: "login" });
+
+  const creds = await window.electronAPI.getCredentials();
+
+  if (creds.length > 0) {
+    const { account } = creds[0];
+    await window.electronAPI.RemoveCredentials(account);
+  }
 };
 </script>
 

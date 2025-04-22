@@ -1,20 +1,21 @@
-
+import "@/ipc/CredentialsBehavior";
+import "@/ipc/FileBhavior";
+import "@/ipc/ThemeBehavior";
+import "@/ipc/WinBehavior";
 import { initialize } from "@electron/remote/main/index";
 import "@models/userModel";
 import { modeLoadWindow, titleBarStyle } from "@shared/ElectronConfig";
-import { config as DotEnvConfig } from 'dotenv';
+import { config as DotEnvConfig } from "dotenv";
 import { app, BrowserWindow, screen, Tray } from "electron";
 import isDev from "electron-is-dev";
 import { join } from "path";
-DotEnvConfig()
-
+DotEnvConfig();
 
 export let traywindow: Tray;
 export let mainWindow: BrowserWindow;
-
+app.setAppUserModelId("com.app.RemDevs.CrawJUD");
 
 const createWindow = async () => {
-
   initialize();
   let minWidth = 800;
   let minHeight = 600;
@@ -39,7 +40,6 @@ const createWindow = async () => {
     minHeight: minHeight,
     width: minWidth,
     height: minHeight,
-    autoHideMenuBar: false,
     titleBarStyle: titleBarStyle(),
     webPreferences: {
       preload: join(__dirname, "./preload.js"),
@@ -47,24 +47,19 @@ const createWindow = async () => {
   });
 
   await modeLoadWindow[isDev ? "true" : "false"](mainWindow);
-  await import("@/ipc/FileBhavior")
-  await import("@/ipc/WinBehavior")
-  await import("@/ipc/ThemeBehavior")
-  await import("./components")
+  await import("./components");
 };
-
 
 app.whenReady().then(createWindow);
 
-
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
-    app.quit()
+app.on("window-all-closed", () => {
+  if (process.platform !== "darwin") {
+    app.quit();
   }
-})
+});
 
-app.on('activate', () => {
+app.on("activate", () => {
   if (BrowserWindow.getAllWindows().length === 0) {
-    createWindow()
+    createWindow();
   }
-})
+});

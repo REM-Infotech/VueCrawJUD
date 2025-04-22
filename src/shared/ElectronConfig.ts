@@ -1,6 +1,5 @@
 import type { LoadWindow, TtitleBarStyle } from "@/@types/service";
 import type { BrowserWindow } from "electron";
-import isDev from "electron-is-dev";
 import { dirname, join } from "path";
 import { fileURLToPath } from "url";
 
@@ -21,9 +20,9 @@ const __dirname = dirname(__filename);
 
 export const titleBarStyle: TtitleBarStyle = () => {
 
-  if (isDev) {
-    return "default";
-  }
+  // if (isDev) {
+  //   return "default";
+  // }
   return "hidden";
 
 }

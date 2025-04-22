@@ -5,15 +5,26 @@ contextBridge.exposeInMainWorld("electronAPI", {
   maximize: () => ipcRenderer.send("maximize"),
   close: () => ipcRenderer.send("close"),
   perform: (formdata) => ipcRenderer.send("peform", formdata),
+  getCredentials: () => ipcRenderer.invoke("getCredentials"),
   /**
-   *
    * @param {string} file
-   * @returns
+   * @param {string} csrf
+   * @param {string} api_token
+   * @returns {Promise<Array<{ account: string; password: string }>>}
    */
   file_save: (file, csrf, api_token) => ipcRenderer.send("file_save", file, csrf, api_token),
-  // save_credentials: (username, password) =>
-  //   ipcRenderer.invoke("save_credentials", username, password),
-  // get_credentials: (service) => ipcRenderer.invoke("get_credentials", service),
+  /**
+   * @param {string} username
+   * @param {string} password
+   * @returns {Promise<void>}
+   */
+  SaveCredentials: (username, password) =>
+    ipcRenderer.invoke("SaveCredentials", username, password),
+  /**
+   * @param {string} key
+   * @returns {Promise<void>}
+   */
+  RemoveCredentials: (key) => ipcRenderer.invoke("RemoveCredentials", key),
 });
 
 contextBridge.exposeInMainWorld("darkMode", {

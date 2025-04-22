@@ -1,4 +1,4 @@
-import { NotificationSuccess } from "@/main/components";
+
 import type { ResponseApi, ResponseGoogleStorage } from "ResponseFile";
 import axios from "axios";
 import { dialog, ipcMain } from "electron";
@@ -7,6 +7,7 @@ import { MainWindow } from ".";
 
 ipcMain.on("file_save", async (_, file: string, csrf_token: string, api_key: string) => {
 
+  const { NotificationSuccess } = await import("@/main/components");
   const mainWindow = await MainWindow();
 
   let response1: ResponseApi

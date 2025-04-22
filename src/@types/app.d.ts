@@ -1,7 +1,6 @@
 import type { CreateOptions as AsarOptions } from "@electron/asar";
 
 declare global {
-
   interface RouteMeta {
     requiresAuth: boolean;
   }
@@ -25,16 +24,16 @@ declare global {
       close: () => void;
       perform: (form: formType) => void;
       file_save: (file: string, csrf_token: string, api_key: string) => Promise<void>;
-      save_credentials: (username: string, password: string) => Promise<void>;
-      get_credentials: () => Promise<{ success: boolean, username: string; password: string }>;
+      SaveCredentials: (key: string, password: string) => Promise<void>;
+      RemoveCredentials: (key: string) => Promise<void>;
+      getCredentials: () => Promise<Array<{ account: string; password: string }>>;
     };
   }
   interface FileObject {
-    filename: string
+    filename: string;
     arrayFile: ArrayBuffer;
   }
   type packagerConfigType = {
-
     icon: string;
     out: string;
     name: string;
@@ -47,13 +46,12 @@ declare global {
     asar: boolean | AsarOptions;
     appCategoryType: string;
     extraResource?: string | string[];
-  }
-
+  };
 }
 
-declare module 'vue-router' {
+declare module "vue-router" {
   interface RouteMeta {
-    requiresAuth?: boolean
-    requiresAdmin?: boolean
+    requiresAuth?: boolean;
+    requiresAdmin?: boolean;
   }
 }

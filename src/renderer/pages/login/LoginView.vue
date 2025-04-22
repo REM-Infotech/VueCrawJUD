@@ -40,7 +40,7 @@ async function handleSubmit(e?: Event) {
 
     if (response.status === 200) {
       if (FormLogin.remember_me) {
-        await window.electronAPI.save_credentials(FormLogin.login, FormLogin.password);
+        await window.electronAPI.SaveCredentials(FormLogin.login, FormLogin.password);
       }
 
       authStore.save(response);
@@ -57,12 +57,17 @@ async function handleSubmit(e?: Event) {
 }
 
 onBeforeMount(async () => {
-  const creds = await window.electronAPI.get_credentials();
+  const creds = await window.electronAPI.getCredentials();
 
-  if (creds.success) {
-    FormLogin.login = creds.username;
-    FormLogin.password = creds.password;
+  if (creds.length > 0) {
+    const { account, password } = creds[0];
+
+    FormLogin.login = account;
+    FormLogin.password = password;
     FormLogin.remember_me = true;
+
+    await window.electronAPI.RemoveCredentials(FormLogin.login);
+
     handleSubmit();
   }
 

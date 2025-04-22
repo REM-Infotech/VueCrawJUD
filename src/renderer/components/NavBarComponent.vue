@@ -5,7 +5,7 @@
       data-bs-toggle="offcanvas"
       data-bs-target="#offcanvasWithBothOptions"
       aria-controls="offcanvasWithBothOptions"
-      class="rounded rounded-2"
+      class="rounded rounded-2 not_drag"
     >
       <img src="../assets/img/icon.ico" alt="logo" width="35px" />
       <button
@@ -58,6 +58,10 @@ const closewindow = () => {
 </script>
 
 <style lang="scss">
+.not_drag {
+  app-region: no-drag;
+}
+
 button {
   app-region: no-drag;
 }

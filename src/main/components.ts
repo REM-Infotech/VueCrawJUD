@@ -4,11 +4,11 @@ const icon = join(process.cwd(), "src", "renderer", "assets", "img", "icon.png")
 
 export const NotificationSuccess = new Notification({
   title: "Sucesso!",
-  icon: icon
+  icon: icon,
+
 });
 
 export const IconTray = new Tray(icon);
-
 
 const MenuApp = Menu.buildFromTemplate([
   {
