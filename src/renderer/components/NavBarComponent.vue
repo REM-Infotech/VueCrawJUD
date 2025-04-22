@@ -1,24 +1,7 @@
 <template>
   <BNavbar v-b-color-mode="'dark'" toggleable="lg" variant="dark" class="titlebar">
-    <BNavbarBrand
-      href="#"
-      data-bs-toggle="offcanvas"
-      data-bs-target="#offcanvasWithBothOptions"
-      aria-controls="offcanvasWithBothOptions"
-    >
-      <img src="../assets/img/icon.ico" alt="logo" width="20%" class="ms-2 no_drag" />
-      <button
-        class="navbar-toggler rounded"
-        type="button"
-        data-bs-toggle="collapse"
-        data-bs-target="#navbarsExample06"
-        aria-controls="navbarsExample06"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <span class="align-middle fw-bold ms-2">Menu</span>
+    <BNavbarBrand>
+      <img src="../assets/img/icon.ico" alt="logo" width="20%" />
     </BNavbarBrand>
     <BNavbarNav class="ms-auto">
       <BButton size="sm" variant="outline-primary" @click="MinimizeWindow" class="me-2">
@@ -58,10 +41,6 @@ const closewindow = () => {
 
 <style lang="scss">
 button {
-  app-region: no-drag;
-}
-
-.no_drag {
   app-region: no-drag;
 }
 

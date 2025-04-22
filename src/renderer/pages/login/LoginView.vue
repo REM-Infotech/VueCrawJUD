@@ -1,27 +1,17 @@
 <script setup lang="ts">
-import NavLogin from "@components/NavLogin.vue";
+import NavBar from "@components/NavBarComponent.vue";
 import { loadingBuzy, onBuzyHidden, setBuzyClick } from "@shared/animations";
 import { api } from "@shared/axios";
 import { $ } from "@shared/index";
 import { useModal } from "bootstrap-vue-next";
-import { onBeforeMount, onMounted, ref } from "vue";
+import { onBeforeMount, reactive } from "vue";
 import { useRouter } from "vue-router";
 const router = useRouter();
 
-const login = ref("");
-const password = ref("");
-const remember_me = ref(false);
-
-onMounted(() => {
-  const { hide } = useModal("modal-load");
-  const { show } = useModal("ModalMessage");
-  hide();
-  var message = sessionStorage.getItem("message");
-  if (message) {
-    $("#message").text(message);
-    show();
-    sessionStorage.removeItem("message");
-  }
+const FormLogin = reactive({
+  login: "",
+  password: "",
+  remember_me: false,
 });
 
 const handleSubmit = (e: Event) => {
@@ -30,9 +20,9 @@ const handleSubmit = (e: Event) => {
     .post(
       "/login",
       {
-        login: login.value,
-        password: password.value,
-        remember_me: remember_me.value,
+        login: FormLogin.login,
+        password: FormLogin.password,
+        remember_me: FormLogin.remember_me,
       },
       {
         headers: {
@@ -76,7 +66,7 @@ onBeforeMount(() => {
 </script>
 
 <template>
-  <NavLogin />
+  <NavBar />
   <main
     class="form-signin w-100 m-auto position-absolute top-50 start-50 translate-middle"
     data-bs-theme="light"
@@ -87,12 +77,20 @@ onBeforeMount(() => {
 
     <form method="post" @submit="handleSubmit">
       <BFormFloatingLabel label="Login" label-for="login" class="my-2 mb-3">
-        <BFormInput id="login" type="text" placeholder="Login" v-model="login" />
+        <BFormInput id="login" type="text" placeholder="Login" v-model="FormLogin.login" />
       </BFormFloatingLabel>
       <BFormFloatingLabel label="Senha" label-for="password" class="my-2 mb-3">
-        <BFormInput id="password" type="password" placeholder="Senha" v-model="password" />
+        <BFormInput
+          id="password"
+          type="password"
+          placeholder="Senha"
+          v-model="FormLogin.password"
+        />
       </BFormFloatingLabel>
-      <BFormCheckbox class="text-white fw-bold" v-model="remember_me" :unchecked-value="true"
+      <BFormCheckbox
+        class="text-white fw-bold"
+        v-model="FormLogin.remember_me"
+        :unchecked-value="true"
         >Salvar Credenciais</BFormCheckbox
       >
       <hr />
