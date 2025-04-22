@@ -1,25 +1,21 @@
 <script setup lang="ts">
+import ModalLoading from "@components/ModalLoading.vue";
 import ModalMessage from "@components/ModalMessage.vue";
+import NavBarComponent from "./components/NavBarComponent.vue";
+import SideBarComponent from "./components/SideBarComponent.vue";
 </script>
 
 <template>
   <ModalMessage />
-  <RouterView />
-  <BModal
-    centered
-    id="modal-load"
-    no-footer
-    no-header
-    size="sm"
-    body-class="bg-transparent"
-    content-class="bg-transparent border-0"
-  >
-    <div class="text-center">
-      <div class="spinner-border text-white" role="status">
-        <span class="visually-hidden">Loading...</span>
-      </div>
+  <NavBarComponent />
+
+  <main>
+    <SideBarComponent />
+    <div class="mt-4">
+      <RouterView />
     </div>
-  </BModal>
+  </main>
+  <ModalLoading />
 </template>
 
 <style>

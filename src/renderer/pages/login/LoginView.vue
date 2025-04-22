@@ -1,23 +1,31 @@
 <script setup lang="ts">
+import { tokenStore } from "@/store/tokenAuthStore";
 import NavBar from "@components/NavBarComponent.vue";
 import { loadingBuzy, onBuzyHidden, setBuzyClick } from "@shared/animations";
 import { api } from "@shared/axios";
 import { $ } from "@shared/index";
+import type { LoginResponse } from "LoginResponse";
 import { useModal } from "bootstrap-vue-next";
 import { onBeforeMount, reactive } from "vue";
 import { useRouter } from "vue-router";
 const router = useRouter();
 
+const { show: show_message } = useModal("ModalMessage");
 const FormLogin = reactive({
   login: "",
   password: "",
   remember_me: false,
 });
 
-const handleSubmit = (e: Event) => {
+const authStore = tokenStore();
+
+async function handleSubmit(e: Event) {
   e.preventDefault();
-  api
-    .post(
+
+  let response: LoginResponse;
+
+  try {
+    response = await api.post(
       "/login",
       {
         login: FormLogin.login,
@@ -28,34 +36,22 @@ const handleSubmit = (e: Event) => {
         headers: {
           "Content-Type": "application/json",
         },
-        withCredentials: true,
-        withXSRFToken: true,
-        xsrfCookieName: "access_token_cookie",
       },
-    )
-    .then((response) => {
-      const { show: show_message } = useModal("ModalMessage");
-      if (response.status === 200) {
-        console.log(response);
-        const data: Record<string, string> = response.data as Record<string, string>;
+    );
 
-        sessionStorage.setItem("token", data.token);
-        sessionStorage.setItem("x-csrf-token", data["x-csrf-token"]);
-        localStorage.setItem("admin", data.admin);
-        sessionStorage.setItem("message", "Login Efetuado com sucesso!");
-
-        router.push({ name: "bot_dashboard" });
-      } else if (response.data.message === "Usuário ou senha incorretos!") {
-        $("#message").text("Usuário ou senha incorretos!");
-        setTimeout(() => {
-          show_message();
-        }, 200);
-      }
-    })
-    .catch(() => {
-      //
-    });
-};
+    if (response.status === 200) {
+      authStore.save(response);
+      router.push({ name: "dashboard" });
+    } else if (response.data.message === "Usuário ou senha incorretos!") {
+      $("#message").text("Usuário ou senha incorretos!");
+      setTimeout(() => {
+        show_message();
+      }, 200);
+    }
+  } catch {
+    return;
+  }
+}
 
 onBeforeMount(() => {
   if ($("#app").hasClass("bg-purple")) {

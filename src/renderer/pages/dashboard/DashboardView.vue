@@ -1,4 +1,10 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import ChartComponent from "@components/ChartComponent.vue";
+import TableComponent from "@components/TableComponent.vue";
+</script>
 <template>
-  <h1>teste</h1>
+  <BContainer fluid class="px-4">
+    <ChartComponent />
+    <TableComponent />
+  </BContainer>
 </template>
