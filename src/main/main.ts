@@ -2,6 +2,7 @@
 import { initialize } from "@electron/remote/main/index";
 import "@models/userModel";
 import { modeLoadWindow, titleBarStyle } from "@shared/ElectronConfig";
+import "@shared/ipc";
 import { config as DotEnvConfig } from 'dotenv';
 import { app, BrowserWindow, screen, Tray } from "electron";
 import isDev from "electron-is-dev";

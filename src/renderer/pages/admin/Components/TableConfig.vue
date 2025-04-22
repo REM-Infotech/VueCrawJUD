@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import UsersComponent from "../pages/UsersComponent.vue";
+import UsersComponent from "./UsersComponent.vue";
 </script>
 
 <template>

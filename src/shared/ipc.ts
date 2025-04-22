@@ -1,11 +1,13 @@
 import { ipcMain, nativeTheme } from "electron";
-import { mainWindow } from "../main/main";
 
-ipcMain.on("minimize", () => {
+ipcMain.on("minimize", async () => {
+
+  const { mainWindow } = await import("../main/main");
   mainWindow.minimize();
 });
 
-ipcMain.on("maximize", () => {
+ipcMain.on("maximize", async () => {
+  const { mainWindow } = await import("../main/main");
   if (mainWindow.isMaximized()) {
     mainWindow.unmaximize();
   } else {
@@ -13,7 +15,8 @@ ipcMain.on("maximize", () => {
   }
 });
 
-ipcMain.on("close", () => {
+ipcMain.on("close", async () => {
+  const { mainWindow } = await import("../main/main");
   mainWindow.close();
 });
 

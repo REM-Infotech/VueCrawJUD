@@ -9,6 +9,19 @@ import { ForgeConfig } from '@electron-forge/shared-types';
 import { FuseV1Options, FuseVersion } from "@electron/fuses";
 import { join } from 'path';
 
+let icon: string = join(process.cwd(), "src", "renderer", "assets", "img", "icon.png");
+
+if (process.platform === "win32") {
+
+  icon = join(process.cwd(), "src", "assets", "img", "icon.ico")
+
+} else if (process.platform === "linux") {
+
+  icon = join(process.cwd(), "src", "assets", "img", "icon.png")
+
+}
+
+
 const config: ForgeConfig = {
   outDir: './build/forge',
   makers: [
@@ -55,18 +68,18 @@ const config: ForgeConfig = {
     ],
 
   packagerConfig: {
-    icon: join(process.cwd(), "client ", "src", "assets", "img", "icon.ico"),
+    icon: icon,
     name: "CrawJUD_Desktop",
     osxSign: {},
     asar: true,
-    windowsSign: {
-      certificateFile: "C:\\Users\\nicholas.silva\\Desktop\\assinarcodigo.pfx",
-      certificatePassword: "5550123",
-      description: "CrawJUD Automatização de Processos Judiciais",
-      website: "https://reminfotech.net.br",
-      debug: true,
-      signJavaScript: true
-    },
+    // windowsSign: {
+    //   certificateFile: "C:\\Users\\nicholas.silva\\Desktop\\assinarcodigo.pfx",
+    //   certificatePassword: "5550123",
+    //   description: "CrawJUD Automatização de Processos Judiciais",
+    //   website: "https://reminfotech.net.br",
+    //   debug: true,
+    //   signJavaScript: true
+    // },
     appCategoryType: "com.app.crawjud",
   }
 };

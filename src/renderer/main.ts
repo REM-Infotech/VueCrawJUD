@@ -1,7 +1,7 @@
 import "@assets/css/main.css";
 import "@assets/css/styles.css";
 import "@popperjs/core";
-import "@shared/axios/index";
+import "@shared/axios";
 import { $ } from "@shared/index";
 import { createBootstrap, useModal } from "bootstrap-vue-next";
 import "bootstrap-vue-next/dist/bootstrap-vue-next.css";
