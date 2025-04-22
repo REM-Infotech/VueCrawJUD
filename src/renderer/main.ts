@@ -2,8 +2,7 @@ import "@assets/css/main.css";
 import "@assets/css/styles.css";
 import "@popperjs/core";
 import "@shared/axios";
-import { $ } from "@shared/index";
-import { createBootstrap, useModal } from "bootstrap-vue-next";
+import { createBootstrap } from "bootstrap-vue-next";
 import "bootstrap-vue-next/dist/bootstrap-vue-next.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.min.js";
@@ -12,7 +11,7 @@ import "jquery/dist/jquery.min.js";
 import { createPinia } from "pinia";
 import { createApp } from "vue";
 import App from "./App.vue";
-import router from "./router";
+import { router } from "./router";
 
 function CreateApp() {
   const pinia = createPinia()
@@ -25,11 +24,3 @@ function CreateApp() {
 
 }
 CreateApp();
-
-
-router.afterEach((to) => {
-  if ($("#message").text() !== "" && to.name === "login") {
-    const { show: show_message } = useModal("ModalMessage");
-    setTimeout(show_message, 500);
-  }
-});
