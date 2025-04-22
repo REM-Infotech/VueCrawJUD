@@ -61,34 +61,6 @@ const need_files = ref(true);
 </template>
 
 <style>
-/* we will explain what these classes do next! */
-.v-enter-active,
-.v-leave-active {
-  transition: opacity 2s ease;
-}
-
-.hover_transition {
-  transition: all 0.3s ease;
-}
-
-.v-enter-from,
-.v-leave-to {
-  opacity: 0;
-}
-.slide-fade-enter-active {
-  transition: all 0.3s ease-out;
-}
-
-.slide-fade-leave-active {
-  transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);
-}
-
-.slide-fade-enter-from,
-.slide-fade-leave-to {
-  transform: translateX(20px);
-  opacity: 0;
-}
-
 .btn-icon-split {
   padding: 0;
   overflow: hidden;
