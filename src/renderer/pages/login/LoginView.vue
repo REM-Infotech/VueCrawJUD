@@ -1,9 +1,9 @@
 <script setup lang="ts">
+import type { TResponseLogin } from "@/@types/ResponsesAPI";
 import { tokenStore } from "@/store/tokenAuthStore";
 import { loadingBuzy, onBuzyHidden, setBuzyClick } from "@shared/animations";
 import { api } from "@shared/axios";
 import { $ } from "@shared/index";
-import type { LoginResponse } from "LoginResponse";
 import { useModal } from "bootstrap-vue-next";
 import { onBeforeMount, reactive } from "vue";
 import { useRouter } from "vue-router";
@@ -21,7 +21,7 @@ const authStore = tokenStore();
 async function handleSubmit(e?: Event) {
   if (e) e.preventDefault();
 
-  let response: LoginResponse;
+  let response: TResponseLogin;
 
   try {
     response = await api.post(

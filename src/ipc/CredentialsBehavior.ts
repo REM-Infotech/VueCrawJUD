@@ -9,6 +9,7 @@ const store = new Store<Record<string, string>>({
 
 ipcMain.handle("SaveCredentials", async (_, key: string, password: string) => {
   const buffer = safeStorage.encryptString(password);
+  store.delete(key);
   store.set(key, buffer.toString("latin1"));
 });
 
@@ -30,5 +31,3 @@ ipcMain.handle(
     );
   },
 );
-
-store.clear();

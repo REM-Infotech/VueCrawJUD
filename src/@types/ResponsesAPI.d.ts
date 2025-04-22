@@ -7,6 +7,7 @@ interface TResponseLogin extends AxiosResponse {
     token: string;
     "x-csrf-token": string;
     admin: boolean | string;
+    message?: string;
   };
 }
 
