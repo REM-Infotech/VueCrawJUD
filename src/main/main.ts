@@ -11,7 +11,7 @@ import process from "process";
 import "./util";
 DotEnvConfig()
 
-const icon = join(process.cwd(), "src", "renderer", "assets", "img", "icon.ico")
+const icon = join(process.cwd(), "src", "renderer", "assets", "img", "icon.png")
 export let traywindow: Tray;
 export let mainWindow: BrowserWindow;
 
@@ -45,7 +45,7 @@ const createWindow = async () => {
     autoHideMenuBar: false,
     titleBarStyle: titleBarStyle(),
     webPreferences: {
-      preload: join(__dirname, "../preload/preload.js"),
+      preload: join(__dirname, "./preload.js"),
     },
   });
 

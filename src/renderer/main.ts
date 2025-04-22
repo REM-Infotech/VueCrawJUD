@@ -12,7 +12,7 @@ import "jquery/dist/jquery.min.js";
 import { createPinia } from "pinia";
 import { createApp } from "vue";
 import App from "./App.vue";
-import router from "./routes";
+import router from "./router";
 
 function CreateApp() {
   const pinia = createPinia()

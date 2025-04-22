@@ -28,6 +28,7 @@ export const User = sequelize.define<Model<IUser, IUser> & UserModel>('User', {
 });
 
 // Example usage
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 async function createUser() {
   try {
     const user = await User.create({
@@ -38,8 +39,6 @@ async function createUser() {
     console.error('Error creating user:', error);
   }
 }
-
-await createUser()
 
 User.findAll().then((users) => {
 
