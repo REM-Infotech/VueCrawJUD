@@ -54,6 +54,7 @@ dependencies = [
     "quart-cors (>=0.8.0,<0.9.0)",
     "billiard (>=4.2.1,<5.0.0)",
     "hypercorn (>=0.17.3,<0.18.0)",
+    "redis-flask (>=0.0.2,<0.0.3)",
 ]
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.11.1"

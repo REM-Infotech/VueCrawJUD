@@ -3416,6 +3416,22 @@ hiredis = ["hiredis (>=3.0.0)"]
 ocsp = ["cryptography (>=36.0.1)", "pyopenssl (==23.2.1)", "requests (>=2.31.0)"]
 
 [[package]]
+name = "redis-flask"
+version = "0.0.2"
+description = "Redis extension for Flask app"
+optional = false
+python-versions = "<4.0,>=3.11"
+groups = ["main"]
+files = [
+    {file = "redis_flask-0.0.2-py3-none-any.whl", hash = "sha256:9fb738bbf0c3b2f3cd6cbdcce34f076e1530e44179a183264ebbbd6d95b02006"},
+    {file = "redis_flask-0.0.2.tar.gz", hash = "sha256:c3300c6d867f3a4b13d49b8e73dd18173aa5c58ee5fe004e936910b3f134ebfe"},
+]
+
+[package.dependencies]
+Flask = ">=3.1.0,<4.0.0"
+redis = ">=5.2.0,<6.0.0"
+
+[[package]]
 name = "requests"
 version = "2.32.3"
 description = "Python HTTP for Humans."
@@ -4140,4 +4156,4 @@ propcache = ">=0.2.0"
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.13,<3.14"
-content-hash = "3084ac67648b465f370b89e27c057064aba002c882e96b2cf322f1983bba92a4"
+content-hash = "f76ad8be6ebbc628572434c03c570316a9f6708c3cdb7c5b0c715151e8b85973"
