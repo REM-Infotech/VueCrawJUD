@@ -3,11 +3,11 @@ import type { TSelectInput } from "./FormSelectInput";
 interface TCurrentBot {
   id: number;
   system: string;
-  state: string;
-  client: string;
-  type: string;
-  display_name: string;
-  form_cfg: string;
+  state?: string;
+  client?: string;
+  type?: string;
+  display_name?: string;
+  form_cfg?: string;
 }
 
 interface TSelectInput {

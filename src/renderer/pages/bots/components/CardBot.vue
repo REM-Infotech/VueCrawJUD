@@ -1,14 +1,12 @@
 <script setup lang="ts">
-import { current_bot } from "@shared/FormConfig";
 import { onBeforeMount, ref } from "vue";
 
 import projudiicon from "@renderer/assets/img/projudi.png";
 import iconbot from "@renderer/assets/svg/crawjud2.svg";
 import { botStore } from "@store/botsStore";
 const items = ref<{ system: string; id: number; display_name: string; text: string }[]>([]);
-
+const storebot = botStore();
 onBeforeMount(async () => {
-  const storebot = botStore();
   if (storebot.bots.length === 0) {
     await storebot.load();
   }
@@ -34,7 +32,11 @@ onBeforeMount(async () => {
             <BButton
               class="btn me-2 fw-bold dropdown-toggle"
               variant="outline-success"
-              @click="current_bot = item"
+              @click="
+                () => {
+                  storebot.loadCurrentBot(item);
+                }
+              "
               data-bs-toggle="dropdown"
               aria-expanded="false"
             >
@@ -70,7 +72,11 @@ onBeforeMount(async () => {
             <BButton
               class="btn me-2 fw-bold dropdown-toggle"
               variant="outline-success"
-              @click="current_bot = item"
+              @click="
+                () => {
+                  storebot.loadCurrentBot(item);
+                }
+              "
               data-bs-toggle="dropdown"
               aria-expanded="false"
             >

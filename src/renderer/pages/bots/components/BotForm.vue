@@ -1,32 +1,42 @@
 <script setup lang="ts">
-import type { TFormBot } from "@/@types/FormBot";
 import FormFileCfg from "@/renderer/services/Bot/FormFileCfg";
 import FormRefs from "@/renderer/services/Bot/FormRefs";
+import FormSelectCfg from "@/renderer/services/Bot/FormSelectCfg";
 import { faCheckSquare, faFileDownload, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import { useModal } from "bootstrap-vue-next";
-import { type Api as Dt } from "datatables.net";
+import { botStore } from "@store/botsStore";
+import { BvTriggerableEvent, useModal } from "bootstrap-vue-next";
+import type { TDataTables } from "CustomDTType";
 import DataTablesCore from "datatables.net-bs5";
 import DataTable from "datatables.net-vue3";
-import { computed, onMounted, reactive, watch } from "vue";
+import type { TCurrentBot, TSelectInput } from "FormBot";
+import { computed, watch } from "vue";
 import { useRouter } from "vue-router";
 import DropZone from "./FileDropZone.vue";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const { show: show_load, hide: hide_load } = useModal("modal-load");
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const { show: show_message } = useModal("ModalMessage");
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const { show: show_form } = useModal("ModalForm");
+const { show: show_form } = useModal("ModalFormBot");
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const router = useRouter();
-
+const { loadCredentials, loadStateClient } = FormSelectCfg();
+const storebot = botStore();
+const item: TCurrentBot = storebot.currentBot;
 const { addFiles } = FormFileCfg();
-const { files, checked_state, column_size, dynamic_size, table_file } = FormRefs();
+const {
+  files,
+  checked_state,
+  column_size,
+  dynamic_size,
+  table_file,
+  TitleForm,
+  FormBot,
+  formLoaded,
+  show_form_ref,
+} = FormRefs();
 
 const addfiles_ = (filesAppend: File[]) => {
-  console.log(filesAppend);
-
   const filesPush = addFiles(filesAppend, files);
 
   FormBot.files.push(...filesPush);
@@ -44,42 +54,16 @@ const columns = [
   },
 ];
 
-const FormBot = reactive<TFormBot>({
-  system: "",
-  state_client: {
-    selected: null,
-    items: [{ value: null, text: "Carregando" }],
-  },
-  credentials: {
-    selected: null,
-    items: [{ value: null, text: "Carregando" }],
-  },
-  type: "",
-  files: [],
-  need_files: true,
-  need_options: true,
-  bot_protocolo: false,
-  state_client_type: "",
-});
-
-let dt: Dt;
-
-onMounted(() => {
-  dt = table_file.value.dt;
-});
-
-DataTable.use(DataTablesCore);
-
 function remove() {
-  dt.rows({ selected: true }).every(function () {
+  (table_file.value?.dt as TDataTables).rows({ selected: true }).every(function () {
     let idx = FormBot.files.indexOf(this.data());
-    removeFile(this.data().file[0]);
+    removeFile(this.data().file);
     FormBot.files.splice(idx, 1);
   });
 }
 // Função para selecionar todos os arquivos da tabela
 const selectAll = () => {
-  dt.rows().select();
+  (table_file.value?.dt as TDataTables).rows().select();
 };
 
 function removeFile(file: File) {
@@ -104,35 +88,77 @@ const checked_state_computed = computed(() => {
 const FilesListable = () => {
   return FormBot.files.map((file, index) => {
     return {
-      id: index,
-      name: file.name,
+      index: index,
+      file: file,
     };
   });
 };
 
 watch(FormBot.files, () => {
-  console.log(files);
-
   const file_lenght = files.value.length > 0;
 
   if (file_lenght) {
+    DataTable.use(DataTablesCore);
     column_size.value = 6;
-    dynamic_size.value = "xl";
   } else {
-    column_size.value = 12;
-    dynamic_size.value = "md";
+    column_size.value = 6;
+    (table_file.value?.dt as TDataTables).destroy();
+    table_file.value = undefined;
   }
 });
+
+const load_options = async (e: BvTriggerableEvent) => {
+  show_load();
+  if (!formLoaded.value) {
+    e.preventDefault();
+  } else if (formLoaded.value) {
+    hide_load();
+    return;
+  }
+  console.log("load_options");
+
+  if (item.form_cfg === "only_auth") {
+    FormBot.need_files = false;
+  } else if (item.form_cfg === "only_file") {
+    FormBot.need_options = false;
+  }
+
+  if (item.type == "PROTOCOLO") {
+    FormBot.bot_protocolo = true;
+  }
+
+  let credentials: TSelectInput[];
+  try {
+    credentials = await loadCredentials(item);
+    const { state_client, isStateOrClient } = await loadStateClient(item);
+
+    TitleForm.value = item.display_name as string;
+
+    FormBot.credentials.items = credentials;
+    FormBot.state_client.items = state_client;
+
+    FormBot.state_client_type = isStateOrClient;
+
+    show_form();
+  } catch (error) {
+    console.log(error);
+    return;
+  }
+  formLoaded.value = true;
+};
 </script>
 
 <template>
   <BModal
+    @hide="formLoaded = false"
+    :show="show_form_ref"
     no-footer
     id="ModalFormBot"
     data-bs-theme="dark"
     :size="dynamic_size"
     centered
     class="text-white"
+    @show="load_options"
   >
     <BForm id="FormBot">
       <BRow>
@@ -182,32 +208,41 @@ watch(FormBot.files, () => {
         </BCol>
         <Transition>
           <BCol v-if="files.length > 0" :md="column_size">
-            <div class="table-responsive">
-              <DataTable
-                id="FilesTable"
-                :data="FilesListable()"
-                :columns="columns"
-                ref="table_file"
-                :options="{ select: true }"
-                class="display table"
-              >
-                <template #column-1="props">
-                  <span>{{ props.cellData[1] }}</span>
-                </template>
-              </DataTable>
-            </div>
-            <BButton @click="selectAll" class="btn-icon-split me-2" variant="primary">
-              <span class="icon text-white-50">
-                <FontAwesomeIcon :icon="faCheckSquare" class="" />
-              </span>
-              <span class="text">Selecionar Todos</span>
-            </BButton>
-            <BButton @click="remove" class="btn-icon-split me-2" variant="danger">
-              <span class="icon text-white-50">
-                <FontAwesomeIcon :icon="faTrash" class="" />
-              </span>
-              <span class="text">Remover Selecionados</span>
-            </BButton>
+            <BCard>
+              <template #header>
+                <span class="fw-bold">Arquivos</span>
+              </template>
+              <div class="table-responsive">
+                <DataTable
+                  id="FilesTable"
+                  :data="FilesListable()"
+                  :columns="columns"
+                  ref="table_file"
+                  :options="{ select: true }"
+                  class="display table"
+                >
+                  <template #column-1="props">
+                    <span>{{ props.cellData.name }}</span>
+                  </template>
+                </DataTable>
+              </div>
+              <template #footer>
+                <div class="d-flex gap-5">
+                  <BButton @click="selectAll" class="btn-icon-split me-2" variant="primary">
+                    <span class="icon text-white-50">
+                      <FontAwesomeIcon :icon="faCheckSquare" class="" />
+                    </span>
+                    <span class="text">Selecionar Todos</span>
+                  </BButton>
+                  <BButton @click="remove" class="btn-icon-split me-2" variant="danger">
+                    <span class="icon text-white-50">
+                      <FontAwesomeIcon :icon="faTrash" class="" />
+                    </span>
+                    <span class="text">Remover Selecionados</span>
+                  </BButton>
+                </div>
+              </template>
+            </BCard>
           </BCol>
         </Transition>
       </BRow>
