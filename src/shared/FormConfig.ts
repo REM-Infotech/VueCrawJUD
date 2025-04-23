@@ -27,7 +27,6 @@ let messages_xlsx: string[] = [];
 
 // functions
 export function addFiles(newFiles: File[]) {
-  console.log(newFiles);
   const XLSX_TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
   const filesArray = [...newFiles];
 
