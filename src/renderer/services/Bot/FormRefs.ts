@@ -24,8 +24,8 @@ export default function () {
     bot_protocolo: false,
     state_client_type: "",
   });
-  const dynamic_size = ref<Size | "xl">("xl");
-  const column_size = ref<ColsNumbers>(6);
+  const dynamic_size = ref<Size | "xl">("lg");
+  const column_size = ref<ColsNumbers>(12);
   const messages_error = ref<string[]>([]);
   const TitleForm = ref("Carregando");
   const need_files = ref(true);

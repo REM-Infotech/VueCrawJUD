@@ -27,6 +27,7 @@ declare global {
       SaveCredentials: (key: string, password: string) => Promise<void>;
       RemoveCredentials: (key: string) => Promise<void>;
       getCredentials: () => Promise<Array<{ account: string; password: string }>>;
+      AlertError: () => Promise<void>;
     };
   }
   interface FileObject {

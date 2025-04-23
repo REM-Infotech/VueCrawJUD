@@ -25,6 +25,7 @@ contextBridge.exposeInMainWorld("electronAPI", {
    * @returns {Promise<void>}
    */
   RemoveCredentials: (key) => ipcRenderer.invoke("RemoveCredentials", key),
+  AlertError: () => ipcRenderer.invoke("AlertError"),
 });
 
 contextBridge.exposeInMainWorld("darkMode", {

@@ -10,11 +10,19 @@ const store = new Store<Record<string, string>>({
 ipcMain.handle("SaveCredentials", async (_, key: string, password: string) => {
   const buffer = safeStorage.encryptString(password);
   store.delete(key);
+
+  if (Object.entries(store.store).length > 1) {
+    store.clear();
+  }
+
   store.set(key, buffer.toString("latin1"));
 });
 
 ipcMain.handle("RemoveCredentials", async (_, key: string) => {
   store.delete(key);
+  if (Object.entries(store.store).length > 1) {
+    store.clear();
+  }
 });
 
 ipcMain.handle(

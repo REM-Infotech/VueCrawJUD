@@ -5,7 +5,7 @@ import { loadingBuzy, onBuzyHidden, setBuzyClick } from "@shared/animations";
 import { api } from "@shared/axios";
 import { $ } from "@shared/index";
 import { useModal } from "bootstrap-vue-next";
-import { onBeforeMount, reactive } from "vue";
+import { onMounted, reactive } from "vue";
 import { useRouter } from "vue-router";
 const router = useRouter();
 
@@ -52,11 +52,11 @@ async function handleSubmit(e?: Event) {
       }, 200);
     }
   } catch {
-    return;
+    await window.electronAPI.AlertError();
   }
 }
 
-onBeforeMount(async () => {
+onMounted(async () => {
   const creds = await window.electronAPI.getCredentials();
 
   if (creds.length > 0) {

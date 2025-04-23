@@ -34,3 +34,18 @@ ipcMain.on("close", async () => {
     app.quit();
   }
 });
+
+ipcMain.handle("AlertError", async () => {
+  const diag = await dialog.showMessageBox({
+    message: "Erro ao realizar login",
+    type: "error",
+    buttons: ["OK"],
+    defaultId: 0,
+    cancelId: 0,
+    title: "Erro",
+    noLink: true,
+    icon: join(process.cwd(), "src", "renderer", "assets", "img", "icon.png"),
+  });
+
+  return diag;
+});

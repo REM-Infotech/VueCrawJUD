@@ -7,16 +7,16 @@ import DataTablesCore from "datatables.net-bs5";
 import DataTable from "datatables.net-vue3";
 import { onMounted } from "vue";
 DataTable.use(DataTablesCore);
-const authStore = tokenStore();
+
 const options = {
   language: {
     url: "./src/renderer/assets/locales/pt-br.json",
   },
 };
+const authStore = tokenStore();
+const exec_Store = execStore();
 
 onMounted(async function () {
-  const exec_Store = execStore().$state;
-
   console.log(exec_Store);
 
   data_.value = exec_Store.items.length === 0;
@@ -24,10 +24,11 @@ onMounted(async function () {
     await execStore().load();
   }
 
-  items.value = execStore().$state.items;
+  items.value = exec_Store.items;
 });
 
 const download_file = (file: string) => {
+  console.log(authStore["x-csrf-token"]);
   window.electronAPI.file_save(file, authStore["x-csrf-token"], authStore.token);
 };
 </script>

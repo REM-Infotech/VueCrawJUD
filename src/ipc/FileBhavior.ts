@@ -40,7 +40,7 @@ ipcMain.on("file_save", async (_, file: string, csrf_token: string, api_key: str
     await fs.writeFile(path.filePath, buffer);
     NotificationSuccess.body = "Arquivo salvo com sucesso em " + path.filePath;
     NotificationSuccess.show();
-  } catch {
-    //
+  } catch (error) {
+    console.log(error);
   }
 });
