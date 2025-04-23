@@ -2,10 +2,13 @@
 import type { TFormBot } from "@/@types/FormBot";
 import FormFileCfg from "@/renderer/services/Bot/FormFileCfg";
 import FormRefs from "@/renderer/services/Bot/FormRefs";
-import { faFileDownload } from "@fortawesome/free-solid-svg-icons";
+import { faCheckSquare, faFileDownload, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { useModal } from "bootstrap-vue-next";
-import { computed, reactive, watch } from "vue";
+import { type Api as Dt } from "datatables.net";
+import DataTablesCore from "datatables.net-bs5";
+import DataTable from "datatables.net-vue3";
+import { computed, onMounted, reactive, watch } from "vue";
 import { useRouter } from "vue-router";
 import DropZone from "./FileDropZone.vue";
 
@@ -19,7 +22,7 @@ const { show: show_form } = useModal("ModalForm");
 const router = useRouter();
 
 const { addFiles } = FormFileCfg();
-const { files, checked_state, column_size, dynamic_size } = FormRefs();
+const { files, checked_state, column_size, dynamic_size, table_file } = FormRefs();
 
 const addfiles_ = (filesAppend: File[]) => {
   console.log(filesAppend);
@@ -30,7 +33,16 @@ const addfiles_ = (filesAppend: File[]) => {
   files.value.push(...filesPush);
 };
 
-const columns = {};
+const columns = [
+  {
+    data: "index",
+    title: "#",
+  },
+  {
+    data: "file",
+    title: "Nome do arquivo",
+  },
+];
 
 const FormBot = reactive<TFormBot>({
   system: "",
@@ -49,6 +61,34 @@ const FormBot = reactive<TFormBot>({
   bot_protocolo: false,
   state_client_type: "",
 });
+
+let dt: Dt;
+
+onMounted(() => {
+  dt = table_file.value.dt;
+});
+
+DataTable.use(DataTablesCore);
+
+function remove() {
+  dt.rows({ selected: true }).every(function () {
+    let idx = FormBot.files.indexOf(this.data());
+    removeFile(this.data().file[0]);
+    FormBot.files.splice(idx, 1);
+  });
+}
+// Função para selecionar todos os arquivos da tabela
+const selectAll = () => {
+  dt.rows().select();
+};
+
+function removeFile(file: File) {
+  const index = FormBot.files.findIndex((f) => f.name === file.name);
+  if (index !== -1) {
+    FormBot.files.splice(index, 1);
+    files.value.splice(index, 1);
+  }
+}
 
 const credentials_computed = computed(() => {
   return FormBot.credentials.selected !== null;
@@ -145,7 +185,7 @@ watch(FormBot.files, () => {
             <div class="table-responsive">
               <DataTable
                 id="FilesTable"
-                :data="FilesListable"
+                :data="FilesListable()"
                 :columns="columns"
                 ref="table_file"
                 :options="{ select: true }"
@@ -156,6 +196,18 @@ watch(FormBot.files, () => {
                 </template>
               </DataTable>
             </div>
+            <BButton @click="selectAll" class="btn-icon-split me-2" variant="primary">
+              <span class="icon text-white-50">
+                <FontAwesomeIcon :icon="faCheckSquare" class="" />
+              </span>
+              <span class="text">Selecionar Todos</span>
+            </BButton>
+            <BButton @click="remove" class="btn-icon-split me-2" variant="danger">
+              <span class="icon text-white-50">
+                <FontAwesomeIcon :icon="faTrash" class="" />
+              </span>
+              <span class="text">Remover Selecionados</span>
+            </BButton>
           </BCol>
         </Transition>
       </BRow>

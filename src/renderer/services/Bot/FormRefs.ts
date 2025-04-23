@@ -1,4 +1,5 @@
 import type { ColsNumbers, Size } from "bootstrap-vue-next";
+import { type Api as Dt } from "datatables.net";
 import type { TUploadableFile } from "FormBot";
 import { ref } from "vue";
 
@@ -13,7 +14,9 @@ export default function () {
   const state_client_type = ref("");
   const files = ref<TUploadableFile[]>([]);
   const checked_state = ref(false);
+  const table_file = ref<Dt>();
   return {
+    table_file,
     checked_state,
     TitleForm,
     need_files,

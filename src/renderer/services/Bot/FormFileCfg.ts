@@ -46,5 +46,6 @@ export default function () {
   function xlsxfileExists(files: Ref<TUploadableFile[]>) {
     return files.value.some(({ type }) => type === xlsx_file);
   }
+
   return { addFiles };
 }
