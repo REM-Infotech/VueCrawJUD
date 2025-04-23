@@ -7,7 +7,7 @@ import { MainWindow } from ".";
 ipcMain.on("file_save", async (_, file: string, csrf_token: string, api_key: string) => {
   const { NotificationSuccess } = await import("@/main/components");
   const mainWindow = await MainWindow();
-
+  console.log("file_save", file, csrf_token, api_key);
   let response1: ResponseApi;
   let response2: ResponseGoogleStorage;
 

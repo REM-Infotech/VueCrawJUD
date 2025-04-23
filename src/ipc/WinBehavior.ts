@@ -1,4 +1,4 @@
-import { dialog, ipcMain } from "electron";
+import { app, dialog, ipcMain } from "electron";
 import { join } from "path";
 import { MainWindow } from ".";
 
@@ -31,6 +31,6 @@ ipcMain.on("close", async () => {
   });
 
   if (mensagem_sair.response === 0) {
-    mainWindow.close();
+    app.quit();
   }
 });
