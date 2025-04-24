@@ -3,6 +3,7 @@ import { api } from "@shared/axios";
 import { convertDate } from "@shared/convert_date";
 import { defineStore } from "pinia";
 import { ref } from "vue";
+import { tokenStore } from "./tokenAuthStore";
 
 export const items = ref([]);
 export const data_ = ref(false);
@@ -18,10 +19,11 @@ export const execStore = defineStore("ExecutionsStore", {
 
       try {
         response = await api.get("/executions", {
-          withXSRFToken: true,
-          withCredentials: true,
-          xsrfCookieName: "access_token_cookie",
-          xsrfHeaderName: "X-CSRF-TOKEN",
+          headers: {
+            "X-CSRF-TOKEN": tokenStore()["x-csrf-token"],
+            Authorization: `Bearer ${tokenStore().token}`,
+            "Content-Type": "multipart/form-data",
+          },
         });
 
         values = response.data.data.map((item: Record<string, string>) => {

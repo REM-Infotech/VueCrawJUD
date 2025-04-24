@@ -1,9 +1,16 @@
+import { tokenStore } from "@/store/tokenAuthStore";
 import { api } from "@shared/axios";
 import type { AxiosResponse } from "axios";
 
 export default async function () {
   async function getConfigSystem(): Promise<unknown> {
-    const response: AxiosResponse = await api.get("/linechart_system");
+    const response: AxiosResponse = await api.get("/linechart_system", {
+      headers: {
+        "X-CSRF-TOKEN": tokenStore()["x-csrf-token"],
+        Authorization: `Bearer ${tokenStore().token}`,
+        "Content-Type": "multipart/form-data",
+      },
+    });
 
     const config = {
       type: "line",
@@ -45,7 +52,13 @@ export default async function () {
   }
 
   async function getConfigBot(): Promise<unknown> {
-    const response: AxiosResponse = await api.get("/linechart_bot");
+    const response: AxiosResponse = await api.get("/linechart_bot", {
+      headers: {
+        "X-CSRF-TOKEN": tokenStore()["x-csrf-token"],
+        Authorization: `Bearer ${tokenStore().token}`,
+        "Content-Type": "multipart/form-data",
+      },
+    });
 
     const config = {
       type: "line",

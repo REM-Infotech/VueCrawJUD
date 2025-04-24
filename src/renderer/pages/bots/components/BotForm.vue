@@ -2,8 +2,11 @@
 import FormFileCfg from "@/renderer/services/Bot/FormFileCfg";
 import FormRefs from "@/renderer/services/Bot/FormRefs";
 import FormSelectCfg from "@/renderer/services/Bot/FormSelectCfg";
+import { $ } from "@/shared";
+import { tokenStore } from "@/store/tokenAuthStore";
 import { faCheckSquare, faFileDownload, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { api } from "@shared/axios";
 import { botStore } from "@store/botsStore";
 import { BvTriggerableEvent, useModal } from "bootstrap-vue-next";
 import type { TDataTables } from "CustomDTType";
@@ -16,10 +19,10 @@ import DropZone from "./FileDropZone.vue";
 
 const currentBot = ref<TCurrentBot>({} as TCurrentBot);
 const { show: show_load, hide: hide_load } = useModal("modal-load");
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+
 const { show: show_message } = useModal("ModalMessage");
 const { show: show_form } = useModal("ModalFormBot");
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+
 const router = useRouter();
 const { loadCredentials, loadStateClient } = FormSelectCfg();
 const { addFiles } = FormFileCfg();
@@ -148,6 +151,55 @@ const load_options = async (e: BvTriggerableEvent) => {
   }
   formLoaded.value = true;
 };
+
+async function peformSubmit(event: BvTriggerableEvent) {
+  event.preventDefault();
+  show_load();
+
+  if (!checked_state.value) {
+    $("#message").text("Você deve aceitar os termos para continuar.");
+    show_message();
+    return;
+  }
+
+  currentBot.value = botStore().currentBot;
+  item = currentBot.value;
+
+  const formData = new FormData();
+  formData.append("creds", FormBot.credentials.selected || "");
+  formData.append(FormBot.state_client_type, FormBot.state_client.selected || "");
+
+  FormBot.files.forEach((fileItem) => {
+    // console.log(fileItem);
+    formData.append(fileItem.file.name, fileItem.file);
+  });
+
+  // console.log(FilesListable.value);
+
+  const system: string = item.system.toLowerCase();
+  const type: string = item.type?.toLowerCase() as string;
+
+  api
+    .post(`/bot/${item.id}/${system}/${type}`, formData, {
+      headers: {
+        "X-CSRF-TOKEN": tokenStore()["x-csrf-token"],
+        Authorization: `Bearer ${tokenStore().token}`,
+        "Content-Type": "multipart/form-data",
+      },
+    })
+    .then((response) => {
+      if (response.status === 200) {
+        const pid = response.data.pid;
+        router.push({ name: "logs_bot", params: { pid: pid } });
+
+        $("#message").text(`Execução iniciada! PID: ${pid}`);
+      }
+    })
+    .catch(() => {
+      $("#message").text("Erro ao iniciar execução.");
+      show_message();
+    });
+}
 </script>
 
 <template>
@@ -164,7 +216,7 @@ const load_options = async (e: BvTriggerableEvent) => {
     :title="currentBot.display_name"
   >
     <BContainer class="mt-4">
-      <BForm id="FormBot">
+      <BForm id="FormBot" @submit="peformSubmit">
         <BRow>
           <BCol :md="column_size">
             <BCard>

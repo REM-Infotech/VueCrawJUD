@@ -2,6 +2,7 @@
 import { api } from "@shared/axios";
 import type { TCurrentBot } from "FormBot";
 import { defineStore } from "pinia";
+import { tokenStore } from "./tokenAuthStore";
 
 export const botStore = defineStore("botsStore", {
   state: () => {
@@ -12,7 +13,13 @@ export const botStore = defineStore("botsStore", {
       let response = null;
 
       try {
-        response = await api.get("/bots_list");
+        response = await api.get("/bots_list", {
+          headers: {
+            "X-CSRF-TOKEN": tokenStore()["x-csrf-token"],
+            Authorization: `Bearer ${tokenStore().token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        });
         this.bots = response.data;
       } catch {
         //

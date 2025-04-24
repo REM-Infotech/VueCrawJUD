@@ -20,6 +20,8 @@ export default function () {
         {
           headers: {
             "X-CSRF-TOKEN": tokenStore()["x-csrf-token"],
+            Authorization: `Bearer ${tokenStore().token}`,
+            "Content-Type": "application/json",
           },
         },
       );
@@ -49,10 +51,8 @@ export default function () {
         {
           headers: {
             "X-CSRF-TOKEN": tokenStore()["x-csrf-token"],
-          },
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          withXSRFToken(config) {
-            return true;
+            Authorization: `Bearer ${tokenStore().token}`,
+            "Content-Type": "application/json",
           },
         },
       );

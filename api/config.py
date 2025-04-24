@@ -23,6 +23,8 @@ load_dotenv()
 workdir = Path(__file__).cwd().joinpath("crawjud")
 running_servers: dict[str, StoreService] = {}
 
+env = environ
+
 
 class StoreService:
     """Dataclass for storing process information."""
@@ -77,6 +79,7 @@ class StoreService:
 class Config:
     """Base configuration class."""
 
+    WITH_REDIS = False
     LOG_LEVEL = logging.INFO
     DEBUG: type[bool] = False
     TESTING: type[bool] = False
@@ -221,9 +224,8 @@ class Config:
 class ProductionConfig(Config):
     """Configuration settings for production environment."""
 
-    env = environ
-
     # Flask-mail config
+
     MAIL_SERVER = env["MAIL_SERVER"]
     MAIL_PORT = int(env["MAIL_PORT"])
     MAIL_USE_TLS = env["MAIL_USE_TLS"] in ["True", "true", "TRUE"]
@@ -255,23 +257,26 @@ class ProductionConfig(Config):
     REDIS_PASSWORD = env["REDIS_PASSWORD"]
     REDIS_URL = env["REDIS_URL"]
 
-    BROKER_DATABASE = int(env["BROKER_DATABASE"])
-    RESULT_BACKEND_DATABASE = int(env["RESULT_BACKEND_DATABASE"])
-
+    WITH_REDIS: bool = env.get("WITH_REDIS", "False") in ["True", "true", "TRUE"]
     CELERY: dict[str, str | bool] = {
-        "broker_url": f"{REDIS_URL}/{BROKER_DATABASE}",
-        "result_backend": f"{REDIS_URL}/{RESULT_BACKEND_DATABASE}",
         "task_ignore_result": True,
         "broker_connection_retry_on_startup": True,
         "timezone": "America/Manaus",
         "task_create_missing_queues": True,
     }
 
+    if WITH_REDIS:
+        BROKER_DATABASE = int(env["BROKER_DATABASE"])
+        RESULT_BACKEND_DATABASE = int(env["RESULT_BACKEND_DATABASE"])
+        CELERY.update({
+            "broker_url": f"{REDIS_URL}/{BROKER_DATABASE}",
+            "result_backend": f"{REDIS_URL}/{RESULT_BACKEND_DATABASE}",
+        })
+
 
 class DevelopmentConfig(Config):
     """Configuration settings for development environment."""
 
-    env = environ
     LOG_LEVEL = logging.DEBUG
     # Flask-mail config
 
@@ -309,24 +314,28 @@ class DevelopmentConfig(Config):
     REDIS_PASSWORD = env["REDIS_PASSWORD"]
     REDIS_URL = env["REDIS_URL"]
 
-    BROKER_DATABASE = int(env["BROKER_DATABASE"])
-    RESULT_BACKEND_DATABASE = int(env["RESULT_BACKEND_DATABASE"])
-
+    WITH_REDIS: bool = env.get("WITH_REDIS", "False") in ["True", "true", "TRUE"]
     CELERY: dict[str, str | bool] = {
-        "broker_url": f"{REDIS_URL}/{BROKER_DATABASE}",
-        "result_backend": f"{REDIS_URL}/{RESULT_BACKEND_DATABASE}",
         "task_ignore_result": True,
         "broker_connection_retry_on_startup": True,
         "timezone": "America/Manaus",
         "task_create_missing_queues": True,
     }
+
+    if WITH_REDIS:
+        BROKER_DATABASE = int(env["BROKER_DATABASE"])
+        RESULT_BACKEND_DATABASE = int(env["RESULT_BACKEND_DATABASE"])
+        CELERY.update({
+            "broker_url": f"{REDIS_URL}/{BROKER_DATABASE}",
+            "result_backend": f"{REDIS_URL}/{RESULT_BACKEND_DATABASE}",
+        })
 
 
 class TestingConfig(Config):
     """Configuration settings for testing environment."""
 
     TESTTING = True
-    env = environ
+
     LOG_LEVEL = logging.DEBUG
     # Flask-mail config
 
@@ -364,14 +373,18 @@ class TestingConfig(Config):
     REDIS_PASSWORD = env["REDIS_PASSWORD"]
     REDIS_URL = env["REDIS_URL"]
 
-    BROKER_DATABASE = int(env["BROKER_DATABASE"])
-    RESULT_BACKEND_DATABASE = int(env["RESULT_BACKEND_DATABASE"])
-
+    WITH_REDIS: bool = env.get("WITH_REDIS", "False") in ["True", "true", "TRUE"]
     CELERY: dict[str, str | bool] = {
-        "broker_url": f"{REDIS_URL}/{BROKER_DATABASE}",
-        "result_backend": f"{REDIS_URL}/{RESULT_BACKEND_DATABASE}",
         "task_ignore_result": True,
-        "broker_connection_retry_on_startup": True,
         "timezone": "America/Manaus",
         "task_create_missing_queues": True,
     }
+
+    if WITH_REDIS:
+        BROKER_DATABASE = int(env["BROKER_DATABASE"])
+        RESULT_BACKEND_DATABASE = int(env["RESULT_BACKEND_DATABASE"])
+        CELERY.update({
+            "broker_connection_retry_on_startup": True,
+            "broker_url": f"{REDIS_URL}/{BROKER_DATABASE}",
+            "result_backend": f"{REDIS_URL}/{RESULT_BACKEND_DATABASE}",
+        })

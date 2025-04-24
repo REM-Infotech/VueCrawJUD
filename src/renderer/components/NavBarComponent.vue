@@ -1,5 +1,5 @@
 <template>
-  <BNavbar v-b-color-mode="'dark'" toggleable="lg" variant="dark" class="titlebar">
+  <BNavbar v-b-color-mode="'light'" toggleable="lg" class="titlebar">
     <BNavbarBrand
       href="#"
       data-bs-toggle="offcanvas"

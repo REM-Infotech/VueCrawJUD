@@ -48,8 +48,8 @@ async def acquire_credentials() -> Response:
     try:
         db: SQLAlchemy = app.extensions["sqlalchemy"]
 
-        await_request_data = await request.data
-        request_data = json.loads(await_request_data.decode("utf-8"))
+        await_request_data = (await request.data).decode("utf-8")
+        request_data = json.loads(await_request_data or "{}")
         form_data = await request.form
         request_json = await request.json
         json_data: dict[str, str] = form_data or request_json or request_data
@@ -90,8 +90,8 @@ async def acquire_systemclient() -> Response:
     try:
         db: SQLAlchemy = app.extensions["sqlalchemy"]
 
-        await_request_data = await request.data
-        request_data = json.loads(await_request_data.decode("utf-8"))
+        await_request_data = (await request.data).decode("utf-8")
+        request_data = json.loads(await_request_data or "{}")
         form_data = await request.form
         request_json = await request.json
         json_data: dict[str, str] = form_data or request_json or request_data
