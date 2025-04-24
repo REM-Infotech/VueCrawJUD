@@ -7,10 +7,10 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { api } from "@shared/axios";
-import { tokenStore } from "@store/tokenAuthStore";
+import { clearStores } from "@shared/index";
 import { useRouter } from "vue-router";
 const router = useRouter();
-const authStore = tokenStore();
+
 const handleLogoutClick = async (e: Event) => {
   e.preventDefault();
   api
@@ -18,13 +18,7 @@ const handleLogoutClick = async (e: Event) => {
     .then(() => {})
     .catch(() => {});
 
-  const creds = await window.electronAPI.getAllCredentials();
-
-  if (creds.length > 0) {
-    const { account } = creds[0];
-    await window.electronAPI.RemoveCredentials(account);
-  }
-  authStore.clear();
+  await clearStores();
   router.push({ name: "login" });
 };
 </script>

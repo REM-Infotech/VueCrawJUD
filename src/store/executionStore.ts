@@ -1,32 +1,28 @@
 // stores/counter.js
-import { api } from '@shared/axios';
+import { api } from "@shared/axios";
 import { convertDate } from "@shared/convert_date";
-import { defineStore } from 'pinia';
-import { ref } from 'vue';
-
+import { defineStore } from "pinia";
+import { ref } from "vue";
 
 export const items = ref([]);
 export const data_ = ref(false);
 
-export const execStore = defineStore('ExecutionsStore', {
+export const execStore = defineStore("ExecutionsStore", {
   state: () => {
-    return { items: [] }
+    return { items: [] };
   },
   actions: {
     async load() {
-
       let response = null;
       let values = [];
 
       try {
-
-        response = await api
-          .get("/executions", {
-            withXSRFToken: true,
-            withCredentials: true,
-            xsrfCookieName: "access_token_cookie",
-            xsrfHeaderName: "X-CSRF-TOKEN",
-          })
+        response = await api.get("/executions", {
+          withXSRFToken: true,
+          withCredentials: true,
+          xsrfCookieName: "access_token_cookie",
+          xsrfHeaderName: "X-CSRF-TOKEN",
+        });
 
         values = response.data.data.map((item: Record<string, string>) => {
           return [
@@ -46,18 +42,15 @@ export const execStore = defineStore('ExecutionsStore', {
           ];
         });
 
-        this.items = values
+        this.items = values;
         data_.value = true;
-
-
-
       } catch {
         //
-
       }
     },
+    clear() {
+      this.items = [];
+      data_.value = false;
+    },
   },
-})
-
-
-
+});

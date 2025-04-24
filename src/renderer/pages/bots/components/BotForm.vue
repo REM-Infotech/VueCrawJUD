@@ -10,7 +10,7 @@ import type { TDataTables } from "CustomDTType";
 import DataTablesCore from "datatables.net-bs5";
 import DataTable from "datatables.net-vue3";
 import type { TCurrentBot, TSelectInput } from "FormBot";
-import { computed, watch } from "vue";
+import { computed, onBeforeMount, watch } from "vue";
 import { useRouter } from "vue-router";
 import DropZone from "./FileDropZone.vue";
 
@@ -21,8 +21,6 @@ const { show: show_form } = useModal("ModalFormBot");
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const router = useRouter();
 const { loadCredentials, loadStateClient } = FormSelectCfg();
-const storebot = botStore();
-const item: TCurrentBot = storebot.currentBot;
 const { addFiles } = FormFileCfg();
 const {
   files,
@@ -36,6 +34,8 @@ const {
   show_form_ref,
 } = FormRefs();
 
+let item: TCurrentBot;
+let currentBot;
 const addfiles_ = (filesAppend: File[]) => {
   const filesPush = addFiles(filesAppend, files);
 
@@ -109,6 +109,11 @@ watch(FormBot.files, () => {
   }
 });
 
+onBeforeMount(() => {
+  const { currentBot } = botStore();
+  item = currentBot;
+});
+
 const load_options = async (e: BvTriggerableEvent) => {
   show_load();
   if (!formLoaded.value) {
@@ -158,7 +163,7 @@ const load_options = async (e: BvTriggerableEvent) => {
     centered
     class="text-white"
     @show="load_options"
-    :title="storebot.currentBot.display_name"
+    :title="currentBot?.display_name as string"
   >
     <BContainer class="mt-4">
       <BForm id="FormBot">

@@ -21,5 +21,9 @@ export const botStore = defineStore("botsStore", {
     loadCurrentBot(bot: TCurrentBot) {
       this.currentBot = bot;
     },
+    clear() {
+      this.bots = [];
+      this.currentBot = {} as TCurrentBot;
+    },
   },
 });
