@@ -4,8 +4,10 @@ import { createRouter, createWebHistory } from "vue-router";
 const routes = [
   {
     path: "/",
-    name: "login",
-    component: () => import("@pages/login/LoginView.vue"),
+    name: "logs",
+    component: () => import("@pages/logs/LogBotView.vue"),
+    // name: "login",
+    // component: () => import("@pages/login/LoginView.vue"),
   },
   {
     path: "/dashboard",

@@ -1,11 +1,20 @@
 <script setup lang="ts">
 import { faPieChart } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { LogsStore } from "@store/logsStore";
+import { ref, watch } from "vue";
+
+const logsbot = ref<string[]>([]);
+const storeLogs = LogsStore();
+
+watch(storeLogs.logs, (newLogs) => {
+  logsbot.value = newLogs;
+});
 </script>
 
 <template>
-  <div class="card fixed-height-card border-4 rounded rounded-4 border-black" style="height: 35rem">
-    <div class="card-header">
+  <div class="rounded-2 border border-1 border-secondary">
+    <BCardHeader class="bg-dark">
       <div class="row justify-content-between align-items-center">
         <div class="col-md-5">
           <span class="fw-semibold me-3">
@@ -15,14 +24,23 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
           <span class="fw-semibold">Logs </span>
         </div>
       </div>
-    </div>
-    <div class="card-body bg-black overflow-auto">
+    </BCardHeader>
+    <BCardBody class="bg-black" style="height: 50vh">
       <div class="container-fluid">
-        <ul id="messages" class="list-group list-group-flush over overflow-hidden"></ul>
+        <ul class="list-group list-group-flush over overflow-hidden">
+          <li
+            v-for="(log, index) in logsbot"
+            :key="index"
+            class="list-group-item list-group-item-action list-group-item-dark"
+          >
+            {{ log }}
+          </li>
+        </ul>
       </div>
-    </div>
-    <div class="card-footer small text-muted fw-semibold">
-      <span id="status">Status: Em Execução | Total: </span>
-    </div>
+    </BCardBody>
+    <BCardFooter class="d-flex gap-5">
+      <span id="status">Status: Em Execução</span>
+      <span>Total: </span>
+    </BCardFooter>
   </div>
 </template>
