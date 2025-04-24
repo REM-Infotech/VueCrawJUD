@@ -19,6 +19,7 @@ export const botStore = defineStore("botsStore", {
       }
     },
     loadCurrentBot(bot: TCurrentBot) {
+      console.log(bot);
       this.currentBot = bot;
     },
     clear() {

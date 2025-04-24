@@ -10,10 +10,11 @@ import type { TDataTables } from "CustomDTType";
 import DataTablesCore from "datatables.net-bs5";
 import DataTable from "datatables.net-vue3";
 import type { TCurrentBot, TSelectInput } from "FormBot";
-import { computed, onBeforeMount, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import { useRouter } from "vue-router";
 import DropZone from "./FileDropZone.vue";
 
+const currentBot = ref<TCurrentBot>({} as TCurrentBot);
 const { show: show_load, hide: hide_load } = useModal("modal-load");
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const { show: show_message } = useModal("ModalMessage");
@@ -35,7 +36,6 @@ const {
 } = FormRefs();
 
 let item: TCurrentBot;
-let currentBot;
 const addfiles_ = (filesAppend: File[]) => {
   const filesPush = addFiles(filesAppend, files);
 
@@ -109,11 +109,6 @@ watch(FormBot.files, () => {
   }
 });
 
-onBeforeMount(() => {
-  const { currentBot } = botStore();
-  item = currentBot;
-});
-
 const load_options = async (e: BvTriggerableEvent) => {
   show_load();
   if (!formLoaded.value) {
@@ -122,6 +117,9 @@ const load_options = async (e: BvTriggerableEvent) => {
     hide_load();
     return;
   }
+
+  currentBot.value = botStore().currentBot;
+  item = currentBot.value;
 
   if (item.form_cfg === "only_auth") {
     FormBot.need_files = false;
@@ -163,7 +161,7 @@ const load_options = async (e: BvTriggerableEvent) => {
     centered
     class="text-white"
     @show="load_options"
-    :title="currentBot?.display_name as string"
+    :title="currentBot.display_name"
   >
     <BContainer class="mt-4">
       <BForm id="FormBot">

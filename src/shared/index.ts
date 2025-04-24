@@ -15,7 +15,6 @@ export const to_modal_message = ref(false);
 
 export async function clearStores() {
   const stores = Object.entries(storeMap).map(([store_name, stores_data]) => {
-    console.log(stores_data);
     const storefn = stores_data();
     return { store_name, storefn };
   });
