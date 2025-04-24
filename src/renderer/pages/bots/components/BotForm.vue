@@ -104,7 +104,6 @@ watch(FormBot.files, () => {
     setTimeout(() => {
       column_size.value = 12;
       dynamic_size.value = "lg";
-      (table_file.value?.dt as TDataTables).destroy();
       table_file.value = undefined;
     }, 500);
   }
