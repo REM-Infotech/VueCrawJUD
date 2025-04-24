@@ -17,8 +17,6 @@ const authStore = tokenStore();
 const exec_Store = execStore();
 
 onMounted(async function () {
-  console.log(exec_Store);
-
   data_.value = exec_Store.items.length === 0;
   if (data_.value) {
     await execStore().load();
@@ -28,7 +26,6 @@ onMounted(async function () {
 });
 
 const download_file = (file: string) => {
-  console.log(authStore["x-csrf-token"]);
   window.electronAPI.file_save(file, authStore["x-csrf-token"], authStore.token);
 };
 </script>

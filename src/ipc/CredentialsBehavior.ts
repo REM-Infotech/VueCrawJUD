@@ -39,3 +39,9 @@ ipcMain.handle(
     );
   },
 );
+ipcMain.handle(
+  "getAllCredentials",
+  async (): Promise<Array<{ account: string; password: string }>> => {
+    return Object.entries(store.store).map(([account, password]) => ({ account, password }));
+  },
+);

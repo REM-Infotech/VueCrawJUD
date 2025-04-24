@@ -118,7 +118,6 @@ const load_options = async (e: BvTriggerableEvent) => {
     hide_load();
     return;
   }
-  console.log("load_options");
 
   if (item.form_cfg === "only_auth") {
     FormBot.need_files = false;
@@ -141,10 +140,8 @@ const load_options = async (e: BvTriggerableEvent) => {
     FormBot.state_client.items = state_client;
 
     FormBot.state_client_type = isStateOrClient;
-
     show_form();
-  } catch (error) {
-    console.log(error);
+  } catch {
     return;
   }
   formLoaded.value = true;

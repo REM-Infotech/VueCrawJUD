@@ -5,6 +5,7 @@ contextBridge.exposeInMainWorld("electronAPI", {
   maximize: () => ipcRenderer.send("maximize"),
   close: () => ipcRenderer.send("close"),
   perform: (formdata) => ipcRenderer.send("peform", formdata),
+  getAllCredentials: () => ipcRenderer.invoke("getAllCredentials"),
   getCredentials: () => ipcRenderer.invoke("getCredentials"),
   /**
    * @param {string} file

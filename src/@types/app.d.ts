@@ -26,6 +26,7 @@ declare global {
       file_save: (file: string, csrf_token: string, api_key: string) => Promise<void>;
       SaveCredentials: (key: string, password: string) => Promise<void>;
       RemoveCredentials: (key: string) => Promise<void>;
+      getAllCredentials: () => Promise<Array<{ account: string; password: string }>>;
       getCredentials: () => Promise<Array<{ account: string; password: string }>>;
       AlertError: () => Promise<void>;
     };

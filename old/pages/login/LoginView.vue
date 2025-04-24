@@ -47,7 +47,6 @@ const handleSubmit = (e: Event) => {
     .then((response: TResponseLogin) => {
       const { show: show_message } = useModal("ModalMessage");
       if (response.status === 200) {
-        console.log(response);
         const data: Record<string, string> = response.data as Record<string, string>;
 
         sessionStorage.setItem("token", data.token);

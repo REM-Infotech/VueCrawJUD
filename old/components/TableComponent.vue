@@ -23,8 +23,6 @@ const { show: show_message } = useModal("ModalMessage");
 onMounted(async function () {
   const exec_Store = execStore().$state;
 
-  console.log(exec_Store);
-
   data_.value = exec_Store.items.length === 0;
   if (data_.value) {
     await execStore().load();

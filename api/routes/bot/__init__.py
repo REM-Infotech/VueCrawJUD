@@ -47,14 +47,14 @@ async def acquire_credentials() -> Response:
     """Return a list credentials."""
     try:
         db: SQLAlchemy = app.extensions["sqlalchemy"]
-        json_data: dict[str, str] = await request.json
-        form_data = request.form
 
-        if not json_data:
-            json_data = await form_data
+        await_request_data = await request.data
+        request_data = json.loads(await_request_data.decode("utf-8"))
+        form_data = await request.form
+        request_json = await request.json
+        json_data: dict[str, str] = form_data or request_json or request_data
 
         system = json_data["system"]
-
         form_cfg = json_data["form_cfg"]
 
         if form_cfg == "only_file":
@@ -89,11 +89,12 @@ async def acquire_systemclient() -> Response:
     """Return a list credentials."""
     try:
         db: SQLAlchemy = app.extensions["sqlalchemy"]
-        json_data: dict[str, str] = await request.json
-        form_data = request.form
 
-        if not json_data:
-            json_data = await form_data
+        await_request_data = await request.data
+        request_data = json.loads(await_request_data.decode("utf-8"))
+        form_data = await request.form
+        request_json = await request.json
+        json_data: dict[str, str] = form_data or request_json or request_data
 
         system = json_data["system"]
         typebot = json_data["type"]
