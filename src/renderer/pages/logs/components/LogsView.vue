@@ -2,9 +2,10 @@
 import { faPieChart } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { LogsStore } from "@store/logsStore";
+import type { TLog } from "LogTypes";
 import { ref, watch } from "vue";
 
-const logsbot = ref<string[]>([]);
+const logsbot = ref<TLog[]>([]);
 const storeLogs = LogsStore();
 
 watch(storeLogs.logs, (newLogs) => {
@@ -31,9 +32,11 @@ watch(storeLogs.logs, (newLogs) => {
           <li
             v-for="(log, index) in logsbot"
             :key="index"
-            class="list-group-item list-group-item-action list-group-item-dark"
+            class="fw-bold"
+            :id="log.id"
+            :style="{ color: log.color }"
           >
-            {{ log }}
+            {{ log.message }}
           </li>
         </ul>
       </div>

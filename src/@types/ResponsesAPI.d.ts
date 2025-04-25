@@ -35,4 +35,17 @@ interface ResponseGoogleStorage extends AxiosResponse {
   };
 }
 
-export type { ResponseApi, ResponseGoogleStorage, TResponseInfoBot, TResponseLogin };
+interface TLogsApiResponse extends AxiosResponse {
+  status: number;
+  data: {
+    document_url: string;
+  };
+}
+
+export type {
+  ResponseApi,
+  ResponseGoogleStorage,
+  TLogsApiResponse,
+  TResponseInfoBot,
+  TResponseLogin,
+};

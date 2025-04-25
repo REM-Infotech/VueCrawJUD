@@ -1,6 +1,33 @@
 <script setup lang="ts">
+import { LogsStore } from "@/store/logsStore";
 import { faPieChart } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { Chart } from "chart.js";
+import { onMounted, ref, watch } from "vue";
+
+const countLogs = ref<number[]>([0, 0, 0]);
+const storeLogs = LogsStore();
+
+watch(storeLogs.logs, () => {
+  countLogs.value = [storeLogs.remaining, storeLogs.success, storeLogs.errors];
+});
+
+onMounted(() => {
+  const ctx = (document.getElementById("LogsBotChart") as HTMLCanvasElement)?.getContext("2d");
+  if (!ctx) return;
+  new Chart(ctx, {
+    type: "doughnut",
+    data: {
+      labels: ["RESTANTES", "SUCESSOS", "ERROS"],
+      datasets: [
+        {
+          data: [0.1, 0.1, 0.1],
+          backgroundColor: ["#0096C7", "#42cf06", "#FF0000"],
+        },
+      ],
+    },
+  });
+});
 </script>
 
 <template>
@@ -25,8 +52,9 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
       </div>
     </div>
     <div class="card-footer small text-muted fw-semibold">
-      <span id="remaining">Restantes: -.- </span> | <span id="success">Sucessos: -.- </span> |
-      <span id="errors">Erros: -.- </span>
+      <span id="remaining">Restantes: {{ countLogs[0] }} </span> |
+      <span id="success">Sucessos: {{ countLogs[1] }} </span> |
+      <span id="errors">Erros: {{ countLogs[2] }} </span>
     </div>
   </div>
 </template>

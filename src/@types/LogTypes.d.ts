@@ -11,4 +11,10 @@ interface TDataLog {
   executed: number;
 }
 
-export type { TDataLog };
+interface TLog {
+  message: string;
+  color: string;
+  id: string;
+}
+
+export type { TDataLog, TLog };
