@@ -1,5 +1,5 @@
-import { tokenStore } from "@/store/tokenAuthStore";
 import { api } from "@shared/axios";
+import { tokenStore } from "@store/tokenAuthStore";
 import type { AxiosResponse } from "axios";
 
 export default async function () {

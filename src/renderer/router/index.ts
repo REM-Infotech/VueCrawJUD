@@ -1,4 +1,4 @@
-import { tokenStore } from "@/store/tokenAuthStore";
+import { tokenStore } from "@store/tokenAuthStore";
 import { createRouter, createWebHistory } from "vue-router";
 
 const routes = [

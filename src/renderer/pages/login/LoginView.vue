@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import type { TResponseLogin } from "@/@types/ResponsesAPI";
-import { tokenStore } from "@/store/tokenAuthStore";
 import { loadingBuzy, onBuzyHidden, setBuzyClick } from "@shared/animations";
 import { api } from "@shared/axios";
 import { $ } from "@shared/index";
+import { tokenStore } from "@store/tokenAuthStore";
 import { useModal } from "bootstrap-vue-next";
 import { onMounted, reactive } from "vue";
 import { useRouter } from "vue-router";

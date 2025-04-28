@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { LogsStore } from "@/store/logsStore";
 import { faPieChart } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { LogsStore } from "@store/logsStore";
 import { Chart } from "chart.js";
 import { onMounted, ref, watch } from "vue";
 

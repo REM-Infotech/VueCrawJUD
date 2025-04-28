@@ -11,7 +11,6 @@ export default defineConfig({
   server: {
     host: "localhost",
     port: 3000,
-
   },
   plugins: [
     vue(),
@@ -32,7 +31,7 @@ export default defineConfig({
       "@pages": fileURLToPath(new URL("./src/renderer/pages", import.meta.url)),
       "@models": fileURLToPath(new URL("./src/models", import.meta.url)),
       "@types": fileURLToPath(new URL("./src/@types", import.meta.url)),
-      "@store": fileURLToPath(new URL("./src/store", import.meta.url)),
+      "@store": fileURLToPath(new URL("./src/stores", import.meta.url)),
     },
   },
   build: {

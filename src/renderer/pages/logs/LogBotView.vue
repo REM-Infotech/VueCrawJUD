@@ -2,7 +2,7 @@
 import type { TLogsApiResponse } from "@/@types/ResponsesAPI";
 import { $ } from "@/shared";
 import { api } from "@/shared/axios";
-import { LogsStore } from "@/store/logsStore";
+import { LogsStore } from "@store/logsStore";
 import { useModal } from "bootstrap-vue-next";
 import { Chart } from "chart.js";
 import type { TDataLog } from "LogTypes";
