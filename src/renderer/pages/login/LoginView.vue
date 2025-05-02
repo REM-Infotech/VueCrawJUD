@@ -43,7 +43,7 @@ async function handleSubmit(e?: Event) {
         await window.electronAPI.SaveCredentials(FormLogin.login, FormLogin.password);
       }
 
-      authStore.save(response);
+      authStore.save(response.data);
       router.push({ name: "dashboard" });
     } else if (response.data.message === "Usuário ou senha incorretos!") {
       $("#message").text("Usuário ou senha incorretos!");

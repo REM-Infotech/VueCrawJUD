@@ -3,9 +3,14 @@ import { router } from "@/renderer/router";
 import axios, { isAxiosError } from "axios";
 import type { ResponseError } from "ResponseError";
 import { clearStores } from ".";
+
 const url_api = "https://api.reminfotech.net.br";
+
 export const api = axios.create({
   baseURL: url_api,
+  headers: {
+    "Content-Type": "application/json",
+  },
 });
 api.interceptors.response.use(
   (response) => response,

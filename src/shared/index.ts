@@ -21,7 +21,7 @@ export async function clearStores() {
 
   try {
     stores.forEach(({ storefn }) => {
-      storefn.clear();
+      storefn.$reset();
     });
   } catch {
     //

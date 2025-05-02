@@ -14,15 +14,16 @@ ipcMain.on("file_save", async (_, file: string, csrf_token: string, api_key: str
     baseURL: "https://api.reminfotech.net.br",
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",
-      "x-csrf-token": csrf_token,
       Authorization: `Bearer ${api_key}`,
     },
-    withCredentials: true,
-    withXSRFToken: true,
   });
 
   try {
-    response1 = await api.get(`/executions/download/${file}`);
+    response1 = await api.get(`/executions/download/${file}`, {
+      headers: {
+        Authorization: `Bearer ${api_key}`,
+      },
+    });
     const data = response1.data;
     const url: string = data.url;
 

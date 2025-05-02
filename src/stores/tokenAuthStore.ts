@@ -1,20 +1,19 @@
-import type { TResponseLogin } from "ResponsesAPI";
+import type { TResponseData } from "ResponsesAPI";
 import { defineStore } from "pinia";
 export const tokenStore = defineStore("bearerStore", {
   state: () => {
-    return { token: "", "x-csrf-token": "" };
+    return { data: {} as TResponseData };
   },
   actions: {
-    save(resp: TResponseLogin) {
-      this.token = resp.data.token;
-      this["x-csrf-token"] = resp.data["x-csrf-token"];
+    save(data: TResponseData) {
+      this.data = data;
     },
     isLogged() {
-      return this.token !== "" && this["x-csrf-token"] !== "";
+      return Object.keys(this.data).length > 0;
     },
-    clear() {
-      this.token = "";
-      this["x-csrf-token"] = "";
+    logout() {
+      this.data = {} as TResponseData;
     },
   },
+  persist: true,
 });
