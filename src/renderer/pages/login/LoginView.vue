@@ -51,7 +51,8 @@ async function handleSubmit(e?: Event) {
         show_message();
       }, 200);
     }
-  } catch {
+  } catch (err) {
+    console.error(err);
     await window.electronAPI.AlertError();
   }
 }
