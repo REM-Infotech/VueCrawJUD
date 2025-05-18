@@ -5,6 +5,7 @@ __pycache__/
 Temp/
 temp/
 # C extensions
+.vite/
 *.so
 change_msg.py
 Browser/
