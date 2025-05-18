@@ -1,9 +1,4 @@
-<script setup lang="ts">
-import NavbarView from "@/components/NavbarView.vue";
-</script>
-
 <template>
-  <NavbarView />
   <div class="vh-50">
     <main class="d-flex justify-content-center align-items-center p-5" id="mainFrame"></main>
   </div>

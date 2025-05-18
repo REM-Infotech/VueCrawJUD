@@ -1,51 +1,6 @@
-<script setup lang="ts">
-import { computed, reactive, ref } from "vue";
-import { useRouter } from "vue-router";
-import IconLogo from "./IconLogo.vue";
-import { BButton, BContainer, BForm, BFormGroup, BFormInput } from "bootstrap-vue-next";
-
-const router = useRouter();
-
-const isSubmited = ref(false);
-const Form = reactive({
-  login: "",
-  password: "",
-});
-
-function ValidatorState(formInput: string) {
-  return !(formInput.length === 0) ? null : !isSubmited.value ? null : !(formInput.length === 0);
-}
-
-function TextInvalidFeedback(formInput: string) {
-  return formInput.length === 0
-    ? "Esse campo não pode ficar em branco"
-    : "Esse campo não pode ficar em branco";
-}
-
-const stateLogin = computed(() => ValidatorState(Form.login));
-const statePassword = computed(() => ValidatorState(Form.password));
-const invalidFeedbackLogin = computed(() => TextInvalidFeedback(Form.login));
-const invalidFeedbackPassword = computed(() => TextInvalidFeedback(Form.login));
-
-async function handleSubmit(event: Event) {
-  console.log(event);
-  event.preventDefault();
-
-  if (Form.login.length === 0 || Form.password.length === 0) {
-    isSubmited.value = true;
-    return;
-  }
-
-  router.push({ name: "dashboard" });
-}
-</script>
-
 <template>
-  <main
-    class="d-flex justify-content-center vh-100 align-items-center p-5 main_login"
-    id="mainFrame"
-  >
-    <BContainer class="p-5 d-flex justify-content-center">
+  <main class="d-flex justify-content-center mt-4 align-items-center main_login" id="mainFrame">
+    <BContainer class="p-5 d-flex mt-4 justify-content-center">
       <BForm class="form-signin" @submit="handleSubmit">
         <IconLogo />
         <BFormGroup
@@ -90,6 +45,47 @@ async function handleSubmit(event: Event) {
     </BContainer>
   </main>
 </template>
+<script setup lang="ts">
+import { BButton, BContainer, BForm, BFormGroup, BFormInput } from "bootstrap-vue-next";
+import { computed, reactive, ref } from "vue";
+import { useRouter } from "vue-router";
+import IconLogo from "./IconLogo.vue";
+
+const router = useRouter();
+
+const isSubmited = ref(false);
+const Form = reactive({
+  login: "",
+  password: "",
+});
+
+function ValidatorState(formInput: string) {
+  return !(formInput.length === 0) ? null : !isSubmited.value ? null : !(formInput.length === 0);
+}
+
+function TextInvalidFeedback(formInput: string) {
+  return formInput.length === 0
+    ? "Esse campo não pode ficar em branco"
+    : "Esse campo não pode ficar em branco";
+}
+
+const stateLogin = computed(() => ValidatorState(Form.login));
+const statePassword = computed(() => ValidatorState(Form.password));
+const invalidFeedbackLogin = computed(() => TextInvalidFeedback(Form.login));
+const invalidFeedbackPassword = computed(() => TextInvalidFeedback(Form.login));
+
+async function handleSubmit(event: Event) {
+  console.log(event);
+  event.preventDefault();
+
+  if (Form.login.length === 0 || Form.password.length === 0) {
+    isSubmited.value = true;
+    return;
+  }
+
+  router.push({ name: "dashboard" });
+}
+</script>
 <style lang="scss" scoped>
 @import "../../assets/scss/colors";
 .form-signin {
