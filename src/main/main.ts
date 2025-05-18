@@ -2,9 +2,9 @@ import "@/ipc/CredentialsBehavior";
 import "@/ipc/FileBhavior";
 import "@/ipc/ThemeBehavior";
 import "@/ipc/WinBehavior";
+import { modeLoadWindow, titleBarStyle } from "@/shared/ElectronConfig";
 import { initialize } from "@electron/remote/main/index";
 import "@models/userModel";
-import { modeLoadWindow, titleBarStyle } from "@shared/ElectronConfig";
 import { config as DotEnvConfig } from "dotenv";
 import { app, BrowserWindow, screen, Tray } from "electron";
 import isDev from "electron-is-dev";
@@ -14,6 +14,11 @@ DotEnvConfig();
 export let traywindow: Tray;
 export let mainWindow: BrowserWindow;
 app.setAppUserModelId("com.app.RemDevs.CrawJUD");
+
+const icon =
+  process.platform === "win32"
+    ? join(__dirname, "../assets", "brand", "icon.ico")
+    : join(__dirname, "../assets", "brand", "icon.png");
 
 const createWindow = async () => {
   initialize();
@@ -35,7 +40,7 @@ const createWindow = async () => {
     }
   }
   mainWindow = new BrowserWindow({
-    icon: join(process.cwd(), "src", "renderer", "assets", "img", "icon.png"),
+    icon: icon,
     minWidth: minWidth,
     minHeight: minHeight,
     width: minWidth,
