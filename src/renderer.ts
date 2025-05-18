@@ -7,7 +7,7 @@ import "bootstrap-vue-next/dist/bootstrap-vue-next.css";
 import "bootstrap/dist/css/bootstrap.css";
 
 import App from "./App.vue";
-import router from "./router";
+import { router } from "./router/index";
 
 const app = createApp(App);
 const bootstrap = createBootstrap();
