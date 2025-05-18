@@ -38,6 +38,7 @@ const createWindow = async () => {
     height: minHeight,
     titleBarStyle: titleBarStyle(),
     webPreferences: {
+      nodeIntegration: true,
       preload: join(__dirname, "./preload.js"),
     },
   });
