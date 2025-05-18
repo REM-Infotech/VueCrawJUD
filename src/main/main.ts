@@ -2,12 +2,11 @@ import "@/ipc/CredentialsBehavior";
 import "@/ipc/FileBhavior";
 import "@/ipc/ThemeBehavior";
 import "@/ipc/WinBehavior";
-import { modeLoadWindow, titleBarStyle } from "@/shared/ElectronConfig";
 import { initialize } from "@electron/remote/main/index";
 import { app, BrowserWindow, screen, Tray } from "electron";
 import isDev from "electron-is-dev";
 import { join } from "path";
-import { icon } from "./configs";
+import { icon, modeLoadWindow, titleBarStyle } from "./configs";
 
 export let traywindow: Tray;
 export let mainWindow: BrowserWindow;
