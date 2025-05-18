@@ -1,23 +1,19 @@
-import DashboardView from "@/views/DashboardView.vue";
 import { createRouter, createWebHistory } from "vue-router";
-import LoginView from "../views/auth/LoginView.vue";
-const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
-  routes: [
-    {
-      path: "/",
-      name: "login",
-      component: LoginView,
-    },
-    {
-      path: "/dashboard",
-      name: "dashboard",
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: DashboardView,
-    },
-  ],
-});
 
-export default router;
+const routes = [
+  {
+    path: "/",
+    name: "login",
+    component: () => import("../views/auth/LoginView.vue"),
+  },
+  {
+    path: "/dashboard",
+    name: "dashboard",
+    component: () => import("../views/DashboardView.vue"),
+  },
+];
+
+export const router = createRouter({
+  history: createWebHistory(),
+  routes,
+});
