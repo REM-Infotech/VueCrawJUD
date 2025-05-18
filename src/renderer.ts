@@ -6,8 +6,26 @@ import { createApp } from "vue";
 import "bootstrap-vue-next/dist/bootstrap-vue-next.css";
 import "bootstrap/dist/css/bootstrap.css";
 
+import { createRouter, createWebHistory } from "vue-router";
 import App from "./App.vue";
-import { router } from "./router/index";
+
+const routes = [
+  {
+    path: "/",
+    name: "login",
+    component: () => import("./views/auth/LoginView.vue"),
+  },
+  {
+    path: "/dashboard",
+    name: "dashboard",
+    component: () => import("./views/DashboardView.vue"),
+  },
+];
+
+export const router = createRouter({
+  history: createWebHistory(),
+  routes,
+});
 
 const app = createApp(App);
 const bootstrap = createBootstrap();
