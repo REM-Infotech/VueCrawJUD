@@ -23,15 +23,6 @@ export default defineConfig({
     extensions: [".mjs", ".js", ".ts", ".jsx", ".tsx", ".json", ".vue"],
     alias: {
       "@": fileURLToPath(new URL("./src", import.meta.url)),
-      "@renderer": fileURLToPath(new URL("./src/renderer", import.meta.url)),
-      "@shared": fileURLToPath(new URL("./src/shared", import.meta.url)),
-      "@routes": fileURLToPath(new URL("./src/routes", import.meta.url)),
-      "@assets": fileURLToPath(new URL("./src/renderer/assets", import.meta.url)),
-      "@components": fileURLToPath(new URL("./src/renderer/components", import.meta.url)),
-      "@pages": fileURLToPath(new URL("./src/renderer/pages", import.meta.url)),
-      "@models": fileURLToPath(new URL("./src/models", import.meta.url)),
-      "@types": fileURLToPath(new URL("./src/@types", import.meta.url)),
-      "@store": fileURLToPath(new URL("./src/stores", import.meta.url)),
     },
   },
   build: {

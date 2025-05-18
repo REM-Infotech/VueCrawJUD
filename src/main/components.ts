@@ -1,7 +1,7 @@
 import { MainWindow } from "@/ipc";
 import { app, dialog, Menu, Notification, Tray } from "electron";
 import { join } from "path";
-const icon = join(process.cwd(), "src", "renderer", "assets", "img", "icon.png");
+import { icon } from "./configs";
 
 export const NotificationSuccess = new Notification({
   title: "Sucesso!",

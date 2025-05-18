@@ -4,27 +4,21 @@ import "@/ipc/ThemeBehavior";
 import "@/ipc/WinBehavior";
 import { modeLoadWindow, titleBarStyle } from "@/shared/ElectronConfig";
 import { initialize } from "@electron/remote/main/index";
-import "@models/userModel";
-import { config as DotEnvConfig } from "dotenv";
 import { app, BrowserWindow, screen, Tray } from "electron";
 import isDev from "electron-is-dev";
 import { join } from "path";
-DotEnvConfig();
+import { icon } from "./configs";
 
 export let traywindow: Tray;
 export let mainWindow: BrowserWindow;
-app.setAppUserModelId("com.app.RemDevs.CrawJUD");
 
-const icon =
-  process.platform === "win32"
-    ? join(__dirname, "../assets", "brand", "icon.ico")
-    : join(__dirname, "../assets", "brand", "icon.png");
+let minWidth = 800;
+let minHeight = 600;
+
+app.setAppUserModelId("com.app.RemDevs.CrawJUD");
 
 const createWindow = async () => {
   initialize();
-  let minWidth = 800;
-  let minHeight = 600;
-
   const { width, height } = screen.getPrimaryDisplay().workAreaSize;
   const configs = [
     { check: (w: number, h: number) => w <= 800 && h <= 600, minWidth: 640, minHeight: 480 },

@@ -18,7 +18,6 @@ if (process.platform === "win32") {
 }
 
 const config: ForgeConfig = {
-  outDir: "./build/forge",
   makers: [
     new MakerSquirrel(
       {
@@ -36,17 +35,17 @@ const config: ForgeConfig = {
       build: [
         {
           entry: "src/main/main.ts",
-          config: "vite.config.main.js",
+          config: "vite.main.config.js",
         },
         {
           entry: "src/main/preload.js",
-          config: "vite.config.preload.js",
+          config: "vite.preload.config.js",
         },
       ],
       renderer: [
         {
           name: "crawjud_renderer",
-          config: "vite.config.renderer.js",
+          config: "vite.renderer.config.js",
         },
       ],
     }),
