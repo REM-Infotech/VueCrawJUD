@@ -1,0 +1,84 @@
+@import "./default.scss";
+
+.navbar-indigo {
+  --#{$prefix}navbar-color: #{$white};
+  --#{$prefix}navbar-hover-color: #{$white};
+  --#{$prefix}navbar-disabled-color: #{$white};
+  --#{$prefix}navbar-active-color: #{$white};
+  --#{$prefix}navbar-brand-color: #{$white};
+  --#{$prefix}navbar-brand-hover-color: #{$white};
+  --#{$prefix}navbar-toggler-border-color: #{$white};
+  --#{$prefix}navbar-toggler-icon-bg: #{$white};
+  background-color: #290f38;
+  // background-color: #{$indigo-600};
+}
+
+body {
+  transition:
+    background-color 0.4s ease,
+    color 0.4s ease;
+}
+
+.btn-purple {
+  transition:
+    background-color 0.4s ease,
+    color 0.4s ease;
+  border-radius: 5px;
+}
+
+[data-bs-theme="dark"] {
+  body {
+    background-color: $amethyst-900;
+    color: #fff;
+  }
+
+  .app-navbar {
+    background-color: $scarlet-gum-950;
+  }
+}
+[data-bs-theme="light"] {
+  body {
+    background-color: $amethyst-300;
+  }
+
+  .app-navbar {
+    background-color: $scarlet-gum-500;
+  }
+}
+
+// Buttons
+[data-bs-theme="light"] {
+  .btn-purple {
+    background-color: $purple-heart-800;
+    border-color: $purple-heart-800;
+    border-radius: 5px;
+  }
+
+  .btn-purple:hover {
+    background-color: $purple-heart-600;
+    border-color: $purple-heart-600;
+    transition:
+      background-color 0.4s ease,
+      color 0.4s ease;
+  }
+  .btn-purple:active {
+    background-color: $purple-heart-600;
+    border-color: $purple-heart-600;
+  }
+}
+
+[data-bs-theme="dark"] {
+  .btn-purple {
+    background-color: $purple-heart-800;
+    border-color: $purple-heart-800;
+  }
+
+  .btn-purple:hover {
+    background-color: $purple-heart-900;
+    border-color: $purple-heart-900;
+  }
+  .btn-purple:active {
+    background-color: $purple-heart-700;
+    border-color: $purple-heart-700;
+  }
+}

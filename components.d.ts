@@ -9,31 +9,11 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     BButton: typeof import('bootstrap-vue-next/components/BButton')['BButton']
-    BCard: typeof import('bootstrap-vue-next/components/BCard')['BCard']
-    BCardBody: typeof import('bootstrap-vue-next/components/BCard')['BCardBody']
-    BCardFooter: typeof import('bootstrap-vue-next/components/BCard')['BCardFooter']
-    BCardGroup: typeof import('bootstrap-vue-next/components/BCard')['BCardGroup']
-    BCardHeader: typeof import('bootstrap-vue-next/components/BCard')['BCardHeader']
-    BCardText: typeof import('bootstrap-vue-next/components/BCard')['BCardText']
-    BCol: typeof import('bootstrap-vue-next/components/BContainer')['BCol']
-    BContainer: typeof import('bootstrap-vue-next/components/BContainer')['BContainer']
-    BForm: typeof import('bootstrap-vue-next/components/BForm')['BForm']
-    BFormCheckbox: typeof import('bootstrap-vue-next/components/BFormCheckbox')['BFormCheckbox']
-    BFormFile: typeof import('bootstrap-vue-next/components/BFormFile')['BFormFile']
-    BFormFloatingLabel: typeof import('bootstrap-vue-next/components/BForm')['BFormFloatingLabel']
-    BFormInput: typeof import('bootstrap-vue-next/components/BFormInput')['BFormInput']
-    BFormSelect: typeof import('bootstrap-vue-next/components/BFormSelect')['BFormSelect']
-    BModal: typeof import('bootstrap-vue-next/components/BModal')['BModal']
-    BNavbar: typeof import('bootstrap-vue-next/components/BNavbar')['BNavbar']
-    BNavbarBrand: typeof import('bootstrap-vue-next/components/BNavbar')['BNavbarBrand']
-    BNavbarNav: typeof import('bootstrap-vue-next/components/BNavbar')['BNavbarNav']
-    BOverlay: typeof import('bootstrap-vue-next/components/BOverlay')['BOverlay']
-    BRow: typeof import('bootstrap-vue-next/components/BContainer')['BRow']
+    ChoseThemeView: typeof import('./src/components/ChoseThemeView.vue')['default']
+    NavbarView: typeof import('./src/components/NavbarView.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
-  }
-  export interface ComponentCustomProperties {
-    vBColorMode: typeof import('bootstrap-vue-next/directives/BColorMode')['vBColorMode']
-    vBModal: typeof import('bootstrap-vue-next/directives/BModal')['vBModal']
+    ThemeIcons: typeof import('./src/components/icons/ThemeIcons.vue')['default']
+    WindowControl: typeof import('./src/components/window/WindowControl.vue')['default']
   }
 }
