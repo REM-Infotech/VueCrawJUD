@@ -3,43 +3,45 @@ import "@/ipc/FileBhavior";
 import "@/ipc/ThemeBehavior";
 import "@/ipc/WinBehavior";
 import { initialize } from "@electron/remote/main/index";
+import "@models/userModel";
+import { modeLoadWindow, titleBarStyle } from "@shared/ElectronConfig";
+import { config as DotEnvConfig } from "dotenv";
 import { app, BrowserWindow, screen, Tray } from "electron";
 import isDev from "electron-is-dev";
 import { join } from "path";
-import { icon, modeLoadWindow, titleBarStyle } from "./configs";
+DotEnvConfig();
 
 export let traywindow: Tray;
 export let mainWindow: BrowserWindow;
-
-let minWidth = 800;
-let minHeight = 600;
-
 app.setAppUserModelId("com.app.RemDevs.CrawJUD");
 
 const createWindow = async () => {
   initialize();
+  let minWidth = 800;
+  let minHeight = 600;
+
   const { width, height } = screen.getPrimaryDisplay().workAreaSize;
-  [
+  const configs = [
     { check: (w: number, h: number) => w <= 800 && h <= 600, minWidth: 640, minHeight: 480 },
     { check: (w: number, h: number) => w === 1366 && h <= 768, minWidth: 1024, minHeight: 720 },
     { check: (w: number, h: number) => w === 1920 && h <= 1080, minWidth: 1280, minHeight: 720 },
-  ].forEach((config) => {
+  ];
+
+  for (const config of configs) {
     if (config.check(width, height)) {
       minWidth = config.minWidth;
       minHeight = config.minHeight;
+      break;
     }
-  });
-
+  }
   mainWindow = new BrowserWindow({
-    icon: icon,
+    icon: join(process.cwd(), "src", "renderer", "assets", "img", "icon.png"),
     minWidth: minWidth,
     minHeight: minHeight,
     width: minWidth,
     height: minHeight,
     titleBarStyle: titleBarStyle(),
     webPreferences: {
-      contextIsolation: true,
-      nodeIntegration: true,
       preload: join(__dirname, "./preload.js"),
     },
   });

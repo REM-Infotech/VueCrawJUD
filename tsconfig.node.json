@@ -1,11 +1,4 @@
 {
-  "compilerOptions": {
-    "module": "ESNext",
-    "moduleResolution": "Bundler",
-    "noEmit": true,
-    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
-    "types": ["node"]
-  },
   "extends": "@tsconfig/node22/tsconfig.json",
   "include": [
     "vite.config.*",
@@ -15,7 +8,15 @@
     "playwright.config.*",
     "eslint.config.*",
     "vite.main.config.js",
-    "vite.renderer.config.js",
-    "vite.preload.config.js"
-  ]
+    "vite.renderer.config.js"
+  ],
+  "compilerOptions": {
+    "noEmit": true,
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "types": [
+      "node",
+    ]
+  }
 }
