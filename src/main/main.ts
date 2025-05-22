@@ -2,6 +2,7 @@ import "@/ipc/CredentialsBehavior";
 import "@/ipc/FileBhavior";
 import "@/ipc/ThemeBehavior";
 import "@/ipc/WinBehavior";
+import imgIcon from "@assets/img/icon.ico";
 import { initialize } from "@electron/remote/main/index";
 import "@models/userModel";
 import { modeLoadWindow, titleBarStyle } from "@shared/ElectronConfig";
@@ -35,7 +36,7 @@ const createWindow = async () => {
     }
   }
   mainWindow = new BrowserWindow({
-    icon: join(process.cwd(), "src", "renderer", "assets", "img", "icon.png"),
+    icon: imgIcon,
     minWidth: minWidth,
     minHeight: minHeight,
     width: minWidth,
