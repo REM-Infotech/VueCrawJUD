@@ -19,7 +19,7 @@ if (!isDev) {
 
 export const modeLoadWindow: LoadWindow = {
   true: async (mainWindow: BrowserWindow) => {
-    await mainWindow.loadURL("http://localhost:3000");
+    await mainWindow.loadURL("http://localhost:5173");
   },
   false: async (mainWindow: BrowserWindow) => {
     mainWindow.loadFile(join(__dirname, `../renderer/crawjud_renderer/index.html`));

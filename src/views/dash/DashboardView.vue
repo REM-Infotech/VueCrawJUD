@@ -1,10 +1,16 @@
+<script setup lang="ts">
+import ExecutionsView from "./components/ExecutionsView.vue";
+</script>
+
 <template>
   <div class="vh-50">
-    <main class="d-flex justify-content-center align-items-center p-5" id="mainFrame"></main>
+    <main class="d-flex justify-content-center align-items-center p-5" id="mainFrame">
+      <ExecutionsView />
+    </main>
   </div>
 </template>
 <style scoped lang="scss">
-@import "../assets/scss/default.scss";
+@import "../../assets/scss/default.scss";
 .main_login {
   transition:
     background-color 0.4s ease,

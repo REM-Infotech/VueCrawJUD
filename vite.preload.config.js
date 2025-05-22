@@ -7,11 +7,6 @@ import vueDevTools from "vite-plugin-vue-devtools";
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: "./",
-  server: {
-    host: "localhost",
-    port: 3000,
-  },
   plugins: [
     vue(),
     vueDevTools(),
@@ -26,6 +21,7 @@ export default defineConfig({
     },
   },
   build: {
+    sourcemap: true,
     rollupOptions: {
       external: ["fs", "path", "os", "child_process", "stream", "buffer"], // Configura os módulos do Node.js como externos
     },
