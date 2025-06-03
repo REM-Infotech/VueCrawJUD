@@ -6,12 +6,21 @@ import { loginDiv, loginInput } from "./components/styledElements";
 
 const active = ref(false);
 const computedType = computed(() => (!active.value ? "password" : "text"));
+
+async function handleSubmit(event: Event) {
+  event.preventDefault();
+  alert("sumit");
+}
 </script>
 
 <template>
   <div class="d-flex flex-column justify-content-center" style="height: 100%">
     <div class="mt-auto mb-auto p-3">
-      <div class="card ms-auto me-auto" style="width: 35%">
+      <form
+        class="card ms-auto me-auto d-flex flex-column gap-2 p-3"
+        style="width: 35%"
+        @submit="handleSubmit"
+      >
         <div class="card-body d-flex flex-column align-items-center justify-content-center">
           <loginDiv class="mb-3">
             <loginInput id="emailInput" placeholder="Usuário" />
@@ -26,7 +35,8 @@ const computedType = computed(() => (!active.value ? "password" : "text"));
             <EyeView type="button" @click="active = !active" />
           </loginDiv>
         </div>
-      </div>
+        <button class="btn btn-success" type="submit">entrar</button>
+      </form>
     </div>
     <div class="bg-dark">teste</div>
   </div>
