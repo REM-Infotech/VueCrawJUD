@@ -4,12 +4,12 @@ import { computed, ref, watch } from "vue";
 defineProps({
   width_sidebar: {
     type: String,
-    default: "80px",
+    default: "65px",
   },
 });
 
 const expand_sidebar = ref(false);
-const computeExpand = computed(() => (expand_sidebar.value ? "250px" : "80px"));
+const computeExpand = computed(() => (expand_sidebar.value ? "250px" : "65px"));
 
 const emit = defineEmits(["update:width_sidebar"]);
 

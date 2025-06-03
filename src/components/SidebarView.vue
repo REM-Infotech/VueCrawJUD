@@ -6,17 +6,17 @@ import { computed } from "vue";
 const props = defineProps({
   width_sidebar: {
     type: String,
-    default: "80px",
+    default: "65px",
   },
 });
 
-const widthCompute = computed(() => props.width_sidebar !== "80px");
-const widthIcon = computed(() => (props.width_sidebar !== "80px" ? "xl" : "2xl"));
+const widthCompute = computed(() => props.width_sidebar !== "65px");
+const widthIcon = computed(() => (props.width_sidebar !== "65px" ? "xl" : "2x"));
 </script>
 
 <template>
   <div
-    class="d-flex bg-body-tertiary flex-column flex-shrink-0 p-3"
+    class="d-flex bg-body-tertiary flex-column flex-shrink-0"
     id="sidebar"
     :style="{ width: props.width_sidebar }"
   >
@@ -32,42 +32,70 @@ const widthIcon = computed(() => (props.width_sidebar !== "80px" ? "xl" : "2xl")
       </Transition>
     </a>
     <hr />
-    <ul class="nav nav-pills flex-column mb-auto">
-      <li>
-        <a href="#" class="nav-link d-flex text-body-emphasis">
+    <ul class="nav nav-pills flex-column gap-1 mb-auto">
+      <li class="nav-item">
+        <RouterLink
+          :to="{ name: 'dashboard' }"
+          :class="{
+            'nav-link d-flex text-body-emphasis active': $route.name === 'dashboard',
+            'nav-link d-flex text-body-emphasis': $route.name,
+          }"
+          aria-current="page"
+        >
           <FontAwesomeIcon id="icon-transition" :icon="faArrowAltCircleUp" :size="widthIcon" />
           <Transition>
             <span class="fw-bold ms-2" v-if="widthCompute"> Dashboard </span>
           </Transition>
-        </a>
+        </RouterLink>
       </li>
-      <li>
-        <a href="#" class="nav-link d-flex text-body-emphasis">
+      <li class="nav-item">
+        <RouterLink
+          :to="{ name: 'dashboard' }"
+          :class="{
+            'nav-link d-flex text-body-emphasis active': $route.name === 'dashboard',
+            'nav-link d-flex text-body-emphasis': $route.name,
+          }"
+          aria-current="page"
+        >
           <FontAwesomeIcon id="icon-transition" :icon="faArrowAltCircleUp" :size="widthIcon" />
           <Transition>
             <span class="fw-bold ms-2" v-if="widthCompute"> Dashboard </span>
           </Transition>
-        </a>
+        </RouterLink>
       </li>
-      <li>
-        <a href="#" class="nav-link d-flex text-body-emphasis">
-          <FontAwesomeIcon id="icon-transition" :icon="faArrowAltCircleUp" :size="widthIcon" />
-          <Transition>
-            <span class="fw-bold ms-2 align-text-center" v-if="widthCompute"> Dashboard </span>
-          </Transition>
-        </a>
-      </li>
-      <li>
-        <a href="#" class="nav-link d-flex text-body-emphasis">
+      <li class="nav-item">
+        <RouterLink
+          :to="{ name: 'dashboard' }"
+          :class="{
+            'nav-link d-flex text-body-emphasis active': $route.name === 'dashboard',
+            'nav-link d-flex text-body-emphasis': $route.name,
+          }"
+          aria-current="page"
+        >
           <FontAwesomeIcon id="icon-transition" :icon="faArrowAltCircleUp" :size="widthIcon" />
           <Transition>
             <span class="fw-bold ms-2" v-if="widthCompute"> Dashboard </span>
           </Transition>
-        </a>
+        </RouterLink>
+      </li>
+      <li class="nav-item">
+        <RouterLink
+          :to="{ name: 'dashboard' }"
+          :class="{
+            'nav-link d-flex text-body-emphasis active': $route.name === 'dashboard',
+            'nav-link d-flex text-body-emphasis': $route.name,
+          }"
+          aria-current="page"
+        >
+          <FontAwesomeIcon id="icon-transition" :icon="faArrowAltCircleUp" :size="widthIcon" />
+          <Transition>
+            <span class="fw-bold ms-2" v-if="widthCompute"> Dashboard </span>
+          </Transition>
+        </RouterLink>
       </li>
     </ul>
     <hr />
-    <div class="dropdown">
+    <div class="dropdown ms-2">
       <a
         href="#"
         class="d-flex align-items-center text-body-emphasis text-decoration-none"

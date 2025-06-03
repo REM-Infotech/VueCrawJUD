@@ -4,7 +4,7 @@ import FooterView from "./FooterView.vue";
 import HeaderView from "./HeaderView.vue";
 import SidebarView from "./SidebarView.vue";
 
-const width_sidebar = ref("80px");
+const width_sidebar = ref("65px");
 </script>
 
 <template>
