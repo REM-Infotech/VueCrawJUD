@@ -1,52 +1,33 @@
+<script setup lang="ts">
+import { computed, ref } from "vue";
+import "../../assets/main.css";
+import EyeView from "./components/EyeView.vue";
+import { loginDiv, loginInput } from "./components/styledElements";
+
+const active = ref(false);
+const computedType = computed(() => (!active.value ? "password" : "text"));
+</script>
+
 <template>
-  <div class="d-flex flex-column justify-content-center align-items-center h-100">
-    <h1>Hello, world!</h1>
-    <div class="margin-auto card-purple d-flex flex-column p-3">
-      <input class="input-form" type="text" />
-      <input class="input-form" type="text" />
+  <div class="d-flex flex-column" style="height: 100%">
+    <div class="d-flex mt-auto mb-auto justify-content-center align-items-center">
+      <div class="card d-flex flex-column p-3">
+        <div class="card-body">
+          <loginDiv class="mb-3">
+            <loginInput id="emailInput" placeholder="Usuário" />
+          </loginDiv>
+          <loginDiv class="mb-3">
+            <loginInput
+              :class="{ visible: active, hidden: !active }"
+              id="password"
+              placeholder="senha"
+              :type="computedType"
+            />
+            <EyeView type="button" @click="active = !active" />
+          </loginDiv>
+        </div>
+      </div>
     </div>
-    <h1>Hello, world!</h1>
+    <div class="bg-dark">teste</div>
   </div>
 </template>
-
-<style lang="scss" scoped>
-.card-purple {
-  background-color: purple;
-  border-radius: 5px;
-  padding: 10px;
-}
-
-.input-form {
-  border: 3px;
-  border-color: rgb(61, 11, 61);
-  border-style: solid;
-  border-radius: 10px;
-  margin-bottom: 10px;
-  font-size: 25px;
-  padding: 5px;
-}
-
-.margin-auto {
-  margin-top: auto;
-  margin-bottom: auto;
-}
-
-.flex-column {
-  flex-direction: column;
-}
-
-.h-100 {
-  height: 100%;
-}
-
-.d-flex {
-  display: flex;
-}
-
-.justify-content-center {
-  justify-content: center;
-}
-.align-items-center {
-  align-items: center;
-}
-</style>

@@ -1,5 +1,6 @@
 @import "./base.css";
 @import "bootstrap/dist/css/bootstrap.css";
+
 :root {
   --color-seance-50: #fdf1ff;
   --color-seance-100: #fbe1ff;
@@ -19,7 +20,9 @@
   background-color: var(--color-seance-950);
 }
 
-[data-bs-theme=dark] #app {
-  height: 100dvh;
-  background-color: var(--color-seance-950);
-}/*# sourceMappingURL=main.css.map */
+[data-bs-theme="dark"] {
+  #app {
+    height: 100dvh;
+    background-color: var(--color-seance-950);
+  }
+}
