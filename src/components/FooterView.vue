@@ -1,3 +1,3 @@
 <template>
-  <footer class="bg-white text-warning">Footer</footer>
+  <footer class="bg-body-tertiary text-warning">Footer</footer>
 </template>
