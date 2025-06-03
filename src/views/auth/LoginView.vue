@@ -9,10 +9,10 @@ const computedType = computed(() => (!active.value ? "password" : "text"));
 </script>
 
 <template>
-  <div class="d-flex flex-column" style="height: 100%">
-    <div class="d-flex mt-auto mb-auto justify-content-center align-items-center">
-      <div class="card d-flex flex-column p-3">
-        <div class="card-body">
+  <div class="d-flex flex-column justify-content-center" style="height: 100%">
+    <div class="mt-auto mb-auto p-3">
+      <div class="card ms-auto me-auto" style="width: 35%">
+        <div class="card-body d-flex flex-column align-items-center justify-content-center">
           <loginDiv class="mb-3">
             <loginInput id="emailInput" placeholder="Usuário" />
           </loginDiv>

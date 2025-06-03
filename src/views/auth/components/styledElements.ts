@@ -1,7 +1,7 @@
 import styled from "@vue-styled-components/core";
 
 export const loginDiv = styled.div`
-  width: 272px;
+  width: 100%;
   height: 42px;
   margin-top: 20px;
 
@@ -13,7 +13,7 @@ export const loginInput = styled.input`
   /* input */
   box-sizing: border-box;
 
-  width: 272px;
+  width: 100%;
   height: 42px;
   left: 0px;
   top: 0px;

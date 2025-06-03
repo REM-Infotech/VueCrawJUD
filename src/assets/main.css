@@ -22,4 +22,5 @@
 [data-bs-theme=dark] #app {
   height: 100dvh;
   background-color: var(--color-seance-950);
+  width: 1000dvw;
 }/*# sourceMappingURL=main.css.map */
