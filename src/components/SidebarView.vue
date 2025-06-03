@@ -32,14 +32,11 @@ const widthIcon = computed(() => (props.width_sidebar !== "65px" ? "xl" : "2x"))
       </Transition>
     </a>
     <hr />
-    <ul class="nav nav-pills flex-column gap-1 mb-auto">
+    <ul class="nav nav-pills flex-column mb-auto">
       <li class="nav-item">
         <RouterLink
           :to="{ name: 'dashboard' }"
-          :class="{
-            'nav-link d-flex text-body-emphasis active': $route.name === 'dashboard',
-            'nav-link d-flex text-body-emphasis': $route.name,
-          }"
+          class="nav-link d-flex text-body-emphasis"
           aria-current="page"
         >
           <FontAwesomeIcon id="icon-transition" :icon="faArrowAltCircleUp" :size="widthIcon" />
@@ -51,10 +48,7 @@ const widthIcon = computed(() => (props.width_sidebar !== "65px" ? "xl" : "2x"))
       <li class="nav-item">
         <RouterLink
           :to="{ name: 'dashboard' }"
-          :class="{
-            'nav-link d-flex text-body-emphasis active': $route.name === 'dashboard',
-            'nav-link d-flex text-body-emphasis': $route.name,
-          }"
+          class="nav-link d-flex text-body-emphasis"
           aria-current="page"
         >
           <FontAwesomeIcon id="icon-transition" :icon="faArrowAltCircleUp" :size="widthIcon" />
@@ -66,10 +60,7 @@ const widthIcon = computed(() => (props.width_sidebar !== "65px" ? "xl" : "2x"))
       <li class="nav-item">
         <RouterLink
           :to="{ name: 'dashboard' }"
-          :class="{
-            'nav-link d-flex text-body-emphasis active': $route.name === 'dashboard',
-            'nav-link d-flex text-body-emphasis': $route.name,
-          }"
+          class="nav-link d-flex text-body-emphasis"
           aria-current="page"
         >
           <FontAwesomeIcon id="icon-transition" :icon="faArrowAltCircleUp" :size="widthIcon" />
@@ -81,10 +72,7 @@ const widthIcon = computed(() => (props.width_sidebar !== "65px" ? "xl" : "2x"))
       <li class="nav-item">
         <RouterLink
           :to="{ name: 'dashboard' }"
-          :class="{
-            'nav-link d-flex text-body-emphasis active': $route.name === 'dashboard',
-            'nav-link d-flex text-body-emphasis': $route.name,
-          }"
+          class="nav-link d-flex text-body-emphasis"
           aria-current="page"
         >
           <FontAwesomeIcon id="icon-transition" :icon="faArrowAltCircleUp" :size="widthIcon" />
