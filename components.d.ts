@@ -8,7 +8,11 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    FooterView: typeof import('./src/components/FooterView.vue')['default']
+    HeaderView: typeof import('./src/components/HeaderView.vue')['default']
+    MainView: typeof import('./src/components/MainView.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    SidebarView: typeof import('./src/components/SidebarView.vue')['default']
   }
 }
