@@ -1,24 +1,26 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import { useRoute } from "vue-router";
 const props = defineProps({
   width_sidebar: {
     type: String,
-    default: "65px",
+    default: "82px",
+  },
+
+  toggle: {
+    type: Boolean,
+    default: false,
   },
 });
 
-const route = useRoute();
+const inTransition = ref(false);
 
-const widthCompute = computed(() => props.width_sidebar !== "65px");
+const route = useRoute();
+const computedToggle = computed(() => props.toggle);
+const widthCompute = computed(() => props.width_sidebar !== "82px");
 
 function navClass(name: string) {
-  return [
-    "nav-link",
-    "text-body-emphasis",
-    "d-flex",
-    { active: route.name === name && widthCompute.value },
-  ];
+  return ["nav-link", "text-body-emphasis", "d-flex", { active: route.name === name }];
 }
 </script>
 
@@ -27,42 +29,49 @@ function navClass(name: string) {
     class="d-flex bg-body-tertiary flex-column"
     id="sidebar"
     :style="{ width: props.width_sidebar }"
+    @transitionstart="inTransition = !inTransition"
+    @transitionend="inTransition = !inTransition"
   >
     <ul class="nav nav-pills flex-column mb-auto -p-5">
-      <li class="nav-item">
+      <li class="nav-item border-bottom">
         <RouterLink :to="{ name: 'dashboard' }" :class="navClass('dashboard')">
-          <IBiSpeedometer2 class="bi pe-none me-2" />
-          <Transition>
-            <span class="fw-bold" v-if="widthCompute"> Dashboard </span>
-            <div class="fw-bold" v-else>‎</div>
-          </Transition>
+          <IBiSpeedometer2
+            class="me-2"
+            :style="{ fontSize: computedToggle ? '20px' : '32px', transition: 'font-size 0.8s' }"
+          />
+
+          <span class="fw-bold sidebar-text align-text-start" title="Agendamentos">
+            Dashboard
+          </span>
         </RouterLink>
       </li>
       <li class="nav-item border-bottom">
         <RouterLink :to="{ name: 'robots' }" :class="navClass('robots')">
-          <IBiRobot class="bi pe-none me-2" />
-          <Transition>
-            <span class="fw-bold" v-if="widthCompute"> Robôs </span>
-            <div class="fw-bold" v-else>‎</div>
-          </Transition>
+          <IBiRobot
+            class="me-2"
+            :style="{ fontSize: computedToggle ? '20px' : '32px', transition: 'font-size 0.8s' }"
+          />
+          <span class="fw-bold sidebar-text align-text-start" title="Agendamentos"> Robôs </span>
         </RouterLink>
       </li>
       <li class="nav-item border-bottom">
         <RouterLink :to="{ name: 'executions' }" :class="navClass('executions')">
-          <IBiBarChartLine class="me-2" />
-          <Transition>
-            <span class="fw-bold" v-if="widthCompute"> Execuções </span>
-            <div class="fw-bold" v-else>‎</div>
-          </Transition>
+          <IBiBarChartLine
+            class="me-2"
+            :style="{ fontSize: computedToggle ? '20px' : '32px', transition: 'font-size 0.8s' }"
+          />
+          <span class="fw-bold sidebar-text align-text-start" title="Agendamentos">
+            Execuções
+          </span>
         </RouterLink>
       </li>
       <li class="nav-item border-bottom">
         <RouterLink :to="{ name: 'scheduled' }" :class="navClass('scheduled')">
-          <IBiCalendar2Date class="me-2" />
-          <Transition>
-            <span class="fw-bold" v-if="widthCompute"> Agendamentos </span>
-            <div class="fw-bold" v-else>‎</div>
-          </Transition>
+          <IBiCalendar2Date
+            class="me-2"
+            :style="{ fontSize: computedToggle ? '20px' : '32px', transition: 'font-size 0.8s' }"
+          />
+          <span class="fw-bold sidebar-text align-middle" title="Agendamentos"> Agendamentos </span>
         </RouterLink>
       </li>
     </ul>
@@ -106,15 +115,24 @@ function navClass(name: string) {
   transition: 0.7s;
 }
 
-.v-enter-active {
-  transition: opacity 1.5s ease-in;
-}
-.v-leave-active {
-  transition: opacity 0.2s ease-out;
-}
-
 .v-enter-from,
 .v-leave-to {
   opacity: 0;
+}
+
+.sidebar-text {
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: clip;
+  transition:
+    max-width 0.8s,
+    opacity 0.8s;
+  opacity: 1;
+}
+
+#sidebar[style*="82px"] .sidebar-text {
+  max-width: 0;
+  opacity: 0;
+  padding: 0;
 }
 </style>

@@ -7,19 +7,29 @@ import { useRouter } from "vue-router";
 defineProps({
   width_sidebar: {
     type: String,
-    default: "65px",
+    default: "82px",
+  },
+
+  toggle: {
+    type: Boolean,
+    default: false,
   },
 });
 
 const router = useRouter();
 
 const expand_sidebar = ref(false);
-const computeExpand = computed(() => (expand_sidebar.value ? "250px" : "65px"));
+const toggler = ref(false);
+const computeExpand = computed(() => (expand_sidebar.value ? "250px" : "82px"));
 
-const emit = defineEmits(["update:width_sidebar"]);
+const emit = defineEmits(["update:width_sidebar", "update:toggle"]);
 
 watch(expand_sidebar, () => {
   return emit("update:width_sidebar", computeExpand.value);
+});
+
+watch(toggler, () => {
+  return emit("update:toggle", toggler.value);
 });
 </script>
 
@@ -29,7 +39,10 @@ watch(expand_sidebar, () => {
       <a
         href="#"
         class="navbar-brand d-flex align-items-center mb-3 mb-md-0 me-md-auto text-body-emphasis text-decoration-none"
-        @click="expand_sidebar = !expand_sidebar"
+        @click="
+          expand_sidebar = !expand_sidebar;
+          toggler = !toggler;
+        "
       >
         <img :src="logoimg" class="ms-2 bi pe-none me-2" alt="" width="40" aria-hidden="true" />
 
