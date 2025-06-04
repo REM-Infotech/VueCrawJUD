@@ -7,7 +7,11 @@ import MainView from "./components/MainView.vue";
   <RouterView v-slot="{ Component, route }">
     <Transition name="fade" mode="out-in">
       <MainView v-if="route.name !== 'login'">
-        <component :is="Component" :key="route.name" />
+        <Transition name="fade" mode="out-in">
+          <div :key="route.name" style="width: 100%; height: 100%">
+            <component :is="Component" />
+          </div>
+        </Transition>
       </MainView>
       <div v-else style="width: 100%; height: 100%">
         <component :is="Component" :key="route.name" />
