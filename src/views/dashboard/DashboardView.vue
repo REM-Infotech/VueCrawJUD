@@ -12,7 +12,7 @@ import CardsView from "./components/CardsView.vue";
   <CardsView />
   <div class="row">
     <div class="col-8">
-      <div class="card mb-4">
+      <div class="card mb-4" style="height: 75dvh">
         <div class="card-header d-flex">
           <span class="title align-items-center d-flex">
             <IBiPieChartFill />
@@ -26,7 +26,7 @@ import CardsView from "./components/CardsView.vue";
       </div>
     </div>
     <div class="col-4">
-      <div class="card mb-4">
+      <div class="card mb-4" style="height: 75dvh">
         <div class="card-header d-flex">
           <span class="title align-items-center d-flex">
             <FontAwesomeIcon :icon="faWarning" />
