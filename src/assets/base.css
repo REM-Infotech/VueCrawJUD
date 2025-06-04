@@ -62,6 +62,8 @@ body {
   min-height: 100dvh;
   color: var(--color-text);
   background: var(--color-background);
+  overflow-y: hidden;
+  overflow-x: hidden;
   transition:
     color 0.5s,
     background-color 0.5s;
