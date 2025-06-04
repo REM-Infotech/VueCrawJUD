@@ -10,3 +10,5 @@ O Copilot deve sugerir mensagens automaticamente sempre que alterações forem d
 Certifique-se de que a configuração github.copilot.enableCommitMessageSuggestions está habilitada para que as sugestões de commit apareçam.
 
 Recomenda-se também sugerir o uso de emojis no início do título do commit, conforme o tipo de alteração, como por exemplo: ✨ para nova feature, 🐛 para correção de bug, 🔧 para ajustes de configuração, entre outros.
+Especifique o tipo do commit (ex.: `chore`, `refact`, etc.)
+Os commits precisam ser em inglês
