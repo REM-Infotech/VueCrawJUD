@@ -1,5 +1,8 @@
 <script setup lang="ts">
+import { faArrowRightFromBracket } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { computed, ref, watch } from "vue";
+import { useRouter } from "vue-router";
 
 defineProps({
   width_sidebar: {
@@ -7,6 +10,8 @@ defineProps({
     default: "65px",
   },
 });
+
+const router = useRouter();
 
 const expand_sidebar = ref(false);
 const computeExpand = computed(() => (expand_sidebar.value ? "250px" : "65px"));
@@ -62,10 +67,19 @@ watch(expand_sidebar, () => {
             <a class="nav-link disabled" aria-disabled="true">Disabled</a>
           </li>
         </ul>
-        <form class="d-flex" role="search">
+        <div class="d-flex" role="search">
           <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
-          <button class="btn btn-outline-success" type="submit">Search</button>
-        </form>
+          <button
+            @click="router.push({ name: 'login' })"
+            class="btn btn-outline-danger d-flex justify-content-start align-items-start"
+            type="submit"
+          >
+            <div>
+              <FontAwesomeIcon :icon="faArrowRightFromBracket" />
+            </div>
+            <span class="ms-2 fw-bold">Logout</span>
+          </button>
+        </div>
       </div>
     </div>
   </nav>
