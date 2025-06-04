@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue";
+import { useRoute } from "vue-router";
 const props = defineProps({
   width_sidebar: {
     type: String,
@@ -7,7 +8,18 @@ const props = defineProps({
   },
 });
 
+const route = useRoute();
+
 const widthCompute = computed(() => props.width_sidebar !== "65px");
+
+function navClass(name: string) {
+  return [
+    "nav-link",
+    "text-body-emphasis",
+    "d-flex",
+    { active: route.name === name && widthCompute.value },
+  ];
+}
 </script>
 
 <template>
@@ -16,42 +28,42 @@ const widthCompute = computed(() => props.width_sidebar !== "65px");
     id="sidebar"
     :style="{ width: props.width_sidebar }"
   >
-    <ul class="nav nav-pills flex-column mb-auto">
+    <ul class="nav nav-pills flex-column mb-auto -p-5">
       <li class="nav-item">
-        <a href="#" class="nav-link text-body-emphasis d-flex">
+        <RouterLink :to="{ name: 'dashboard' }" :class="navClass('dashboard')">
           <IBiSpeedometer2 class="bi pe-none me-2" />
           <Transition>
             <span class="fw-bold" v-if="widthCompute"> Dashboard </span>
             <div class="fw-bold" v-else>‎</div>
           </Transition>
-        </a>
+        </RouterLink>
       </li>
-      <li class="nav-item">
-        <a href="#" class="nav-link text-body-emphasis d-flex">
+      <li class="nav-item border-bottom">
+        <RouterLink :to="{ name: 'robots' }" :class="navClass('robots')">
           <IBiRobot class="bi pe-none me-2" />
           <Transition>
             <span class="fw-bold" v-if="widthCompute"> Robôs </span>
             <div class="fw-bold" v-else>‎</div>
           </Transition>
-        </a>
+        </RouterLink>
       </li>
-      <li class="nav-item">
-        <a href="#" class="nav-link text-body-emphasis d-flex">
+      <li class="nav-item border-bottom">
+        <RouterLink :to="{ name: 'executions' }" :class="navClass('executions')">
           <IBiBarChartLine class="me-2" />
           <Transition>
             <span class="fw-bold" v-if="widthCompute"> Execuções </span>
             <div class="fw-bold" v-else>‎</div>
           </Transition>
-        </a>
+        </RouterLink>
       </li>
-      <li class="nav-item">
-        <a href="#" class="nav-link text-body-emphasis d-flex">
+      <li class="nav-item border-bottom">
+        <RouterLink :to="{ name: 'scheduled' }" :class="navClass('scheduled')">
           <IBiCalendar2Date class="me-2" />
           <Transition>
             <span class="fw-bold" v-if="widthCompute"> Agendamentos </span>
             <div class="fw-bold" v-else>‎</div>
           </Transition>
-        </a>
+        </RouterLink>
       </li>
     </ul>
     <hr />

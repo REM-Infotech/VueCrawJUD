@@ -20,6 +20,21 @@ const router = createRouter({
       name: "dashboard",
       component: () => import("@/views/dashboard/DashboardView.vue"),
     },
+    {
+      path: "/robots",
+      name: "robots",
+      component: () => import("@/views/EmptyView.vue"),
+    },
+    {
+      path: "/executions",
+      name: "executions",
+      component: () => import("@/views/EmptyView.vue"),
+    },
+    {
+      path: "/scheduled",
+      name: "scheduled",
+      component: () => import("@/views/EmptyView.vue"),
+    },
   ],
 });
 
