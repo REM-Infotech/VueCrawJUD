@@ -13,7 +13,7 @@ const width_sidebar = ref("65px");
     <div class="d-flex justify-content-center" id="render-setup">
       <SidebarView v-model:width_sidebar="width_sidebar" />
       <div class="ms-auto me-auto d-flex flex-column" id="render-content">
-        <main class="mb-auto overflow-y-auto" style="height: 100%">
+        <main class="mb-auto overflow-y-auto">
           <slot></slot>
         </main>
         <FooterView />
@@ -24,17 +24,14 @@ const width_sidebar = ref("65px");
 
 <style lang="css" scoped>
 #page-content {
-  height: 100%;
   width: 100%;
 }
 
 #render-setup {
-  height: 100%;
   width: 100%;
 }
 
 #render-content {
-  height: 100%;
   width: 100%;
 }
 </style>

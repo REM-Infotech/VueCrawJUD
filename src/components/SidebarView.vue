@@ -2,7 +2,6 @@
 import { faArrowAltCircleUp } from "@fortawesome/free-regular-svg-icons/faArrowAltCircleUp";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { computed } from "vue";
-
 const props = defineProps({
   width_sidebar: {
     type: String,
@@ -20,18 +19,6 @@ const widthIcon = computed(() => (props.width_sidebar !== "65px" ? "xl" : "2x"))
     id="sidebar"
     :style="{ width: props.width_sidebar }"
   >
-    <a
-      href="/"
-      class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-body-emphasis text-decoration-none"
-    >
-      <svg class="bi pe-none me-2" width="40" height="32" aria-hidden="true">
-        <use xlink:href="#bootstrap"></use>
-      </svg>
-      <Transition>
-        <span class="fs-4" v-if="widthCompute"> Sidebar </span>
-      </Transition>
-    </a>
-    <hr />
     <ul class="nav nav-pills flex-column mb-auto">
       <li class="nav-item">
         <RouterLink

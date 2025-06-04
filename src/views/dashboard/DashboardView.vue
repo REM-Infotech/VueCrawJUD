@@ -5,7 +5,7 @@ import TableView from "./example/TableView.vue";
 
 <template>
   <MainView>
-    <div class="container-fluid px-4 overflow-y-auto" style="max-height: 88dvh">
+    <div class="container-fluid px-4 overflow-y-auto" style="height: 88dvh">
       <h1 class="mt-4">Dashboard</h1>
       <ol class="breadcrumb mb-4">
         <li class="breadcrumb-item active">Dashboard</li>

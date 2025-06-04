@@ -1,9 +1,9 @@
 <script setup lang="ts">
+import logoimg from "@/assets/img/logo2.png";
 import { faArrowRightFromBracket } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { computed, ref, watch } from "vue";
 import { useRouter } from "vue-router";
-
 defineProps({
   width_sidebar: {
     type: String,
@@ -26,60 +26,26 @@ watch(expand_sidebar, () => {
 <template>
   <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#" @click="expand_sidebar = !expand_sidebar">Navbar</a>
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-bs-toggle="collapse"
-        data-bs-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
+      <a
+        href="#"
+        class="navbar-brand d-flex align-items-center mb-3 mb-md-0 me-md-auto text-body-emphasis text-decoration-none"
+        @click="expand_sidebar = !expand_sidebar"
       >
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Link</a>
-          </li>
-          <li class="nav-item dropdown">
-            <a
-              class="nav-link dropdown-toggle"
-              href="#"
-              role="button"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
-              Dropdown
-            </a>
-            <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="#">Action</a></li>
-              <li><a class="dropdown-item" href="#">Another action</a></li>
-              <li><hr class="dropdown-divider" /></li>
-              <li><a class="dropdown-item" href="#">Something else here</a></li>
-            </ul>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link disabled" aria-disabled="true">Disabled</a>
-          </li>
-        </ul>
-        <div class="d-flex" role="search">
-          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
-          <button
-            @click="router.push({ name: 'login' })"
-            class="btn btn-outline-danger d-flex justify-content-start align-items-start"
-            type="submit"
-          >
-            <div>
-              <FontAwesomeIcon :icon="faArrowRightFromBracket" />
-            </div>
-            <span class="ms-2 fw-bold">Logout</span>
-          </button>
-        </div>
+        <img :src="logoimg" class="ms-2 bi pe-none me-2" alt="" width="40" aria-hidden="true" />
+
+        <span class="fs-4"> Sidebar </span>
+      </a>
+      <div class="d-flex gap-2" role="search">
+        <button
+          @click="router.push({ name: 'login' })"
+          class="btn btn-outline-danger d-flex justify-content-start align-items-start"
+          type="submit"
+        >
+          <div>
+            <FontAwesomeIcon :icon="faArrowRightFromBracket" />
+          </div>
+          <span class="ms-2 fw-bold">Logout</span>
+        </button>
       </div>
     </div>
   </nav>
