@@ -33,7 +33,7 @@ watch(expand_sidebar, () => {
       >
         <img :src="logoimg" class="ms-2 bi pe-none me-2" alt="" width="40" aria-hidden="true" />
 
-        <span class="fs-4"> Sidebar </span>
+        <span class="fs-4"> CrawJUD </span>
       </a>
       <div class="d-flex gap-2" role="search">
         <button

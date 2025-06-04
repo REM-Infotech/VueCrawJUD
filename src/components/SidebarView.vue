@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { faArrowAltCircleUp } from "@fortawesome/free-regular-svg-icons/faArrowAltCircleUp";
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { computed } from "vue";
 const props = defineProps({
   width_sidebar: {
@@ -10,63 +8,50 @@ const props = defineProps({
 });
 
 const widthCompute = computed(() => props.width_sidebar !== "65px");
-const widthIcon = computed(() => (props.width_sidebar !== "65px" ? "xl" : "2x"));
 </script>
 
 <template>
   <div
-    class="d-flex bg-body-tertiary flex-column flex-shrink-0"
+    class="d-flex bg-body-tertiary flex-column"
     id="sidebar"
     :style="{ width: props.width_sidebar }"
   >
     <ul class="nav nav-pills flex-column mb-auto">
       <li class="nav-item">
-        <RouterLink
-          :to="{ name: 'dashboard' }"
-          class="nav-link d-flex text-body-emphasis"
-          aria-current="page"
-        >
-          <FontAwesomeIcon id="icon-transition" :icon="faArrowAltCircleUp" :size="widthIcon" />
+        <a href="#" class="nav-link text-body-emphasis d-flex">
+          <IBiSpeedometer2 class="bi pe-none me-2" />
           <Transition>
-            <span class="fw-bold ms-2" v-if="widthCompute"> Dashboard </span>
+            <span class="fw-bold" v-if="widthCompute"> Dashboard </span>
+            <div class="fw-bold" v-else>‎</div>
           </Transition>
-        </RouterLink>
+        </a>
       </li>
       <li class="nav-item">
-        <RouterLink
-          :to="{ name: 'dashboard' }"
-          class="nav-link d-flex text-body-emphasis"
-          aria-current="page"
-        >
-          <FontAwesomeIcon id="icon-transition" :icon="faArrowAltCircleUp" :size="widthIcon" />
+        <a href="#" class="nav-link text-body-emphasis d-flex">
+          <IBiRobot class="bi pe-none me-2" />
           <Transition>
-            <span class="fw-bold ms-2" v-if="widthCompute"> Dashboard </span>
+            <span class="fw-bold" v-if="widthCompute"> Robôs </span>
+            <div class="fw-bold" v-else>‎</div>
           </Transition>
-        </RouterLink>
+        </a>
       </li>
       <li class="nav-item">
-        <RouterLink
-          :to="{ name: 'dashboard' }"
-          class="nav-link d-flex text-body-emphasis"
-          aria-current="page"
-        >
-          <FontAwesomeIcon id="icon-transition" :icon="faArrowAltCircleUp" :size="widthIcon" />
+        <a href="#" class="nav-link text-body-emphasis d-flex">
+          <IBiBarChartLine class="me-2" />
           <Transition>
-            <span class="fw-bold ms-2" v-if="widthCompute"> Dashboard </span>
+            <span class="fw-bold" v-if="widthCompute"> Execuções </span>
+            <div class="fw-bold" v-else>‎</div>
           </Transition>
-        </RouterLink>
+        </a>
       </li>
       <li class="nav-item">
-        <RouterLink
-          :to="{ name: 'dashboard' }"
-          class="nav-link d-flex text-body-emphasis"
-          aria-current="page"
-        >
-          <FontAwesomeIcon id="icon-transition" :icon="faArrowAltCircleUp" :size="widthIcon" />
+        <a href="#" class="nav-link text-body-emphasis d-flex">
+          <IBiCalendar2Date class="me-2" />
           <Transition>
-            <span class="fw-bold ms-2" v-if="widthCompute"> Dashboard </span>
+            <span class="fw-bold" v-if="widthCompute"> Agendamentos </span>
+            <div class="fw-bold" v-else>‎</div>
           </Transition>
-        </RouterLink>
+        </a>
       </li>
     </ul>
     <hr />

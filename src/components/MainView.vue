@@ -10,28 +10,28 @@ const width_sidebar = ref("65px");
 <template>
   <div class="d-flex flex-column justify-content-center" id="page-content">
     <HeaderView v-model:width_sidebar="width_sidebar" />
-    <div class="d-flex justify-content-center" id="render-setup">
+    <div class="d-flex justify-content-center" id="layoutSidenav">
       <SidebarView v-model:width_sidebar="width_sidebar" />
-      <div class="ms-auto me-auto d-flex flex-column" id="render-content">
-        <main class="mb-auto overflow-y-auto">
+      <div class="ms-auto me-auto d-flex flex-column" id="layoutSidenav_content">
+        <div class="container-fluid px-4 overflow-y-auto mb-auto" id="page-slot">
           <slot></slot>
-        </main>
-        <FooterView />
+        </div>
+        <FooterView style="max-height: 55px" />
       </div>
     </div>
   </div>
 </template>
 
 <style lang="css" scoped>
-#page-content {
+#app #page-content,
+#app #layoutSidenav,
+#app #layoutSidenav_content {
+  height: 100%;
   width: 100%;
 }
 
-#render-setup {
+#app #layoutSidenav #layoutSidenav_content #page-slot {
   width: 100%;
-}
-
-#render-content {
-  width: 100%;
+  height: calc(100dvh - 104px);
 }
 </style>
