@@ -20,7 +20,14 @@ const computedToggle = computed(() => props.toggle);
 const widthCompute = computed(() => props.width_sidebar !== "82px");
 
 function navClass(name: string) {
-  return ["nav-link", "text-body-emphasis", "d-flex", { "active-purple": route.name === name }];
+  return [
+    "nav-link",
+    "text-body-emphasis",
+    "d-inline-flex ",
+    "align-content-center",
+    "w-100",
+    { "active-purple": route.name === name },
+  ];
 }
 </script>
 
@@ -32,9 +39,13 @@ function navClass(name: string) {
     @transitionstart="inTransition = !inTransition"
     @transitionend="inTransition = !inTransition"
   >
-    <ul class="nav nav-pills flex-column mb-auto -p-5">
+    <ul class="nav nav-pills flex-column mb-auto">
       <li class="nav-item border-bottom">
-        <RouterLink :to="{ name: 'dashboard' }" :class="navClass('dashboard')">
+        <RouterLink
+          :to="{ name: 'dashboard' }"
+          :class="navClass('dashboard')"
+          style="transition: justify-content 0.8s"
+        >
           <IBiSpeedometer2
             class="me-2"
             :style="{ fontSize: computedToggle ? '20px' : '32px', transition: 'font-size 0.8s' }"
@@ -46,12 +57,18 @@ function navClass(name: string) {
         </RouterLink>
       </li>
       <li class="nav-item border-bottom">
-        <RouterLink :to="{ name: 'robots' }" :class="navClass('robots')">
+        <RouterLink
+          :to="{ name: 'robots' }"
+          :class="navClass('robots')"
+          style="transition: justify-content 0.8s"
+        >
           <IBiRobot
             class="me-2"
             :style="{ fontSize: computedToggle ? '20px' : '32px', transition: 'font-size 0.8s' }"
           />
-          <span class="fw-bold sidebar-text align-text-start" title="Agendamentos"> Robôs </span>
+          <span class="fw-bold flex-grow-1 sidebar-text align-text-start" title="Agendamentos">
+            Robôs
+          </span>
         </RouterLink>
       </li>
       <li class="nav-item border-bottom">
