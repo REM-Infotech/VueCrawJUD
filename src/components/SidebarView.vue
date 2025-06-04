@@ -23,9 +23,9 @@ function navClass(name: string) {
   return [
     "nav-link",
     "text-body-emphasis",
-    "d-inline-flex ",
+    "d-flex",
     "align-content-center",
-    "w-100",
+    "align-items-start",
     { "active-purple": route.name === name },
   ];
 }
@@ -41,11 +41,7 @@ function navClass(name: string) {
   >
     <ul class="nav nav-pills flex-column mb-auto">
       <li class="nav-item border-bottom">
-        <RouterLink
-          :to="{ name: 'dashboard' }"
-          :class="navClass('dashboard')"
-          style="transition: justify-content 0.8s"
-        >
+        <RouterLink :to="{ name: 'dashboard' }" :class="navClass('dashboard')">
           <IBiSpeedometer2
             class="me-2"
             :style="{ fontSize: computedToggle ? '20px' : '32px', transition: 'font-size 0.8s' }"
@@ -57,18 +53,12 @@ function navClass(name: string) {
         </RouterLink>
       </li>
       <li class="nav-item border-bottom">
-        <RouterLink
-          :to="{ name: 'robots' }"
-          :class="navClass('robots')"
-          style="transition: justify-content 0.8s"
-        >
+        <RouterLink :to="{ name: 'robots' }" :class="navClass('robots')">
           <IBiRobot
             class="me-2"
             :style="{ fontSize: computedToggle ? '20px' : '32px', transition: 'font-size 0.8s' }"
           />
-          <span class="fw-bold flex-grow-1 sidebar-text align-text-start" title="Agendamentos">
-            Robôs
-          </span>
+          <span class="fw-bold sidebar-text align-text-start" title="Agendamentos"> Robôs </span>
         </RouterLink>
       </li>
       <li class="nav-item border-bottom">
