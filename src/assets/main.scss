@@ -103,4 +103,14 @@ html {
   #app {
     background-color: var(--color-seance-950);
   }
+
+  .active-purple {
+    background-color: var(--color-seance-900) !important;
+
+    &:hover {
+      background-color: var(--color-seance-600) !important;
+      transition: 0.8s;
+    }
+    transition: 0.8s;
+  }
 }

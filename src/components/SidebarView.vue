@@ -20,7 +20,7 @@ const computedToggle = computed(() => props.toggle);
 const widthCompute = computed(() => props.width_sidebar !== "82px");
 
 function navClass(name: string) {
-  return ["nav-link", "text-body-emphasis", "d-flex", { active: route.name === name }];
+  return ["nav-link", "text-body-emphasis", "d-flex", { "active-purple": route.name === name }];
 }
 </script>
 

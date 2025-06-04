@@ -76,4 +76,12 @@ html {
 
 [data-bs-theme=dark] #app {
   background-color: var(--color-seance-950);
+}
+[data-bs-theme=dark] .active-purple {
+  background-color: var(--color-seance-900) !important;
+  transition: 0.8s;
+}
+[data-bs-theme=dark] .active-purple:hover {
+  background-color: var(--color-seance-600) !important;
+  transition: 0.8s;
 }/*# sourceMappingURL=main.css.map */
