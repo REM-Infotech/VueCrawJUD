@@ -6,7 +6,6 @@ import logoSystem from "@/assets/img/logo2.png";
 const router = useRouter();
 async function handleSubmit(event: Event) {
   event.preventDefault();
-  alert("submit");
   router.push({ name: "dashboard" });
 }
 </script>
@@ -49,10 +48,26 @@ async function handleSubmit(event: Event) {
 
         <div class="d-flex flex-column mt-4">
           <hr />
-          <button class="btn btn-success" type="submit">entrar</button>
+          <button id="loginButton" class="btn" type="submit">Login</button>
         </div>
       </form>
     </div>
     <div class="bg-dark">teste</div>
   </div>
 </template>
+
+<style lang="css" scoped>
+#loginButton {
+  background-color: var(--color-seance-700);
+  transition: 0.5s;
+  &:hover {
+    background-color: var(--color-seance-900);
+    font-weight: bold;
+    transition: 0.5s;
+  }
+  &:active {
+    border-color: var(--color-seance-600);
+    transition: 0.5s;
+  }
+}
+</style>
