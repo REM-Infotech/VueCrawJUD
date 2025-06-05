@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { faWarning } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import ChartExecutions from "./ChartExecutions.vue";
 import CardsView from "./components/CardsView.vue";
 </script>
 
@@ -22,7 +23,9 @@ import CardsView from "./components/CardsView.vue";
             <input class="form-control" placeholder="Filtre aqui.." type="text" />
           </div>
         </div>
-        <div class="card-body"></div>
+        <div class="card-body">
+          <ChartExecutions />
+        </div>
       </div>
     </div>
     <div class="col-4">
