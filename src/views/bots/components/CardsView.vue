@@ -35,7 +35,11 @@ const computedList = computed(() => {
         </div>
         <div class="card-body">
           <TransitionGroup name="slide-fade" class="list-group" tag="ul">
-            <li class="list-group-item" v-for="(item, index) in computedList" :key="index">
+            <li
+              class="list-group-item list-group-item-action"
+              v-for="(item, index) in computedList"
+              :key="index"
+            >
               {{ item.msg }}
             </li>
           </TransitionGroup>
