@@ -53,7 +53,7 @@ function navClass(name: string) {
         </RouterLink>
       </li>
       <li class="nav-item border-bottom">
-        <RouterLink :to="{ name: 'robots' }" :class="navClass('robots')">
+        <RouterLink :to="{ name: 'robos' }" :class="navClass('robos')">
           <IBiRobot
             class="me-2"
             :style="{ fontSize: computedToggle ? '20px' : '32px', transition: 'font-size 0.8s' }"

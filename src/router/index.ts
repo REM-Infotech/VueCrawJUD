@@ -21,9 +21,9 @@ const router = createRouter({
       component: () => import("@/views/dashboard/DashboardView.vue"),
     },
     {
-      path: "/robots",
-      name: "robots",
-      component: () => import("@/views/robots/RobotsView.vue"),
+      path: "/robos",
+      name: "robos",
+      component: () => import("@/views/robos/RobotsView.vue"),
     },
     {
       path: "/executions",
