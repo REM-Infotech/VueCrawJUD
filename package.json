@@ -15,7 +15,7 @@
     "type-check": "vue-tsc --build",
     "lint": "eslint . --fix",
     "format": "prettier --write src/",
-    "types-css": "npx typed-css-modules src"
+    "types": "tcm src"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.7.2",

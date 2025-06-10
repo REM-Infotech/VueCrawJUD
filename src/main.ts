@@ -8,7 +8,7 @@ import "@/assets/scripts/color-modes";
 import "bootstrap-vue-next/dist/bootstrap-vue-next.css";
 import "bootstrap/dist/css/bootstrap.css";
 
-import "./assets/main.module.css";
+import "./assets/css/main.css";
 
 import App from "./App.vue";
 import router from "./router";

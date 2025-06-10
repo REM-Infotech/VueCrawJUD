@@ -6,8 +6,11 @@
 </template>
 
 <script setup lang="ts">
+import style from "@/assets/css-modules/main.module.css";
 import Chart from "chart.js/auto";
 import { onMounted, ref } from "vue";
+
+console.log(style);
 const primaryColor = getComputedStyle(document.documentElement).getPropertyValue(
   "--color-paua-500",
 );

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import "@/assets/main.module.css";
+import "@/assets/main.css";
 import { useRouter } from "vue-router";
 
 import logoSystem from "@/assets/img/logo2.png";
