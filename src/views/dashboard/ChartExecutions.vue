@@ -6,13 +6,11 @@
 </template>
 
 <script setup lang="ts">
-import content from "@/assets/main.css";
 import Chart from "chart.js/auto";
 import { onMounted, ref } from "vue";
-
-const styles = content;
-console.log(styles);
-
+const primaryColor = getComputedStyle(document.documentElement).getPropertyValue(
+  "--color-paua-500",
+);
 const canvasRef = ref<HTMLCanvasElement | null>(null);
 
 onMounted(() => {
@@ -38,7 +36,7 @@ onMounted(() => {
           {
             label: "Execuções",
             data: [10, 20, 15, 35, 10, 20, 15, 35, 85, 27, 57, 28],
-            backgroundColor: ["#42b983", "#35495e", "#ff6384"],
+            backgroundColor: primaryColor,
           },
         ],
       },

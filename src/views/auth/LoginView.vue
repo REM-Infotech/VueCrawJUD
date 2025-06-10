@@ -1,6 +1,6 @@
 <script setup lang="ts">
+import "@/assets/main.module.css";
 import { useRouter } from "vue-router";
-import "../../assets/main.css";
 
 import logoSystem from "@/assets/img/logo2.png";
 const router = useRouter();

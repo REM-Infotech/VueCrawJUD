@@ -1,0 +1,128 @@
+@import "bootstrap/dist/css/bootstrap.css";
+:root {
+  --vt-c-white: #ffffff;
+  --vt-c-white-soft: #f8f8f8;
+  --vt-c-white-mute: #f2f2f2;
+
+  --vt-c-black: #181818;
+  --vt-c-black-soft: #222222;
+  --vt-c-black-mute: #282828;
+
+  --vt-c-indigo: #2c3e50;
+
+  --vt-c-divider-light-1: rgba(60, 60, 60, 0.29);
+  --vt-c-divider-light-2: rgba(60, 60, 60, 0.12);
+  --vt-c-divider-dark-1: rgba(84, 84, 84, 0.65);
+  --vt-c-divider-dark-2: rgba(84, 84, 84, 0.48);
+
+  --vt-c-text-light-1: var(--vt-c-indigo);
+  --vt-c-text-light-2: rgba(60, 60, 60, 0.66);
+  --vt-c-text-dark-1: var(--vt-c-white);
+  --vt-c-text-dark-2: rgba(235, 235, 235, 0.64);
+}
+
+/* semantic color variables for this project */
+:root {
+  --color-background: var(--vt-c-white);
+  --color-background-soft: var(--vt-c-white-soft);
+  --color-background-mute: var(--vt-c-white-mute);
+
+  --color-border: var(--vt-c-divider-light-2);
+  --color-border-hover: var(--vt-c-divider-light-1);
+
+  --color-heading: var(--vt-c-text-light-1);
+  --color-text: var(--vt-c-text-light-1);
+
+  --section-gap: 165px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-background: var(--vt-c-black);
+    --color-background-soft: var(--vt-c-black-soft);
+    --color-background-mute: var(--vt-c-black-mute);
+
+    --color-border: var(--vt-c-divider-dark-2);
+    --color-border-hover: var(--vt-c-divider-dark-1);
+
+    --color-heading: var(--vt-c-text-dark-1);
+    --color-text: var(--vt-c-text-dark-2);
+  }
+}
+
+body,
+html {
+  color: var(--color-text);
+  background: var(--color-background);
+
+  transition:
+    color 0.5s,
+    background-color 0.5s;
+  line-height: 1.6;
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    Oxygen,
+    Ubuntu,
+    Cantarell,
+    "Fira Sans",
+    "Droid Sans",
+    "Helvetica Neue",
+    sans-serif;
+  font-size: 15px;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+:root {
+  --color-seance-50: #fdf1ff;
+  --color-seance-100: #fbe1ff;
+  --color-seance-200: #f6c3ff;
+  --color-seance-300: #f394ff;
+  --color-seance-400: #eb54ff;
+  --color-seance-500: #e216ff;
+  --color-seance-600: #ca00ff;
+  --color-seance-700: #ac00d9;
+  --color-seance-800: #8f00b1;
+  --color-seance-900: #7f0099;
+  --color-seance-950: #520063;
+
+  --color-paua-50: #f4f1ff;
+  --color-paua-100: #ece5ff;
+  --color-paua-200: #daceff;
+  --color-paua-300: #c0a7ff;
+  --color-paua-400: #a476ff;
+  --color-paua-500: #893fff;
+  --color-paua-600: #7e18ff;
+  --color-paua-700: #7207fa;
+  --color-paua-800: #5f05d2;
+  --color-paua-900: #4f06ac;
+  --color-paua-950: #270061;
+}
+
+#app {
+  height: 100dvh;
+  width: 100dvw;
+  overflow-y: hidden;
+  background-color: var(--color-seance-950);
+}
+
+[data-bs-theme="dark"] {
+  #app {
+    background-color: var(--color-seance-950);
+  }
+
+  .active-purple {
+    background-color: var(--color-seance-900) !important;
+
+    &:hover {
+      background-color: var(--color-seance-600) !important;
+      transition: 0.8s;
+    }
+    transition: 0.8s;
+  }
+}
