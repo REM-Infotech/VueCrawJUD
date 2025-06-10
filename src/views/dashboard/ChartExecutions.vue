@@ -6,8 +6,12 @@
 </template>
 
 <script setup lang="ts">
+import content from "@/assets/main.css";
 import Chart from "chart.js/auto";
 import { onMounted, ref } from "vue";
+
+const styles = content;
+console.log(styles);
 
 const canvasRef = ref<HTMLCanvasElement | null>(null);
 
