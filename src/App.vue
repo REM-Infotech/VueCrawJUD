@@ -18,4 +18,5 @@ import MainView from "./components/MainView.vue";
       </div>
     </Transition>
   </RouterView>
+  <BModal id="ModalMessage"> Bem vindo @ </BModal>
 </template>

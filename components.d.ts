@@ -8,6 +8,7 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    BModal: typeof import('bootstrap-vue-next/components/BModal')['BModal']
     FooterView: typeof import('./src/components/FooterView.vue')['default']
     HeaderView: typeof import('./src/components/HeaderView.vue')['default']
     IBiBarChartLine: typeof import('~icons/bi/bar-chart-line')['default']
