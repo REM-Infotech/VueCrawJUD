@@ -3,15 +3,11 @@ import type { AxiosInstance, AxiosRequestConfig } from "axios";
 import axios from "axios";
 
 class AxiosCrawJUD {
-  private api: AxiosInstance;
+  AxiosApi: AxiosInstance;
   private tokenApi: string = "";
 
-  constructor(axios_config: AxiosRequestConfig<unknown>) {
-    this.api = axios.create(axios_config);
-  }
-
-  async get(url: string) {
-    return await this.api.get(url);
+  constructor(axios_config: AxiosRequestConfig<unknown> = { url: "/" }) {
+    this.AxiosApi = axios.create(axios_config);
   }
 
   handleChangeToken(token_api: string) {
