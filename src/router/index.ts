@@ -1,4 +1,3 @@
-import { appCookies } from "@/main";
 import { createRouter, createWebHistory } from "vue-router";
 
 const router = createRouter({
@@ -49,16 +48,6 @@ const router = createRouter({
       },
     },
   ],
-});
-
-router.beforeEach((to, from, next) => {
-  console.log(to.name);
-
-  const isAuth = !!to.meta.isAuth;
-  const access_token = appCookies.cookiesApp;
-  console.log(isAuth, access_token);
-  if (isAuth && !!access_token) next({ name: "login" });
-  next();
 });
 
 export default router;

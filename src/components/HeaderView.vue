@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { appCookies } from "@/main";
 import { faArrowRightFromBracket } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { computed, ref, watch } from "vue";
@@ -58,7 +57,6 @@ watch(toggler, () => {
         <button
           @click="
             (e) => {
-              appCookies.clearCookies();
               router.push({ name: 'login' });
             }
           "
