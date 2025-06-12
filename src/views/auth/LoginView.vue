@@ -47,6 +47,7 @@ async function handleSubmit(event: Event) {
             class="form-control"
             id="floatingInput"
             placeholder="name@example.com"
+            v-model="FormLogin.email"
           />
           <label for="floatingInput">Email address</label>
         </div>
@@ -56,6 +57,7 @@ async function handleSubmit(event: Event) {
             class="form-control"
             id="floatingPassword"
             placeholder="Password"
+            v-model="FormLogin.password"
           />
           <label for="floatingPassword">Password</label>
         </div>

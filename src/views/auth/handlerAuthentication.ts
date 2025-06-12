@@ -1,6 +1,14 @@
 import { api } from "@/main";
 import type { LoginForm } from "@/types/forms";
-import { isAxiosError } from "axios";
+import { AxiosError, isAxiosError } from "axios";
+
+interface AxiosResponseError extends AxiosError {
+  response?: AxiosError["response"] & {
+    data?: {
+      message: string;
+    };
+  };
+}
 
 export async function handleAuthentication(form: LoginForm) {
   try {
@@ -8,6 +16,13 @@ export async function handleAuthentication(form: LoginForm) {
     const result = await api.request("post", "/login", form);
   } catch (err) {
     if (isAxiosError(err)) {
+      const error: AxiosResponseError = err;
+      if (error.response?.data?.message) {
+        const message: string = error.response.data.message;
+
+        return message;
+      }
+
       console.log(err);
     }
   }
