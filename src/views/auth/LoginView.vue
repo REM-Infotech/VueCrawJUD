@@ -3,10 +3,24 @@ import "@/assets/css/main.css";
 import { useRouter } from "vue-router";
 
 import logoSystem from "@/assets/img/logo2.png";
+import type { LoginForm } from "@/types/forms";
+import { reactive } from "vue";
+import { handleAuthentication } from "./handlerAuthentication";
 const router = useRouter();
+
+const FormLogin: LoginForm = reactive({
+  email: "",
+  password: "",
+  remember_me: false,
+});
+
 async function handleSubmit(event: Event) {
   event.preventDefault();
-  router.push({ name: "dashboard" });
+
+  const isAuth = await handleAuthentication(FormLogin);
+  if (isAuth) {
+    router.push({ name: "dashboard" });
+  }
 }
 </script>
 
