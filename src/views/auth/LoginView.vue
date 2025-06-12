@@ -2,7 +2,7 @@
 import "@/assets/css/main.css";
 import { useRouter } from "vue-router";
 
-import logoSystem from "@/assets/img/logo2.png";
+import logoSystem from "@/assets/image.png";
 import type { LoginForm } from "@/types/forms";
 import { reactive } from "vue";
 import { handleAuthentication } from "./handlerAuthentication";

@@ -22,3 +22,8 @@ declare module "*.css" {
   const classes: CSSModuleClasses;
   export default classes;
 }
+
+declare module "*.png" {
+  const src: string;
+  export default src;
+}

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import logoimg from "@/assets/img/logo2.png";
 import { faArrowRightFromBracket } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { computed, ref, watch } from "vue";
@@ -44,7 +43,13 @@ watch(toggler, () => {
           toggler = !toggler;
         "
       >
-        <img :src="logoimg" class="ms-2 bi pe-none me-2" alt="" width="40" aria-hidden="true" />
+        <img
+          src="@/assets/image.png"
+          class="ms-2 bi pe-none me-2"
+          alt=""
+          width="40"
+          aria-hidden="true"
+        />
 
         <span class="fs-4"> CrawJUD </span>
       </a>
