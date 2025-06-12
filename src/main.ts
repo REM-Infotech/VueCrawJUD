@@ -33,7 +33,7 @@ export const mainSocketio = io(uri_server, {
 });
 
 export const appCookies = new CookiesCrawJUD();
-export const api = new AxiosCrawJUD({ url: import.meta.env.VITE_API_URL });
+export const api = new AxiosCrawJUD({ baseURL: import.meta.env.VITE_API_URL });
 
 // export const testSocketio = io(uri_server + "/test", {
 //   autoConnect: false,
