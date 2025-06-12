@@ -1,5 +1,5 @@
 import "@/assets/scripts/color-modes";
-import axios from "axios";
+
 import { createBootstrap } from "bootstrap-vue-next";
 import { createPinia } from "pinia";
 import { createApp } from "vue";
@@ -11,6 +11,7 @@ import "bootstrap/dist/css/bootstrap.css";
 import io from "socket.io-client";
 import App from "./App.vue";
 import "./assets/css/main.css";
+import AxiosCrawJUD from "./resouces/axios";
 import CookiesCrawJUD from "./resouces/cookies";
 import router from "./router";
 
@@ -31,31 +32,25 @@ export const mainSocketio = io(uri_server, {
   agent: true,
 });
 
-const token = localStorage.getItem("token") as string;
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const api = axios({
-  headers: {
-    "Content-Type": "application/json",
-  },
-});
-export const testSocketio = io(uri_server + "/test", {
-  autoConnect: false,
-  agent: true,
-  extraHeaders: {
-    "Content-Type": "application/json",
-    Authorization: `Bearer ${token}`,
-  },
-});
-
 export const appCookies = new CookiesCrawJUD();
+export const api = new AxiosCrawJUD({ url: import.meta.env.VITE_API_URL });
 
-mainSocketio.connect();
-testSocketio.connect();
+// export const testSocketio = io(uri_server + "/test", {
+//   autoConnect: false,
+//   agent: true,
+//   extraHeaders: {
+//     "Content-Type": "application/json",
+//     Authorization: `Bearer ${token}`,
+//   },
+// });
 
-mainSocketio.on("connect", () => {
-  console.log("connected!");
-});
+// mainSocketio.connect();
+// testSocketio.connect();
 
-testSocketio.on("connect", () => {
-  console.log("connected!");
-});
+// mainSocketio.on("connect", () => {
+//   console.log("connected!");
+// });
+
+// testSocketio.on("connect", () => {
+//   console.log("connected!");
+// });
