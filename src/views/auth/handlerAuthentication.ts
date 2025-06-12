@@ -1,19 +1,16 @@
 import { api } from "@/main";
 import type { LoginForm } from "@/types/forms";
-import { AxiosError, isAxiosError } from "axios";
-
-interface AxiosResponseError extends AxiosError {
-  response?: AxiosError["response"] & {
-    data?: {
-      message: string;
-    };
-  };
-}
+import { isAxiosError } from "axios";
+import type { AxiosResponseError, ResponseApi } from "./types";
 
 export async function handleAuthentication(form: LoginForm) {
   try {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const result = await api.request("post", "/login", form);
+    const result: ResponseApi = await api.request("post", "/login", form);
+
+    if (result.data?.token) {
+      const data = result.data;
+      console.log(data);
+    }
   } catch (err) {
     if (isAxiosError(err)) {
       const error: AxiosResponseError = err;
@@ -22,8 +19,6 @@ export async function handleAuthentication(form: LoginForm) {
 
         return message;
       }
-
-      console.log(err);
     }
   }
 
