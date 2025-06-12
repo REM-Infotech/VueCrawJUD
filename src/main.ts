@@ -11,6 +11,7 @@ import "bootstrap/dist/css/bootstrap.css";
 import io from "socket.io-client";
 import App from "./App.vue";
 import "./assets/css/main.css";
+import CookiesCrawJUD from "./resouces/cookies";
 import router from "./router";
 
 const app = createApp(App);
@@ -45,6 +46,8 @@ export const testSocketio = io(uri_server + "/test", {
     Authorization: `Bearer ${token}`,
   },
 });
+
+export const appCookies = new CookiesCrawJUD();
 
 mainSocketio.connect();
 testSocketio.connect();
