@@ -7,10 +7,12 @@ export default class CookiesCrawJUD implements TCookiesCrawJUD {
   cookiesApp: {
     [key: string]: string | undefined;
     token?: string;
-  } = Cookies.get();
+  } = undefined;
 
   ChangeState() {
-    this.cookiesApp = Cookies.get();
+    const getCookies = Cookies.get();
+    console.log(getCookies);
+    this.cookiesApp = Object.apply(getCookies);
   }
 
   insertKey(
