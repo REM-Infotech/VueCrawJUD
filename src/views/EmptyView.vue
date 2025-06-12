@@ -5,7 +5,9 @@
   </div>
 </template>
 <script setup lang="ts">
-import io from "@/resources/socketio";
+import { testSocketio } from "@/main";
+
+const io = testSocketio;
 
 function emitmessage() {
   io.emit("teste", { data: "teste", file: "teste" });
@@ -14,5 +16,4 @@ function emitmessage() {
 io.auth = {
   token: "teste",
 };
-io.connect();
 </script>
