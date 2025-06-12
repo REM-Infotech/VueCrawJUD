@@ -13,8 +13,22 @@ export default class CookiesCrawJUD implements TCookiesCrawJUD {
     this.cookiesApp = Cookies.get();
   }
 
-  insertKey(key: string, value: string, options: TCookieAttributes["defaultOptions"]) {
+  insertKey(
+    key: string,
+    value: string,
+    options: TCookieAttributes["defaultOptions"] = {
+      sameSite: "Strict",
+      secure: true,
+    },
+  ) {
     Cookies.set(key, value, options);
+    this.ChangeState();
+  }
+
+  clearCookies() {
+    Object.keys(this.cookiesApp).forEach((key) => {
+      Cookies.remove(key);
+    });
     this.ChangeState();
   }
 }

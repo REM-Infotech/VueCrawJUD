@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { appCookies } from "@/main";
 import { faArrowRightFromBracket } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { computed, ref, watch } from "vue";
@@ -55,7 +56,12 @@ watch(toggler, () => {
       </a>
       <div class="d-flex gap-2" role="search">
         <button
-          @click="router.push({ name: 'login' })"
+          @click="
+            (e) => {
+              appCookies.clearCookies();
+              router.push({ name: 'login' });
+            }
+          "
           class="btn btn-outline-danger d-flex justify-content-start align-items-start"
           type="submit"
         >

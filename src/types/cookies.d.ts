@@ -41,10 +41,7 @@ export interface TCookieAttributes {
 }
 
 export interface TCookiesCrawJUD {
-  cookiesApp: {
-    [key: string]: string | undefined;
-    token?: string;
-  };
+  cookiesApp: Record<string, string | undefined> & { token?: string };
   defaultOptions?: TCookieAttributes["defaultOptions"];
   ChangeState(): void;
   insertKey(key: string, value: string, options: TCookieAttributes["defaultOptions"]): void;
