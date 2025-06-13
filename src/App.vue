@@ -1,6 +1,17 @@
 <script setup lang="ts">
-import { RouterView } from "vue-router";
+import { RouterView, useRoute, useRouter } from "vue-router";
 import MainView from "./components/MainView.vue";
+import { mainSocket } from "./main";
+const router = useRouter();
+const route = useRoute();
+
+if (route.name !== "login" && route.name !== "index") {
+  mainSocket.on("validate-auth", (isValid: boolean) => {
+    if (!isValid) {
+      router.push({ name: "login" });
+    }
+  });
+}
 </script>
 
 <template>

@@ -1,3 +1,4 @@
+import { mainSocket } from "@/main";
 import { createRouter, createWebHistory } from "vue-router";
 
 const router = createRouter({
@@ -48,6 +49,10 @@ const router = createRouter({
       },
     },
   ],
+});
+
+router.beforeEach(() => {
+  mainSocket.emit("validate-auth");
 });
 
 export default router;

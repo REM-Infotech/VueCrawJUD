@@ -5,6 +5,10 @@ interface ImportMetaEnv {
   VITE_DEVMODE: boolean;
 }
 
+interface RouteMeta {
+  isAuth: boolean;
+}
+
 interface ImportMeta {
   url: string;
 

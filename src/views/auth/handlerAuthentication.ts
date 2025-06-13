@@ -5,7 +5,11 @@ import type { AxiosResponseError, ResponseApi } from "./types";
 
 export async function handleAuthentication(form: LoginForm) {
   try {
-    const result: ResponseApi = await api.request("post", "/login", form);
+    const result: ResponseApi = await api.request({
+      method: "POST",
+      url: "/auth/login",
+      data: form,
+    });
 
     if (result.data) {
       return true;
