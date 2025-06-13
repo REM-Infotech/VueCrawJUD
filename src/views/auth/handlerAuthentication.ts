@@ -7,7 +7,7 @@ export async function handleAuthentication(form: LoginForm) {
   try {
     const result: ResponseApi = await api.request({
       method: "POST",
-      url: "/auth/login",
+      url: "/login",
       data: form,
     });
 

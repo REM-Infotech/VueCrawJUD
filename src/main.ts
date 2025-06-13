@@ -23,6 +23,6 @@ app.use(pinia);
 app.use(router);
 
 export const api = axios.create();
-export const mainSocket = manager.socket("/api-socketio");
+export const mainSocket = manager.socket("/");
 
 app.mount("#app");

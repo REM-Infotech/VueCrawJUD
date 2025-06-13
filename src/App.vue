@@ -6,6 +6,7 @@ const router = useRouter();
 const route = useRoute();
 
 if (route.name !== "login" && route.name !== "index") {
+  mainSocket.emit("check-token");
   mainSocket.on("validate-auth", (isValid: boolean) => {
     if (!isValid) {
       router.push({ name: "login" });
