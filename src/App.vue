@@ -5,7 +5,7 @@ import { mainSocket } from "./main";
 const router = useRouter();
 const route = useRoute();
 
-if (route.name !== "login" && route.name !== "index") {
+if (route.meta.requireAuth) {
   mainSocket.emit("check-token");
   mainSocket.on("validate-auth", (isValid: boolean) => {
     if (!isValid) {
