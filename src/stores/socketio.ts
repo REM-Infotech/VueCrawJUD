@@ -10,8 +10,9 @@ export const useSocketStore = defineStore("socket", () => {
     if (socket.value) {
       socket.value.disconnect(); // Desconecta do namespace atual, se existir
     }
-    const fullUrl = `${apiBaseUrl}/${namespace}`; // Concatena a URL base com o namespace
-    socket.value = io(fullUrl, { auth: { token: "your_token" } }); // Conecta ao novo namespace
+
+    const url = new URL(namespace, apiBaseUrl).toString(); // Cria um objeto URL para manipular a URL base
+    socket.value = io(url, { withCredentials: true }); // Conecta ao novo namespace
   }
 
   function disconnect() {
