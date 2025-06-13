@@ -12,7 +12,13 @@ export const useSocketStore = defineStore("socket", () => {
     }
 
     const url = new URL(namespace, apiBaseUrl).toString(); // Cria um objeto URL para manipular a URL base
-    socket.value = io(url, { withCredentials: true }); // Conecta ao novo namespace
+    socket.value = io(url, {
+      auth: { token: "your_token" },
+      withCredentials: true,
+      extraHeaders: {
+        "Content-Type": "application/json",
+      },
+    }); // Conecta ao novo namespace
   }
 
   function disconnect() {
