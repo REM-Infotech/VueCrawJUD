@@ -20,7 +20,7 @@ const router = createRouter({
       name: "dashboard",
       component: () => import("@/views/dashboard/DashboardView.vue"),
       meta: {
-        requireAuth: true,
+        require_auth: true,
       },
     },
     {
@@ -28,7 +28,7 @@ const router = createRouter({
       name: "bots",
       component: () => import("@/views/bots/RobotsView.vue"),
       meta: {
-        requireAuth: true,
+        require_auth: true,
       },
     },
     {
@@ -36,7 +36,7 @@ const router = createRouter({
       name: "executions",
       component: () => import("@/views/EmptyView.vue"),
       meta: {
-        requireAuth: true,
+        require_auth: true,
       },
     },
     {
@@ -44,7 +44,7 @@ const router = createRouter({
       name: "scheduled",
       component: () => import("@/views/EmptyView.vue"),
       meta: {
-        requireAuth: true,
+        require_auth: true,
       },
     },
   ],

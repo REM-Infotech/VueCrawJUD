@@ -1,9 +1,29 @@
 <script setup lang="ts">
-import { faAngleRight, faWarning } from "@fortawesome/free-solid-svg-icons";
+import manager from "@/resouces/socketio";
+import { faAngleRight, faRobot } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { computed, ref } from "vue";
 
-const listItems = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
+interface BotInfo {
+  id: number;
+  display_name: string;
+  system: string;
+  state: string;
+  client: string;
+  type: string;
+  form_cfg: string;
+  classification: string;
+  text: string;
+}
+
+const botlist = ref<BotInfo[]>([]);
+
+const botsSocket = manager.socket("/bots");
+
+botsSocket.emit("bots_list", (bots_list: BotInfo[]) => {
+  console.log(bots_list);
+  botlist.value = bots_list;
+});
 
 const list = [
   { msg: "Bruce Lee" },
@@ -47,15 +67,14 @@ const computedList = computed(() => {
       </div>
     </div>
     <div class="col-9 row">
-      <div class="col-xl-3 col-md-6" v-for="item in listItems" :key="item">
+      <div class="col-xl-3 col-md-6" v-for="item in botlist" :key="item.id">
         <div class="card bg-body-tertiary text-white mb-4">
           <div class="card-body d-flex justify-content-between align-items-center">
             <div class="text-card d-flex flex-column">
-              <span class="fs-6 text-body-secondary">Falhas nas últimas 24h</span>
-              <span class="fs-3 fw-bold text-danger">3</span>
+              <span class="fs-6 fw-bold text-body-secondary">{{ item.display_name }}</span>
             </div>
-            <div class="fw-bold bg-danger p-3 rounded rounded-4 bg-opacity-50">
-              <FontAwesomeIcon :icon="faWarning" size="xl" />
+            <div class="fw-bold bg-primary p-3 rounded rounded-4 bg-opacity-50">
+              <FontAwesomeIcon :icon="faRobot" size="xl" />
             </div>
           </div>
           <div class="card-footer d-flex align-items-center justify-content-between">

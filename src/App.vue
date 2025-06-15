@@ -1,18 +1,21 @@
 <script setup lang="ts">
+import { watch } from "vue";
 import { RouterView, useRoute, useRouter } from "vue-router";
 import MainView from "./components/MainView.vue";
 import { mainSocket } from "./main";
 const router = useRouter();
 const route = useRoute();
 
-if (route.meta.requireAuth) {
-  mainSocket.emit("check-token");
-  mainSocket.on("validate-auth", (isValid: boolean) => {
-    if (!isValid) {
-      router.push({ name: "login" });
-    }
-  });
-}
+watch(route, (newRoute) => {
+  if (newRoute.meta.require_auth) {
+    mainSocket.emit("check-token", {}, (isValid: boolean) => {
+      if (!isValid) {
+        console.log(isValid);
+        router.push({ name: "login" });
+      }
+    });
+  }
+});
 </script>
 
 <template>

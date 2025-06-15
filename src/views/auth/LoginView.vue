@@ -2,7 +2,7 @@
 import "@/assets/css/main.css";
 import { useRouter } from "vue-router";
 
-import logoSystem from "@/assets/image.png";
+import logoSystem from "@/assets/img/iconlogo.png";
 import type { LoginForm } from "@/types/forms";
 import { reactive } from "vue";
 import { handleAuthentication } from "./handlerAuthentication";
@@ -43,7 +43,7 @@ async function handleSubmit(event: Event) {
         </div>
         <div class="form-floating mb-3">
           <input
-            type="email"
+            type="text"
             class="form-control"
             id="floatingInput"
             placeholder="name@example.com"

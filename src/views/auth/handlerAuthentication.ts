@@ -19,15 +19,10 @@ export async function handleAuthentication(form: LoginForm) {
       const error: AxiosResponseError = err;
       if (error.response?.data?.message) {
         const message: string = error.response.data.message;
-
-        return message;
+        alert(message);
+        return false;
       }
     }
     console.log(err);
   }
-
-  if (import.meta.env.VITE_DEVMODE) {
-    return true;
-  }
-  return true;
 }

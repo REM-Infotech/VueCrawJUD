@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import manager from "@/resouces/socketio";
 import {
   faAngleRight,
   faCheckCircle,
@@ -7,6 +8,13 @@ import {
   faWarning,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { ref } from "vue";
+
+const number_botsRef = ref(0);
+const dashSocket = manager.socket("/system");
+dashSocket.emit("number_bots", (number_bots: number) => {
+  number_botsRef.value = number_bots;
+});
 </script>
 
 <template>
@@ -16,7 +24,7 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
         <div class="card-body d-flex justify-content-between align-items-center">
           <div class="text-card d-flex flex-column">
             <span class="fs-6 text-body-secondary">Total de bots contratados</span>
-            <span class="fs-3 fw-bold">25</span>
+            <span class="fs-3 fw-bold">{{ number_botsRef }}</span>
           </div>
           <div class="icon bg-primary p-3 rounded rounded-4 bg-opacity-50">
             <FontAwesomeIcon :icon="faRobot" size="2xl" />

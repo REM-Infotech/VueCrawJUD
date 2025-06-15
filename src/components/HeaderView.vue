@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { api } from "@/main";
 import { faArrowRightFromBracket } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { computed, ref, watch } from "vue";
@@ -30,6 +31,19 @@ watch(expand_sidebar, () => {
 watch(toggler, () => {
   return emit("update:toggle", toggler.value);
 });
+
+async function handleLogout() {
+  try {
+    await api.request({
+      method: "post",
+      url: "/logout",
+    });
+  } catch {
+    //
+  }
+
+  router.push({ name: "login" });
+}
 </script>
 
 <template>
@@ -55,11 +69,7 @@ watch(toggler, () => {
       </a>
       <div class="d-flex gap-2" role="search">
         <button
-          @click="
-            (e) => {
-              router.push({ name: 'login' });
-            }
-          "
+          @click="handleLogout"
           class="btn btn-outline-danger d-flex justify-content-start align-items-start"
           type="submit"
         >
