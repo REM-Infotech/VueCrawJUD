@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import logo from "@/assets/img/iconlogo.png";
 import { api } from "@/main";
 import { faArrowRightFromBracket } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
@@ -57,13 +58,7 @@ async function handleLogout() {
           toggler = !toggler;
         "
       >
-        <img
-          src="@/assets/image.png"
-          class="ms-2 bi pe-none me-2"
-          alt=""
-          width="40"
-          aria-hidden="true"
-        />
+        <img :src="logo" class="ms-2 bi pe-none me-2" alt="" width="40" aria-hidden="true" />
 
         <span class="fs-4"> CrawJUD </span>
       </a>
