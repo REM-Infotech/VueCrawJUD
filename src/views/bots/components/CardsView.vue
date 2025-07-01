@@ -12,34 +12,10 @@ const botlist = ref<BotInfo[]>([]);
 const botsSocket = manager.socket("/bots");
 const opacity = ref(0.18);
 const overlayFormBot = ref(false);
-const ex1Options = [
-  { value: null, text: "Selecione uma Vara/Foro", disabled: true },
-  { value: "a", text: "This is First option" },
-  { value: "b", text: "Selected Option" },
-  { value: { C: "3PO" }, text: "This is an option with object value" },
-  { value: "d", text: "This one is disabled", disabled: true },
-];
-const ex2Options = [
-  { value: null, text: "Selecione uma credencial", disabled: true },
-  { value: "a", text: "This is First option" },
-  { value: "b", text: "Selected Option" },
-  { value: { C: "3PO" }, text: "This is an option with object value" },
-  { value: "d", text: "This one is disabled", disabled: true },
-];
-const ex3Options = [
-  { value: null, text: "Selecione um estado", disabled: true },
-  { value: "a", text: "This is First option" },
-  { value: "b", text: "Selected Option" },
-  { value: { C: "3PO" }, text: "This is an option with object value" },
-  { value: "d", text: "This one is disabled", disabled: true },
-];
-const ex4Options = [
-  { value: null, text: "Selecione um Cliente", disabled: true },
-  { value: "a", text: "This is First option" },
-  { value: "b", text: "Selected Option" },
-  { value: { C: "3PO" }, text: "This is an option with object value" },
-  { value: "d", text: "This one is disabled", disabled: true },
-];
+const ex1Options = ref([{ value: null, text: "Selecione uma Vara/Foro", disabled: true }]);
+const ex2Options = ref([{ value: null, text: "Selecione uma credencial", disabled: true }]);
+const ex3Options = ref([{ value: null, text: "Selecione um estado", disabled: true }]);
+const ex4Options = ref([{ value: null, text: "Selecione um Cliente", disabled: true }]);
 const Form = reactive<{ [key: string]: null }>({
   xlsx: null,
   cred: null,
@@ -88,17 +64,15 @@ async function show_form(item: BotInfo) {
     );
 
     if (resp.data?.config) {
-      const config = resp.data.config;
-      for (const cfg of config) {
+      resp.data.config.map((cfg) => {
         EnableInputs[cfg] = true;
         if (cfg === "client") {
           if (item.client === "EVERYONE" || item.client === "GLOBAL") {
             EnableInputs[cfg] = false;
           }
-          continue;
         }
-      }
-      currentConfig.value = config;
+      });
+      currentConfig.value = resp.data.config;
     }
   } catch {
     //
