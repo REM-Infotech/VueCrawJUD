@@ -10,7 +10,6 @@ watch(route, (newRoute) => {
   if (newRoute.meta.require_auth) {
     mainSocket.emit("check-token", {}, (isValid: boolean) => {
       if (!isValid) {
-        console.log(isValid);
         router.push({ name: "login" });
       }
     });

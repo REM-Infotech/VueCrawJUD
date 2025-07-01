@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import logo from "@/assets/img/iconlogo.png";
-import { api } from "@/main";
+import { api } from "@/defaults/axios";
 import { faArrowRightFromBracket } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { computed, ref, watch } from "vue";

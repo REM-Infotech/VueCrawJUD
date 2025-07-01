@@ -1,28 +1,68 @@
 <script setup lang="ts">
+import { api } from "@/defaults/axios";
 import manager from "@/resouces/socketio";
 import { faAngleRight, faRobot } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import { computed, ref } from "vue";
+import { BModal, useModal } from "bootstrap-vue-next";
+import { computed, reactive, ref } from "vue";
+import type { BotInfo, ResponseConfigForm } from "./types";
 
-interface BotInfo {
-  id: number;
-  display_name: string;
-  system: string;
-  state: string;
-  client: string;
-  type: string;
-  form_cfg: string;
-  classification: string;
-  text: string;
-}
-
+const { show: showForm } = useModal("FormBot");
 const botlist = ref<BotInfo[]>([]);
 
 const botsSocket = manager.socket("/bots");
 
 botsSocket.emit("bots_list", (bots_list: BotInfo[]) => {
-  console.log(bots_list);
   botlist.value = bots_list;
+});
+const opacity = ref(0.18);
+const overlayFormBot = ref(false);
+
+const ex1Options = [
+  { value: null, text: "Selecione uma Vara/Foro", disabled: true },
+  { value: "a", text: "This is First option" },
+  { value: "b", text: "Selected Option" },
+  { value: { C: "3PO" }, text: "This is an option with object value" },
+  { value: "d", text: "This one is disabled", disabled: true },
+];
+
+const ex2Options = [
+  { value: null, text: "Selecione um Cliente", disabled: true },
+  { value: "a", text: "This is First option" },
+  { value: "b", text: "Selected Option" },
+  { value: { C: "3PO" }, text: "This is an option with object value" },
+  { value: "d", text: "This one is disabled", disabled: true },
+];
+
+const ex3Options = [
+  { value: null, text: "Selecione um estado", disabled: true },
+  { value: "a", text: "This is First option" },
+  { value: "b", text: "Selected Option" },
+  { value: { C: "3PO" }, text: "This is an option with object value" },
+  { value: "d", text: "This one is disabled", disabled: true },
+];
+const ex4Options = [
+  { value: null, text: "Selecione uma credencial", disabled: true },
+  { value: "a", text: "This is First option" },
+  { value: "b", text: "Selected Option" },
+  { value: { C: "3PO" }, text: "This is an option with object value" },
+  { value: "d", text: "This one is disabled", disabled: true },
+];
+
+const selected = ref(null);
+const currentConfig = ref<string[]>([]);
+const EnableInputs = reactive<{ [key: string]: boolean }>({
+  xlsx: false,
+  creds: false,
+  state: false,
+  client: false,
+  otherfiles: false,
+  parte_name: false,
+  doc_parte: false,
+  data_inicio: false,
+  data_fim: false,
+  polo_parte: false,
+  varas: false,
 });
 
 const list = [
@@ -38,6 +78,42 @@ const query = ref("");
 const computedList = computed(() => {
   return list.filter((item) => item.msg.toLowerCase().includes(query.value));
 });
+
+const TitleForm = ref("");
+
+async function show_form(item: BotInfo) {
+  TitleForm.value = item.display_name;
+  try {
+    const resp: ResponseConfigForm = await api.get(
+      `/bot/get_form?classification=${item.classification}&form_cfg=${item.form_cfg}`,
+    );
+
+    if (resp.data?.config) {
+      const config = resp.data.config;
+      for (const cfg of config) {
+        console.log(cfg);
+        EnableInputs[cfg] = true;
+      }
+      console.log(EnableInputs);
+      currentConfig.value = config;
+    }
+  } catch {
+    //
+  }
+
+  showForm();
+}
+
+function hideInputs() {
+  const config = currentConfig.value;
+  for (const cfg of config) {
+    EnableInputs[cfg] = false;
+  }
+}
+
+async function handleSubmit(e: Event) {
+  e.preventDefault();
+}
 </script>
 
 <template>
@@ -78,7 +154,9 @@ const computedList = computed(() => {
             </div>
           </div>
           <div class="card-footer d-flex align-items-center justify-content-between">
-            <a class="small text-white stretched-link" href="#">Mais detalhes</a>
+            <button class="btn" @click="show_form(item)">
+              <span class="small text-white stretched-link">Mais Detalhes</span>
+            </button>
             <div class="small text-white">
               <FontAwesomeIcon :icon="faAngleRight" />
             </div>
@@ -87,6 +165,65 @@ const computedList = computed(() => {
       </div>
     </div>
   </div>
+  <BModal
+    size="lg"
+    id="FormBot"
+    centered
+    :title="TitleForm"
+    footer-class="d-flex"
+    as="form"
+    no-footer
+    @hide="hideInputs"
+  >
+    <BOverlay class="p-3" :show="overlayFormBot" :opacity="opacity" rounded="md">
+      <form @submit="handleSubmit" class="row">
+        <div class="col-12 mb-3" v-if="EnableInputs.xlsx">
+          <BFormFile size="md" />
+        </div>
+        <div class="col-12 mb-3" v-if="EnableInputs.vara">
+          <BFormSelect size="md" v-model="selected" :options="ex1Options" />
+        </div>
+        <div class="col-12 mb-3" v-if="EnableInputs.creds">
+          <BFormSelect size="md" v-model="selected" :options="ex2Options" />
+        </div>
+        <div class="col-12 mb-3" v-if="EnableInputs.state">
+          <BFormSelect size="md" v-model="selected" :options="ex3Options" />
+        </div>
+        <div class="col-12 mb-3" v-if="EnableInputs.client">
+          <BFormSelect size="md" v-model="selected" :options="ex4Options" />
+        </div>
+        <div class="col-12 mb-3" v-if="EnableInputs.parte_name">
+          <BFormGroup id="fieldset-nome" label="Nome" label-for="input-floating-nome" floating>
+            <BFormInput id="input-floating-nome" :state="null" trim placeholder="..." />
+          </BFormGroup>
+        </div>
+        <div class="col-12 mb-3" v-if="EnableInputs.polo_parte">
+          <BFormSelect size="md" v-model="selected" :options="ex1Options" />
+        </div>
+        <div class="col-12 mb-3" v-if="EnableInputs.doc_parte">
+          <BFormGroup id="fieldset-nome" label="Nome" label-for="input-floating-nome" floating>
+            <BFormInput id="input-floating-nome" :state="null" trim placeholder="..." />
+          </BFormGroup>
+        </div>
+        <div class="col-12 mb-3" v-if="EnableInputs.data_inicio">
+          <BFormGroup id="fieldset-nome" label="Nome" label-for="input-floating-nome" floating>
+            <BFormInput type="date" id="input-floating-nome" :state="null" trim placeholder="..." />
+          </BFormGroup>
+        </div>
+        <div class="col-12 mb-3" v-if="EnableInputs.data_fim">
+          <BFormGroup id="fieldset-nome" label="Nome" label-for="input-floating-nome" floating>
+            <BFormInput type="date" id="input-floating-nome" :state="null" trim placeholder="..." />
+          </BFormGroup>
+        </div>
+        <hr />
+        <div class="d-flex flex-column mt-2">
+          <BButton type="submit" variant="success" size="lg">
+            <strong> Salvar </strong>
+          </BButton>
+        </div>
+      </form>
+    </BOverlay>
+  </BModal>
 </template>
 
 <style lang="css" scoped>

@@ -1,30 +1,16 @@
-import type { AxiosInstance, AxiosRequestConfig } from "axios";
 import axios from "axios";
 
-type AxiosRequests = "get" | "post";
+const baseUrl = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
-class AxiosCrawJUD {
-  AxiosApi: AxiosInstance;
-  axios_config: AxiosRequestConfig<unknown> = { baseURL: "/" };
-  constructor(axios_config: AxiosRequestConfig<unknown> = { baseURL: "/" }) {
-    this.axios_config = axios_config;
+axios.defaults.withCredentials = true;
+axios.defaults.baseURL = baseUrl;
 
-    this.AxiosApi = axios.create(axios_config);
-    axios["get"]("/login");
-  }
-
-  async request(
-    method: AxiosRequests,
-    url: string,
-    data?: unknown,
-    config: AxiosRequestConfig = {},
-  ) {
-    if (data) {
-      return await this.AxiosApi[method](url, data, config);
-    }
-
-    return await this.AxiosApi[method](url, config);
-  }
-}
-
-export default AxiosCrawJUD;
+export const api = axios.create({
+  withCredentials: true,
+  withXSRFToken: true,
+  xsrfCookieName: "X-Xsrf-Token",
+  xsrfHeaderName: "X-Xsrf-Token",
+  headers: {
+    "Content-Type": "multipart/form-data",
+  },
+});

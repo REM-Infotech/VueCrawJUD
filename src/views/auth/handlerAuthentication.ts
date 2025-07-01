@@ -1,4 +1,4 @@
-import { api } from "@/main";
+import { api } from "@/defaults/axios";
 import type { LoginForm } from "@/types/forms";
 import { isAxiosError } from "axios";
 import type { AxiosResponseError, ResponseApi } from "./types";
@@ -23,6 +23,5 @@ export async function handleAuthentication(form: LoginForm) {
         return false;
       }
     }
-    console.log(err);
   }
 }
