@@ -16,6 +16,7 @@ const ex1Options = ref([{ value: null, text: "Selecione uma Vara/Foro", disabled
 const ex2Options = ref([{ value: null, text: "Selecione uma credencial", disabled: true }]);
 const ex3Options = ref([{ value: null, text: "Selecione um estado", disabled: true }]);
 const ex4Options = ref([{ value: null, text: "Selecione um Cliente", disabled: true }]);
+const currentConfig = ref<string[]>([]);
 const Form = reactive<{ [key: string]: null }>({
   xlsx: null,
   cred: null,
@@ -28,7 +29,6 @@ const Form = reactive<{ [key: string]: null }>({
   polo_parte: null,
   vara: null,
 });
-const currentConfig = ref<string[]>([]);
 const EnableInputs = reactive<{ [key: string]: boolean }>({
   xlsx: false,
   cred: false,
