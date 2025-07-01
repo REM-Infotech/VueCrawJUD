@@ -109,12 +109,14 @@ async function show_form(item: BotInfo) {
 
 function hideInputs() {
   const config = currentConfig.value;
-  for (const cfg of config) {
+
+  Array.from(config).map((cfg) => {
     EnableInputs[cfg] = false;
-    Object.entries(Form).map(([key]) => {
-      Form[key] = null;
-    });
-  }
+  });
+
+  Object.entries(Form).map(([key]) => {
+    Form[key] = null;
+  });
 }
 
 async function handleSubmit(e: Event) {
