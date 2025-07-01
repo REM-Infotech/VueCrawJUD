@@ -6,17 +6,17 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { BModal, useModal } from "bootstrap-vue-next";
 import { computed, reactive, ref } from "vue";
 import type { BotInfo, ResponseConfigForm } from "./types";
-
-const { show: showForm } = useModal("FormBot");
-const botlist = ref<BotInfo[]>([]);
 const botsSocket = manager.socket("/bots");
+
 const opacity = ref(0.18);
 const overlayFormBot = ref(false);
+const botlist = ref<BotInfo[]>([]);
+const currentConfig = ref<string[]>([]);
 const ex1Options = ref([{ value: null, text: "Selecione uma Vara/Foro", disabled: true }]);
 const ex2Options = ref([{ value: null, text: "Selecione uma credencial", disabled: true }]);
 const ex3Options = ref([{ value: null, text: "Selecione um estado", disabled: true }]);
 const ex4Options = ref([{ value: null, text: "Selecione um Cliente", disabled: true }]);
-const currentConfig = ref<string[]>([]);
+const { show: showForm } = useModal("FormBot");
 const Form = reactive<{ [key: string]: null }>({
   xlsx: null,
   cred: null,
