@@ -9,15 +9,9 @@ import type { BotInfo, ResponseConfigForm } from "./types";
 
 const { show: showForm } = useModal("FormBot");
 const botlist = ref<BotInfo[]>([]);
-
 const botsSocket = manager.socket("/bots");
-
-botsSocket.emit("bots_list", (bots_list: BotInfo[]) => {
-  botlist.value = bots_list;
-});
 const opacity = ref(0.18);
 const overlayFormBot = ref(false);
-
 const ex1Options = [
   { value: null, text: "Selecione uma Vara/Foro", disabled: true },
   { value: "a", text: "This is First option" },
@@ -25,7 +19,6 @@ const ex1Options = [
   { value: { C: "3PO" }, text: "This is an option with object value" },
   { value: "d", text: "This one is disabled", disabled: true },
 ];
-
 const ex2Options = [
   { value: null, text: "Selecione uma credencial", disabled: true },
   { value: "a", text: "This is First option" },
@@ -33,7 +26,6 @@ const ex2Options = [
   { value: { C: "3PO" }, text: "This is an option with object value" },
   { value: "d", text: "This one is disabled", disabled: true },
 ];
-
 const ex3Options = [
   { value: null, text: "Selecione um estado", disabled: true },
   { value: "a", text: "This is First option" },
@@ -41,7 +33,6 @@ const ex3Options = [
   { value: { C: "3PO" }, text: "This is an option with object value" },
   { value: "d", text: "This one is disabled", disabled: true },
 ];
-
 const ex4Options = [
   { value: null, text: "Selecione um Cliente", disabled: true },
   { value: "a", text: "This is First option" },
@@ -49,7 +40,6 @@ const ex4Options = [
   { value: { C: "3PO" }, text: "This is an option with object value" },
   { value: "d", text: "This one is disabled", disabled: true },
 ];
-
 const Form = reactive<{ [key: string]: null }>({
   xlsx: null,
   cred: null,
@@ -62,7 +52,6 @@ const Form = reactive<{ [key: string]: null }>({
   polo_parte: null,
   vara: null,
 });
-
 const currentConfig = ref<string[]>([]);
 const EnableInputs = reactive<{ [key: string]: boolean }>({
   xlsx: false,
@@ -77,7 +66,6 @@ const EnableInputs = reactive<{ [key: string]: boolean }>({
   polo_parte: false,
   varas: false,
 });
-
 const list = [
   { msg: "Bruce Lee" },
   { msg: "Jackie Chan" },
@@ -85,14 +73,12 @@ const list = [
   { msg: "Jet Li" },
   { msg: "Kung Fury" },
 ];
-
 const query = ref("");
+const TitleForm = ref("");
 
 const computedList = computed(() => {
   return list.filter((item) => item.msg.toLowerCase().includes(query.value));
 });
-
-const TitleForm = ref("");
 
 async function show_form(item: BotInfo) {
   TitleForm.value = item.display_name;
@@ -134,6 +120,9 @@ function hideInputs() {
 async function handleSubmit(e: Event) {
   e.preventDefault();
 }
+botsSocket.emit("bots_list", (bots_list: BotInfo[]) => {
+  botlist.value = bots_list;
+});
 </script>
 
 <template>
