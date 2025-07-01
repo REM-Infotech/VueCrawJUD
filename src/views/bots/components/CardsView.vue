@@ -27,7 +27,7 @@ const ex1Options = [
 ];
 
 const ex2Options = [
-  { value: null, text: "Selecione um Cliente", disabled: true },
+  { value: null, text: "Selecione uma credencial", disabled: true },
   { value: "a", text: "This is First option" },
   { value: "b", text: "Selected Option" },
   { value: { C: "3PO" }, text: "This is an option with object value" },
@@ -41,19 +41,32 @@ const ex3Options = [
   { value: { C: "3PO" }, text: "This is an option with object value" },
   { value: "d", text: "This one is disabled", disabled: true },
 ];
+
 const ex4Options = [
-  { value: null, text: "Selecione uma credencial", disabled: true },
+  { value: null, text: "Selecione um Cliente", disabled: true },
   { value: "a", text: "This is First option" },
   { value: "b", text: "Selected Option" },
   { value: { C: "3PO" }, text: "This is an option with object value" },
   { value: "d", text: "This one is disabled", disabled: true },
 ];
 
-const selected = ref(null);
+const Form = reactive<{ [key: string]: null }>({
+  xlsx: null,
+  cred: null,
+  state: null,
+  client: null,
+  parte_name: null,
+  doc_parte: null,
+  data_inicio: null,
+  data_fim: null,
+  polo_parte: null,
+  vara: null,
+});
+
 const currentConfig = ref<string[]>([]);
 const EnableInputs = reactive<{ [key: string]: boolean }>({
   xlsx: false,
-  creds: false,
+  cred: false,
   state: false,
   client: false,
   otherfiles: false,
@@ -91,10 +104,14 @@ async function show_form(item: BotInfo) {
     if (resp.data?.config) {
       const config = resp.data.config;
       for (const cfg of config) {
-        console.log(cfg);
         EnableInputs[cfg] = true;
+        if (cfg === "client") {
+          if (item.client === "EVERYONE" || item.client === "GLOBAL") {
+            EnableInputs[cfg] = false;
+          }
+          continue;
+        }
       }
-      console.log(EnableInputs);
       currentConfig.value = config;
     }
   } catch {
@@ -108,6 +125,9 @@ function hideInputs() {
   const config = currentConfig.value;
   for (const cfg of config) {
     EnableInputs[cfg] = false;
+    Object.entries(Form).map(([key]) => {
+      Form[key] = null;
+    });
   }
 }
 
@@ -181,16 +201,16 @@ async function handleSubmit(e: Event) {
           <BFormFile size="md" />
         </div>
         <div class="col-12 mb-3" v-if="EnableInputs.vara">
-          <BFormSelect size="md" v-model="selected" :options="ex1Options" />
+          <BFormSelect size="md" v-model="Form.vara" :options="ex1Options" />
         </div>
         <div class="col-12 mb-3" v-if="EnableInputs.creds">
-          <BFormSelect size="md" v-model="selected" :options="ex2Options" />
+          <BFormSelect size="md" v-model="Form.cred" :options="ex2Options" />
         </div>
         <div class="col-12 mb-3" v-if="EnableInputs.state">
-          <BFormSelect size="md" v-model="selected" :options="ex3Options" />
+          <BFormSelect size="md" v-model="Form.state" :options="ex3Options" />
         </div>
         <div class="col-12 mb-3" v-if="EnableInputs.client">
-          <BFormSelect size="md" v-model="selected" :options="ex4Options" />
+          <BFormSelect size="md" v-model="Form.client" :options="ex4Options" />
         </div>
         <div class="col-12 mb-3" v-if="EnableInputs.parte_name">
           <BFormGroup id="fieldset-nome" label="Nome" label-for="input-floating-nome" floating>
@@ -198,7 +218,9 @@ async function handleSubmit(e: Event) {
           </BFormGroup>
         </div>
         <div class="col-12 mb-3" v-if="EnableInputs.polo_parte">
-          <BFormSelect size="md" v-model="selected" :options="ex1Options" />
+          <BFormGroup id="fieldset-nome" label="Nome" label-for="input-floating-nome" floating>
+            <BFormInput id="input-floating-nome" :state="null" trim placeholder="..." />
+          </BFormGroup>
         </div>
         <div class="col-12 mb-3" v-if="EnableInputs.doc_parte">
           <BFormGroup id="fieldset-nome" label="Nome" label-for="input-floating-nome" floating>
